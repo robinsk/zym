@@ -1,0 +1,4 @@
+ZYM INSTALLATION INSTRUCTIONS
+-----------------------------
+
+See INSTALL.txt in the latest stable Zend Framework package for detailed instructions.
