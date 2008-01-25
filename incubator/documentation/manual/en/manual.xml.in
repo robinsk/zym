@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+    "@DOCBOOK_DTD@"
+[
+<!ENTITY % xinclude SYSTEM "xinclude.mod">
+%xinclude;
+]>
+<book id="manual" lang="en">
+    <bookinfo>
+        <title>Programmer's Reference Guide</title>
+        <subtitle>Zym Framework</subtitle>
+        <edition>Programmer's Reference Guide for Zym Framework</edition>
+        <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
+        <copyright>
+            <year>2008-<?dbtimestamp format="Y"?></year>
+            <holder>
+                Zym
+                (<ulink url="http://www.assembla.com/wiki/show/zym" />)
+            </holder>
+        </copyright>
+    </bookinfo>
+
+    <chapter id="zym.controller">
+        <title>Zym_Controller</title>
+        <xi:include href="module_specs/Zym_Controller-Action.xml" />
+    </chapter>
+
+    <appendix id="appendix.copyright">
+        <title>Copyright Information</title>
+        <xi:include href="ref/copyrights.xml" />
+    </appendix>
+    <index id="the.index" />
+</book>
+<!--
+vim:se ts=4 sw=4 et:
+-->
