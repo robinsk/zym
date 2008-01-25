@@ -1,0 +1,13 @@
+<sect1 id="copyright">
+    <title>Copyright Information</title>
+    <para>
+        The following copyrights are applicable to portions of the Zym Framework.
+    </para>
+    <para>
+        Copyright &#169; 2008-<?dbtimestamp format="Y"?> Zym.
+        (<ulink url="http://www.assembla.com/wiki/show/zym" />)
+    </para>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

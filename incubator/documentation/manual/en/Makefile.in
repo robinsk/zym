@@ -63,8 +63,8 @@ $(HTML_XSL): $(HTML_XSL).in
 # Build the docs in PDF format
 
 # pdf: $(MANUAL_XML) $(FO_XSL)
-#	$(XSLTPROC) --xinclude --output ZendFramework.fo $(FO_XSL) $(MANUAL_XML)
-#	$(FOP) -fo ZendFramework.fo -pdf ZendFramework.pdf
+#	$(XSLTPROC) --xinclude --output ZymFramework.fo $(FO_XSL) $(MANUAL_XML)
+#	$(FOP) -fo ZymFramework.fo -pdf ZymFramework.pdf
 
 check: $(MANUAL_XML)
 	@echo "Checking the whole manual with $(XMLLINT)..."
