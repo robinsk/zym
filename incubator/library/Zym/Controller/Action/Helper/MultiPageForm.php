@@ -529,7 +529,7 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
             case self::ACTION_KEY_CANCEL:
                 if (empty($this->_cancelAction)) {
                     $this->clear();
-                    $action = $this->getCurrentValidAction();
+                    $action = $this->_actions[0];
                 } else {
                     $action = $this->getCancelAction();
                 }
