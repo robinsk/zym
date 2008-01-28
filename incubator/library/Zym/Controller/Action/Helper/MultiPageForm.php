@@ -401,12 +401,18 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
      *
      * @return array
      */
-    public function getAllSubformData()
+    public function getAllSubformData($flatten = false)
     {
         $formData = array();
         
         foreach ($this->_actions as $action) {
-            $formData[$action] = $this->getValues($action);
+            $formValues = $this->getValues($action);
+            
+            if ($flatten) {
+                $formData = array_merge($formData, $formValues);
+            } else {
+                $formData[$action] = $formValues;
+            }
         }
         
         return $formData;
