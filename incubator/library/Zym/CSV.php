@@ -9,7 +9,6 @@
  *
  * @category   Zym
  * @package    CSV
- * @subpackage Exception
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
@@ -22,7 +21,6 @@ require_once 'Zym/CSV/Exception/FileNotReadable.php';
 /**
  * @category   Zym
  * @package    CSV
- * @subpackage Exception
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
