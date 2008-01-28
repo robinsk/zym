@@ -561,12 +561,9 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
      */ 
     public function clear() 
     { 
-        $this->_default = array(); 
-
-        $this->_session->valid = array(); 
-        $this->_session->value = array(); 
-        $this->_session->registry = array(); 
- 
+        $this->_session->valid = array();
+        $this->_session->value = array();
+        
         foreach ($this->_actions as $id) { 
             if (!isset($this->_session->valid[$id])) { 
                 $this->_session->valid[$id] = false; 
