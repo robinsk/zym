@@ -16,14 +16,14 @@
  */
 
 /**
- * Zym_Controller_Exception
+ * @see Zym_Controller_Exception
  */
-require_once('Zym/Controller/Exception.php');
+require_once 'Zym/Controller/Exception.php';
 
 /**
- * Zym_Controller_Action_Exception_Interface
+ * @see Zym_Controller_Action_Exception_Interface
  */
-require_once('Zym/Controller/Action/Exception/Interface.php');
+require_once 'Zym/Controller/Action/Exception/Interface.php';
 
 /**
  * @author Geoffrey Tran
@@ -33,6 +33,7 @@ require_once('Zym/Controller/Action/Exception/Interface.php');
  * @subpackage Action
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_Controller_Action_Exception extends Zym_Controller_Exception 
+class Zym_Controller_Action_Exception extends Zym_Controller_Exception
     implements Zym_Controller_Action_Exception_Interface
-{}
+{
+}

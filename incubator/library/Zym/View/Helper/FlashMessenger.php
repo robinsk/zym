@@ -46,5 +46,4 @@ class Zym_View_Helper_FlashMessenger
 
         return $flashMessenger;
     }
-
 }

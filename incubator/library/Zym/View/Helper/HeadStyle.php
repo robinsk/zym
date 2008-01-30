@@ -152,8 +152,8 @@ class Zym_View_Helper_HeadStyle extends ArrayObject implements Countable
      *
      * @param Zend_View_Abstract $view
      */
-    public function setView($view) {
+    public function setView($view)
+    {
         $this->_view = $view;
     }
-
 }

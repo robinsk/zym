@@ -37,4 +37,5 @@
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_Exception extends Exception
-{}
+{
+}

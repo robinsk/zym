@@ -27,20 +27,20 @@
  */
 
 /**
- * Zend_Controller_Dispatcher_Standard
+ * @see Zend_Controller_Dispatcher_Standard
  */
-require_once('Zend/Controller/Dispatcher/Standard.php');
+require_once 'Zend/Controller/Dispatcher/Standard.php';
 
 /**
  * ErrorHandler that allows module-based error handling
- * 
+ *
  * If an errorController is not found inside the current module, then
  * the error is forwarded to the default module's errorController
- * 
+ *
  * All exceptions that occur during the dispatch of the module error controller
  * is thrown.
- * 
- * Usage: 
+ *
+ * Usage:
  * <pre>
  * Zend_Controller_Front::getInstance()->registerPlugin(new Zym_Controller_Plugin_ErrorHandler(), 98);
  * </pre>
@@ -52,7 +52,7 @@ require_once('Zend/Controller/Dispatcher/Standard.php');
  * @subpackage Dispatcher
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Standard 
+class Zym_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Standard
 {
     /**
      * Format the module name.
@@ -68,7 +68,7 @@ class Zym_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Stan
 
         return ucfirst($this->_formatName($unformatted));
     }
-    
+
     /**
      * Load a controller class
      *

@@ -15,18 +15,18 @@
  */
 
 /**
- * Zym_Log_Exception
+ * @see Zym_Log_Exception
  */
-require_once('Zym/Log/Exception.php');
+require_once 'Zym/Log/Exception.php';
 
 /**
- * Zend_Log_Writer_Abstract
+ * @see Zend_Log_Writer_Abstract
  */
-require_once('Zend/Log/Writer/Abstract.php');
+require_once 'Zend/Log/Writer/Abstract.php';
 
 /**
  * A Zend_Log writer for integration with Doctrine (http://PHPDoctrine.org)
- * 
+ *
  * This writer was modelled after Doctrine_Log_Writer_Db which itself was
  * derived from Zend_Log_Writer_Db. ;)
  *
@@ -65,10 +65,10 @@ class Zym_Log_Writer_Doctrine extends Zend_Log_Writer_Abstract
             if (!class_exists('Doctrine')) {
                 throw new Zym_Log_Exception(get_class() . ' requires the Doctrine library');
             }
-            
+
             $table = Doctrine::getTable($table);
         }
-        
+
         $this->_table = $table;
         $this->_columnMap = $columnMap;
     }
@@ -111,7 +111,7 @@ class Zym_Log_Writer_Doctrine extends Zend_Log_Writer_Abstract
                 $dataToInsert[$columnName] = $event[$fieldKey];
             }
         }
-        
+
         $record = $this->_table->create($dataToInsert);
         $record->save();
     }

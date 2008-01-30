@@ -16,7 +16,7 @@
 /**
  * Zend_Filter_Interface
  */
-require_once('Zend/Filter/Interface.php');
+require_once 'Zend/Filter/Interface.php';
 
 /**
  * Converts values to floats
@@ -42,7 +42,7 @@ class Zym_Filter_Float implements Zym_Filter_Interface
 
         $valueFiltered = str_replace($locale['decimal_point'], '.', (string) $value);
         $valueFiltered = str_replace($locale['thousands_sep'], '', $valueFiltered);
-      
+
         return floatval($valueFiltered);
     }
 }

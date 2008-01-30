@@ -27,25 +27,25 @@
  */
 
 /**
- * Zend_Controller_Front
+ * @see Zend_Controller_Front
  */
-require_once('Zend/Controller/Front.php');
+require_once 'Zend/Controller/Front.php';
 
 /**
- * Zend_Controller_Plugin_Abstract
+ * @see Zend_Controller_Plugin_Abstract
  */
-require_once('Zend/Controller/Plugin/ErrorHandler.php');
+require_once 'Zend/Controller/Plugin/ErrorHandler.php';
 
 /**
  * ErrorHandler that allows module-based error handling
- * 
+ *
  * If an errorController is not found inside the current module, then
  * the error is forwarded to the default module's errorController
- * 
+ *
  * All exceptions that occur during the dispatch of the module error controller
  * is thrown.
- * 
- * Usage: 
+ *
+ * Usage:
  * <pre>
  * Zend_Controller_Front::getInstance()->registerPlugin(new Zym_Controller_Plugin_ErrorHandler(), 98);
  * </pre>
@@ -57,31 +57,31 @@ require_once('Zend/Controller/Plugin/ErrorHandler.php');
  * @subpackage Plugin
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHandler 
+class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHandler
 {
     /**
      * Request error handler param
      *
      */
     const ERROR_PARAM = 'error_handler';
-    
+
     /**
      * Flag to determine if the module errorHandler has been called
      *
      * @var boolean
      */
     protected $_isInsideModuleErrorHandler = false;
-    
+
     /**
      * Enable module error handling
      *
      * @var boolean
      */
     protected $_moduleErrorHandling = true;
-    
+
     /**
      * Custom module error controller map
-     * 
+     *
      * Array in form of:
      * <pre>
      * array(
@@ -96,7 +96,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
      * @var array
      */
     protected $_moduleErrorHandlerMap = array();
-    
+
     /**
      * Constructor
      *
@@ -112,19 +112,19 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     {
         $this->setErrorHandler($options);
     }
-    
+
     /**
      * Set module error handling
      *
      * @param boolean $handle
      * @return Zym_Controller_Plugin_ErrorHandler
      */
-    public function setModuleErrorHandling($handle = false) 
+    public function setModuleErrorHandling($handle = false)
     {
         $this->_moduleErrorHandling = (bool) $handle;
         return $this;
     }
-    
+
     /**
      * Get module error handling flag
      *
@@ -134,7 +134,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     {
         return $this->_moduleErrorHandling;
     }
-    
+
     /**
      * setErrorHandler() - setup the error handling options
      *
@@ -146,14 +146,14 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         if (isset($options['moduleErrorHandling'])) {
             $this->setModuleErrorHandling($options['moduleErrorHandling']);
         }
-        
+
         if (isset($options['moduleErrorHandlerMap'])) {
             $this->setModuleErrorHandlerMap($options['moduleErrorHandlerMap']);
         }
-        
+
         return parent::setErrorHandler($options);
     }
-    
+
     /**
      * Add a error handler map for a module
      *
@@ -165,7 +165,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         $this->_moduleErrorHandlerMap[$module] = $map;
         return $this;
     }
-    
+
     /**
      * Set the module error controller map
      *
@@ -177,7 +177,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         $this->_moduleErrorHandlerMap = $map;
         return $this;
     }
-    
+
     /**
      * Get the module error controller map
      *
@@ -187,7 +187,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     {
         return $this->_moduleErrorHandlerMap;
     }
-    
+
     /**
      * Called before Zend_Controller_Front begins evaluating the
      * request against its routes.
@@ -199,14 +199,14 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
         $frontController = Zend_Controller_Front::getInstance();
-        
+
         // Ensure this plugin is the only one (hackish, because FC does not allow custom ER setting)
         // We want to ensure compatibility with the 'noErrorHandler' param
         if ($frontController->hasPlugin('Zend_Controller_Plugin_ErrorHandler')) {
             $frontController->unregisterPlugin('Zend_Controller_Plugin_ErrorHandler');
         }
     }
-    
+
     /**
      * postDispatch() plugin hook -- check for exceptions and dispatch error
      * handler if necessary
@@ -220,7 +220,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
         $frontController = Zend_Controller_Front::getInstance();
-        
+
         // Disable error handling if 'noErrorHandler' is set
         if ($frontController->getParam('noErrorHandler')) {
             return;
@@ -230,7 +230,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         $response = $this->getResponse();
         $exceptions = $response->getException();
 
-        
+
         // Error handling failed... just throw the exception
         if ($this->_isInsideErrorHandlerLoop && count($exceptions) > $this->_exceptionCountAtFirstEncounter) {
             // Exception thrown by error handler; tell the front controller to throw it
@@ -245,7 +245,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
             $this->_isInsideErrorHandlerLoop = true;
 
             // Keep a copy of the original request
-            $error->request = clone $request;
+            // @FIXME: $error->request = clone $request;
 
             // Get a count of the number of exceptions encountered
             $this->_exceptionCountAtFirstEncounter = count($exceptions);
@@ -254,40 +254,40 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
             $module = $this->getErrorHandlerModule();
             $controller = $this->getErrorHandlerController();
             $action = $this->getErrorHandlerAction();
-            
+
             // Use module error controller if flag is set
             if ($this->getModuleErrorHandling() && !$this->_isInsideModuleErrorHandler) {
                 $this->_isInsideModuleErrorHandler = true;
                 $curModule = $request->getModuleName();
-                
+
                 $testModule = $curModule;
                 $testController = $controller;
                 $testAction = $action;
-                
+
                 // Module map set, use those settings
                 $moduleMap = $this->getModuleErrorHandlerMap();
                 if (array_key_exists($curModule, $moduleMap)) {
                     $curModuleMap = $moduleMap[$curModule];
-                    
+
                     if (!empty($curModuleMap['module'])) {
                         $testModule = $curModuleMap['module'];
                     }
-                    
+
                     if (!empty($curModuleMap['controller'])) {
                         $testController = $curModuleMap['controller'];
                     }
-                    
+
                     if (!empty($curModuleMap['action'])) {
                         $testAction = $curModuleMap['action'];
                     }
                 }
-                
+
                 // Build validator request
                 $requestValidator = clone $request;
                 $requestValidator->setModuleName($testModule)
                                  ->setControllerName($testController)
                                  ->setActionName($testAction);
-                                 
+
                 // Make sure it's a valid request
                 if ($frontController->getDispatcher()->isDispatchable($requestValidator)) {
                     $module = $testModule;
@@ -295,7 +295,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
                     $action = $testAction;
                 }
             }
-            
+
             // Forward to the error handler
             $request->setParam(self::ERROR_PARAM, $this->_getExceptionInfo($exceptions))
                     ->setModuleName($module)
@@ -304,7 +304,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
                     ->setDispatched(false);
         }
     }
-    
+
     /**
      * Get exception information
      *
@@ -322,11 +322,11 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
             case 'Zend_Controller_Dispatcher_Exception':
                 $error->type = self::EXCEPTION_NO_CONTROLLER;
                 break;
-                
+
             case 'Zend_Controller_Action_Exception':
                 $error->type = self::EXCEPTION_NO_ACTION;
                 break;
-                
+
             default:
                 // Check if exception implements an action interface
                 if ($exception instanceof Zym_Controller_Action_Exception_Interface) {
@@ -334,10 +334,10 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
                 } else {
                     $error->type = self::EXCEPTION_OTHER;
                 }
-                
+
                 break;
         }
-        
+
         return $error;
     }
 }

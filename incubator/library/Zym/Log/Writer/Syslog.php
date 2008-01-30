@@ -27,9 +27,9 @@
  */
 
 /**
- * Zend_Log_Writer_Abstract
+ * @see Zend_Log_Writer_Abstract
  */
-require_once('Zend/Log/Writer/Abstract.php');
+require_once 'Zend/Log/Writer/Abstract.php';
 
 /**
  * A Zend_Log Syslog writer
@@ -62,7 +62,7 @@ class Zym_Log_Writer_Syslog extends Zend_Log_Writer_Abstract
     /**
      * Formatting is not possible on this writer
      */
-    public function setFormatter($formatter) 
+    public function setFormatter($formatter)
     {
         throw new Zend_Log_Exception(get_class() . ' does not support formatting');
     }

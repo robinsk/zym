@@ -15,14 +15,14 @@
  */
 
 /**
- * Zend_Controller_Plugin_Abstract
+ * @see Zend_Controller_Plugin_Abstract
  */
-require_once('Zend/Controller/Plugin/Abstract.php');
+require_once 'Zend/Controller/Plugin/Abstract.php';
 
 /**
- * Zend_Session
+ * @see Zend_Session
  */
-require_once('Zend/Session.php');
+require_once 'Zend/Session.php';
 
 /**
  * Changes a session to a specified session id... This allows changing of the session
@@ -52,20 +52,20 @@ class Zym_Controller_Plugin_Sid extends Zend_Controller_Plugin_Abstract
     {
         $this->setSidKey($sidKey);
     }
-    
+
     /**
      * Get the sid key
-     * 
+     *
      * @return string
      */
     public function getSidKey()
     {
         return $this->_sidKey;
     }
-    
+
     /**
      * Set the sid key
-     * 
+     *
      * @param string $sidKey
      * @return Zym_Controller_Plugin_Sid
      */
@@ -99,7 +99,7 @@ class Zym_Controller_Plugin_Sid extends Zend_Controller_Plugin_Abstract
             if (Zend_Session::getId() == $sid) {
                 return;
             }
-            
+
             Zend_Session::destroy();
             Zend_Session::writeClose();
         }

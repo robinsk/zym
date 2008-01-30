@@ -38,7 +38,8 @@ class Zym_View_Helper_Url
     }
 
     public function route(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
-    {}
+    {
+    }
 
     public function __toString()
     {

@@ -27,9 +27,9 @@
  */
 
 /**
- * Zend_Controller_Response_Http
+ * @see Zend_Controller_Response_Http
  */
-require_once('Zend/Controller/Response/Http.php');
+require_once 'Zend/Controller/Response/Http.php';
 
 /**
  * @author Geoffrey Tran
@@ -39,7 +39,7 @@ require_once('Zend/Controller/Response/Http.php');
  * @subpackage Response
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_Controller_Response_Http extends Zend_Controller_Response_Http 
+class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
 {
     /**
      * Cookies storage
@@ -47,7 +47,7 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
      * @var array
      */
     protected $_cookies = array();
-    
+
     /**
      * Sets a cookie.
      *
@@ -63,25 +63,25 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
     public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = false, $httpOnly = false)
     {
         $this->canSendHeaders(true);
-        
+
         // Validate expiration time
         if ($expire !== null && is_numeric($expire)) {
             $expire = (int) $expire;
         } else if ($expire !== null) {
             $expire = strtotime($expire);
-            
+
             // Barf if its not valid
             if ($expire === false || $expire == -1) {
                 /**
                  * @see Zym_Controller_Response_Exception
                  */
-                require_once('Zym/Controller/Response/Exception.php');
+                require_once 'Zym/Controller/Response/Exception.php';
                 throw new Zym_Controller_Response_Exception(
                     'Your expire parameter is not valid.'
                 );
             }
         }
-        
+
         $this->cookies[] = array(
             'name'     => $name,
             'value'    => $value,
@@ -91,10 +91,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
             'secure'   => $secure ? true : false,
             'httpOnly' => $httpOnly
         );
-        
+
         return $this;
     }
-    
+
     /**
      * Clear cookies
      *
@@ -103,10 +103,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
     public function clearCookies()
     {
         $this->_cookies = array();
-      
+
         return $this;
     }
-    
+
     /**
      * Retrieves cookies from the current web response.
      *
@@ -118,7 +118,7 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
         foreach ($this->cookies as $cookie){
             $cookies[$cookie['name']] = $cookie;
         }
-    
+
         return $cookies;
     }
 
@@ -135,10 +135,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Clear all headers, normal and raw
      *
@@ -148,10 +148,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
     {
         // Clear cookies
         $this->clearCookies();
-        
+
         return parent::clearAllHeaders();
     }
-    
+
     /**
      * Send all headers
      *
@@ -166,13 +166,13 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
         if (count($this->_cookies)) {
             $this->canSendHeaders(true);
         }
-        
+
         // Send cookies
         foreach ($this->_cookies as $cookie) {
             setrawcookie($cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'],
                          $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
         }
-        
+
         return parent::sendHeaders();
     }
 }

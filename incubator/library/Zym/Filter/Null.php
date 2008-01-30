@@ -14,9 +14,9 @@
  */
 
 /**
- * Zend_Filter_Interface
+ * @see Zend_Filter_Interface
  */
-require_once('Zend/Filter/Interface.php');
+require_once 'Zend/Filter/Interface.php';
 
 /**
  * Fake filter that does not do anything

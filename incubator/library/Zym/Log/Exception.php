@@ -26,9 +26,9 @@
  */
 
 /**
- * Zym_Exception
+ * @see Zym_Exception
  */
-require_once('Zym/Exception.php');
+require_once 'Zym/Exception.php';
 
 /**
  * Log Exception Class
@@ -40,4 +40,5 @@ require_once('Zym/Exception.php');
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_Log_Exception extends Zym_Exception
-{}
+{
+}

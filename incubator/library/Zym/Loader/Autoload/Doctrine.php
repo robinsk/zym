@@ -27,14 +27,14 @@
  */
 
 /**
- * Doctrine
+ * @see Doctrine
  */
-require_once('Doctrine.php');
+require_once 'Doctrine.php';
 
 /**
- * Zym_Loader_Autoload_Interface
+ * @see Zym_Loader_Autoload_Interface
  */
-require_once('Zym/Loader/Autoload/Interface.php');
+require_once 'Zym/Loader/Autoload/Interface.php';
 
 /**
  * Zym Autoload for Doctrine (http://phpdoctrine.org)

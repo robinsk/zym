@@ -27,9 +27,9 @@
  */
 
 /**
- * Zend_Log_Writer_Abstract
+ * @see Zend_Log_Writer_Abstract
  */
-require_once('Zend/Log/Writer/Abstract.php');
+require_once 'Zend/Log/Writer/Abstract.php';
 
 /**
  * A Zend_Log debugging writer similar to the Mock writer
@@ -49,22 +49,22 @@ class Zym_Log_Writer_Debug extends Zend_Log_Writer_Abstract
      * @var array
      */
     protected $_events = array();
-    
+
     /**
      * Writer shutdown status
      *
      * @var boolean
      */
     protected $_shutdown = false;
-    
+
     /**
      * Formatting is not possible on this writer
      */
-    public function setFormatter($formatter) 
+    public function setFormatter($formatter)
     {
         throw new Zym_Log_Exception(get_class() . ' does not support formatting');
     }
-    
+
     /**
      * Get the logged events
      *
@@ -88,7 +88,7 @@ class Zym_Log_Writer_Debug extends Zend_Log_Writer_Abstract
                 'Database adapter instance has been removed by shutdown'
             );
         }
-        
+
         $this->_events[] = $event;
 	}
 

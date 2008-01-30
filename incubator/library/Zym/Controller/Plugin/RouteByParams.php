@@ -27,18 +27,18 @@
  */
 
 /**
- * Zend_Controller_Front
+ * @see Zend_Controller_Front
  */
-require_once('Zend/Controller/Front.php');
+require_once 'Zend/Controller/Front.php';
 
 /**
- * Zend_Controller_Plugin_Abstract
+ * @see Zend_Controller_Plugin_Abstract
  */
-require_once('Zend/Controller/Plugin/Abstract.php');
+require_once 'Zend/Controller/Plugin/Abstract.php';
 
 /**
  * Controller plugin to map get params to routes
- * 
+ *
  * So http://localhost/?module=test&controller=some&action=foo would work
  *
  * @author Geoffrey Tran
@@ -60,30 +60,29 @@ class Zym_Controller_Plugin_RouteByParams extends Zend_Controller_Plugin_Abstrac
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
         $frontController = Zend_Controller_Front::getInstance();
-        
+
         // Request keys
         $moduleKey = $request->getModuleKey();
         $controllerKey = $request->getControllerKey();
         $actionKey = $request->getActionKey();
-        
+
         // Defaults
         $moduleName = $frontController->getDefaultModule();
         $controllerName = $frontController->getDefaultControllerName();
         $actionName = $frontController->getDefaultAction();
-        
+
         // Set a url path
         if ($request->getPathInfo() == '') {
             $module = $request->getParam($moduleKey, $moduleName);
             $controller = $request->getParam($controllerKey, $controllerName);
             $action = $request->getParam($actionKey, $actionName);
-            
+
             if($controller != '' ) {
                 $url = ($module == $moduleName) ? $module : '/' . $module ;
                 $url .= '/' . $controller;
                 $url .= '/' . $action;
                 $request->setPathInfo($url);
-            } 
+            }
         }
     }
-
 }

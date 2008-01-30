@@ -27,9 +27,9 @@
  */
 
 /**
- * Zym_Controller_Exception
+ * @see Zym_Controller_Exception
  */
-require_once('Zym/Controller/Exception.php');
+require_once 'Zym/Controller/Exception.php';
 
 /**
  * @author Geoffrey Tran
@@ -40,4 +40,5 @@ require_once('Zym/Controller/Exception.php');
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_Controller_Response_Exception extends Zym_Controller_Exception
-{}
+{
+}
