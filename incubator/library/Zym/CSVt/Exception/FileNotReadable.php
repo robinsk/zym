@@ -28,6 +28,6 @@ require_once 'Zym/Exception.php';
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Zym_CSV_Exception_FileNotReadable extends Zym_Exception
+class Zym_Csv_Exception_FileNotReadable extends Zym_Exception
 {
 }

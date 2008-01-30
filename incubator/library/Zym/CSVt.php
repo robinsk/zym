@@ -15,7 +15,7 @@
  */
 
 /**
- * @see Zym_CSV_Exception_FileNotReadable
+ * @see Zym_Csv_Exception_FileNotReadable
  */
 require_once 'Zym/CSV/Exception/FileNotReadable.php';
 
@@ -26,7 +26,7 @@ require_once 'Zym/CSV/Exception/FileNotReadable.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Zym_CSV implements Iterator
+class Zym_Csv implements Iterator
 {
     /**
      * Maximum row length
@@ -67,7 +67,7 @@ class Zym_CSV implements Iterator
      *
      * @param string $file
      * @param string $delimiter
-     * @throws Zym_CSV_Exception_FileNotReadable
+     * @throws Zym_Csv_Exception_FileNotReadable
      */
     public function __construct($file, $delimiter = ',')
     {
@@ -75,7 +75,7 @@ class Zym_CSV implements Iterator
         $this->delimiter = $delimiter;
 
         if (empty($this->filePointer)) {
-            throw new Zym_CSV_Exception_FileNotReadable(sprintf('The file "%s" cannot be read.', $file));
+            throw new Zym_Csv_Exception_FileNotReadable(sprintf('The file "%s" cannot be read.', $file));
         }
     }
 
