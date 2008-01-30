@@ -21,7 +21,7 @@
 
 
 /**
- * Abstract class for extension
+ * @see Abstract class for extension
  */
 require_once 'Zend/View/Helper/FormElement.php';
 

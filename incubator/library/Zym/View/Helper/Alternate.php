@@ -24,7 +24,8 @@
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_View_Helper_Alternate implements Iterator {
+class Zym_View_Helper_Alternate implements Iterator
+{
     /**
      * Counter
      *
@@ -45,7 +46,8 @@ class Zym_View_Helper_Alternate implements Iterator {
      * @param array $values Shortcut to setValues()
      * @return Zym_View_Helper_Alternate
      */
-    public function alternate(array $values = null) {
+    public function alternate(array $values = null)
+    {
         if (count($values)) {
             $this->setValues($values);
         }

@@ -15,9 +15,9 @@
  */
 
 /**
- * Zend_Controller_Action_HelperBroker
+ * @see Zend_Controller_Action_HelperBroker
  */
-require_once('Zend/Controller/Action/HelperBroker.php');
+require_once 'Zend/Controller/Action/HelperBroker.php';
 
 /**
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License

@@ -15,9 +15,9 @@
  */
 
 /**
- * Zend_Controller_Action_HelperBroker
+ * @see Zend_Controller_Action_HelperBroker
  */
-require_once('Zend/Controller/Action/HelperBroker.php');
+require_once 'Zend/Controller/Action/HelperBroker.php';
 
 /**
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
@@ -31,15 +31,15 @@ class Zym_View_Helper_Url
     {
         return $this;
     }
-    
+
     public function simple($action, $controller = null, $module = null, array $params = null)
     {
-        return Zend_Controller
+        //return Zend_Controller
     }
-    
+
     public function route(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
     {}
-    
+
     public function __toString()
     {
         return $this->route();

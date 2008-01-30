@@ -22,37 +22,37 @@
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-abstract class Zym_View_Helper_Abstract {
-
+abstract class Zym_View_Helper_Abstract
+{
     /**
      * View Object
      *
      * @var Zend_View_Abstract
      */
     protected $_view;
-    
+
     /**
      * Clone view object
      *
      * @return Zend_View_Abstract
      */
-    public function cloneView() 
+    public function cloneView()
     {
         if (!$this->_view) {
             throw new Zym_Exception("A view object of instance Zend_View_Abstract is not set.");
         }
-        
+
         $clonedView = clone $this->getView();
         return $clonedView;
     }
-    
+
     /**
      * Set view object
      *
      * @param Zend_View_Abstract $view
      * @return Zym_View_Helper_Abstract
      */
-    public function setView(Zend_View_Abstract $view) 
+    public function setView(Zend_View_Abstract $view)
     {
         $this->_view = $view;
         return $this;
@@ -63,7 +63,7 @@ abstract class Zym_View_Helper_Abstract {
      *
      * @return Zend_View_Abstract
      */
-    public function getView() 
+    public function getView()
     {
         return $this->_view;
     }
