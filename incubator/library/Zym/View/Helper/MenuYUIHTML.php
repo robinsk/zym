@@ -45,24 +45,26 @@ class Zym_View_Helper_MenuYUIHTML
      * @param Zym_Menu_Abstract $menu
      * @return string
      */
-    public function MenuYUIHTML(Zym_Menu $menu)
+    public function MenuYUIHTML(Zym_Menu $menu, $menuClass = 'yuimenubar')
     {
-        return $this->_renderMenu($menu, true);
+        return $this->_renderMenu($menu, $menuClass, true);
     }
 
     /**
      * Render the menu
      *
      * @param Zym_Menu_Abstract $menu
+     * @param string $menuClass
      * @param boolean $firstRun
      * @return string
      */
-    protected function _renderMenu(Zym_Menu_Abstract $menu, $firstRun = false)
+    protected function _renderMenu(Zym_Menu_Abstract $menu, $menuClass, $firstOfType = false)
     {
-        $xhtml = sprintf('<div id="Menu%s" class="yuimenu">', $menu->getId());
+        $xhtml = sprintf('<div id="Menu%s" class="%s">',
+                         $menu->getId(), $menuClass);
         $xhtml .= '<div class="bd"><ul';
 
-        if ($firstRun) {
+        if ($firstOfType) {
             $xhtml .= ' class="first-of-type"';
         }
 
@@ -71,8 +73,11 @@ class Zym_View_Helper_MenuYUIHTML
         if ($menu->hasMenuItems()) {
             $menuItems = $menu->getMenuItems();
 
+            $firstItemOfType = true;
+
             foreach ($menuItems as $menuItem) {
-                $xhtml .= $this->_renderMenuItem($menuItem);
+                $xhtml .= $this->_renderMenuItem($menuItem, $menuClass, $firstItemOfType);
+                $firstItemOfType = false;
             }
         }
 
@@ -87,7 +92,7 @@ class Zym_View_Helper_MenuYUIHTML
      * @param Zym_Menu_Item $item
      * @return string
      */
-    protected function _renderMenuItem(Zym_Menu_Item $item)
+    protected function _renderMenuItem(Zym_Menu_Item $item, $menuClass, $firstOfType = false)
     {
         $link = null;
         $target = $item->getTarget();
@@ -100,7 +105,12 @@ class Zym_View_Helper_MenuYUIHTML
             }
         }
 
-        $xhtml .= sprintf('<li id="%s" class="yuimenuitem', $item->getId());
+        $xhtml .= sprintf('<li id="%s" class="%sitem',
+                          $item->getId(), $menuClass);
+
+        if ($firstOfType) {
+            $xhtml .= ' first-of-type';
+        }
 
         if ($item->isSelected()) {
             $xhtml .= ' activeMenuItem';
@@ -109,13 +119,14 @@ class Zym_View_Helper_MenuYUIHTML
         $xhtml .= '">';
 
         if (!empty($link)) {
-            $xhtml .= sprintf('<a class="yuimenuitemlabel" href="%s">%s</a>', $link, $item->getLabel());
+            $xhtml .= sprintf('<a class="%sitemlabel" href="%s">%s</a>',
+                              $menuClass, $link, $item->getLabel());
         } else {
             $xhtml .= $item->getLabel();
         }
 
         if ($item->hasMenuItems()) {
-            $xhtml .= $this->_renderMenu($item);
+            $xhtml .= $this->_renderMenu($item, $menuClass);
         }
 
         $xhtml .= '</li>';
