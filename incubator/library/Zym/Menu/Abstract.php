@@ -78,7 +78,7 @@ abstract class Zym_Menu_Abstract
      */
     public function setId($id)
     {
-        $this->_id = $id;
+        $this->_id = (string)$id;
 
         return $this;
     }
@@ -90,7 +90,7 @@ abstract class Zym_Menu_Abstract
      */
     public function getId()
     {
-        return $this->_id;
+        return (string)$this->_id;
     }
 
     /**

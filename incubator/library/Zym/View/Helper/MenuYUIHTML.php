@@ -99,7 +99,7 @@ class Zym_View_Helper_MenuYUIHTML
 
         if (!empty($target)) {
             if (is_array($target)) {
-                $link = $this->_view->url($target, null, true);
+                $link = (string) $this->_view->url($target, null, true);
             } else {
                 $link = (string) $target;
             }

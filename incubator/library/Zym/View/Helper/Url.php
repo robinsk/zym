@@ -25,11 +25,15 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_View_Helper_Url
+class Zym_View_Helper_Url extends Zend_View_Helper_Url
 {
     public function url(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
     {
-        return $this;
+        if (empty($urlOptions)) {
+            return $this;
+        } else {
+            return parent::url($urlOptions, $name, $reset, $encode);
+        }
     }
 
     public function simple($action, $controller = null, $module = null, array $params = null)

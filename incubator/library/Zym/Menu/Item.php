@@ -99,7 +99,7 @@ class Zym_Menu_Item extends Zym_Menu_Abstract
      */
     public function setLabel($label)
     {
-        $this->_label = $label;
+        $this->_label = (string)$label;
 
         return $this;
     }
@@ -124,7 +124,7 @@ class Zym_Menu_Item extends Zym_Menu_Abstract
      */
     public function getLabel()
     {
-        return $this->_label;
+        return (string)$this->_label;
     }
 
     /**
@@ -145,7 +145,7 @@ class Zym_Menu_Item extends Zym_Menu_Abstract
      */
     public function setSelected($selected = true)
     {
-        $this->_selected = $selected;
+        $this->_selected = (bool)$selected;
 
         return $this;
     }
@@ -165,7 +165,7 @@ class Zym_Menu_Item extends Zym_Menu_Abstract
             }
         }
 
-        return $this->_selected;
+        return (bool)$this->_selected;
     }
 
     /**
