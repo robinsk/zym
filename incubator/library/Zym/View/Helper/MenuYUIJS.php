@@ -21,7 +21,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Zym_View_Helper_MenuYUI
+class Zym_View_Helper_MenuYUIJS
 {
     /**
      * @var Zend_View_Interface
@@ -45,9 +45,9 @@ class Zym_View_Helper_MenuYUI
      * @param Zym_Menu_Abstract $menu
      * @return string
      */
-    public function MenuYUI(Zym_Menu $menu)
+    public function MenuYUIJS(Zym_Menu $menu)
     {
-        return $this->_renderMenu($menu, true);
+        return $this->_renderMenu($menu);
     }
 
     /**
@@ -57,28 +57,29 @@ class Zym_View_Helper_MenuYUI
      * @param boolean $firstRun
      * @return string
      */
-    protected function _renderMenu(Zym_Menu_Abstract $menu, $firstRun = false)
+    protected function _renderMenu(Zym_Menu_Abstract $menu)
     {
-        $xhtml .= sprintf('<div id="Menu%s" class="yuimenu">', $menu->getId());
-        $xhtml .= '<div class="bd"><ul';
-
-        if ($firstRun) {
-            $xhtml .= ' class="first-of-type"';
-        }
-
-        $xhtml .= '>';
+        $js = '[';
 
         if ($menu->hasMenuItems()) {
             $menuItems = $menu->getMenuItems();
+            $itemCount = count($menuItems);
 
+            $i = 0;
             foreach ($menuItems as $menuItem) {
-                $xhtml .= $this->_renderMenuItem($menuItem);
+                $js .= $this->_renderMenuItem($menuItem);
+
+                if ($i < $itemCount - 1) {
+                    $js .= ',';
+                }
+
+                $i++;
             }
         }
 
-        $xhtml .= '</ul></div></div>';
+        $js .= ']';
 
-        return $xhtml;
+        return $js;
     }
 
     /**
@@ -92,32 +93,30 @@ class Zym_View_Helper_MenuYUI
         $link = null;
         $target = $item->getTarget();
 
-        if (is_array($target)) {
-            $link = $this->_view->url($target, null, true);
-        } else {
-            $link = (string) $target;
+        if (!empty($target)) {
+            if (is_array($target)) {
+                $link = $this->_view->url($target, null, true);
+            } else {
+                $link = (string) $target;
+            }
         }
 
-        $xhtml .= sprintf('<li id="%s" class="yuimenuitem', $item->getId());
+        $js .= sprintf('{text:"%s"', $item->getLabel());
 
         if ($item->isSelected()) {
-            $xhtml .= ' activeMenuItem';
+            $js .= ',selected:true';
         }
 
-        $xhtml .= '">';
-
         if (!empty($link)) {
-            $xhtml .= sprintf('<a class="yuimenuitemlabel" href="%s">%s</a>', $link, $item->getLabel());
-        } else {
-            $xhtml .= $item->getLabel();
+            $js .= sprintf(',url:"%s"', $link);
         }
 
         if ($item->hasMenuItems()) {
-            $xhtml .= $this->_renderMenu($item);
+            $js .= sprintf(',submenu:{id:"%s",itemdata:%s}', $item->getId(), $this->_renderMenu($item));
         }
 
-        $xhtml .= '</li>';
+        $js .= '}';
 
-        return $xhtml;
+        return $js;
     }
 }

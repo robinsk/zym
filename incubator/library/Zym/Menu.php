@@ -39,7 +39,7 @@ class Zym_Menu extends Zym_Menu_Abstract
         $this->setId($id);
         $this->setMenuItems($menuItems);
 
-        $this->init();
+        $this->_init();
     }
 
     /**
