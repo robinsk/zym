@@ -145,13 +145,17 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
 
     /**
      * Show a list with all available models
-     * @TODO Add pagination support
      */
     public function listAction()
     {
-        $table = $this->_getTable();
-        $models = $table->fetchAll();
+        $limit = $this->_getParam('limit');
+        $page  = $this->_getParam('page');
 
+        $table = $this->_getTable();
+        $models = $table->fetchAll(null, $limit, $page);
+
+        $this->view->limit = $limit;
+        $this->view->page = $page;
         $this->view->models = $models;
     }
 
