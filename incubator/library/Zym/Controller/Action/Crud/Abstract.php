@@ -26,6 +26,11 @@ require_once 'Zend/Db/Table/Abstract.php';
 require_once 'Zym/Controller/Action/Abstract.php';
 
 /**
+ * @see Zym_Controller_Exception
+ */
+require_once 'Zym/Controller/Exception.php';
+
+/**
  * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Controller
@@ -49,11 +54,21 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     abstract protected function _getForm();
 
+    /**
+     * Get the primary id from the request
+     *
+     * @return int|null
+     */
     protected function _getPrimaryId()
     {
         return $this->_getParam($this->_getPrimaryIdKey());
     }
 
+    /**
+     * Get the location to where the form needs to submit for a new entry
+     *
+     * @return array
+     */
     protected function _getNewSubmitLocation()
     {
         return array('module'     => $this->getRequest()->getModuleName(),
@@ -61,6 +76,11 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                      'action'     => $this->_getAddEditAction());
     }
 
+    /**
+     * Get the location to where the form needs to submit for an edited entry
+     *
+     * @return array
+     */
     protected function _getEditSubmitLocation()
     {
         $location = $this->_getNewSubmitLocation();
@@ -69,28 +89,64 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         return $location;
     }
 
+    /**
+     * Get the column name of the primary id
+     *
+     * @return string
+     */
     protected function _getPrimaryIdKey()
     {
         $info = $this->_getTable()->info();
         // @TODO: decide if we want support for multiple primary keys
-        return $info[Zend_Db_Table_Abstract::PRIMARY][0];
+        return (string) $info[Zend_Db_Table_Abstract::PRIMARY][0];
     }
 
+    /**
+     * Get the model from the table
+     *
+     * @param int $id
+     * @return Zend_Db_Table_Row_Abstract|null
+     */
+    protected function _getModel($id)
+    {
+        $table = $this->_getTable();
+
+        return $table->find((int) $id)
+                     ->current();
+    }
+
+    /**
+     * Get the name of the action that takes care of the add/edit stuff
+     *
+     * @return string
+     */
     protected function _getAddEditAction()
     {
         return 'addEdit';
     }
 
+    /**
+     * Get the name of the action that takes care of the listing
+     *
+     * @return string
+     */
     protected function _getListAction()
     {
         return 'list';
     }
 
-    public function indexAction ()
+    /**
+     * Index action. Forward to the list action
+     */
+    public function indexAction()
     {
         $this->_forward($this->_getListAction());
     }
 
+    /**
+     * Show a list with all available models
+     * @TODO Add pagination support
+     */
     public function listAction()
     {
         $table = $this->_getTable();
@@ -99,15 +155,16 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $this->view->models = $models;
     }
 
+    /**
+     * View a model if it exists
+     */
     public function viewAction()
     {
         $id = $this->_getPrimaryId();
         $model = null;
 
         if ($id) {
-            $table = $this->_getTable();
-            $model = $table->find($id)
-                           ->current();
+            $model = $this->_getModel($id);
 
             if ($model) {
                 $this->view->model = $model;
@@ -119,6 +176,9 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         }
     }
 
+    /**
+     * Add or edit a model
+     */
     public function addEditAction()
     {
         $idKey = $this->_getPrimaryIdKey();
@@ -129,30 +189,31 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 $formValues = $form->getValues();
-                $table = $this->_getTable();
-                // @TODO: make a safe way to set the values
+
                 if (!empty($formValues[$idKey])) {
-                    $model = $table->find($formValues[$idKey])
-                                   ->current();
+                    $model = $this->_getModel($id);
 
                     if (!$model) {
-                        // @TODO redirect to 'couldn't find model' page
+                        throw new Zym_Controller_Exception('The model could not be loaded.'); // @TODO redirect to 'couldn't find model' page instead of an exception?
                     }
                 } else {
-                    $model = $table->createRow();
+                    $model = $this->_getTable()->createRow();
                 }
 
-                /**
-                 * @TODO: Set model values here....
-                 * $model->key = $formValues['key'];
-                 */
+                foreach ($formValues as $key => $value) {
+                	if (isset($model->$key)) {
+                	    $model->$key = $value;
+                	}
+                }
 
                 $model->save();
 
                 $this->_goto($this->_getListAction());
             }
         } else {
-            // @TODO if no form data is present and this is an edit action, load the model from the db and populate the form.
+            $model = $this->_getModel($id);
+
+            $form->setDefaults($model->toArray());
         }
 
         if (!$id) {
@@ -166,6 +227,9 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Delete a model
+     */
     public function deleteAction()
     {
         $id = $this->_getPrimaryId();
