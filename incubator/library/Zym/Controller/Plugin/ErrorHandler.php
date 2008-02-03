@@ -232,9 +232,6 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         if ($response->isException() && ($notInLoop || $inModuleErrorLoop)) {
             $this->_isInsideErrorHandlerLoop = true;
 
-            // Keep a copy of the original request
-            $error->request = clone $request;
-
             // Get a count of the number of exceptions encountered
             $this->_exceptionCountAtFirstEncounter = count($exceptions);
 
@@ -285,7 +282,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
             }
 
             // Forward to the error handler
-            $request->setParam(self::ERROR_PARAM, $this->_getExceptionInfo($exceptions))
+            $request->setParam(self::ERROR_PARAM, $this->_getExceptionInfo($exceptions, $request))
                     ->setModuleName($module)
                     ->setControllerName($controller)
                     ->setActionName($action)
@@ -299,13 +296,14 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
      * @param array $exceptions
      * @return ArrayObject
      */
-    protected function _getExceptionInfo(array $exceptions)
+    protected function _getExceptionInfo(array $exceptions, Zend_Controller_Request_Abstract $request)
     {
         // Get exception information
         $error            = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         $exception        = $exceptions[0];
         $exceptionType    = get_class($exception);
         $error->exception = $exception;
+
         switch ($exceptionType) {
             case 'Zend_Controller_Dispatcher_Exception':
                 $error->type = self::EXCEPTION_NO_CONTROLLER;
@@ -325,6 +323,9 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
 
                 break;
         }
+        
+        // Keep a copy of the original request
+        $error->request = clone $request;
 
         return $error;
     }

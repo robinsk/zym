@@ -10,13 +10,12 @@
  * @category Zym
  * @package Zym_Version
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
- * Framework Version
- *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Version
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
@@ -37,7 +36,7 @@ final class Zym_Version
 
     /**
      * Compare the specified Framework version string $version
-     * with the current Zym_Version::VERSION of the Zym Framework.
+     * with the current Zym_Version::VERSION of the Zym/ Framework.
      *
      * @param  string  $version  A version string (e.g. "0.7.1").
      * @return boolean           -1 if the $version is older,
