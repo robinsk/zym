@@ -7,6 +7,7 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
+ * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Controller
  * @subpackage Action
@@ -20,6 +21,7 @@
 require_once 'Zend/Controller/Action.php';
 
 /**
+ * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Controller
  * @subpackage Action
@@ -30,24 +32,24 @@ abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
 {
     /**
      * Get the view object
-     * 
+     *
      * @return Zend_View
      */
     public function getView()
     {
         return $this->view;
     }
-    
+
     /**
      * Get the view script suffix
-     * 
+     *
      * @return string
      */
     public function getViewSuffix()
     {
         return $this->viewSuffix;
     }
-    
+
     /**
      * Perform a redirect to an action/controller/module with params.
      *
