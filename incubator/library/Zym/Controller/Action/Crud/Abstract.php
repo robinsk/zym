@@ -97,8 +97,8 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     protected function _getPrimaryIdKey()
     {
         $info = $this->_getTable()->info();
-        // @TODO: decide if we want support for multiple primary keys
-        return (string) $info[Zend_Db_Table_Abstract::PRIMARY][0];
+
+        return (string) array_shift($info[Zend_Db_Table_Abstract::PRIMARY]);
     }
 
     /**
@@ -193,7 +193,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                     $model = $this->_getModel($id);
 
                     if (!$model) {
-                        throw new Zym_Controller_Exception('The model could not be loaded.'); // @TODO redirect to 'couldn't find model' page instead of an exception?
+                        throw new Zym_Controller_Exception('The model could not be loaded.');
                     }
                 } else {
                     $model = $this->_getTable()->createRow();
