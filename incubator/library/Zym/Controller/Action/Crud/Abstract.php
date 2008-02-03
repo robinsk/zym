@@ -54,20 +54,19 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         return $this->_getParam($this->_getPrimaryIdKey());
     }
 
-    // @TODO: make the locations dynamic
     protected function _getNewSubmitLocation()
     {
         return array('module'     => $this->getRequest()->getModuleName(),
                      'controller' => $this->getRequest()->getControllerName(),
-                     'action'     => 'addEdit');
+                     'action'     => $this->_getAddEditAction());
     }
 
     protected function _getEditSubmitLocation()
     {
-        return array('module'     => $this->getRequest()->getModuleName(),
-                     'controller' => $this->getRequest()->getControllerName(),
-                     'action'     => 'addEdit',
-                     'id'         => $this->_getPrimaryId());
+        $location = $this->_getNewSubmitLocation();
+        $location[$this->_getPrimaryIdKey()] = $this->_getPrimaryId();
+
+        return $location;
     }
 
     protected function _getPrimaryIdKey()
@@ -75,6 +74,11 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $info = $this->_getTable()->info();
         // @TODO: decide if we want support for multiple primary keys
         return $info[Zend_Db_Table_Abstract::PRIMARY][0];
+    }
+
+    protected function _getAddEditAction()
+    {
+        return 'addEdit';
     }
 
     protected function _getListAction()
