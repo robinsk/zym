@@ -26,11 +26,6 @@ require_once 'Zend/Db/Table/Abstract.php';
 require_once 'Zym/Controller/Action/Abstract.php';
 
 /**
- * @see Zym_Controller_Exception
- */
-require_once 'Zym/Controller/Exception.php';
-
-/**
  * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Controller
@@ -188,15 +183,21 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $form = $this->_getForm();
 
         $id = $this->_getPrimaryId();
+        $idKey = $this->_getPrimaryIdKey();
 
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
                 $formValues = $form->getValues();
 
-                if (!empty($formValues[$this->_getPrimaryIdKey()])) {
+                if (!empty($formValues[$idKey])) {
                     $model = $this->_getModel($id);
 
                     if (!$model) {
+                        /**
+                         * @see Zym_Controller_Exception
+                         */
+                        require_once 'Zym/Controller/Exception.php';
+
                         throw new Zym_Controller_Exception('The model could not be loaded.');
                     }
                 } else {
@@ -204,7 +205,8 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                 }
 
                 foreach ($formValues as $key => $value) {
-                	if (isset($model->$key)) {
+                    // @TODO: Check if the primary key is set to auto_increment. if so, ignore it, if not treat it normally.
+                	if (isset($model->$key) && $key != $idKey) {
                 	    $model->$key = $value;
                 	}
                 }
