@@ -214,9 +214,11 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                 $this->_goto($this->_getListAction());
             }
         } else {
-            $model = $this->_getModel($id);
+            if ($id) {
+                $model = $this->_getModel($id);
 
-            $form->setDefaults($model->toArray());
+                $form->setDefaults($model->toArray());
+            }
         }
 
         if (!$id) {
