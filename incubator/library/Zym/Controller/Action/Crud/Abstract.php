@@ -148,7 +148,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                 $this->_goto($this->_getListAction());
             }
         } else {
-            $form->loadAddress($id);
+            // @TODO if no form data is present and this is an edit action, load the model from the db and populate the form.
         }
 
         if (!$id) {
