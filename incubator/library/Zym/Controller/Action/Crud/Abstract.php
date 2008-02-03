@@ -181,7 +181,6 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     public function addEditAction()
     {
-        $idKey = $this->_getPrimaryIdKey();
         $form = $this->_getForm();
 
         $id = $this->_getPrimaryId();
@@ -190,7 +189,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
             if ($form->isValid($this->getRequest()->getPost())) {
                 $formValues = $form->getValues();
 
-                if (!empty($formValues[$idKey])) {
+                if (!empty($formValues[$this->_getPrimaryIdKey()])) {
                     $model = $this->_getModel($id);
 
                     if (!$model) {
