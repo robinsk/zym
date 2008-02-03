@@ -11,7 +11,7 @@
  * @package Zym_Controller
  * @subpackage Plugin
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
@@ -28,7 +28,8 @@ require_once 'Zend/Session.php';
  * Changes a session to a specified session id... This allows changing of the session
  * via url variables such as /index/index/sid/ASD231sd123
  *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Controller
  * @subpackage Plugin

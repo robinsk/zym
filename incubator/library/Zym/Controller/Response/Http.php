@@ -4,26 +4,14 @@
  *
  * LICENSE
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
  *
  * @category Zym
  * @package Zym_Controller
  * @subpackage Response
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
- * @link http://www.spotsec.com
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
@@ -33,13 +21,13 @@ require_once 'Zend/Controller/Response/Http.php';
 
 /**
  * @author Geoffrey Tran
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Controller
  * @subpackage Response
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
+class Zym_Controller_Response_Http extends Zend_Controller_Response_Http 
 {
     /**
      * Cookies storage
@@ -47,7 +35,7 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
      * @var array
      */
     protected $_cookies = array();
-
+    
     /**
      * Sets a cookie.
      *
@@ -63,13 +51,13 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
     public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = false, $httpOnly = false)
     {
         $this->canSendHeaders(true);
-
+        
         // Validate expiration time
         if ($expire !== null && is_numeric($expire)) {
             $expire = (int) $expire;
         } else if ($expire !== null) {
             $expire = strtotime($expire);
-
+            
             // Barf if its not valid
             if ($expire === false || $expire == -1) {
                 /**
@@ -81,7 +69,7 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
                 );
             }
         }
-
+        
         $this->cookies[] = array(
             'name'     => $name,
             'value'    => $value,
@@ -91,10 +79,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
             'secure'   => $secure ? true : false,
             'httpOnly' => $httpOnly
         );
-
+        
         return $this;
     }
-
+    
     /**
      * Clear cookies
      *
@@ -103,10 +91,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
     public function clearCookies()
     {
         $this->_cookies = array();
-
+      
         return $this;
     }
-
+    
     /**
      * Retrieves cookies from the current web response.
      *
@@ -118,7 +106,7 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
         foreach ($this->cookies as $cookie){
             $cookies[$cookie['name']] = $cookie;
         }
-
+    
         return $cookies;
     }
 
@@ -135,10 +123,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     /**
      * Clear all headers, normal and raw
      *
@@ -148,10 +136,10 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
     {
         // Clear cookies
         $this->clearCookies();
-
+        
         return parent::clearAllHeaders();
     }
-
+    
     /**
      * Send all headers
      *
@@ -166,13 +154,13 @@ class Zym_Controller_Response_Http extends Zend_Controller_Response_Http
         if (count($this->_cookies)) {
             $this->canSendHeaders(true);
         }
-
+        
         // Send cookies
         foreach ($this->_cookies as $cookie) {
             setrawcookie($cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'],
                          $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
         }
-
+        
         return parent::sendHeaders();
     }
 }

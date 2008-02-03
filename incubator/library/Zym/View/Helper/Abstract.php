@@ -11,13 +11,14 @@
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
  * Abstract view helper
  *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
@@ -41,7 +42,7 @@ abstract class Zym_View_Helper_Abstract
         if (!$this->_view) {
             throw new Zym_Exception("A view object of instance Zend_View_Abstract is not set.");
         }
-
+        
         $clonedView = clone $this->getView();
         return $clonedView;
     }
@@ -63,7 +64,7 @@ abstract class Zym_View_Helper_Abstract
      *
      * @return Zend_View_Abstract
      */
-    public function getView()
+    public function getView() 
     {
         return $this->_view;
     }

@@ -10,18 +10,19 @@
  * @category Zym
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
- * Zend_Filter_Interface
+ * @see Zend_Filter_Interface
  */
 require_once 'Zend/Filter/Interface.php';
 
 /**
  * Converts values to floats
  *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)

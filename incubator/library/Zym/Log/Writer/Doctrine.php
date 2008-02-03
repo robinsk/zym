@@ -11,7 +11,7 @@
  * @package Zym_Log
  * @subpackage Writer
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
@@ -30,7 +30,8 @@ require_once 'Zend/Log/Writer/Abstract.php';
  * This writer was modelled after Doctrine_Log_Writer_Db which itself was
  * derived from Zend_Log_Writer_Db. ;)
  *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Log
  * @subpackage Writer

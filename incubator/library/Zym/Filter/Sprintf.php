@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
@@ -21,7 +21,8 @@ require_once 'Zend/Filter/Interface.php';
 /**
  * Filter using sprintf
  *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)

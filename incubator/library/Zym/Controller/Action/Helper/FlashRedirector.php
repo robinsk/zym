@@ -8,10 +8,10 @@
  * with this package in the file LICENSE.txt.
  *
  * @category Zym
- * @package Zym_Controller
- * @subpackage Action
+ * @package Zym_Controller_Action
+ * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
 
 /**
@@ -29,10 +29,11 @@ require_once 'Zend/Session/Namespace.php';
  * a url with a specified duration before expiration. The url can be retrieved
  * on the next request. Useful for redirecting to previous page after login.
  *
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @author Geoffrey Tran
+ * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
- * @package Zym_Controller
- * @subpackage Action
+ * @package Zym_Controller_Action
+ * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Action_Helper_Abstract
