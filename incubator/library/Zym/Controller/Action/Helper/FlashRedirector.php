@@ -8,8 +8,8 @@
  * with this package in the file LICENSE.txt.
  *
  * @category Zym
- * @package Zym_Controller_Action
- * @subpackage Helper
+ * @package Zym_Controller
+ * @subpackage Action_Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
@@ -32,8 +32,8 @@ require_once 'Zend/Session/Namespace.php';
  * @author Geoffrey Tran
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
- * @package Zym_Controller_Action
- * @subpackage Helper
+ * @package Zym_Controller
+ * @subpackage Action_Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Action_Helper_Abstract

@@ -9,6 +9,7 @@
  *
  * @category Zym
  * @package Zym_Error
+ * @subpackage Handler
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
@@ -18,6 +19,7 @@
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_Error
+ * @subpackage Handler
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 interface Zym_Error_Handler_Interface
