@@ -20,18 +20,7 @@
 require_once 'Zend/Controller/Dispatcher/Standard.php';
 
 /**
- * ErrorHandler that allows module-based error handling
- *
- * If an errorController is not found inside the current module, then
- * the error is forwarded to the default module's errorController
- *
- * All exceptions that occur during the dispatch of the module error controller
- * is thrown.
- *
- * Usage:
- * <pre>
- * Zend_Controller_Front::getInstance()->registerPlugin(new Zym_Controller_Plugin_ErrorHandler(), 98);
- * </pre>
+ * Dispatcher
  *
  * @author Geoffrey Tran
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
@@ -86,11 +75,17 @@ class Zym_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Stan
         try {
             Zend_Loader::loadFile($file, $dir, true);
         } catch (Zend_Exception $e) {
+            /**
+             * @see Zend_Controller_Dispatcher_Exception
+             */
             require_once 'Zend/Controller/Dispatcher/Exception.php';
             throw new Zend_Controller_Dispatcher_Exception('Cannot load controller class "' . $className . '" from file "' . $file . '" in directory "' . $dir . '"');
         }
 
         if (!class_exists($finalClass)) {
+            /**
+             * @see Zend_Controller_Dispatcher_Exception
+             */
             require_once 'Zend/Controller/Dispatcher/Exception.php';
             throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $finalClass . '")');
         }
