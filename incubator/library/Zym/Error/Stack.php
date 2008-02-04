@@ -26,20 +26,20 @@
  */
 class Zym_Error_Stack implements Countable, Iterator 
 {
-	/**
-	 * Instance
-	 * 
-	 * @var Zym_Error_Stack
-	 */
-	protected static $_instance = null;
+    /**
+     * Instance
+     * 
+     * @var Zym_Error_Stack
+     */
+    protected static $_instance = null;
 
-	/**
-	 * Error stack array
-	 * 
-	 * @var array
-	 */
-	protected $_errors = array();
-	
+    /**
+     * Error stack array
+     * 
+     * @var array
+     */
+    protected $_errors = array();
+    
     /**
      * Iteration index
      *
@@ -54,63 +54,63 @@ class Zym_Error_Stack implements Countable, Iterator
      */
     protected $_count;
 
-	/**
-	 * Construct
-	 * 
-	 */
-	protected function __construct()
-	{}
+    /**
+     * Construct
+     * 
+     */
+    protected function __construct()
+    {}
 
-	/**
-	 * Clone
-	 * 
-	 * Do not allow attempts to clone our singleton.
-	 */
-	protected function __clone()
-	{}
+    /**
+     * Clone
+     * 
+     * Do not allow attempts to clone our singleton.
+     */
+    protected function __clone()
+    {}
 
-	/**
-	 * Returns an Error Queue instance.
-	 *
-	 * @return Zym_Error_Stack
-	 */
-	public static function getInstance()
-	{
-	    // Create an instance if one does not exist
-		if (self::$_instance === null) {
-			self::$_instance = new self();
-		}
+    /**
+     * Returns an Error Queue instance.
+     *
+     * @return Zym_Error_Stack
+     */
+    public static function getInstance()
+    {
+        // Create an instance if one does not exist
+        if (self::$_instance === null) {
+            self::$_instance = new self();
+        }
 
-		return self::$_instance;
-	}
+        return self::$_instance;
+    }
 
-	/**
-	 * Add error to error queue.
-	 *
-	 * @param Zym_Error $error error object
-	 * @return void
-	 */
-	public function push(Zym_Error $error)
-	{
-		self::$_errors[] = $error;
-	}
+    /**
+     * Add error to error queue.
+     *
+     * @param Zym_Error $error error object
+     * @return void
+     */
+    public function push(Zym_Error $error)
+    {
+        self::$_errors[] = $error;
+    }
 
-	/**
-	 * Get error count
-	 * 
-	 * Implements Countable
-	 *
-	 * @return integer
-	 */
-	public function count()
-	{
-	    if ($this->_count === null) {
-	        $this->_count = count($this->_errors);
-	    }
-	    
-	    return $this->_count;
-	}
-	
+    /**
+     * Get error count
+     * 
+     * Implements Countable
+     *
+     * @return integer
+     */
+    public function count()
+    {
+        if ($this->_count === null) {
+            $this->_count = count($this->_errors);
+        }
+        
+        return $this->_count;
+    }
+    
     /**
      * Defined by Iterator interface
      *
