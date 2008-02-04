@@ -36,18 +36,72 @@ require_once 'Zym/Controller/Action/Abstract.php';
 abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action_Abstract
 {
     /**
+     * Table instance
+     *
+     * @var Zend_Db_Table_Abstract
+     */
+    protected $_table;
+
+    /**
+     * Form instance
+     *
+     * @var Zend_Form
+     */
+    protected $_form;
+
+    /**
      * Get the table for this model
      *
      * @return Zend_Db_Table_Abstract
      */
-    abstract protected function _getTable();
+    protected function _getTable()
+    {
+        if (!$this->_table) {
+            $this->_throwException('No table instance set.');
+        }
+
+        return $this->_table;
+    }
+
+    /**
+     * Set the table
+     *
+     * @param Zend_Db_Table_Abstract $table
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setTable(Zend_Db_Table_Abstract $table)
+    {
+        $this->_table = $table;
+
+        return $this;
+    }
 
     /**
      * Get the form for this model
      *
      * @return Zend_Form
      */
-    abstract protected function _getForm();
+    protected function _getForm()
+    {
+        if (!$this->_form) {
+            $this->_throwException('No form instance set.');
+        }
+
+        return $this->_form;
+    }
+
+    /**
+     * Set a form instance
+     *
+     * @param Zend_Form $form
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setForm(Zend_Form $form)
+    {
+        $this->_form = $form;
+
+        return $this;
+    }
 
     /**
      * Get the primary id from the request
@@ -130,6 +184,16 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         return 'list';
     }
 
+    protected function _throwException($message)
+    {
+        /**
+         * @see Zym_Controller_Action_Exception
+         */
+        require_once 'Zym/Controller/Action/Exception.php';
+
+        throw new Zym_Controller_Action_Exception($message);
+    }
+
     /**
      * Index action. Forward to the list action
      */
@@ -183,37 +247,10 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $form = $this->_getForm();
 
         $id = $this->_getPrimaryId();
-        $idKey = $this->_getPrimaryIdKey();
 
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
-                $formValues = $form->getValues();
-
-                if (!empty($formValues[$idKey])) {
-                    $model = $this->_getModel($id);
-
-                    if (!$model) {
-                        /**
-                         * @see Zym_Controller_Exception
-                         */
-                        require_once 'Zym/Controller/Exception.php';
-
-                        throw new Zym_Controller_Exception('The model could not be loaded.');
-                    }
-                } else {
-                    $model = $this->_getTable()->createRow();
-                }
-
-                foreach ($formValues as $key => $value) {
-                    // @TODO: Check if the primary key is set to auto_increment. if so, ignore it, if not treat it normally.
-                	if (isset($model->$key) && $key != $idKey) {
-                	    $model->$key = $value;
-                	}
-                }
-
-                $model->save();
-
-                $this->_goto($this->_getListAction());
+                $this->_processValidForm($form);
             }
         } else {
             if ($id) {
@@ -232,6 +269,40 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $form->setAction($this->view->url($url, null, true));
 
         $this->view->form = $form;
+    }
+
+    /**
+     * Process the form after it's been succesfully validated
+     *
+     * @param Zend_Form $form
+     */
+    protected function _processValidForm(Zend_Form $form)
+    {
+        $id = $this->_getPrimaryId();
+        $idKey = $this->_getPrimaryIdKey();
+
+        $formValues = $form->getValues();
+
+        if (!empty($formValues[$idKey])) {
+            $model = $this->_getModel($id);
+
+            if (!$model) {
+                $this->_throwException('The model could not be loaded.');
+            }
+        } else {
+            $model = $this->_getTable()->createRow();
+        }
+
+        foreach ($formValues as $key => $value) {
+            // @TODO: Check if the primary key is set to auto_increment. if so, ignore it, if not treat it normally.
+            if (isset($model->$key) && $key != $idKey) {
+                $model->$key = $value;
+            }
+        }
+
+        $model->save();
+
+        $this->_goto($this->_getListAction());
     }
 
     /**
