@@ -160,8 +160,14 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     {
         $table = $this->_getTable();
 
-        return $table->find((int) $id)
-                     ->current();
+        $model = $table->find((int) $id)
+                       ->current();
+
+        if (!$model) {
+            $this->_throwException('The model could not be loaded.');
+        }
+
+        return $model;
     }
 
     /**
@@ -207,14 +213,14 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     public function listAction()
     {
-        $limit = $this->_getParam('limit');
-        $page  = $this->_getParam('page');
+        $limit = (int) $this->_getParam('limit');
+        $page  = (int) $this->_getParam('page');
 
         $table = $this->_getTable();
 
         $select = $table->select();
 
-        if ($limit && $page) {
+        if ($limit > 0 && $page > 0) {
             $select->limitPage($page, $limit);
         }
 
@@ -231,19 +237,9 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     public function viewAction()
     {
         $id = $this->_getPrimaryId();
-        $model = null;
+        $model = $this->_getModel($id);
 
-        if ($id) {
-            $model = $this->_getModel($id);
-
-            if ($model) {
-                $this->view->model = $model;
-            }
-        }
-
-        if (!$model) {
-            $this->_goto($this->_getListAction());
-        }
+        $this->view->model = $model;
     }
 
     /**
@@ -292,10 +288,6 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
 
         if (!empty($formValues[$idKey])) {
             $model = $this->_getModel($id);
-
-            if (!$model) {
-                $this->_throwException('The model could not be loaded.');
-            }
         } else {
             $model = $this->_getTable()->createRow();
         }
