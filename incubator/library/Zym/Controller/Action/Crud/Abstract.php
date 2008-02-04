@@ -50,6 +50,20 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     protected $_form;
 
     /**
+     * The add-edit action
+     *
+     * @var string
+     */
+    protected $_addEditAction = 'addEdit';
+
+    /**
+     * The list action
+     *
+     * @var string
+     */
+    protected $_listAction = 'list';
+
+    /**
      * Get the table for this model
      *
      * @return Zend_Db_Table_Abstract
@@ -177,7 +191,24 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     protected function _getAddEditAction()
     {
-        return 'addEdit';
+        if (!$this->_addEditAction) {
+            $this->_throwException('You must set an add-edit action.');
+        }
+
+        return $this->_addEditAction;
+    }
+
+    /**
+     * Set the add-edit action
+     *
+     * @param string $action
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setAddEditAction($action)
+    {
+        $this->_addEditAction = $action;
+
+        return $this;
     }
 
     /**
@@ -187,9 +218,32 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     protected function _getListAction()
     {
-        return 'list';
+        if (!$this->_listAction) {
+            $this->_throwException('You must set a list action.');
+        }
+
+        return $this->_listAction;
     }
 
+    /**
+     * Set the add-edit action
+     *
+     * @param string $action
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setListAction($action)
+    {
+        $this->_listAction = $action;
+
+        return $this;
+    }
+
+    /**
+     * Throw an exception
+     *
+     * @param string $message
+     * @throws Zym_Controller_Action_Exception
+     */
     protected function _throwException($message)
     {
         /**
@@ -292,6 +346,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
             $model = $this->_getTable()->createRow();
         }
 
+        // @TODO: can I make this more monkey proof by playing around with php's array functions?
         foreach ($formValues as $key => $value) {
             // @TODO: Check if the primary key is set to auto_increment. if so, ignore it, if not treat it normally.
             if (isset($model->$key) && $key != $idKey) {
