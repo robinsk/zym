@@ -335,21 +335,21 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     protected function _processValidForm(Zend_Form $form)
     {
-        $id = $this->_getPrimaryId();
-        $idKey = $this->_getPrimaryIdKey();
+        $table = $this->_getTable();
 
         $formValues = $form->getValues();
 
-        if (!empty($formValues[$idKey])) {
-            $model = $this->_getModel($id);
+        if (!empty($formValues[$this->_getPrimaryIdKey()])) {
+            $model = $this->_getModel($this->_getPrimaryId());
         } else {
-            $model = $this->_getTable()->createRow();
+            $model = $table->createRow();
         }
 
-        // @TODO: can I make this more monkey proof by playing around with php's array functions?
+        $tableInfo = $table->info();
+        $metaData = $tableInfo[Zend_Db_Table_Abstract::METADATA];
+
         foreach ($formValues as $key => $value) {
-            // @TODO: Check if the primary key is set to auto_increment. if so, ignore it, if not treat it normally.
-            if (isset($model->$key) && $key != $idKey) {
+            if (isset($model->$key) && !(bool) $metaData[$key]['IDENTITY']) {
                 $model->$key = $value;
             }
         }
