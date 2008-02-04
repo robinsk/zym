@@ -211,7 +211,14 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $page  = $this->_getParam('page');
 
         $table = $this->_getTable();
-        $models = $table->fetchAll(null, $limit, $page);
+
+        $select = $table->select();
+
+        if ($limit && $page) {
+            $select->limitPage($page, $limit);
+        }
+
+        $models = $table->fetchAll($select);
 
         $this->view->limit = $limit;
         $this->view->page = $page;
