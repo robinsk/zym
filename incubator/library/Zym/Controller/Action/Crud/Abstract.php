@@ -342,17 +342,16 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     protected function _processValidForm()
     {
-        $form = $this->_getForm();
         $table = $this->_getTable();
 
-        $formValues = $form->getValues();
+        $formValues = $this->_getForm()->getValues();
 
         if (!empty($formValues[$this->_getPrimaryIdKey()])) {
             $model = $this->_getModel($this->_getPrimaryId());
         } else {
             $model = $table->createRow();
         }
-//@TODO hooks?
+
         $tableInfo = $table->info();
         $metaData = $tableInfo[Zend_Db_Table_Abstract::METADATA];
 
@@ -361,7 +360,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                 $model->$key = $value;
             }
         }
-
+        // @TODO: Have hooks for pre-save operations? Or should that be filed as feature request for ZDTR?
         $model->save();
 
         $this->_goto($this->_getListAction());
