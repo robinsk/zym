@@ -27,7 +27,7 @@ require_once 'Zend/Filter/Interface.php';
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_Filter_Nl2Br implements Zym_Filter_Interface
+class Zym_Filter_Nl2Br implements Zend_Filter_Interface
 {
     /**
      * Defined by Zend_Filter_Interface
