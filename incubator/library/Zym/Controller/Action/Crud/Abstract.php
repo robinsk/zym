@@ -270,19 +270,27 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $limit = (int) $this->_getParam('limit');
         $page  = (int) $this->_getParam('page');
 
-        $table = $this->_getTable();
-
-        $select = $table->select();
+        $select = $this->_getListSelect();
 
         if ($limit > 0 && $page > 0) {
             $select->limitPage($page, $limit);
         }
 
-        $models = $table->fetchAll($select);
+        $models = $this->_getTable()->fetchAll($select);
 
         $this->view->limit = $limit;
         $this->view->page = $page;
         $this->view->models = $models;
+    }
+
+    /**
+     * Get the select object for the list action
+     *
+     * @return Zend_Db_Table_Select
+     */
+    protected function _getListSelect()
+    {
+        return $this->_getTable()->select();
     }
 
     /**
@@ -307,7 +315,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
 
         if ($this->getRequest()->isPost()) {
             if ($form->isValid($this->getRequest()->getPost())) {
-                $this->_processValidForm($form);
+                $this->_processValidForm();
             }
         } else {
             if ($id) {
@@ -331,10 +339,10 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     /**
      * Process the form after it's been succesfully validated
      *
-     * @param Zend_Form $form
      */
-    protected function _processValidForm(Zend_Form $form)
+    protected function _processValidForm()
     {
+        $form = $this->_getForm();
         $table = $this->_getTable();
 
         $formValues = $form->getValues();
@@ -344,7 +352,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         } else {
             $model = $table->createRow();
         }
-
+//@TODO hooks?
         $tableInfo = $table->info();
         $metaData = $tableInfo[Zend_Db_Table_Abstract::METADATA];
 
