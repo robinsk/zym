@@ -64,6 +64,18 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     protected $_listAction = 'list';
 
     /**
+     * Default page limit for pagination
+     *
+     * @var int
+     */
+    protected $_defaultPageLimit = null;
+
+    /**
+     * Default page number for pagination
+     */
+    protected $_defaultPageNr = null;
+
+    /**
      * Get the table for this model
      *
      * @return Zend_Db_Table_Abstract
@@ -267,8 +279,8 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     public function listAction()
     {
-        $limit = (int) $this->_getParam('limit');
-        $page  = (int) $this->_getParam('page');
+        $limit = (int) $this->_getParam('limit', $this->_defaultPageLimit);
+        $page  = (int) $this->_getParam('page', $this->_defaultPageNr);
 
         $select = $this->_getListSelect();
 
