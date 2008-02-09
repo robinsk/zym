@@ -326,6 +326,8 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $id = $this->_getPrimaryId();
 
         if ($this->getRequest()->isPost()) {
+            $this->_handlePostAction();
+
             if ($form->isValid($this->getRequest()->getPost())) {
                 $this->_processValidForm();
             }
@@ -346,6 +348,26 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $form->setAction($this->view->url($url, null, true));
 
         $this->view->form = $form;
+    }
+
+    /**
+     * Check if a special submit button is used and act accordingly.
+     * @TODO make this nice...
+     */
+    protected function _handlePostAction()
+    {
+        $postDataKeys = array_keys($this->getRequest()->getPost());
+
+        foreach ($postDataKeys as $key) {
+        	if (strpos($key, '_') === 0) {
+        	    switch ($key) {
+        	        case '_cancel':
+        	            $this->_goto($this->_getListAction());
+        	            break;
+        	    }
+        	    break;
+        	}
+        }
     }
 
     /**
