@@ -394,21 +394,10 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
                 $row->$key = $value;
             }
         }
-        // @TODO: Should this preSave be filed as feature request for ZDTR?
-        $this->_preSave($row);
 
         $row->save();
 
         $this->_goto($this->_getListAction());
-    }
-
-    /**
-     * This method is executed right before the row gets saved to the DB.
-     *
-     * @param Zend_Db_Table_Row_Abstract $row
-     */
-    protected function _preSave(Zend_Db_Table_Row_Abstract $row)
-    {
     }
 
     /**
