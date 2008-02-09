@@ -42,7 +42,7 @@ class Zym_Paginate
     /**
      * Get the paginate instance
      */
-    protected function _getInstance()
+    public static function getInstance()
     {
         if (!self::$_instance) {
             self::$_instance = new self();
@@ -60,7 +60,7 @@ class Zym_Paginate
      */
     public static function paginate($data, $itemsPerPage = self::DEFAULT_ITEMS_PER_PAGE)
     {
-        $paginator = self::_getInstance();
+        $paginator = self::getInstance();
 
         if ($data instanceof Zend_Db_Table_Rowset_Abstract) {
             $data = $paginator->paginateRowset($data, $itemsPerPage);
