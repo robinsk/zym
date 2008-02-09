@@ -182,18 +182,18 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      * @param int $id
      * @return Zend_Db_Table_Row_Abstract|null
      */
-    protected function _getModel($id)
+    protected function _getRow($id)
     {
         $table = $this->_getTable();
 
-        $model = $table->find((int) $id)
-                       ->current();
+        $row = $table->find((int) $id)
+                     ->current();
 
-        if (!$model) {
-            $this->_throwException('The model could not be loaded.');
+        if (!$row) {
+            $this->_throwException('The requested row could not be loaded.');
         }
 
-        return $model;
+        return $row;
     }
 
     /**
@@ -288,11 +288,11 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
             $select->limitPage($page, $limit);
         }
 
-        $models = $this->_getTable()->fetchAll($select);
+        $rows = $this->_getTable()->fetchAll($select);
 
         $this->view->limit = $limit;
         $this->view->page = $page;
-        $this->view->models = $models;
+        $this->view->rows = $rows;
     }
 
     /**
@@ -311,9 +311,9 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     public function viewAction()
     {
         $id = $this->_getPrimaryId();
-        $model = $this->_getModel($id);
+        $row = $this->_getRow($id);
 
-        $this->view->model = $model;
+        $this->view->row = $row;
     }
 
     /**
@@ -333,9 +333,9 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
             }
         } else {
             if ($id) {
-                $model = $this->_getModel($id);
+                $row = $this->_getRow($id);
 
-                $form->setDefaults($model->toArray());
+                $form->setDefaults($row->toArray());
             }
         }
 
@@ -381,23 +381,34 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $formValues = $this->_getForm()->getValues();
 
         if (!empty($formValues[$this->_getPrimaryIdKey()])) {
-            $model = $this->_getModel($this->_getPrimaryId());
+            $row = $this->_getRow($this->_getPrimaryId());
         } else {
-            $model = $table->createRow();
+            $row = $table->createRow();
         }
 
         $tableInfo = $table->info();
         $metaData = $tableInfo[Zend_Db_Table_Abstract::METADATA];
 
         foreach ($formValues as $key => $value) {
-            if (isset($model->$key) && !(bool) $metaData[$key]['IDENTITY']) {
-                $model->$key = $value;
+            if (isset($row->$key) && !(bool) $metaData[$key]['IDENTITY']) {
+                $row->$key = $value;
             }
         }
-        // @TODO: Have hooks for pre-save operations? Or should that be filed as feature request for ZDTR?
-        $model->save();
+        // @TODO: Should this preSave be filed as feature request for ZDTR?
+        $this->_preSave($row);
+
+        $row->save();
 
         $this->_goto($this->_getListAction());
+    }
+
+    /**
+     * This method is executed right before the row gets saved to the DB.
+     *
+     * @param Zend_Db_Table_Row_Abstract $row
+     */
+    protected function _preSave(Zend_Db_Table_Row_Abstract $row)
+    {
     }
 
     /**
