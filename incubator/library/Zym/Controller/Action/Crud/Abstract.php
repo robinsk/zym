@@ -73,7 +73,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     /**
      * Default page number for pagination
      */
-    protected $_defaultPageNr = null;
+    protected $_defaultPageNr = 1;
 
     /**
      * Get the table for this model
