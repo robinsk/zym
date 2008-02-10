@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zym_Paginate_Abstract
+ */
+require_once 'Zym/Paginate/Abstract.php';
+
+/**
  * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Paginate

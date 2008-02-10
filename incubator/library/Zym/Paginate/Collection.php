@@ -15,13 +15,18 @@
  */
 
 /**
+ * @see Zym_Paginate_Abstract
+ */
+require_once 'Zym/Paginate/Abstract.php';
+
+/**
  * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-abstract class Zym_Paginate_Collection
+abstract class Zym_Paginate_Collection extends Zym_Paginate_Abstract
 {
     /**
      * The paginated dataset

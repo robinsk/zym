@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zym_Paginate_Collection
+ */
+require_once 'Zym/Paginate/Collection.php';
+
+/**
  * @author     Jurri‘n Stutterheim
  * @category   Zym
  * @package    Paginate
@@ -67,11 +72,6 @@ class Zym_Paginate_Array extends Zym_Paginate_Collection
 
     /**
      * Paginate a numeric array
-     *
-     * @param array $data
-     * @param int $itemsPerPage
-     * @param int $page
-     * @return array
      */
     protected function _paginateNumeric()
     {
@@ -82,11 +82,6 @@ class Zym_Paginate_Array extends Zym_Paginate_Collection
 
     /**
      * Paginate an associative array
-     *
-     * @param array $data
-     * @param int $itemsPerPage
-     * @param int $page
-     * @return array
      */
     protected function _paginateAssoc()
     {
