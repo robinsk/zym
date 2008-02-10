@@ -1,6 +1,8 @@
 <?php
 class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
 {
+    const ROWCOUNT_COLUMN = 'zymPaginateRowCount';
+
     /**
      * @var Zend_Db_Table_Abstract
      */
@@ -17,21 +19,16 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
         $this->_select = $select;
 
         $countSelect = clone $select;
-        $countSelect->from($table, new Zend_Db_Expr('COUNT(*) AS rowCount'));
+        $countSelect->from($table, new Zend_Db_Expr('COUNT(*) AS ' . self::ROWCOUNT_COLUMN));
         $result = $table->fetchRow($countSelect);
 
-        $this->_rowCount = $result->rowCount;
+        $this->_rowCount = $result->{self::ROWCOUNT_COLUMN};
     }
 
     public function getPage($page)
     {
         $this->_select->limitPage($page, $this->getRowLimit());
 
-        return $this->_table->fetchAll($this->_select);
-    }
-
-    public function getAllPages()
-    {
         return $this->_table->fetchAll($this->_select);
     }
 }

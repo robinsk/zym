@@ -22,4 +22,6 @@ abstract class Zym_Paginate_Collection
 
         return $pages[$key];
     }
+
+    public abstract function getAllPages();
 }

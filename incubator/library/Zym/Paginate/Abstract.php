@@ -102,6 +102,4 @@ abstract class Zym_Paginate_Abstract
     }
 
     abstract public function getPage($page);
-
-    abstract public function getAllPages();
 }
