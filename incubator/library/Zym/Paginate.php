@@ -161,17 +161,40 @@ class Zym_Paginate
     }
 
     /**
-     * Proxy to paginateAssoc.
-     * Pagination for rowsets is best done through Zend_Db_Table_Abstract
+     * Paginate an Iterator or numeric array
      *
-     * @param Zend_Db_Table_Rowset_Abstract $data
+     * @param Iterator|array $data
      * @param int $itemsPerPage
      * @param int $page
      * @return array
      */
-    public function paginateRowset(Zend_Db_Table_Rowset_Abstract $data, $itemsPerPage = self::DEFAULT_ITEMS_PER_PAGE)
+    public function paginateIterator($data, $itemsPerPage = self::DEFAULT_ITEMS_PER_PAGE)
     {
-        return $this->paginateAssoc($data, $itemsPerPage);
+        if ($data instanceof Iterator) {
+            $itemsPerPage = $this->_getItemsPerPage($itemsPerPage);
+
+            $paginatedItems = array();
+            $itemCount = count($data);
+
+            $page = 0;
+            $items = 0;
+
+            foreach ($data as $value) {
+                $items++;
+
+                $paginatedItems[$page][] = $value;
+
+                if ($items % $itemsPerPage === 0) {
+                    $page++;
+                }
+            }
+
+            return array(self::ITEMS => $paginatedItems,
+                         self::PAGES => ($page + 1),
+                         self::COUNT => $itemCount);
+        } else {
+            return $this->paginateNumeric($data, $itemsPerPage);
+        }
     }
 
     /**
