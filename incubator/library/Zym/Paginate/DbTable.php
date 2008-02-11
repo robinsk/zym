@@ -31,7 +31,7 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
     /**
      * The name for the rowcount column
      */
-    const ROWCOUNT_COLUMN = 'zymPaginateRowCount';
+    const ROW_COUNT_COLUMN = 'zym_paginate_row_count';
 
     /**
      * @var Zend_Db_Table_Abstract
@@ -55,10 +55,10 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
         $this->_select = $select;
 
         $countSelect = clone $select;
-        $countSelect->from($table, new Zend_Db_Expr('COUNT(*) AS ' . self::ROWCOUNT_COLUMN));
+        $countSelect->from($table, new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
         $result = $table->fetchRow($countSelect);
 
-        $this->_rowCount = $result->{self::ROWCOUNT_COLUMN};
+        $this->_rowCount = $result->{self::ROW_COUNT_COLUMN};
     }
 
     /**

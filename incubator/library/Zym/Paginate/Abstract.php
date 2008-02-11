@@ -21,7 +21,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-abstract class Zym_Paginate_Abstract implements Iterator
+abstract class Zym_Paginate_Abstract implements Iterator, Countable
 {
     /**
      * Total number of pages
@@ -102,6 +102,16 @@ abstract class Zym_Paginate_Abstract implements Iterator
     public function valid()
     {
         return $this->_iteratorPage < $this->getPageCount();
+    }
+
+    /**
+     * Get the number of pages
+     *
+     * @return int;
+     */
+    public function count()
+    {
+        return (int) $this->_pageCount;
     }
 
     /**
