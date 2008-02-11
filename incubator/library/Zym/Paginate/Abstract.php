@@ -135,6 +135,22 @@ abstract class Zym_Paginate_Abstract implements Iterator
     }
 
     /**
+     * Get item nr
+     *
+     * @param int $itemNr
+     * @param int $pageNr
+     * @return int
+     */
+    public function getItemNr($item, $page = null)
+    {
+        if (!$page) {
+            $page = $this->getCurrentPageNr();
+        }
+
+        return (((int) $page * $this->getRowLimit()) + (int) $item);
+    }
+
+    /**
      * Get the total amount of pages
      *
      * @return int
@@ -179,7 +195,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      */
     public function getRowLimit()
     {
-        return $this->_rowLimit;
+        return (int) $this->_rowLimit;
     }
 
     /**
@@ -203,7 +219,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      */
     public function setCurrentPageNr($page)
     {
-        $this->_currentPage = $page;
+        $this->_currentPage = (int) $page;
 
         return $this;
     }
@@ -215,7 +231,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      */
     public function getCurrentPageNr()
     {
-        return $this->_currentPage;
+        return (int) $this->_currentPage;
     }
 
     /**
@@ -226,7 +242,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      */
     public function isCurrentPageNr($number)
     {
-        return $this->getCurrentPageNr() == $number;
+        return $this->getCurrentPageNr() === (int) $number;
     }
 
     /**
