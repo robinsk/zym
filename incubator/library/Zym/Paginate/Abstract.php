@@ -21,7 +21,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-abstract class Zym_Paginate_Abstract
+abstract class Zym_Paginate_Abstract implements Iterator
 {
     /**
      * Total number of pages
@@ -50,6 +50,59 @@ abstract class Zym_Paginate_Abstract
      * @var int
      */
     protected $_currentPage = 1;
+
+    /**
+     * Page counter for the iterator
+     *
+     * @var int
+     */
+    protected $_iteratorPage = 1;
+
+    /**
+     * Get the current page nr.
+     *
+     * @return int
+     */
+    public function current()
+    {
+        return $this->_iteratorPage;
+    }
+
+    /**
+     * Get the iterator key
+     *
+     * @return int
+     */
+    public function key()
+    {
+        return $this->_iteratorPage;
+    }
+
+    /**
+     * Get the next page nr
+     */
+    public function next()
+    {
+        $this->_iteratorPage += 1;
+    }
+
+    /**
+     * Rewind to the first page
+     */
+    public function rewind()
+    {
+        $this->_iteratorPage = 1;
+    }
+
+    /**
+     * Check if there's a next page
+     *
+     * @return boolean
+     */
+    public function valid()
+    {
+        return $this->_iteratorPage < $this->getPageCount();
+    }
 
     /**
      * Check if there are pages available
@@ -163,6 +216,17 @@ abstract class Zym_Paginate_Abstract
     public function getCurrentPageNr()
     {
         return $this->_currentPage;
+    }
+
+    /**
+     * Check if the given number is the current page nr
+     *
+     * @param int $number
+     * @return boolean
+     */
+    public function isCurrentPageNr($number)
+    {
+        return $this->getCurrentPageNr() == $number;
     }
 
     /**

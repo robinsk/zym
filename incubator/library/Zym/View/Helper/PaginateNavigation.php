@@ -77,7 +77,7 @@ class Zym_View_Helper_PaginateNavigation
      * @param string $styles
      * @return string
      */
-    public function paginateNavigation($pageCount, $currentPage, $targetLocation,
+    public function paginateNavigation(Zym_Paginate_Abstract $paginate, $targetLocation,
                                        $currentPageAttribute = 'page',
                                        $translations = array(
                                            self::L10N_KEY_FIRST    => '&lt;&lt; First',
@@ -102,12 +102,12 @@ class Zym_View_Helper_PaginateNavigation
                          $styles[self::STYLE_CONTAINER],
                          $styles[self::STYLE_LIST]);
 
-        if ($currentPage > 1) {
+        if ($paginate->hasPrevious()) {
             $firstPageLocation = array_merge($targetLocation,
                                              array($currentPageAttribute => 1));
 
             $previousPageLocation = array_merge($targetLocation,
-                                                array($currentPageAttribute => ($currentPage - 1)));
+                                                array($currentPageAttribute => $paginate->getPreviousPageNr()));
 
             $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
                               $this->_view->url($firstPageLocation, null, true),
@@ -118,26 +118,26 @@ class Zym_View_Helper_PaginateNavigation
                               $translations[self::L10N_KEY_PREVIOUS]);
         }
 
-        for ($i = 1; $i <= $pageCount; $i++) {
-            $pageLocation = array_merge($targetLocation, array($currentPageAttribute => $i));
+        foreach ($paginate as $pageNumber) {
+            $pageLocation = array_merge($targetLocation, array($currentPageAttribute => $pageNumber));
 
-            if ($i == $currentPage) {
+            if ($paginate->isCurrentPageNr($pageNumber)) {
                 $xhtml .= sprintf($markup[self::MARKUP_LIST_ACTIVE],
                                   $styles[self::STYLE_ACTIVE],
                                   $this->_view->url($pageLocation, null, true),
-                                  $markup[self::STYLE_CURRENT], $i);
+                                  $markup[self::STYLE_CURRENT], $pageNumber);
             } else {
                 $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
-                                  $this->_view->url($pageLocation, null, true), $i);
+                                  $this->_view->url($pageLocation, null, true), $pageNumber);
             }
         }
 
-        if ($currentPage < $pageCount) {
+        if ($paginate->hasNext()) {
             $lastPageLocation = array_merge($targetLocation,
-                                            array($currentPageAttribute => $pageCount));
+                                            array($currentPageAttribute => $paginate->getLastPageNr()));
 
             $nextPageLocation = array_merge($targetLocation,
-                                            array($currentPageAttribute => ($currentPage + 1)));
+                                            array($currentPageAttribute => $paginate->getNextPageNr()));
 
             $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
                               $this->_view->url($nextPageLocation, null, true),
