@@ -137,14 +137,14 @@ abstract class Zym_Paginate_Abstract implements Iterator
     /**
      * Get item nr
      *
-     * @param int $itemNr
-     * @param int $pageNr
+     * @param int $itemNumber
+     * @param int $pageNumber
      * @return int
      */
-    public function getItemNr($item, $page = null)
+    public function getItemNumber($item, $page = null)
     {
         if (!$page) {
-            $page = $this->getCurrentPageNr();
+            $page = $this->getCurrentPageNumber();
         }
 
         return (((int) $page * $this->getRowLimit()) + (int) $item);
@@ -217,7 +217,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      * @param int $page
      * @return Zym_Paginate_Abstract
      */
-    public function setCurrentPageNr($page)
+    public function setCurrentPageNumber($page)
     {
         $this->_currentPage = (int) $page;
 
@@ -229,7 +229,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      *
      * @return int
      */
-    public function getCurrentPageNr()
+    public function getCurrentPageNumber()
     {
         return (int) $this->_currentPage;
     }
@@ -240,9 +240,9 @@ abstract class Zym_Paginate_Abstract implements Iterator
      * @param int $number
      * @return boolean
      */
-    public function isCurrentPageNr($number)
+    public function isCurrentPageNumber($number)
     {
-        return $this->getCurrentPageNr() === (int) $number;
+        return $this->getCurrentPageNumber() === (int) $number;
     }
 
     /**
@@ -252,7 +252,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
      */
     public function getCurrentPage()
     {
-        return $this->getPage($this->getCurrentPageNr());
+        return $this->getPage($this->getCurrentPageNumber());
     }
 
     /**
@@ -272,7 +272,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
             throw new Zym_Paginate_Exception_NoNextPage('No next page');
         }
 
-        return $this->getPage($this->getNextPageNr());
+        return $this->getPage($this->getNextPageNumber());
     }
 
     /**
@@ -280,9 +280,9 @@ abstract class Zym_Paginate_Abstract implements Iterator
      *
      * @return int
      */
-    public function getNextPageNr()
+    public function getNextPageNumber()
     {
-        return $this->getCurrentPageNr() + 1;
+        return $this->getCurrentPageNumber() + 1;
     }
 
     /**
@@ -302,7 +302,7 @@ abstract class Zym_Paginate_Abstract implements Iterator
             throw new Zym_Paginate_Exception_NoPreviousPage('No previous page');
         }
 
-        return $this->getPage($this->getPreviousPageNr());
+        return $this->getPage($this->getPreviousPageNumber());
     }
 
     /**
@@ -310,9 +310,9 @@ abstract class Zym_Paginate_Abstract implements Iterator
      *
      * @return int
      */
-    public function getPreviousPageNr()
+    public function getPreviousPageNumber()
     {
-        return $this->getCurrentPageNr() - 1;
+        return $this->getCurrentPageNumber() - 1;
     }
 
     /**
