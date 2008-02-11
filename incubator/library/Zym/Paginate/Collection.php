@@ -38,19 +38,9 @@ abstract class Zym_Paginate_Collection extends Zym_Paginate_Abstract
     /**
      * The dataset
      *
-     * @var array
+     * @var Iterator|array
      */
     protected $_dataSet = null;
-
-    /**
-     * Constructor
-     *
-     * @var array $dataSet
-     */
-    public function __construct($dataSet)
-    {
-        $this->_dataSet = $dataSet;
-    }
 
     /**
      * Get a page

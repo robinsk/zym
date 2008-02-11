@@ -28,14 +28,14 @@ abstract class Zym_Paginate_Abstract
      *
      * @var int
      */
-    protected $_pageCount = null;
+    protected $_pageCount = 0;
 
     /**
      * Total number of items
      *
      * @var int
      */
-    protected $_rowCount = null;
+    protected $_rowCount = 0;
 
     /**
      * Amount of items per page
@@ -88,7 +88,7 @@ abstract class Zym_Paginate_Abstract
      */
     public function getPageCount()
     {
-        if (!$this->_pageCount) {
+        if ($this->_pageCount < 1) {
             $rowCount = $this->getRowCount();
 
             $floor = floor($rowCount / $this->_rowLimit);
@@ -107,7 +107,7 @@ abstract class Zym_Paginate_Abstract
      */
     public function getRowCount()
     {
-        if ($this->_rowCount == null) {
+        if ($this->_rowCount < 1) {
             /**
              * @see Zym_Paginate_Exception_NoRows
              */

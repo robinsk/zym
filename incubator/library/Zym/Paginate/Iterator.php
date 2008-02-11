@@ -29,6 +29,16 @@ require_once 'Zym/Paginate/Collection.php';
 class Zym_Paginate_Iterator extends Zym_Paginate_Collection
 {
     /**
+     * Constructor
+     *
+     * @var Iterator $dataSet
+     */
+    public function __construct(Iterator $dataSet)
+    {
+        $this->_dataSet = $dataSet;
+    }
+
+    /**
      * Get all pages
      *
      * @return array
