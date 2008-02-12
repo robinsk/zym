@@ -45,11 +45,11 @@ class Zym_Paginate_Array extends Zym_Paginate_Collection
      */
     public function getAllPages()
     {
-        if (empty($this->_pages)) {
+        if (!$this->_pages) {
             if ($this->_isAssocArray($this->_dataSet)) {
-                $this->_pages = $this->_paginateAssoc();
+                $this->_paginateAssoc();
             } else {
-                $this->_pages = $this->_paginateNumeric();
+                $this->_paginateNumeric();
             }
         }
 
