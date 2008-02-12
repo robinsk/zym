@@ -45,6 +45,7 @@ abstract class Zym_Paginate_Collection extends Zym_Paginate_Abstract
     /**
      * Get a page
      *
+     * @throws Zym_Paginate_Exception_PageNotFound
      * @var int $page
      */
     public function getPage($page)

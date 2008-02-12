@@ -111,7 +111,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function count()
     {
-        return (int) $this->_pageCount;
+        return $this->getPageCount();
     }
 
     /**
@@ -121,7 +121,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function hasPages()
     {
-        return ($this->_pageCount > 0);
+        return $this->_pageCount > 0;
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function hasNext()
     {
-        return ($this->_currentPage < $this->_pageCount);
+        return $this->_currentPage < $this->_pageCount;
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function hasPrevious()
     {
-        return ($this->_currentPage > 1);
+        return $this->_currentPage > 1;
     }
 
     /**
@@ -157,7 +157,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
             $page = $this->getCurrentPageNumber();
         }
 
-        return (((int) $page * $this->getRowLimit()) + (int) $item);
+        return ((int) $page * $this->getRowLimit()) + (int) $item;
     }
 
     /**
@@ -182,6 +182,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
     /**
      * Get the amount of rows
      *
+     * @throws Zym_Paginate_Exception_NoRows
      * @return int
      */
     public function getRowCount()
