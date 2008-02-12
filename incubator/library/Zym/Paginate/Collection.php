@@ -54,7 +54,12 @@ abstract class Zym_Paginate_Collection extends Zym_Paginate_Abstract
         $key = $page - 1;
 
         if (!array_key_exists($key, $pages)) {
-            throw new Exception('Page not found');
+            /**
+             * @see Zym_Paginate_Exception_PageNotFound
+             */
+            require_once 'Zym/Paginate/Exception/PageNotFound.php';
+
+            throw new Zym_Paginate_Exception_PageNotFound(sprintf('Page "%s" not found', $page));
         }
 
         return $pages[$key];
