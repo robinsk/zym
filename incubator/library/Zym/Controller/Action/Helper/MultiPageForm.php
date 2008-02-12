@@ -7,7 +7,7 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @author     Jurri‘n Stutterheim
+ * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Controller
  * @subpackage ActionHelper
@@ -26,7 +26,7 @@ require_once 'Zend/Session/Namespace.php';
 require_once 'Zend/Controller/Action/Helper/Abstract.php';
 
 /**
- * @author     Jurri‘n Stutterheim
+ * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Controller
  * @subpackage ActionHelper

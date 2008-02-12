@@ -7,7 +7,7 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @author     Jurri‘n Stutterheim
+ * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    View
  * @subpackage Helper
@@ -21,7 +21,7 @@
 require_once 'Zend/View/Helper/FormElement.php';
 
 /**
- * @author     Jurri‘n Stutterheim
+ * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    View
  * @subpackage Helper
