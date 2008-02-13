@@ -33,24 +33,69 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
  */
 class Zym_View_Helper_Url extends Zend_View_Helper_Url
 {
-    public function url(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
+    /**
+     * Url action helper
+     *
+     * @var Zend_Controller_Action_Helper_Url
+     */
+    protected $_actionHelper;
+    
+    /**
+     * Url generator
+     *
+     * @param  array   $urlOptions
+     * @param  string  $name
+     * @param  boolean $reset
+     * @param  boolean $encode
+     * @return string|Zym_View_Helper_Url
+     */
+    public function url(array $urlOptions = null, $name = null, $reset = false, $encode = true)
     {
-        if (empty($urlOptions)) {
+        if ($urlOptions === null) {
             return $this;
         } else {
             return parent::url($urlOptions, $name, $reset, $encode);
         }
     }
-
+    
+    /**
+     * Create URL based on default route
+     *
+     * @todo consider copying code from the action helper to reduce loaded files
+     * 
+     * @param  string $action
+     * @param  string $controller
+     * @param  string $module
+     * @param  array $params
+     * @return string
+     */
     public function simple($action, $controller = null, $module = null, array $params = null)
     {
-        //return Zend_Controller
+        if (!$this>_actionHelper instanceof Zend_Controller_Action_Helper_Url) {
+            $this->_actionHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
+        }
+        
+        return $this->_actionHelper->url($action, $controller, $module, $params);
     }
 
+    /**
+     * Complex route
+     *
+     * @param array   $urlOptions
+     * @param string  $name
+     * @param boolean $reset
+     * @param boolean $encode
+     */
     public function route(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
     {
+        parent::url($urlOptions, $name, $reset, $encode);
     }
 
+    /**
+     * ToString implementation
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->route();
