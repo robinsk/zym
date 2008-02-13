@@ -50,6 +50,10 @@ class Zym_View_Helper_PaginateNavigation
     const MARKUP_LIST_ITEM   = 'listItem';
     const MARKUP_LIST_ACTIVE = 'activeListItem';
 
+    protected $_markupListStart = '<div id="MVHPContainer"><ul id="MVHPList">';
+    protected $_markupListEnd = '</ul></div>';
+    protected $_markupListItem = '<li><a href="%s">%s</a></li>';
+    protected $_markupListItemActive = '<li id="MVHPActiveItem"><a href="%s" id="MVHPCurrent">%s</a></li>';
     /**
      * @var Zend_View_Interface
      */
@@ -79,29 +83,39 @@ class Zym_View_Helper_PaginateNavigation
      */
     public function paginateNavigation(Zym_Paginate_Abstract $paginate, $targetLocation,
                                        $currentPageAttribute = 'page',
-                                       $translations = array(
-                                           self::L10N_KEY_FIRST    => '&lt;&lt; First',
-                                           self::L10N_KEY_PREVIOUS => '&lt; Previous',
-                                           self::L10N_KEY_NEXT     => 'Next &gt;',
-                                           self::L10N_KEY_LAST     => 'Last &gt;&gt;'
-                                       ),
-                                       $styles = array(
-                                           self::STYLE_CONTAINER => 'MVHPContainer',
-                                           self::STYLE_LIST      => 'MVHPList',
-                                           self::STYLE_ACTIVE    => 'MVHPActiveItem',
-                                           self::STYLE_CURRENT   => 'MVHPCurrent'
-                                       ),
-                                       $markup = array(
-                                           self::MARKUP_LIST_START  => '<div id="%s"><ul id="%s">',
-                                           self::MARKUP_LIST_END    => '</ul></div>',
-                                           self::MARKUP_LIST_ITEM   => '<li><a href="%s">%s</a></li>',
-                                           self::MARKUP_LIST_ACTIVE => '<li id="%s"><a href="%s" id="%s">%s</a></li>'
-                                       ))
+                                       $translations = array(self::L10N_KEY_FIRST    => '&lt;&lt; First',
+                                                             self::L10N_KEY_PREVIOUS => '&lt; Previous',
+                                                             self::L10N_KEY_NEXT     => 'Next &gt;',
+                                                             self::L10N_KEY_LAST     => 'Last &gt;&gt;'))
     {
-        $xhtml = sprintf($markup[self::MARKUP_LIST_START],
-                         $styles[self::STYLE_CONTAINER],
-                         $styles[self::STYLE_LIST]);
+        $xhtml = $this->_renderPaginationStart();
 
+        $xhtml .= $this->_renderPreviousNavigation($paginate, $targetLocation,
+                                                   $currentPageAttribute, $translations);
+
+        $xhtml .= $this->_renderPages($paginate, $targetLocation, $currentPageAttribute);
+
+        $xhtml .= $this->_renderNextNavigation($paginate, $targetLocation,
+                                               $currentPageAttribute, $translations);
+
+        $xhtml .= $this->_renderPaginationEnd();
+
+        return $xhtml;
+    }
+
+    protected function _renderPaginationStart()
+    {
+        return $this->_markupListStart;
+    }
+
+    protected function _renderPaginationEnd()
+    {
+        return $this->_markupListEnd;
+    }
+
+    protected function _renderPreviousNavigation(Zym_Paginate_Abstract $paginate,
+                                                 $targetLocation, $currentPageAttribute, $translations)
+    {
         if ($paginate->hasPrevious()) {
             $firstPageLocation = array_merge($targetLocation,
                                              array($currentPageAttribute => 1));
@@ -109,29 +123,37 @@ class Zym_View_Helper_PaginateNavigation
             $previousPageLocation = array_merge($targetLocation,
                                                 array($currentPageAttribute => $paginate->getPreviousPageNr()));
 
-            $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
+            $xhtml .= sprintf($this->_markupListItem,
                               $this->_view->url($firstPageLocation, null, true),
                               $translations[self::L10N_KEY_FIRST]);
 
-            $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
+            $xhtml .= sprintf($this->_markupListItem,
                               $this->_view->url($previousPageLocation, null, true),
                               $translations[self::L10N_KEY_PREVIOUS]);
         }
+    }
 
+    protected function _renderPages(Zym_Paginate_Abstract $paginate, $targetLocation,
+                                    $currentPageAttribute)
+    {
         foreach ($paginate as $pageNumber) {
             $pageLocation = array_merge($targetLocation, array($currentPageAttribute => $pageNumber));
 
             if ($paginate->isCurrentPageNr($pageNumber)) {
-                $xhtml .= sprintf($markup[self::MARKUP_LIST_ACTIVE],
-                                  $styles[self::STYLE_ACTIVE],
+                $xhtml .= sprintf($this->_markupListItemActive,
                                   $this->_view->url($pageLocation, null, true),
-                                  $markup[self::STYLE_CURRENT], $pageNumber);
+                                  $pageNumber);
             } else {
-                $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
-                                  $this->_view->url($pageLocation, null, true), $pageNumber);
+                $xhtml .= sprintf($this->_markupListItem,
+                                  $this->_view->url($pageLocation, null, true),
+                                  $pageNumber);
             }
         }
+    }
 
+    protected function _renderNextNavigation(Zym_Paginate_Abstract $paginate,
+                                             $targetLocation, $currentPageAttribute, $translations)
+    {
         if ($paginate->hasNext()) {
             $lastPageLocation = array_merge($targetLocation,
                                             array($currentPageAttribute => $paginate->getLastPageNr()));
@@ -139,17 +161,12 @@ class Zym_View_Helper_PaginateNavigation
             $nextPageLocation = array_merge($targetLocation,
                                             array($currentPageAttribute => $paginate->getNextPageNr()));
 
-            $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
+            $xhtml .= sprintf($this->_markupListItem,
                               $this->_view->url($nextPageLocation, null, true),
-
                               $translations[self::L10N_KEY_NEXT]);
-            $xhtml .= sprintf($markup[self::MARKUP_LIST_ITEM],
+            $xhtml .= sprintf($this->_markupListItem,
                               $this->_view->url($lastPageLocation, null, true),
                               $translations[self::L10N_KEY_LAST]);
         }
-
-        $xhtml .= $markup[self::MARKUP_LIST_END];
-
-        return $xhtml;
     }
 }
