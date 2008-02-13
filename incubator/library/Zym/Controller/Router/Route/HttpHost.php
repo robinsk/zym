@@ -221,9 +221,26 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
             }
         }
 
-        parent::match($path);
+        return parent::match($path);
     }
-
+    
+    /**
+     * Assembles user submitted parameters forming a URL path defined by this route
+     *
+     * We cannot generate http://subdomain.domain.com/ due to the fact
+     * that the url helper adds the baseUrl in front of it... *sigh*
+     * 
+     * @todo figure out a workaround
+     * 
+     * @param  array $data An array of variable and value pairs used as parameters
+     * @param  boolean $reset Whether or not to set route defaults with those provided in $data
+     * @return string Route path with user submitted parameters
+     */
+    public function assemble($data = array(), $reset = false)
+    {
+        return parent::assemble($array, $reset);
+    }
+    
     /**
      * __sleep()
      *
