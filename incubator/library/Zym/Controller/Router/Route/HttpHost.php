@@ -22,7 +22,9 @@ require_once 'Zend/Controller/Router/Route.php';
 /**
  * Router using $_SERVER['HTTP_HOST']...
  *
- * This router can be used for routing subdomains
+ * This router can be used for routing subdomains; however, it does have limitations
+ * as it cannot generate full urls or match urls that do not have the subdomain
+ * in the HTTP_HOST
  *
  * @author Geoffrey Tran
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
@@ -77,6 +79,16 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
      * @var integer
      */
     protected $_hostStaticCount = 0;
+    
+    /**
+     * Holds the cache for match()
+     * 
+     * Allows skipping of the match process if a route was pre-determined to
+     * fail
+     *
+     * @var array
+     */
+    protected static $_matchCache = array();
 
     /**
      * Route allowing matching of the HTTP_HOST
@@ -156,6 +168,14 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
             $this->_host = $domains = explode(self::DOMAIN_SEPARATOR, $requestHost);
 
         }
+        
+        // If cache checked, continue match
+        $matchKey = serialize($this->_hostParts);
+        if (isset(self::$_matchCache[$matchKey]) && self::$_matchCache[$matchKey] === true) {
+            return parent::match($path);
+        } else if (isset(self::$_matchCache[$matchKey]) && self::$_matchCache[$matchKey] === false) {
+            return false;
+        }
 
         $hostStaticCount = 0;
 
@@ -171,6 +191,7 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
             foreach ($this->_host as $pos => $part) {
                 // Make sure required parts exist (eg foo.com -> foo and com)
                 if (!isset($this->_hostParts[$pos])) {
+                    self::$_matchCache[$matchKey] = false;
                     return false;
                 }
 
@@ -184,15 +205,18 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
 
                 if ($name === null) {
                     if ($hostPart['regex'] != $part) {
+                        self::$_matchCache[$matchKey] = false;
                         return false;
                     }
                 } else if ($hostPart['regex'] === null) {
                     if (strlen($part) == 0) {
+                        self::$_matchCache[$matchKey] = false;
                         return false;
                     }
                 } else {
                     $regex = $this->_regexDelimiter . '^' . $hostPart['regex'] . '$' . $this->_regexDelimiter . 'iu';
                     if (!preg_match($regex, $part)) {
+                        self::$_matchCache[$matchKey] = false;
                         return false;
                     }
                 }
@@ -211,16 +235,21 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
 
         // Check if all static mappings have been met
         if ($this->_hostStaticCount != $hostStaticCount) {
+            self::$_matchCache[$matchKey] = false;
             return false;
         }
 
         // Check if all map variables have been initialized
         foreach ($this->_hostVars as $var) {
             if (!array_key_exists($var, $return)) {
+                self::$_matchCache[$matchKey] = false;
                 return false;
             }
         }
 
+        // Set route match cache
+        self::$_matchCache[$matchKey] = true;
+        
         return parent::match($path);
     }
     
@@ -238,7 +267,7 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
      */
     public function assemble($data = array(), $reset = false)
     {
-        return parent::assemble($array, $reset);
+        return parent::assemble($data, $reset);
     }
     
     /**
