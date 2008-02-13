@@ -81,27 +81,17 @@ class Zym_Controller_Plugin_LayoutSwitcher extends Zend_Controller_Plugin_Abstra
      * Add a layout
      *
      * @param string $layoutName
-     * @param string $routeName
+     * @param string|array $routeName
      * @return Zym_Controller_Plugin_LayoutSwitcher
      */
-    public function addRoute($layoutName, $routeName)
+    public function addRoute($layoutName, $routeNames)
     {
-        $this->_layouts[$routeName] = $layoutName;
+        if (!is_array($routeNames)) {
+            $routeNames = (array) $routeNames;
+        }
 
-        return $this;
-    }
-
-    /**
-     * Add multiple routes to a layout name at once
-     *
-     * @param string $layoutName
-     * @param array $routeNames
-     * @return Zym_Controller_Plugin_LayoutSwitcher
-     */
-    public function addRoutes($layoutName, array $routeNames)
-    {
         foreach ($routeNames as $routeName) {
-        	$this->addRoute($routeName, $layoutName);
+            $this->_layouts[$routeName] = $layoutName;
         }
 
         return $this;
