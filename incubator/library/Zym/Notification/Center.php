@@ -65,12 +65,6 @@ class Zym_Notification_Center
     const DUPLICATE_REGISTRATION_EXCEPTION = 'Observer already registered for event "%s"';
 
     /**
-     * Exception for when the required method arguments are empty
-     *
-     */
-    const NO_ARGUMENTS_EXCEPTION = 'Required method arguments can\'t be empty';
-
-    /**
      * Exception for when an event is not registered
      *
      */
@@ -123,15 +117,6 @@ class Zym_Notification_Center
 	 */
 	public function post($name, $sender, array $data = array())
 	{
-	    if (empty($name) || empty($sender)) {
-	        /**
-	         * @see Zym_Notification_Exception_NoArguments
-	         */
-	        require_once 'Zym/Notification/Exception/NoArguments.php';
-
-	        throw new Zym_Notification_Exception_NoArguments(self::NO_ARGUMENTS_EXCEPTION);
-	    }
-
 	    if (strpos($name, self::WILDCARD) !== false) {
 	        $name = str_ireplace(self::WILDCARD, '', $name);
 
@@ -164,15 +149,6 @@ class Zym_Notification_Center
 	 */
 	protected function _post($name, $sender, array $data = array())
 	{
-	    if (empty($name) || empty($sender)) {
-	        /**
-             * @see Zym_Notification_Exception_NoArguments
-             */
-            require_once 'Zym/Notification/Exception/NoArguments.php';
-
-            throw new Zym_Notification_Exception_NoArguments(self::NO_ARGUMENTS_EXCEPTION);
-	    }
-
         if ($this->eventIsRegistered($name)) {
             $notification = new Zym_Notification($name, $sender, $data);
 
@@ -209,15 +185,6 @@ class Zym_Notification_Center
 	 */
 	public function attach($observer, $event, $callback = self::DEFAULT_CALLBACK_METHOD)
 	{
-	    if (empty($observer) || empty($event) || empty($callback)) {
-	        /**
-             * @see Zym_Notification_Exception_NoArguments
-             */
-            require_once 'Zym/Notification/Exception/NoArguments.php';
-
-            throw new Zym_Notification_Exception_NoArguments(self::NO_ARGUMENTS_EXCEPTION);
-	    }
-
 	    if (is_array($event)) {
 	        foreach ($event as $singleEvent) {
 	            $this->_attach($observer, $singleEvent, $callback);
@@ -240,15 +207,6 @@ class Zym_Notification_Center
 	 */
 	protected function _attach($observer, $event, $callback = self::DEFAULT_CALLBACK_METHOD)
 	{
-	    if (empty($observer) || empty($event) || empty($callback)) {
-	        /**
-             * @see Zym_Notification_Exception_NoArguments
-             */
-            require_once 'Zym/Notification/Exception/NoArguments.php';
-
-            throw new Zym_Notification_Exception_NoArguments(self::NO_ARGUMENTS_EXCEPTION);
-	    }
-
 	    if (!array_key_exists($event, $this->_observers)) {
 	        $this->reset($event);
         } else {
@@ -292,15 +250,6 @@ class Zym_Notification_Center
 	 */
 	public function detach($observer, $event = null)
 	{
-	    if (empty($observer)) {
-	        /**
-             * @see Zym_Notification_Exception_NoArguments
-             */
-            require_once 'Zym/Notification/Exception/NoArguments.php';
-
-            throw new Zym_Notification_Exception_NoArguments(self::NO_ARGUMENTS_EXCEPTION);
-	    }
-
 	    if (!empty($event)) {
 	        $this->_detach($observer, $event);
 	    } else {
@@ -324,15 +273,6 @@ class Zym_Notification_Center
      */
 	protected function _detach($observer, $event)
 	{
-	    if (empty($observer) || empty($event)) {
-	        /**
-             * @see Zym_Notification_Exception_NoArguments
-             */
-            require_once 'Zym/Notification/Exception/NoArguments.php';
-
-            throw new Zym_Notification_Exception_NoArguments(self::NO_ARGUMENTS_EXCEPTION);
-	    }
-
 	    if (!$this->eventIsRegistered($event)) {
 	        /**
              * @see Zym_Notification_Exception_EventNotRegistered
@@ -393,11 +333,7 @@ class Zym_Notification_Center
 	 */
 	public function eventIsRegistered($event)
 	{
-	    if (empty($event)) {
-	        return array_key_exists($event, $this->_observers);
-	    }
-
-	    return false;
+	    return array_key_exists($event, $this->_observers);
 	}
 
     /**
