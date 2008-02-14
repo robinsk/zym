@@ -179,53 +179,37 @@ class Zym_Notification_Center
 	 *
 	 * @throws Zym_Notification_Exception
 	 * @param object $observer
-	 * @param string|array $event
+	 * @param string|array $events
 	 * @param string $callback
 	 * @return Zym_Notification_Center
 	 */
-	public function attach($observer, $event, $callback = self::DEFAULT_CALLBACK_METHOD)
+	public function attach($observer, $events, $callback = self::DEFAULT_CALLBACK_METHOD)
 	{
-	    if (is_array($event)) {
-	        foreach ($event as $singleEvent) {
-	            $this->_attach($observer, $singleEvent, $callback);
-	        }
-	    } else {
-	        $this->_attach($observer, $event, $callback);
+	    if (!is_array($events)) {
+	        $events = (array) $events;
 	    }
 
-        return $this;
-	}
+	    foreach ($events as $event) {
+            if (!array_key_exists($event, $this->_observers)) {
+                $this->reset($event);
+            } else {
+                if ($this->eventHasObserver($observer, $event)) {
+                    /**
+                     * @see Zym_Notification_Exception_DuplicateRegistration
+                     */
+                    require_once 'Zym/Notification/Exception/DuplicateRegistration.php';
 
-	/**
-	 * Actually register an observer for the specified notification
-	 *
-	 * @throws Zym_Notification_Exception
-     * @param object $observer
-     * @param string|array $event
-     * @param string $callback
-     * @return Zym_Notification_Center
-	 */
-	protected function _attach($observer, $event, $callback = self::DEFAULT_CALLBACK_METHOD)
-	{
-	    if (!array_key_exists($event, $this->_observers)) {
-	        $this->reset($event);
-        } else {
-            if ($this->eventHasObserver($observer, $event)) {
-                /**
-                 * @see Zym_Notification_Exception_DuplicateRegistration
-                 */
-                require_once 'Zym/Notification/Exception/DuplicateRegistration.php';
+                    $message = sprintf(self::DUPLICATE_REGISTRATION_EXCEPTION, $event);
 
-                $message = sprintf(self::DUPLICATE_REGISTRATION_EXCEPTION, $event);
-
-                throw new Zym_Notification_Exception_DuplicateRegistration($message);
+                    throw new Zym_Notification_Exception_DuplicateRegistration($message);
+                }
             }
+
+            $this->_observers[$event][] = array(self::OBSERVER_KEY => $observer,
+                                                self::CALLBACK_KEY => $callback);
         }
 
-        $this->_observers[$event][] = array(self::OBSERVER_KEY => $observer,
-                                            self::CALLBACK_KEY => $callback);
-
-	    return $this;
+        return $this;
 	}
 
 	/**
@@ -248,52 +232,37 @@ class Zym_Notification_Center
 	 * @param string|array $event
 	 * @return Zym_Notification_Center
 	 */
-	public function detach($observer, $event = null)
+	public function detach($observer, $events = null)
 	{
-	    if (!empty($event)) {
-	        $this->_detach($observer, $event);
-	    } else {
-	        $events = array_keys($this->_observers);
+        if (empty($events)) {
+            $events = array_keys($this->_observers);
+        } else {
+            $events = (array) $events;
+        }
 
-            foreach ($events as $event) {
-                $this->_detach($observer, $event);
+	    foreach ($events as $event) {
+    	    if (!$this->eventIsRegistered($event)) {
+                /**
+                 * @see Zym_Notification_Exception_EventNotRegistered
+                 */
+                require_once 'Zym/Notification/Exception/EventNotRegistered.php';
+
+                $message = sprintf(self::EVENT_NOT_REGISTERED_EXCEPTION, $event);
+
+                throw new Zym_Notification_Exception_EventNotRegistered($message);
             }
-	    }
 
-	    return $this;
-	}
+            $observerCount = count($this->_observers[$event]);
 
-	/**
-     * Actually remove an observer
-     *
-     * @throws Zym_Notification_Exception
-     * @param object $observer
-     * @param string|array $event
-     * @return Zym_Notification_Center
-     */
-	protected function _detach($observer, $event)
-	{
-	    if (!$this->eventIsRegistered($event)) {
-	        /**
-             * @see Zym_Notification_Exception_EventNotRegistered
-             */
-            require_once 'Zym/Notification/Exception/EventNotRegistered.php';
-
-            $message = sprintf(self::EVENT_NOT_REGISTERED_EXCEPTION, $event);
-
-            throw new Zym_Notification_Exception_EventNotRegistered($message);
-	    }
-
-        $observerCount = count($this->_observers[$event]);
-
-        for ($i = 0; $i < $observerCount; $i++) {
-            if ($this->_observers[$event][$i][self::OBSERVER_KEY] === $observer) {
-                unset($this->_observers[$event][$i]);
-                break;
+            for ($i = 0; $i < $observerCount; $i++) {
+                if ($this->_observers[$event][$i][self::OBSERVER_KEY] === $observer) {
+                    unset($this->_observers[$event][$i]);
+                    break;
+                }
             }
         }
 
-        return $this;
+	    return $this;
 	}
 
 	/**
