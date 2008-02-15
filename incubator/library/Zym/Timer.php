@@ -121,8 +121,6 @@ class Zym_Timer
         $calls = $this->getCalls();
         if ($calls == 0) {
             // @todo do we throw an exception or return 0?
-            return 0;
-            
             /**
              * @see Zym_Timer_Exception
              */

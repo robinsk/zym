@@ -29,28 +29,28 @@
  */
 class Zym_Js_Beautify
 {
-    const IN_EXPR = 2;
+    const IN_EXPR  = 2;
     const IN_BLOCK = 3;
 
-    const TK_UNKNOWN = 4;
-    const TK_WORD = 5;
-    const TK_START_EXPR = 6;     // ([
-    const TK_END_EXPR = 7;       // )]
-    const TK_START_BLOCK = 8;    // {
-    const TK_END_BLOCK = 9;      // }
-    const TK_END_COMMAND = 10;   // ;
-    const TK_EOF = 11;
-    const TK_STRING = 12;        // '"
+    const TK_UNKNOWN     = 4;
+    const TK_WORD        = 5;
+    const TK_START_EXPR  = 6;  // ([
+    const TK_END_EXPR    = 7;  // )]
+    const TK_START_BLOCK = 8;  // {
+    const TK_END_BLOCK   = 9;  // }
+    const TK_END_COMMAND = 10; // ;
+    const TK_EOF         = 11;
+    const TK_STRING      = 12; // '"
 
     const TK_BLOCK_COMMENT = 13; // /* ... */
-    const TK_COMMENT = 14;       // //
+    const TK_COMMENT       = 14; // //
 
     const TK_OPERATOR = 15;
 
     // Internal flags
-    const PRINT_NONE = 16;
+    const PRINT_NONE  = 16;
     const PRINT_SPACE = 17;
-    const PRINT_NL = 18;
+    const PRINT_NL    = 18;
 
     /**
      * Whether to use tabs or spaces
