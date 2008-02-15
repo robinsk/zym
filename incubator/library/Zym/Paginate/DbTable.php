@@ -54,6 +54,7 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
         $this->_table = $table;
         $this->_select = $select;
 
+        // @TODO: Check how well this works when you have a query with multiple joined tables
         $countSelect = clone $select;
         $countSelect->from($table, new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
         $result = $table->fetchRow($countSelect);

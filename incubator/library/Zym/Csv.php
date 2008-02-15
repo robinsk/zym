@@ -15,11 +15,6 @@
  */
 
 /**
- * @see Zym_Csv_Exception_FileNotReadable
- */
-require_once 'Zym/CSV/Exception/FileNotReadable.php';
-
-/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    CSV
@@ -75,6 +70,11 @@ class Zym_Csv implements Iterator
         $this->delimiter = $delimiter;
 
         if (empty($this->filePointer)) {
+            /**
+             * @see Zym_Csv_Exception_FileNotReadable
+             */
+            require_once 'Zym/CSV/Exception/FileNotReadable.php';
+
             throw new Zym_Csv_Exception_FileNotReadable(sprintf('The file "%s" cannot be read.', $file));
         }
     }

@@ -124,7 +124,7 @@ class Zym_Notification_Center
     	        $events = array_keys($this->_observers);
 
     	        foreach ($events as $event) {
-    	        	if (strpos($event, $name) == null) {
+    	        	if (strpos($event, $name) === 0) {
     	        	    $this->_post($event, $sender, $data);
     	        	}
     	        }

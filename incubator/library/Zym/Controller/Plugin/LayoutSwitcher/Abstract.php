@@ -20,11 +20,6 @@
 require_once 'Zend/Controller/Plugin/Abstract.php';
 
 /**
- * @see Zend_Controller_Front
- */
-require_once 'Zend/Controller/Front.php';
-
-/**
  * @see Zend_Layout
  */
 require_once 'Zend/Layout.php';
@@ -36,7 +31,7 @@ require_once 'Zend/Layout.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Zym_Controller_Plugin_LayoutSwitcher extends Zend_Controller_Plugin_Abstract
+class Zym_Controller_Plugin_LayoutSwitcher_Abstract extends Zend_Controller_Plugin_Abstract
 {
     /**
      * Default layout name
@@ -60,54 +55,43 @@ class Zym_Controller_Plugin_LayoutSwitcher extends Zend_Controller_Plugin_Abstra
     protected $_layout = null;
 
     /**
-     * Router
-     *
-     * @var Zend_Controller_Router_Rewrite
-     */
-    protected $_router = null;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->_layout = Zend_Layout::getMvcInstance();
+        $this->_layout = Zend_Layout::startMvc();
         $this->_defaultLayout = $this->_layout->getLayout();
-
-        $this->_router = Zend_Controller_Front::getInstance()->getRouter();
     }
 
     /**
      * Add a layout
      *
      * @param string $layoutName
-     * @param string|array $routeName
+     * @param string|array $ruleNames
      * @return Zym_Controller_Plugin_LayoutSwitcher
      */
-    public function addRoute($layoutName, $routeNames)
+    public function addLayout($layoutName, $ruleNames)
     {
-        if (!is_array($routeNames)) {
-            $routeNames = (array) $routeNames;
+        if (!is_array($ruleNames)) {
+            $ruleNames = (array) $ruleNames;
         }
 
-        foreach ($routeNames as $routeName) {
-            $this->_layouts[$routeName] = $layoutName;
+        foreach ($ruleNames as $rule) {
+            $this->_layouts[$rule] = $layoutName;
         }
 
         return $this;
     }
 
     /**
-     * Switch layout depending on the current route
+     * Switch layout based on the given condition
      *
-     * @param Zend_Controller_Request_Abstract $request
+     * @param string $ruleName
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    protected function _switchLayout($ruleName)
     {
-        $currentRouteName = $this->_router->getCurrentRouteName();
-
-        if (array_key_exists($currentRouteName, $this->_layouts)) {
-            $this->_layout->setLayout($this->_layouts[$currentRouteName]);
+        if (array_key_exists($ruleName, $this->_layouts)) {
+            $this->_layout->setLayout($this->_layouts[$ruleName]);
         } else {
             $this->_layout->setLayout($this->_defaultLayout);
         }
