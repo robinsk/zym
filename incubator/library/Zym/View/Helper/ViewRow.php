@@ -29,15 +29,25 @@ class Zym_View_Helper_ViewRow
      * @param Zend_Db_Table_Row_Abstract $row
      * @return string
      */
-    public function viewRow(Zend_Db_Table_Row_Abstract $row)
+    public function viewRow(Zend_Db_Table_Row_Abstract $row, $header = null, $columns = null)
     {
         $table = $row->getTable();
         $rowData = $row->toArray();
 
-        $xhtml = '<table>';
+        $xhtml = '<table class="ZVHViewRowTable">';
+
+        if ($header) {
+            $xhtml .= '<thead>';
+
+            $xhtml .= sprintf('<tr><td colspan="2">%s</td></tr>', $header);
+
+            $xhtml .= '</thead>';
+        }
+
+        $xhtml .= '<tbody>';
 
         foreach ($rowData as $key => $value) {
-            if (!$table->isIdentity($key)) {
+            if (!$table->isIdentity($key) && ($columns != null && in_array($key, $columns))) {
                 $xhtml .= '<tr>';
 
                 $xhtml .= sprintf('<td><strong>%s</strong></td>', $key);
@@ -47,7 +57,7 @@ class Zym_View_Helper_ViewRow
             }
         }
 
-        $xhtml .= '</table>';
+        $xhtml .= '</tbody></table>';
 
         return $xhtml;
     }
