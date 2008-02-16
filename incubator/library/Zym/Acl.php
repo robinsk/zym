@@ -1,19 +1,16 @@
 <?php
 /**
- * Intermentis Library
+ * Zym
  *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to contact@intermentis.nl so we can send you a copy immediately.
  *
- * @category   Intermentis
- * @package    Acl
- * @copyright  Copyright (c) 2007 Intermentis. (http://www.intermentis.nl)
- * @license    http://www.intermentis.nl/license/new-bsd.txt    New BSD License
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Acl
+ * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
 
 /**
@@ -32,26 +29,26 @@ require_once 'Zend/Auth.php';
 require_once 'Zend/Controller/Front.php';
 
 /**
- * @category   Intermentis
- * @package    Acl
- * @copyright  Copyright (c) 2007 Intermentis. (http://www.intermentis.nl)
- * @license    http://www.intermentis.nl/license/new-bsd.txt    New BSD License
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Acl
+ * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Mentis_Acl extends Zend_Acl
+class Zym_Acl extends Zend_Acl
 {
     /**
      * ACL registry key
      *
      */
     const REGISTRY_KEY = 'MACLRegistryKey';
-    
+
     /**
      * User identity
      *
      * @var string
      */
     protected $_identity;
-    
+
     /**
      * Constructor
      *
@@ -64,26 +61,26 @@ class Mentis_Acl extends Zend_Acl
 
         $this->init();
     }
-    
+
     /**
      * Get the acl instance from either the frontcontroller or the registry.
      *
-     * @throws Mentis_Acl_Exception
+     * @throws Zym_Acl_Exception
      * @return Zend_ACL
      */
     public static function getACL()
     {
         $front = Zend_Controller_Front::getInstance();
-        
+
         if ($front->getParam(self::REGISTRY_KEY) instanceof Zend_Acl) {
             return $front->getParam(self::REGISTRY_KEY);
         } elseif (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
             return Zend_Registry::get(self::REGISTRY_KEY);
         } else {
-            throw new Mentis_Acl_Exception('Cannot access the acl via the front controller or the registry.');
+            throw new Zym_Acl_Exception('Cannot access the acl via the front controller or the registry.');
         }
     }
-    
+
     /**
      * Shortens the signature for 'isAllowed' - we will retrieve the role from the built-in identity
      *
@@ -97,7 +94,7 @@ class Mentis_Acl extends Zend_Acl
         if (empty($role)) {
             $role = $this->getRole();
         }
-        
+
         return parent::isAllowed($role, $resource, $privilege);
     }
 
