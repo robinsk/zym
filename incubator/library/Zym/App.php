@@ -521,7 +521,6 @@ class Zym_App
      */
     protected function _parseResources(Zend_Config $config)
     {
-        // TODO: Cache this! YOU'RE AN IDIOT
         // Lets handle resources provided by config
         foreach ($config->resource as $name => $resource) {            
             // Get default resource config
@@ -574,7 +573,6 @@ class Zym_App
             
             // Make sure that it's a valid script
             if (!$script instanceof Zym_App_Resource_Abstract) {
-                // $script not handled...
                 throw new Zym_App_Exception(
                     "Resource script \"$name\" is not an instance of Zym_App_Resource_Abstract"
                 );

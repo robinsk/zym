@@ -248,7 +248,7 @@ class Zym_Debug extends Zend_Debug
      * @param string $group
      * @return Zym_Debug_Timer
      */
-    public static function getTimer($name, $group = null)
+    public static function getTimer($name = null, $group = null)
     {
         return self::getInstance()->getTimerManager()->getTimer($name, $group);
     }
