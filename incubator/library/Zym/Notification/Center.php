@@ -100,7 +100,7 @@ class Zym_Notification_Center
 	 * @param array $data
 	 * @return Zym_Notification_Center
 	 */
-	public function post($name, $sender, array $data = array())
+	public function post($name, $sender = null, array $data = array())
 	{
 	    if (strpos($name, self::WILDCARD) !== false) {
 	        $name = str_ireplace(self::WILDCARD, '', $name);
@@ -132,7 +132,7 @@ class Zym_Notification_Center
 	 * @param array $data
 	 * @return Zym_Notification_Center
 	 */
-	protected function _post($name, $sender, array $data = array())
+	protected function _post($name, $sender = null, array $data = array())
 	{
         if ($this->eventIsRegistered($name)) {
             $notification = new Zym_Notification($name, $sender, $data);
