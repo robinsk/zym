@@ -17,7 +17,12 @@
 /**
  * @see Zend_Config
  */
-require_once('Zend/Config.php');
+require_once'Zend/Config.php';
+
+/**
+ * @see Zym_App
+ */
+require_once 'Zym/App.php';
 
 /**
  * Abstract resource class
@@ -37,7 +42,7 @@ abstract class Zym_App_Resource_Abstract
      * Executes last
      *
      */
-    const PRIORITY_LOW = 50;
+    const PRIORITY_LOW    = 50;
     
     /**
      * Middle priority
@@ -51,7 +56,7 @@ abstract class Zym_App_Resource_Abstract
      * 
      * Executes the first
      */
-    const PRIORITY_HIGH = 10;
+    const PRIORITY_HIGH   = 10;
    
     /**
      * Application
@@ -72,15 +77,20 @@ abstract class Zym_App_Resource_Abstract
      *
      * @var array
      */
-    protected $_defaultConfig = array();
+    protected $_defaultConfig = array(
+        Zym_App::ENV_DEVELOPMENT => array(),
+        Zym_App::ENV_PRODUCTION  => array(),
+        Zym_App::ENV_TEST        => array(),
+        Zym_App::ENV_DEFAULT     => array()
+    );
     
     /**
      * Default config object cache
      *
      * @var Zend_Config
      */
-    protected $_defaultConfigObject;
-    
+    private $_defaultConfigObject;
+
     /**
      * Dispatch priority
      *
@@ -92,11 +102,11 @@ abstract class Zym_App_Resource_Abstract
      * Construct
      * 
      */
-    public function __construct(Zend_Config $config = null)
+    public function __construct(Zend_Config $config = null, $environment = null)
     {
         // Set config
         if ($config) {
-            $this->setConfig($config);
+            $this->setConfig($config, $environment);
         }
     }
 
@@ -148,11 +158,26 @@ abstract class Zym_App_Resource_Abstract
      *
      * @return Zend_Config
      */
-    public function getDefaultConfig()
+    public function getDefaultConfig($environment = null)
     {
         // Cache config obj
         if (!$this->_defaultConfigObject instanceof Zend_Config) {
-            $this->_defaultConfigObject = new Zend_Config($this->_defaultConfig);
+            // Set default environment if environment doesn't exist
+            if ($environment === null || !array_key_exists($environment, $this->_defaultConfig)) {
+                $environment = Zym_App::ENV_DEFAULT;
+            }
+            
+            // Merge environment with default environment
+            if (array_key_exists($environment, $this->_defaultConfig)) {
+                $config = $this->_defaultConfig[$environment];
+                if ($environment !== Zym_App::ENV_DEFAULT && array_key_exists(Zym_App::ENV_DEFAULT, $this->_defaultConfig)) {
+                    $config = $this->_mergeConfig($this->_defaultConfig[Zym_App::ENV_DEFAULT], $config);
+                }
+            } else {
+                $config = array();
+            }
+            
+            $this->_defaultConfigObject = new Zend_Config($config);
         }
         
         return $this->_defaultConfigObject;
@@ -174,10 +199,10 @@ abstract class Zym_App_Resource_Abstract
      * @param Zend_Config $config
      * @return Zym_App_Resource_Abstract
      */
-    public function setConfig(Zend_Config $config)
+    public function setConfig(Zend_Config $config, $environment = null)
     {
         // Merge default config with user config
-        $defaultConfig = $this->_defaultConfig;
+        $defaultConfig = $this->getDefaultConfig($environment);
         $this->_config = $this->_mergeConfig($defaultConfig, $config);
         
         return $this;

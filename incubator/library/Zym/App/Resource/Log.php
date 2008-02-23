@@ -17,27 +17,27 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Log
  */
-require_once('Zend/Log.php');
+require_once 'Zend/Log.php';
 
 /**
  * @see Zend_Log_Writer_Db
  */
-require_once('Zend/Log/Writer/Db.php');
+require_once 'Zend/Log/Writer/Db.php';
 
 /**
  * @see Zend_Log_Writer_Stream
  */
-require_once('Zend/Log/Writer/Stream.php');
+require_once 'Zend/Log/Writer/Stream.php';
 
 /**
  * @see Zend_Log_Writer_Null
  */
-require_once('Zend/Log/Writer/Null.php');
+require_once 'Zend/Log/Writer/Null.php';
 
 /**
  * Logger
@@ -57,36 +57,38 @@ class Zym_App_Resource_Log extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'writer' => array(
-            'database' => array(
-                'enabled' => false,
-                'table' => 'logs',
-                'key' => 'db'
-            ),
-
-            'stream' => array(
-                'enabled' => false,
-                'stream' => 'application.log',
-                'mode' => 'a',
-                'formatter' => array(/*
-                    'name' => 'Zend_Log_Formatter_Simple',
-                    'params' => array(
-                        '%timestamp% %ipAddr% %priorityName% (%priority%): %message%'
-                    )*/
+        Zym_App::ENV_DEFAULT => array(
+            'writer' => array(
+                'database' => array(
+                    'enabled' => false,
+                    'table' => 'logs',
+                    'key' => 'db'
+                ),
+    
+                'stream' => array(
+                    'enabled' => false,
+                    'stream' => 'application.log',
+                    'mode' => 'a',
+                    'formatter' => array(/*
+                        'name' => 'Zend_Log_Formatter_Simple',
+                        'params' => array(
+                            '%timestamp% %ipAddr% %priorityName% (%priority%): %message%'
+                        )*/
+                    )
+                ),
+    
+                'syslog' => array(
+                    'enabled' => false,
                 )
             ),
-
-            'syslog' => array(
-                'enabled' => false,
+    
+            'filter' => array(
+                'priority' => array(
+                    'enabled' => true,
+                    'level' => Zend_Log::WARN
+                )
             )
-        ),
-
-        'filter' => array(
-            'priority' => array(
-                'enabled' => true,
-                'level' => Zend_Log::WARN
-            )
-        ),
+        )
     );
 
     /**

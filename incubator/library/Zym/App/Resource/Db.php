@@ -17,22 +17,22 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Db
  */
-require_once('Zend/Db.php');
+require_once 'Zend/Db.php';
 
 /**
  * @see Zend_Db_Table_Abstract
  */
-require_once('Zend/Db/Table/Abstract.php');
+require_once 'Zend/Db/Table/Abstract.php';
 
 /**
  * @see Zend_Registry
  */
-require_once('Zend/Registry.php');
+require_once 'Zend/Registry.php';
 
 /**
  * Database
@@ -59,29 +59,39 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'default_config' => array(
-            'adapter' => 'Mysqli',
-        
-            'registry' => array(
-                'disabled' => false,
-                'key' => 'db'
-            ),
-            
-            'set_default_adapter' => array(
-                'Zend_Db_Table_Abstract'
-            ),
-            
-            'profiler' => array(
-                'enabled' => false,
-                'class' => null,
-                'filter' => array(
-                    'elapsed_secs' => null,
-                    'query_type' => null
+        Zym_App::ENV_DEVELOPMENT => array(
+            'default_config' => array(
+                'profiler' => array(
+                    'enabled' => true
                 )
             )
         ),
         
-        'connection' => array()
+        Zym_APP::ENV_DEFAULT => array(
+            'default_config' => array(
+                'adapter' => 'Mysqli',
+            
+                'registry' => array(
+                    'disabled' => false,
+                    'key' => 'db'
+                ),
+                
+                'set_default_adapter' => array(
+                    'Zend_Db_Table_Abstract'
+                ),
+                
+                'profiler' => array(
+                    'enabled' => false,
+                    'class' => null,
+                    'filter' => array(
+                        'elapsed_secs' => null,
+                        'query_type' => null
+                    )
+                )
+            ),
+            
+            'connection' => array()
+        )
     );
 
     /**

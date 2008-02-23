@@ -17,12 +17,12 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Controller_Front
  */
-require_once('Zend/Controller/Front.php');
+require_once 'Zend/Controller/Front.php';
 
 /**
  * Custom routes setter

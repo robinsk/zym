@@ -17,7 +17,7 @@
 /**
  * @see Zym_App_Resource_Controller_Plugin_Interface
  */
-require_once('Zym/App/Resource/Controller/Plugin/Interface.php');
+require_once 'Zym/App/Resource/Controller/Plugin/Interface.php';
 
 /**
  * @author Geoffrey Tran
@@ -35,14 +35,6 @@ abstract class Zym_App_Resource_Controller_Plugin_Abstract implements Zym_App_Re
      * @var Zend_Config
      */
     protected $_config;
-
-    /**
-     * Return a controller plugin
-     *
-     * @return Zend_Controller_Plugin_Abstract
-     */
-    public function getPlugin()
-    {}
     
     /**
      * Set config

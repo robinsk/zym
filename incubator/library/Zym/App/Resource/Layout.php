@@ -17,12 +17,12 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Layout
  */
-require_once('Zend/Layout.php');
+require_once 'Zend/Layout.php';
 
 /**
  * Init Zend_Layout
@@ -42,12 +42,14 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'layout_path' => '../layout',
-        'layout' => 'default',
-        'mvc_enabled' => null,
-        'content_key' => null,
-        'inflector' => null,
-        'view' => null
+        Zym_App::ENV_DEFAULT => array(
+            'layout_path' => '../layout',
+            'layout' => 'default',
+            'mvc_enabled' => null,
+            'content_key' => null,
+            'inflector' => null,
+            'view' => null
+        )
     );
 
     /**

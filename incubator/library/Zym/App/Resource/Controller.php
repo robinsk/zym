@@ -17,22 +17,17 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
-
-/**
- * @see Zym_Controller_Dispatcher_Standard
- */
-require_once('Zym/Controller/Dispatcher/Standard.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Controller_Front
  */
-require_once('Zend/Controller/Front.php');
+require_once 'Zend/Controller/Front.php';
 
 /**
  * @see Zend_Loader
  */
-require_once('Zend/Loader.php');
+require_once 'Zend/Loader.php';
 
 /**
  * Abstract controller setup process
@@ -59,40 +54,46 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'class' => 'Zend_Controller_Front',
-        'throw_exceptions' => false,
-    
-        'module' => array(
-            'directory' => array(),
-            'controller_name' => null
-        ),
-        
-        'controller' => array(
-            'directory' => array()
-        ),
-        
-        'base_url' => null,
-        
-        'plugin' => array(
-            'Zym_App_Resource_Controller_Plugin_ErrorHandler' => array(
-                'plugin_index' => 105
-            )
+        Zym_App::ENV_DEVELOPMENT => array(
+            'throw_exceptions' => true
         ),
     
-        'default' => array(
-            'action' => null,
-            'controller_name' => null,
-            'module' => null
-        ),
+        Zym_App::ENV_DEFAULT => array(
+            'class' => 'Zend_Controller_Front',
+            'throw_exceptions' => false,
         
-        'params' => array(
-            'prefixDefaultModule' => true
-        ),
+            'module' => array(
+                'directory' => array(),
+                'controller_name' => null
+            ),
+            
+            'controller' => array(
+                'directory' => array()
+            ),
+            
+            'base_url' => null,
+            
+            'plugin' => array(
+                'Zym_App_Resource_Controller_Plugin_ErrorHandler' => array(
+                    'plugin_index' => 105
+                )
+            ),
         
-        'request' => null,
-        'response' => 'Zym_Controller_Response_Http',
-        'dispatcher' => 'Zym_Controller_Dispatcher_Standard',
-        'router' => null
+            'default' => array(
+                'action' => null,
+                'controller_name' => null,
+                'module' => null
+            ),
+            
+            'params' => array(
+                'prefixDefaultModule' => true
+            ),
+            
+            'request' => null,
+            'response' => 'Zym_Controller_Response_Http',
+            'dispatcher' => 'Zym_Controller_Dispatcher_Standard',
+            'router' => null
+        )
     );
     
     /**

@@ -17,12 +17,12 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Mail
  */
-require_once('Zend/Mail.php');
+require_once 'Zend/Mail.php';
 
 /**
  * Mail component configuration
@@ -42,16 +42,19 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'default_transport' => 'sendmail',
-        'transport' => array(
-            'sendmail' => array(
-                'parameters' => null
-            ),
-            
-            'smtp' => array(
-                'host' => '127.0.0.1'
+        Zym_App::ENV_DEFAULT => array(
+            'default_transport' => 'sendmail',
+        
+            'transport' => array(
+                'sendmail' => array(
+                    'parameters' => null
+                ),
+                
+                'smtp' => array(
+                    'host' => '127.0.0.1'
+                )
             )
-        ),
+        )
     );
     
     /**

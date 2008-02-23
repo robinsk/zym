@@ -16,12 +16,12 @@
 /**
  * @see Zym_App_Registry
  */
-require_once('Zym/App/Registry.php');
+require_once 'Zym/App/Registry.php';
 
 /**
  * @see Zend_Loader
  */
-require_once('Zend/Loader.php');
+require_once 'Zend/Loader.php';
 
 /**
  * Bootstraping component
@@ -51,6 +51,11 @@ class Zym_App
      *
      */
     const ENV_TEST        = 'test';
+    
+    /**
+     * Environment type default
+     */
+    const ENV_DEFAULT     = 'default';
     
     /**
      * Cache directory
@@ -563,7 +568,7 @@ class Zym_App
             $namespace = $resource->namespace ? trim($resource->namespace) : null;
             $loadedScript = $this->_loadResource($name, $namespace);
             
-            $script = new $loadedScript($resConfig);
+            $script = new $loadedScript($resConfig, $environment);
             $script->setApp($this);
             
             // Set custom priority

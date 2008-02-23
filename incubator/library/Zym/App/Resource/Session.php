@@ -17,12 +17,12 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Session
  */
-require_once('Zend/Session.php');
+require_once 'Zend/Session.php';
 
 /**
  * Setup session
@@ -42,8 +42,10 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'auto_start' => true,
-        'config' => array()
+        Zym_App::ENV_DEFAULT => array(
+            'auto_start' => true,
+            'config' => array()
+        )
     );
 
     /**
@@ -52,14 +54,9 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      */
     public function setup(Zend_Config $config)
     {
-        // Skip if session was already started
-        if (Zend_Session::isStarted()) {
-            return;
-        }
-
         // Setup config
         Zend_Session::setOptions($config->config->toArray());
-
+        
         // Autostart session?
         if ($config->auto_start) {
             // Start session

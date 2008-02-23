@@ -47,45 +47,47 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        'view' => array(
-            'encoding' => null,
-            'escape' => null,
-    
-            'path' => array(
-                'base' => array(),
-    
-                'filter' => array(
-                    'SpotSec' => array(
-                        'prefix' => 'Zym_View_Filter',
-                        'path' => 'Zym/View/Filter'
-                    )
-                ),
-                
-                'helper' => array(
-                    'SpotSec' => array(
-                        'prefix' => 'Zym_View_Helper',
-                        'path' => 'Zym/View/Helper'
-                    )
-                ),
-                
-                'script' => array()
-            )
-        ),
+        Zym_App::ENV_DEFAULT => array(
+            'view' => array(
+                'encoding' => null,
+                'escape' => null,
         
-        'view_renderer' => array(
-            'suffix' => null,
+                'path' => array(
+                    'base' => array(),
         
-            'spec' => array(
-                'basePath' => null,
-                'scriptPath' => null,
-                'scriptPathNoController' => null
+                    'filter' => array(
+                        'SpotSec' => array(
+                            'prefix' => 'Zym_View_Filter',
+                            'path' => 'Zym/View/Filter'
+                        )
+                    ),
+                    
+                    'helper' => array(
+                        'SpotSec' => array(
+                            'prefix' => 'Zym_View_Helper',
+                            'path' => 'Zym/View/Helper'
+                        )
+                    ),
+                    
+                    'script' => array()
+                )
             ),
             
-            'flag' => array(
-                'neverController' => null,
-                'neverRender' => null,
-                'noController' => null,
-                'noRender' => null,
+            'view_renderer' => array(
+                'suffix' => null,
+            
+                'spec' => array(
+                    'basePath' => null,
+                    'scriptPath' => null,
+                    'scriptPathNoController' => null
+                ),
+                
+                'flag' => array(
+                    'neverController' => null,
+                    'neverRender' => null,
+                    'noController' => null,
+                    'noRender' => null,
+                )
             )
         )
     );

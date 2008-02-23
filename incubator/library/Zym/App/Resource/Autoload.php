@@ -17,12 +17,12 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * @see Zend_Loader
  */
-require_once('Zend/Loader.php');
+require_once 'Zend/Loader.php';
 
 /**
  * Registers class autoloader
@@ -35,13 +35,7 @@ require_once('Zend/Loader.php');
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
-{
-    /**
-     * Config key for custom class
-     *
-     */
-    const CONFIG_CLASS = 'class';
-    
+{   
     /**
      * Priority
      *
@@ -55,7 +49,9 @@ class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        self::CONFIG_CLASS => 'Zend_Loader'
+        Zym_App::ENV_DEFAULT => array(
+            'class' => 'Zend_Loader'
+        )
     );
 
     /**

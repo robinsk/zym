@@ -17,12 +17,12 @@
 /**
  * @see Zym_App_Resource_Controller_Plugin_Abstract
  */
-require_once('Zym/App/Resource/Controller/Plugin/Abstract.php');
+require_once 'Zym/App/Resource/Controller/Plugin/Abstract.php';
 
 /**
  * @see Zym_Controller_Plugin_ErrorHandler
  */
-require_once('Zym/Controller/Plugin/ErrorHandler.php');
+require_once 'Zym/Controller/Plugin/ErrorHandler.php';
 
 /**
  * @author Geoffrey Tran

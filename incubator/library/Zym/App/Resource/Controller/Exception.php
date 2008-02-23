@@ -18,7 +18,7 @@
 /**
  * @see Zym_App_Resource_Exception
  */
-require_once ('Zym/App/Resource/Exception.php');
+require_once 'Zym/App/Resource/Exception.php';
 
 /**
  * Abstract controller setup process
