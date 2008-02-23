@@ -8,8 +8,7 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym
- * @package    Notification
+ * @category   Zym_Notification
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
@@ -21,8 +20,7 @@ require_once 'Zym/Notification.php';
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym
- * @package    Notification
+ * @category   Zym_Notification
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */

@@ -8,16 +8,14 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym
- * @package    Notification
+ * @category   Zym_Notification
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym
- * @package    Notification
+ * @category   Zym_Notification
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
@@ -53,9 +51,9 @@ class Zym_Notification
 	 */
 	public function __construct($name, $sender, array $data = array())
 	{
-		$this->_name = $name;
+		$this->_name   = $name;
 		$this->_sender = $sender;
-		$this->_data = $data;
+		$this->_data   = $data;
 	}
 
 	/**
