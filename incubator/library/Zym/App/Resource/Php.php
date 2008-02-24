@@ -37,10 +37,16 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        Zym_App::ENV_DEFAULT => array(
+        Zym_App::ENV_DEVELOPMENT => array(
+            'error_reporting' => 8191 // E_ALL | E_STRICT
+        ),
+        
+        Zym_App::ENV_DEFAULT     => array(
             'date' => array(
                 'force_default_timezone' => false
-            )
+            ),
+            
+            'include_path' => array()
         )
     );
     
@@ -132,9 +138,15 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      */
     protected function _setIncludePath(Zend_Config $config)
     {
+        // Setting the include path is an expensive operation
+        // Only do it when needed
+        if (!$config->include_path) {
+            return;
+        }
+        
         // Handle array
         if ($config->include_path instanceof Zend_Config) {
-            $paths = implode(PATH_SEPARATOR, $config->include_path);
+            $paths = implode(PATH_SEPARATOR, $config->include_path->toArray());
         } else {
             // Normalize include path string
             $paths = str_replace(array(':', ';'), PATH_SEPARATOR, $config->include_path);
