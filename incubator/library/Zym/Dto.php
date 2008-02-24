@@ -79,6 +79,17 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
     }
 
     /**
+     * Remove a value from the DTO
+     *
+     * @param string $key
+     * @return Zym_Dto
+     */
+    public function __unset($key)
+    {
+        return $this->removeValue($key);
+    }
+
+    /**
      * Returns the serialized DTO when it's echoed
      *
      * @return string
