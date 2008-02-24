@@ -48,6 +48,13 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
     protected $_current = 0;
 
     /**
+     * Item count
+     *
+     * @var int
+     */
+    protected $_itemCount = 0;
+
+    /**
      * Constructor
      *
      * @param array $data
@@ -140,6 +147,8 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
         $this->_data[$key] = $value;
         $this->_keys[] = $key;
 
+        $this->_itemCount++;
+
         return $this;
     }
 
@@ -157,6 +166,8 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
 
             unset($this->_data[$key]);
             unset($this->_keys[$index]);
+
+            $this->_itemCount--;
         }
 
         return $this;
@@ -292,6 +303,6 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
      */
     public function valid()
     {
-        return $this->_current < count($this->_keys);
+        return $this->_current < $this->_itemCount;
     }
 }
