@@ -24,7 +24,7 @@ require_once 'Zym/ArrayData/Interface.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess
+class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
 {
     /**
      * The data for the Dto
@@ -185,5 +185,25 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess
     public function offsetUnset($key)
     {
         $this->removeValue($key);
+    }
+
+    /**
+     * Serializable method. Returns the _data array as a serialized string.
+     *
+     * @return array
+     */
+    public function serialize()
+    {
+        return serialize($this->toArray());
+    }
+
+    /**
+     * Unserialize the DTO
+     *
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        $this->setFromArray(unserialize($serialized));
     }
 }
