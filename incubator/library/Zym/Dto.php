@@ -24,7 +24,7 @@ require_once 'Zym/ArrayData/Interface.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
  */
-class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
+class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Serializable
 {
     /**
      * The data for the Dto
@@ -34,13 +34,27 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
     protected $_data = array();
 
     /**
+     * Keys for the data so we can implement Iterator easilly
+     *
+     * @var array
+     */
+    protected $_keys = array();
+
+    /**
+     * Current item for iterator
+     *
+     * @var int
+     */
+    protected $_current = 0;
+
+    /**
      * Constructor
      *
      * @param array $data
      */
     public function __construct(array $data = array())
     {
-        $this->_data = $data;
+        $this->setFromArray($data);
     }
 
     /**
@@ -62,6 +76,16 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
     public function __set($key, $value)
     {
         $this->setValue($key, $value);
+    }
+
+    /**
+     * Returns the serialized DTO when it's echoed
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->serialize();
     }
 
     /**
@@ -103,6 +127,7 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
     public function setValue($key, $value)
     {
         $this->_data[$key] = $value;
+        $this->_keys[] = $key;
 
         return $this;
     }
@@ -116,7 +141,11 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
     public function removeValue($key)
     {
         if ($this->hasValue($key)) {
-            $this->removeValue($key);
+            $keys = array_flip($this->_keys);
+            $index = $keys[$key];
+
+            unset($this->_data[$key]);
+            unset($this->_keys[$index]);
         }
 
         return $this;
@@ -138,9 +167,11 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
      * @param array $data
      * @return Zym_Dto
      */
-    public function setFromArray(array $data = array())
+    public function setFromArray(array $data)
     {
-        $this->_data = $data;
+        foreach ($data as $key => $value) {
+        	$this->setValue($key, $value);
+        }
 
         return $this;
     }
@@ -205,5 +236,51 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Serializable
     public function unserialize($serialized)
     {
         $this->setFromArray(unserialize($serialized));
+    }
+
+    /**
+     * Get the current value
+     *
+     * @return mixed
+     */
+    public function current()
+    {
+        return $this->_data[$this->key()];
+    }
+
+    /**
+     * Get the current key
+     *
+     * @return string
+     */
+    public function key()
+    {
+        return $this->_keys[$this->_current];
+    }
+
+    /**
+     * Up the counter
+     */
+    public function next()
+    {
+        $this->_current++;
+    }
+
+    /**
+     * Rewind the counter
+     */
+    public function rewind()
+    {
+        $this->_current = 0;
+    }
+
+    /**
+     * Is the iterator still valid?
+     *
+     * @return boolean
+     */
+    public function valid()
+    {
+        return $this->_current < count($this->_keys);
     }
 }
