@@ -50,7 +50,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         Zym_App::ENV_DEFAULT => array(
             'view' => array(
                 'encoding' => null,
-                'escape' => null,
+                'escape'   => null,
         
                 'path' => array(
                     'base' => array(),
@@ -58,14 +58,14 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     'filter' => array(
                         'SpotSec' => array(
                             'prefix' => 'Zym_View_Filter',
-                            'path' => 'Zym/View/Filter'
+                            'path'   => 'Zym/View/Filter'
                         )
                     ),
                     
                     'helper' => array(
                         'SpotSec' => array(
                             'prefix' => 'Zym_View_Helper',
-                            'path' => 'Zym/View/Helper'
+                            'path'   => 'Zym/View/Helper'
                         )
                     ),
                     
@@ -77,16 +77,16 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 'suffix' => null,
             
                 'spec' => array(
-                    'basePath' => null,
-                    'scriptPath' => null,
+                    'basePath'               => null,
+                    'scriptPath'             => null,
                     'scriptPathNoController' => null
                 ),
                 
                 'flag' => array(
                     'neverController' => null,
-                    'neverRender' => null,
-                    'noController' => null,
-                    'noRender' => null,
+                    'neverRender'     => null,
+                    'noController'    => null,
+                    'noRender'        => null
                 )
             )
         )

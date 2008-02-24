@@ -20,7 +20,7 @@
 require_once 'Zym/App/Resource/Abstract.php';
 
 /**
- * Setup timezone
+ * Setup php environment
  * 
  * @author Geoffrey Tran
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
@@ -30,42 +30,116 @@ require_once 'Zym/App/Resource/Abstract.php';
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
 class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
-{
+{   
     /**
      * Default Config
      *
      * @var array
      */
     protected $_defaultConfig = array(
-        'date' => array(
-            'force_default_timezone' => false
+        Zym_App::ENV_DEFAULT => array(
+            'date' => array(
+                'force_default_timezone' => false
+            )
         )
     );
     
-    protected $_customConfigMap = array(
-        'date' => array(
-            'force_default_timezone'
-        )
-    );
-
     /**
-     * Set default timezone
+     * Array of items to skip from ini_set()
      *
+     * @todo make this format similar to the config array instead
+     * @var array
+     */
+    protected $_customConfigMap = array(
+        'date.force_default_timezone',
+        'include_path'
+    );
+    
+    /**
+     * Set as high priority to load first in the dispatch
+     *
+     * @var integer
+     */
+    protected $_priority = self::PRIORITY_HIGH;
+    
+    /**
+     * Setup
+     *
+     * @param Zend_Config $config
      */
     public function setup(Zend_Config $config)
     {
-        foreach ($config as $namespace => $child) {
-        	ini_set();
-        }
+        // Parse for php config and set them
+        $this->_recurseConfig($config);
         
-        $timezone = $config->timezone;
+        // Set/Force default timezone?
+        $this->_forceDefaultTimezone($config->date);
         
-        // Use default timezone
-        if ((bool) $config->force_default) {
-            $timezone = @date_default_timezone_get();
-        }
+        // Set include path
+        $this->_setIncludePath($config);
+    }
 
-        // Set default timezone
-        date_default_timezone_set($timezone);
-    }    
+    /**
+     * Recursively iterate through zend config elements
+     * if one is a value, set it through ini_set
+     *
+     * @todo Use a better algorithm since this requires a lot of cpu
+     * @param Zend_Config $config
+     * @param string      $location Current dimension
+     */
+    protected function _recurseConfig(Zend_Config $config, $location = null)
+    {
+        foreach ($config as $namespace => $child) {
+            $key = $location . '.' . $namespace;
+
+            // Skip if it's not a php config item
+            if (in_array($key, $this->_customConfigMap)) {
+                continue;
+            }
+            
+            // Go deeper
+            if ($child instanceof Zend_Config) {
+                $this->_recurseConfig($child, $key);
+                continue;
+            }
+            
+            ini_set($key, $child);
+        }
+    }
+    
+    /**
+     * Force default timezone
+     *
+     * @param Zend_Config $config Date obj
+     */
+    protected function _forceDefaultTimezone(Zend_Config $config)
+    {
+        if ((bool) $config->force_default_timezone) {
+            $timezone = @date_default_timezone_get();
+            
+            // Set default timezone
+            date_default_timezone_set($timezone);
+        }
+    }
+    
+    /**
+     * Parse include_path element and normalize with PATH_SEPARATORS
+     * 
+     * If an an array (Zend_Config) is found, convert those with 
+     * PATH_SEPARATORS and shift them infront of the current include path
+     *
+     * @param Zend_Config $config
+     */
+    protected function _setIncludePath(Zend_Config $config)
+    {
+        // Handle array
+        if ($config->include_path instanceof Zend_Config) {
+            $paths = implode(PATH_SEPARATOR, $config->include_path);
+        } else {
+            // Normalize include path string
+            $paths = str_replace(array(':', ';'), PATH_SEPARATOR, $config->include_path);
+        }
+        
+        set_include_path($paths . get_include_path());
+    }
 }
