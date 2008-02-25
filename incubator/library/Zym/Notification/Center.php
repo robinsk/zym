@@ -39,22 +39,18 @@ class Zym_Notification_Center
     const CALLBACK_KEY = 'callback';
 
     /**
-     * Constant for the default callback method name
+     * The default callback method name
      *
+     * @var string
      */
-    const DEFAULT_CALLBACK_METHOD = 'notify';
+    protected $_defaultCallback = 'notify';
 
     /**
-     * Constant for the catch-all event
+     * Wildcard for the catch-all event
      *
+     * @var string
      */
-    const WILDCARD = '*';
-
-    /**
-     * Exception for when the callback method isn't implemented in the target class
-     *
-     */
-    const METHOD_NOT_IMPLEMENTED_EXCEPTION = 'Method "%s" is not implemented in class "%s"';
+    protected $_wildcard = '*';
 
 	/**
 	 * The collection of objects that registered to notifications
@@ -102,8 +98,8 @@ class Zym_Notification_Center
 	 */
 	public function post($name, $sender = null, array $data = array())
 	{
-	    if (strpos($name, self::WILDCARD) !== false) {
-	        $name = str_ireplace(self::WILDCARD, '', $name);
+	    if (strpos($name, $this->_wildcard) !== false) {
+	        $name = str_ireplace($this->_wildcard, '', $name);
 
 	        if (!empty($name)) {
     	        $events = array_keys($this->_observers);
@@ -118,7 +114,7 @@ class Zym_Notification_Center
 	        $this->_post($name, $sender, $data);
 	    }
 
-	    $this->_post(self::WILDCARD, $sender, $data);
+	    $this->_post($this->_wildcard, $sender, $data);
 
 		return $this;
 	}
@@ -147,7 +143,7 @@ class Zym_Notification_Center
                      */
                     require_once 'Zym/Notification/Exception/MethodNotImplemented.php';
 
-                    $message = sprintf(self::METHOD_NOT_IMPLEMENTED_EXCEPTION, $callback, get_class($observer));
+                    $message = sprintf('Method "%s" is not implemented in class "%s"', $callback, get_class($observer));
 
                     throw new Zym_Notification_Exception_MethodNotImplemented($message);
                 }
@@ -167,8 +163,12 @@ class Zym_Notification_Center
 	 * @param string $callback
 	 * @return Zym_Notification_Center
 	 */
-	public function attach($observer, $events, $callback = self::DEFAULT_CALLBACK_METHOD)
+	public function attach($observer, $events, $callback = null)
 	{
+	   if (!$callback) {
+            $callback = $this->_defaultCallback;
+        }
+
 	    if (!is_array($events)) {
 	        $events = (array) $events;
 	    }
@@ -194,9 +194,13 @@ class Zym_Notification_Center
      * @param string $callback
      * @return Zym_Notification_Center
      */
-	public function attachCatchAll($observer, $callback = self::DEFAULT_CALLBACK_METHOD)
+	public function attachCatchAll($observer, $callback = null)
 	{
-	    return $this->attach($observer, self::WILDCARD, $callback);
+	    if (!$callback) {
+	        $callback = $this->_defaultCallback;
+	    }
+
+	    return $this->attach($observer, $this->_wildcard, $callback);
 	}
 
 	/**
@@ -238,7 +242,7 @@ class Zym_Notification_Center
 	 */
 	public function detachCatchAll($observer)
 	{
-	    return $this->detach($observer, self::WILDCARD);
+	    return $this->detach($observer, $this->_wildcard);
 	}
 
 	/**
