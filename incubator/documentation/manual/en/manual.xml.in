@@ -35,7 +35,7 @@
         <xi:include href="module_specs/Zym_Notification.xml" />
         <xi:include href="module_specs/Zym_Notification-Center.xml" />
         <xi:include href="module_specs/Zym_Notification-Registering.xml" />
-        <xi:include href="module_specs/Zym_Notification-Posting .xml" />
+        <xi:include href="module_specs/Zym_Notification-Posting.xml" />
     </chapter>
 
     <appendix id="appendix.copyright">
