@@ -5,14 +5,10 @@
   <para>Registering to a notification is done at the
   Zym_Notification_Center:</para>
 
-  <para>
-	<programlisting role="php">
-<![CDATA[
+  <programlisting role="php"><![CDATA[
 $center = Zym_Notification_Center::getInstance();
-$center-&gt;attach($theReceivingObject, ‘testEvent’);
-]]>
-	</programlisting>
-  </para>
+$center->attach($theReceivingObject, ‘testEvent’);
+]]></programlisting>
 
   <para>In this snippet an object is attached to the testEvent notification.
   All posts that are sent to the ‘testEvent’ notification will be passed to
@@ -20,12 +16,10 @@ $center-&gt;attach($theReceivingObject, ‘testEvent’);
   notify() method. An optional third parameter in the attach() method allows
   you to use a custom method.</para>
 
-  <para><programlisting role="php">
-<![CDATA[
+  <programlisting role="php"><![CDATA[
 $center = Zym_Notification_Center::getInstance();
-  $center-&gt;attach($theReceivingObject, ‘testEvent’, ‘customMethod’);
-]]>
-	</programlisting></para>
+$center->attach($theReceivingObject, ‘testEvent’, ‘customMethod’);
+]]></programlisting>
 
   <para>In this case, all ‘testEvent’ notifications will be posted to the
   customMethod() method in $theReceivingObject. There is a special attach
@@ -42,14 +36,30 @@ $center = Zym_Notification_Center::getInstance();
   of how to make sure this gets done. Receiving a notification By default the
   notifications are sent to the notify() method of the receiver.</para>
 
-  <para><code> class MyClass { protected $_notificationCenter = null; public
-  function __construct() { $this-&gt;_notificationCenter =
-  Zym_Notification_Center::getInstance(); $this-&gt;_notificationCenter
-  -&gt;attach($this, ‘testEvent’); } public function __destruct() {
-  $this-&gt;_notificationCenter -&gt;detach($this); } public function
-  notify(Zym_Notification $notification) { if ($notification-&gt;getName() ==
-  ‘testEvent’) { Zend_Registry:get(‘log’)-&gt;log(‘testEvent was triggered and
-  received by MyClass!’); } } } </code></para>
+  <programlisting role="php"><![CDATA[
+class MyClass 
+{ 
+  protected $_notificationCenter = null; 
+  
+  public function __construct()
+  {
+    $this->_notificationCenter = Zym_Notification_Center::getInstance();
+    $this->_notificationCenter->attach($this, 'testEvent');
+  }
+  
+  public function __destruct()
+  {
+    $this->_notificationCenter->detach($this);
+  }
+  
+  public function notify(Zym_Notification $notification)
+  {
+    if ('testEvent' == $notification->getName()) {
+      Zend_Registry::get('log')->log('testEvent was triggered and received by MyClass!');
+    }
+  }
+}
+]]></programlisting>
 
   <para>In the example above the MyClass instance is automatically registered
   to the ‘testEvent’ notification at instantiation. If and when the
