@@ -25,6 +25,11 @@
         <xi:include href="module_specs/Zym_Controller-Action.xml" />
     </chapter>
 
+    <chapter id="zym.dto">
+        <title>Zym_Dto</title>
+        <xi:include href="module_specs/Zym_Dto.xml" />
+    </chapter>
+
     <appendix id="appendix.copyright">
         <title>Copyright Information</title>
         <xi:include href="ref/copyrights.xml" />
