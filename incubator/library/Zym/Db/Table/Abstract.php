@@ -9,8 +9,8 @@
  *
  * @author Jurrien Stutterheim
  * @category Zym_Db
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -20,9 +20,9 @@ require_once 'Zend/Db/Table/Abstract.php';
 
 /**
  * @author Jurrien Stutterheim
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym_Db
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {

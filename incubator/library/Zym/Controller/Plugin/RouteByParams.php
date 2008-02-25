@@ -10,8 +10,8 @@
  * @category Zym
  * @package Zym_Controller
  * @subpackage Plugin
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -30,11 +30,11 @@ require_once 'Zend/Controller/Plugin/Abstract.php';
  * So http://localhost/?module=test&controller=some&action=foo would work
  *
  * @author Geoffrey Tran
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_Controller
  * @subpackage Plugin
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Controller_Plugin_RouteByParams extends Zend_Controller_Plugin_Abstract
 {

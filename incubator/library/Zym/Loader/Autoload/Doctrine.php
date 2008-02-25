@@ -10,8 +10,8 @@
  * @category Zym
  * @package Zym_Loader
  * @subpackage Autoload
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -28,11 +28,11 @@ require_once 'Zym/Loader/Autoload/Interface.php';
  * Zym/ Autoload for Doctrine (http://phpdoctrine.org)
  *
  * @author Geoffrey Tran
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_Loader
  * @subpackage Autoload
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Loader_Autoload_Doctrine implements Zym_Loader_Autoload_Interface
 {

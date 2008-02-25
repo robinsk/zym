@@ -9,8 +9,8 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Acl
- * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
@@ -37,8 +37,8 @@ require_once 'Zend/Acl/Role.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym_Acl
- * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Acl_Config extends Zym_Acl
 {

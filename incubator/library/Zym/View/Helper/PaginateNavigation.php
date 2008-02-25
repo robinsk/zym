@@ -10,16 +10,16 @@
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    View_Helper
- * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    View_Helper
- * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_View_Helper_PaginateNavigation
 {

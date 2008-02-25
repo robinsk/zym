@@ -10,8 +10,8 @@
  * @author     Jurrien Stutterheim
  * @category   Zym_Controller
  * @package    Plugin
- * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
@@ -28,8 +28,8 @@ require_once 'Zend/Controller/Front.php';
  * @author     Jurrien Stutterheim
  * @category   Zym_Controller
  * @package    Plugin
- * @copyright  Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Controller_Plugin_LayoutSwitcher_Route extends Zym_Controller_Plugin_LayoutSwitcher_Abstract
 {

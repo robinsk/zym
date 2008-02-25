@@ -9,8 +9,8 @@
  *
  * @category Zym
  * @package Zym_Exception
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -19,10 +19,10 @@
  * Base exception class
  *
  * @author Geoffrey Tran
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_Exception
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Exception extends Exception
 {

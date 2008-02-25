@@ -11,8 +11,8 @@
  * @category   Zym
  * @package    Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
@@ -25,8 +25,8 @@ require_once 'Zend/Controller/Action.php';
  * @category   Zym
  * @package    Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
 {

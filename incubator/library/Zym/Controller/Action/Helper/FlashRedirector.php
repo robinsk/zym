@@ -10,8 +10,8 @@
  * @category Zym
  * @package Zym_Controller
  * @subpackage Action_Helper
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -30,11 +30,11 @@ require_once 'Zend/Session/Namespace.php';
  * on the next request. Useful for redirecting to previous page after login.
  *
  * @author Geoffrey Tran
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_Controller
  * @subpackage Action_Helper
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Action_Helper_Abstract
 {

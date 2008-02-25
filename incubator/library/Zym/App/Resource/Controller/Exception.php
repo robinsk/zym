@@ -10,8 +10,8 @@
  * @category Zym
  * @package Zym_App
  * @subpackage Resource_Controller
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 
@@ -24,11 +24,11 @@ require_once 'Zym/App/Resource/Exception.php';
  * Abstract controller setup process
  * 
  * @author Geoffrey Tran
- * @license http://www.assembla.com/wiki/show/zym/License New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_App
  * @subpackage Resource_Controller
- * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_App_Resource_Controller_Exception extends Zym_App_Resource_Exception
 {}

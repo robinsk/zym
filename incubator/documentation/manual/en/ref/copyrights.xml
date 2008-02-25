@@ -4,8 +4,8 @@
         The following copyrights are applicable to portions of the Zym Framework.
     </para>
     <para>
-        Copyright &#169; 2008-<?dbtimestamp format="Y"?> Zym.
-        (<ulink url="http://www.assembla.com/wiki/show/zym" />)
+        Copyright &#169; <?dbtimestamp format="Y"?> Zym.
+        (<ulink url="http://www.zym-project.com/" />)
     </para>
 </sect1>
 <!--
