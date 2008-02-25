@@ -127,7 +127,7 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
     public function getValue($key)
     {
         if (!$this->hasValue($key)) {
-            $message = sprintf('The value "%s" was not found.');
+            $message = sprintf('The value for key "%s" was not found.', $key);
 
             throw new Zym_Dto_Exception_KeyNotFound($message);
         }
