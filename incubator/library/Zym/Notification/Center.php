@@ -165,7 +165,7 @@ class Zym_Notification_Center
 	 */
 	public function attach($observer, $events, $callback = null)
 	{
-	   if (!$callback) {
+	    if (!$callback) {
             $callback = $this->_defaultCallback;
         }
 

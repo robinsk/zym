@@ -1,0 +1,14 @@
+<sect1 id="zym.notification">
+    <title>About Zym_Notification</title>
+
+    <para>
+		A notification encapsulates information about an event, such as a row saved to a database or a dispatchLoopStartup in the frontcontroller. Objects that need to know about an event register with the notification center that it wants to be notified when that event happens. When the event does happen, a notification is posted to the notification center, which immediately broadcasts the notification to all registered objects.
+		The standard way to pass information between objects is message passing—one object invokes the method of another object. However, message passing requires that the object sending the message know who the receiver is and what messages it responds to. At times, this tight coupling of two objects is undesirable—most notably because it would join together two otherwise independent subsystems. For these cases, a broadcast model is introduced: An object posts a notification, which is dispatched to the appropriate observers through the Zym_Notification_Center.
+		A Zym_Notification object (referred to as a notification) contains a name, an object, and an optional array. The name is a tag identifying the notification. The object is any object that the poster of the notification wants to send to observers of that notification (typically, it is the object that posted the notification). The array stores other related objects if any.
+		Any object may post a notification. Other objects can register themselves with the notification center as observers to receive notifications when they are posted. The notification center takes care of broadcasting notifications to the registered observers, if any. The object posting the notification, the object included in the notification, and the observer of the notification may all be different objects or the same object. Objects that post notifications need not know anything about the observers. On the other hand, observers need to know at least the notification name.
+		Using the notification system is similar to using delegates, but it has these advantages:
+		    Any number of objects may receive the notification, not just the delegate object. This precludes returning a value.
+		    An object may receive any message you like from the notification center, not just the predefined delegate methods.
+		The object posting the notification does not even have to know the observer exists.
+    </para>
+</sect1>

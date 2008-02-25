@@ -12,7 +12,7 @@
         <edition>Programmer's Reference Guide for Zym Framework</edition>
         <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
         <copyright>
-            <year>2008-<?dbtimestamp format="Y"?></year>
+            <year><?dbtimestamp format="Y"?></year>
             <holder>
                 Zym
                 (<ulink url="http://www.assembla.com/wiki/show/zym" />)
@@ -28,6 +28,14 @@
     <chapter id="zym.dto">
         <title>Zym_Dto</title>
         <xi:include href="module_specs/Zym_Dto.xml" />
+    </chapter>
+
+    <chapter id="zym.notification">
+        <title>Zym_Notification</title>
+        <xi:include href="module_specs/Zym_Notification.xml" />
+        <xi:include href="module_specs/Zym_Notification-Center.xml" />
+        <xi:include href="module_specs/Zym_Notification-Registering.xml" />
+        <xi:include href="module_specs/Zym_Notification-Posting.xml" />
     </chapter>
 
     <appendix id="appendix.copyright">

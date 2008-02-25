@@ -1,0 +1,31 @@
+<sect1 id="zym.notification.posting">
+    <title>Posting a notification</title>
+    <para>
+        Notifications are sent by using the Zym_Notification_Center. When the notification center’s post() method is called, a Zym_Notification object is automatically created and sent.
+    </para>
+
+    <para>
+        <code>
+            $center = Zym_Notification_Center::getInstance();
+            $center->post(‘testEvent’, $this, array(‘foo’ => $bar,
+                                                    ‘baz’ => new Baz()));
+        </code>
+    </para>
+
+    <para>
+        After fetching the notification center instance, you can send a notification by simply calling the post() method.
+        This method takes three arguments, of which only the first is mandatory.
+    </para>
+
+    <para>
+        The first argument is the name of the notification you want to send. All objects that have registered to that notification will receive it.
+    </para>
+
+    <para>
+        The second argument is the sender. Usually this is the object that sends the notification.
+    </para>
+
+    <para>
+        The third argument is a data array. This can contain additional data that might be required at the receiving end.
+    </para>
+</sect1>

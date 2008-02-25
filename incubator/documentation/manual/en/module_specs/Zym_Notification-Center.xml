@@ -1,0 +1,7 @@
+<sect1 id="zym.notification.center">
+    <title>The Notification Center</title>
+
+    <para>
+        The notification center is responsible for sending notifications to all objects that are registered to it. The Zym_Notification_Center is a singleton class, which only contains a list of which notifications can be sent to which objects.
+    </para>
+</sect1>
