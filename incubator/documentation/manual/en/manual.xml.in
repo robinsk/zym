@@ -15,7 +15,7 @@
             <year><?dbtimestamp format="Y"?></year>
             <holder>
                 Zym
-                (<ulink url="http://www.assembla.com/wiki/show/zym" />)
+                (<ulink url="http://www.zym-project.com/" />)
             </holder>
         </copyright>
     </bookinfo>
@@ -35,7 +35,7 @@
         <xi:include href="module_specs/Zym_Notification.xml" />
         <xi:include href="module_specs/Zym_Notification-Center.xml" />
         <xi:include href="module_specs/Zym_Notification-Registering.xml" />
-        <xi:include href="module_specs/Zym_Notification-Posting.xml" />
+        <xi:include href="module_specs/Zym_Notification-Posting .xml" />
     </chapter>
 
     <appendix id="appendix.copyright">

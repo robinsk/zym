@@ -8,10 +8,9 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym
- * @package    Paginate
+ * @category   Zym_Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
@@ -21,10 +20,9 @@ require_once 'Zym/Exception.php';
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym
- * @package    Paginate
+ * @category   Zym_Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.assembla.com/wiki/show/dpEKouT5Gr3jP5abIlDkbG/License    New BSD License
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Paginate_Exception_PageNotFound extends Zym_Exception
 {
