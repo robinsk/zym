@@ -58,12 +58,12 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             'throw_exceptions' => true
         ),
     
-        Zym_App::ENV_DEFAULT => array(
+        Zym_App::ENV_DEFAULT     => array(
             'class' => 'Zend_Controller_Front',
             'throw_exceptions' => false,
         
             'module' => array(
-                'directory' => array(),
+                'directory'       => array(),
                 'controller_name' => null
             ),
             
@@ -80,25 +80,26 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             ),
         
             'default' => array(
-                'action' => null,
+                'action'          => null,
                 'controller_name' => null,
-                'module' => null
+                'module'          => null
             ),
             
             'params' => array(
                 'prefixDefaultModule' => true
             ),
             
-            'request' => null,
-            'response' => 'Zym_Controller_Response_Http',
+            'request'    => null,
+            'response'   => 'Zym_Controller_Response_Http',
             'dispatcher' => 'Zym_Controller_Dispatcher_Standard',
-            'router' => null
+            'router'     => null
         )
     );
     
     /**
-     * Pre setup
+     * PreSetup
      *
+     * @param Zend_Config $config
      */
     public function preSetup(Zend_Config $config)
     {
@@ -108,8 +109,9 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     }
     
     /**
-     * FrontController
+     * Setup
      *
+     * @param Zend_Config $config
      */
     public function setup(Zend_Config $config)
     {        
@@ -284,18 +286,17 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     /**
      * Load controller plugins
      * 
+     * Zend_Config type enforcement is not a bug, it was left in in order
+     * to prevent <plugin /> overriding any defaults
+     * 
      * <plugin>
      *     <Zym_Controller_Plugin_ErrorHandler />
      * </plugin>
      *
      * @param Zend_Config $config
      */
-    protected function _loadPlugins($config)
-    {
-        if (!$config instanceof Zend_Config) {
-            return;
-        }
-        
+    protected function _loadPlugins(Zend_Config $config) 
+    {        
         $fc = $this->getFrontController();
         foreach ($config as $key => $name) {
             // Handle index
@@ -310,11 +311,13 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             
             // Talk about nested if... *sigh*
             if ($pluginInterface instanceof Zym_App_Resource_Controller_Plugin_Interface) {    
-                if (method_exists($pluginInterface, 'setConfig') && $name instanceof Zend_Config) {
-                    $pluginInterface->setConfig($name);
+                if ($name instanceof Zend_Config) {
+                    $pluginConfig = $name;
+                } else {
+                    $pluginConfig = null;
                 }
                 
-                $plugin = $pluginInterface->getPlugin();
+                $plugin = $pluginInterface->getPlugin($pluginConfig);
             } else if ($pluginInterface instanceof Zend_Controller_Plugin_Abstract) {
                 $plugin = $pluginInterface;
             } else {
@@ -325,7 +328,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
                 );
             }
             
-        	$fc->registerPlugin($plugin, $index);
+            $fc->registerPlugin($plugin, $index);
         }
     }
 }

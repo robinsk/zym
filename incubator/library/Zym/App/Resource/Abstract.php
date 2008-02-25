@@ -293,6 +293,7 @@ abstract class Zym_App_Resource_Abstract
         } else {
             $array1 = $array2;
         }
+        
         return $array1;
     }
     

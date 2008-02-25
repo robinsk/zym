@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_App_Resource_Controller_Plugin_Abstract
+ * @see Zym_App_Resource_Controller_Plugin_Interface
  */
-require_once 'Zym/App/Resource/Controller/Plugin/Abstract.php';
+require_once 'Zym/App/Resource/Controller/Plugin/Interface.php';
 
 /**
  * @see Zym_Controller_Plugin_ErrorHandler
@@ -32,17 +32,20 @@ require_once 'Zym/Controller/Plugin/ErrorHandler.php';
  * @subpackage Resource_Controller_Plugin
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-class Zym_App_Resource_Controller_Plugin_ErrorHandler extends Zym_App_Resource_Controller_Plugin_Abstract 
+class Zym_App_Resource_Controller_Plugin_ErrorHandler implements Zym_App_Resource_Controller_Plugin_Interface
 {   
     /**
      * Return errorHandler
      *
+     * @param  Zend_Config $config
      * @return Zym_Controller_Plugin_ErrorHandler
      */
-    public function getPlugin()
+    public function getPlugin(Zend_Config $config = null)
     {
-        if ($this->getConfig() instanceof Zend_Config) {
-            $options = $this->getConfig()->toArray();
+        if ($config instanceof Zend_Config) {
+            $options = $config->toArray();
+        } else {
+            $options = array();
         }
         
         $plugin = new Zym_Controller_Plugin_ErrorHandler($options);

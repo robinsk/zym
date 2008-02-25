@@ -154,4 +154,31 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
         
         set_include_path($paths . get_include_path());
     }
+    
+    /**
+     * Kill magic quotes gpc
+     * 
+     * Strips the crap that magic quotes does...
+     * 
+     * @todo Discuss whether or not to include this hack...
+     * @param Zend_Config $config
+     */
+    protected function _undoMagicQuotesGpc(Zend_Config $config)
+    {
+        $isMagicQuotesGpc = (isset($config->magic_quotes_gpc) && !$config->magic_quotes_gpc);
+        if ($isMagicQuotesGpc && get_magic_quotes_gpc()) {
+            $in = array(&$_GET, &$_POST, &$_COOKIE);
+            while (list($k,$v) = each($in)) {
+                foreach ($v as $key => $val) {
+                    if (!is_array($val)) {
+                        $in[$k][$key] = stripslashes($val);
+                        continue;
+                    }
+                    $in[] =& $in[$k][$key];
+                }
+            }
+            
+            unset($in);
+        }
+    }
 }

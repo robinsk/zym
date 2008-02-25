@@ -9,7 +9,7 @@
  *
  * @category Zym
  * @package Zym_App
- * @subpackage Resource_Controller_Plugin
+ * @subpackage Resource_Mail_Transport
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  */
@@ -19,16 +19,16 @@
  * @license http://www.assembla.com/wiki/show/zym/License New BSD License
  * @category Zym
  * @package Zym_App
- * @subpackage Resource_Controller_Plugin
+ * @subpackage Resource_Mail_Transport
  * @copyright Copyright (c) 2008 Zym. (http://www.assembla.com/wiki/show/zym)
  */
-interface Zym_App_Resource_Controller_Plugin_Interface 
-{    
+interface Zym_App_Resource_Mail_Transport_Interface
+{
     /**
-     * Get controller plugin
+     * Get transport
      *
      * @param Zend_Config $config
-     * @return Zend_Controller_Plugin_Abstract
+     * @return Zend_Mail_Transport_Abstract
      */
-    public function getPlugin(Zend_Config $config = null);
+    public static function getTransport(Zend_Config $config = null);
 }

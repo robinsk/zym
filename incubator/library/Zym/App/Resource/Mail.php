@@ -37,36 +37,29 @@ require_once 'Zend/Mail.php';
 class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
 {
     /**
+     * Default transport adapter prefix
+     *
+     */
+    const DEFAULT_TRANSPORT_PREFIX = 'Zym_App_Resource_Mail_Transport';
+    
+    /**
      * Default config
      *
      * @var array
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
-            'default_transport' => 'sendmail',
-        
-            'transport' => array(
-                'sendmail' => array(
-                    'parameters' => null
-                ),
-                
-                'smtp' => array(
-                    'host' => '127.0.0.1'
-                )
-            )
+            'default_transport' => null,        
+            'transport'         => array(),
+            'transport_map'     => array()
         )
     );
-    
-    /**
-     * Mail transport
-     *
-     * @var Zend_Mail_Transport_Abstract
-     */
-    protected $_transport;
+
 
     /**
-     * Setup mail component
+     * Setup mail
      *
+     * @param Zend_Config $config
      */
     public function setup(Zend_Config $config)
     {
@@ -76,47 +69,83 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
             return;
         }
         
-        // TODO: Decide whether to lazy load or not
-        // Transport Config
-        $transportConfig = $config->transport;
-        switch (trim(strtolower($config->default_transport))) {
-            case 'smtp':
-                require_once('Zend/Mail/Transport/Smtp.php');
-                $transport = new Zend_Mail_Transport_Smtp($transportConfig->smtp->host, $transportConfig->smtp->toArray());
-                break;
-                
-            case 'sendmail': // defaults to sendmail
-            default:
-                require_once('Zend/Mail/Transport/Sendmail.php');
-                $transport = new Zend_Mail_Transport_Sendmail($transportConfig->sendmail->parameters);
+        // Do we skip?
+        if (!$config->default_transport) {
+            return;
         }
         
-        // Save transport in here
-        $this->setTransport($transport);
+        // Transport Config
+        $transport = $this->_loadTransport($config);
         
         // Set default mail transport
         Zend_Mail::setDefaultTransport($transport);
     }
     
     /**
-     * Set transport
+     * Load transport settings
      *
-     * @param Zend_Mail_Transport_Abstract $transport
-     * @return Zym_App_Resource_Mail
-     */
-    public function setTransport(Zend_Mail_Transport_Abstract $transport)
-    {
-        $this->_transport = $transport;
-        return $this;
-    }
-    
-    /**
-     * Get the mail transport
-     *
+     * @param Zend_Config $config
      * @return Zend_Mail_Transport_Abstract
      */
-    public function getTransport()
+    protected function _loadTransport(Zend_Config $config)
     {
-        return $this->_transport;
+        // Make lowercase
+        $defaultTransport = strtolower($config->default_transport);
+        $transportMap     = array_change_key_case($config->transport_map->toArray(), CASE_LOWER);
+        
+        // Load transport
+        $transportConfig = null;
+        if ($config->transport->$defaultTransport instanceof Zend_Config) {
+            $transportConfig = $config->transport->$defaultTransport;
+        }
+        
+        $transportClass = $this->_parseTransportMap($defaultTransport, $transportMap);
+        $transport = call_user_func(array($transportClass, 'getTransport'), $transportConfig);
+
+        if (!$transport instanceof Zend_Mail_Transport_Abstract) {
+            /**
+             * @see Zym_App_Resource_Mail_Exception
+             */
+            require_once 'Zym/App/Resource/Mail/Exception.php';
+            throw new Zym_App_Resource_Mail_Exception(
+                'Could not load mail transport "' . $defaultTransport . '"'
+            );
+        }
+        
+        return $transport;
+    }
+    
+    
+    protected function _parseTransportMap($item, array $map)
+    {
+        $path = null;
+        
+        if (array_key_exists($item, $map)) {
+            $mapItem = $map[$item];
+            if (isset($mapItem['prefix']) && isset($mapItem['path'])) {
+                $namespace = $prefix;
+                $path = $mapItem['path'];
+            } else if (is_string($mapItem)) {
+                // Assume prefix was given
+                $namespace = $mapItem;
+            }
+            
+            // Make sure we have a class prefix
+            if (!$namespace) {
+                /**
+                 * @see Zym_App_Resource_Mail_Exception
+                 */
+                require_once 'Zym/App/Resource/Mail/Exception.php';
+                throw new Zym_App_Resource_Mail_Exception(
+                    'Could not determine transport map classname of "' . $item . '"'
+                );
+            }
+        } else {
+            $namespace = self::DEFAULT_TRANSPORT_PREFIX;
+        }
+        
+        $classname = rtrim($namespace, '_') . '_' . ucfirst($item);
+        Zend_Loader::loadClass($classname, $path);
+        return $classname;
     }
 }
