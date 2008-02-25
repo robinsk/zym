@@ -40,4 +40,34 @@ class Zym_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
         return (bool) $this->_metadata[$column]['IDENTITY'];
     }
+
+    /**
+     * Add a reference to the reference map
+     *
+     * @param string $ruleKey
+     * @param string|array $columns
+     * @param string $refTableClass
+     * @param string|array $refColumns
+     * @param string $onDelete
+     * @param string $onUpdate
+     * @return Zend_Db_Table_Abstract
+     */
+    public function addReference($ruleKey, $columns, $refTableClass, $refColumns, $onDelete = null, $onUpdate = null)
+    {
+        $reference = array(self::COLUMNS         => $columns,
+                           self::REF_TABLE_CLASS => $refTableClass,
+                           self::REF_COLUMNS     => $refColumns);
+
+        if (!empty($onDelete)) {
+            $reference[self::ON_DELETE] = $onDelete;
+        }
+
+        if (!empty($onUpdate)) {
+            $reference[self::ON_UPDATE] = $onUpdate;
+        }
+
+        $this->_referenceMap[$ruleKey] = $reference;
+
+        return $this;
+    }
 }
