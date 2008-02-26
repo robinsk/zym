@@ -130,8 +130,11 @@ class Zym_Notification
         }
 
 	    foreach ($events as $event) {
+	        $cleanEvent = str_ireplace($this->_wildcard, '', $event);
+
 	        if (($hasWildcard && strpos($event, $cleanName) === 0) ||
-	             $this->_checkWildcardEvents($event)) {
+	            (strpos($event, $this->_wildcard) !== false &&
+                 strpos($event, $cleanEvent) === 0)) {
                 $this->_post($event, $sender, $data);
             }
         }
@@ -145,17 +148,6 @@ class Zym_Notification
 	    }
 
 		return $this;
-	}
-
-	/**
-	 * Check if the notification needs to be posted to other events.
-	 *
-	 * @return boolean
-	 */
-	protected function _checkWildcardEvents($event)
-	{
-	    return strpos($event, $this->_wildcard) !== false &&
-               strpos($event, str_ireplace($this->_wildcard, '', $event)) === 0;
 	}
 
     /**
