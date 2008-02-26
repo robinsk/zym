@@ -9,9 +9,9 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Controller
- * @subpackage ActionHelper
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @package    Zym_Controller
+ * @subpackage Action_Helper
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 // @TODO: Allow custom mapping of forms to action?
@@ -28,9 +28,9 @@ require_once 'Zend/Controller/Action/Helper/Abstract.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Controller
- * @subpackage ActionHelper
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @package    Zym_Controller
+ * @subpackage Action_Helper
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_Helper_Abstract

@@ -8,14 +8,18 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym_Acl
+ * @category   Zym
+ * @package    Zym_Acl
+ * @subpackage Db_Role
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym_Acl
+ * @category   Zym
+ * @package    Zym_Acl
+ * @subpackage Db_Role
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

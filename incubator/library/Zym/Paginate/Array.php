@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Paginate
+ * @package    Zym_Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -22,7 +22,7 @@ require_once 'Zym/Paginate/Collection.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Paginate
+ * @package    Zym_Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

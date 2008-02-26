@@ -9,7 +9,7 @@
  *
  * @category Zym
  * @package Zym_Debug
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -40,7 +40,7 @@ require_once 'Zend/Log.php';
  * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_Debug
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Debug extends Zend_Debug
 {

@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Controller
  * @subpackage Response
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -25,7 +25,7 @@ require_once 'Zym/Controller/Exception.php';
  * @category Zym
  * @package Zym_Controller
  * @subpackage Response
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Controller_Response_Exception extends Zym_Controller_Exception
 {

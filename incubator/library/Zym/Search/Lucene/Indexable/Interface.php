@@ -8,14 +8,18 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym_Search
+ * @category   Zym
+ * @package    Zym_Search_Lucene
+ * @subpackage Indexable
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym_Search
+ * @category   Zym
+ * @package    Zym_Search_Lucene
+ * @subpackage Indexable
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

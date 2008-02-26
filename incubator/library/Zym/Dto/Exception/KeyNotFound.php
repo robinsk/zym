@@ -8,7 +8,9 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym_Dto
+ * @category   Zym
+ * @package    Zym_Dto
+ * @subpackage Exception
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -20,7 +22,9 @@ require_once 'Zym/Exception.php';
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym_Dto
+ * @category   Zym
+ * @package    Zym_Dto
+ * @subpackage Exception
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

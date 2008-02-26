@@ -7,10 +7,12 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @author Jurrien Stutterheim
- * @category Zym_Db
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @author     Jurrien Stutterheim
+ * @category   Zym
+ * @package    Zym_Db
+ * @subpackage Table
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -19,10 +21,12 @@
 require_once 'Zend/Db/Table/Abstract.php';
 
 /**
- * @author Jurrien Stutterheim
- * @license http://www.zym-project.com//License New BSD License
- * @category Zym_Db
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @author     Jurrien Stutterheim
+ * @license    http://www.zym-project.com//License New BSD License
+ * @category   Zym
+ * @package    Zym_Db
+ * @subpackage Table
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {

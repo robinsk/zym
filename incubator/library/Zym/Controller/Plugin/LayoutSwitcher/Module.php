@@ -8,8 +8,9 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym_Controller
- * @package    Plugin
+ * @category   Zym
+ * @package    Zym_Controller
+ * @subpackage Plugin
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -21,8 +22,9 @@ require_once 'Zym/Controller/Plugin/LayoutSwitcher/Abstract.php';
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym_Controller
- * @package    Plugin
+ * @category   Zym
+ * @package    Zym_Controller
+ * @subpackage Plugin
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

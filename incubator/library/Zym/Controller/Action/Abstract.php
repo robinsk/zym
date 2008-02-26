@@ -9,9 +9,9 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Controller
+ * @package    Zym_Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
@@ -23,9 +23,9 @@ require_once 'Zend/Controller/Action.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Controller
+ * @package    Zym_Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action

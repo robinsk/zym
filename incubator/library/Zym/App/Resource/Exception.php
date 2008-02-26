@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_App
  * @subpackage Resource
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -27,7 +27,7 @@ require_once ('Zym/App/Exception.php');
  * @category Zym
  * @package Zym_App
  * @subpackage Resource
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_App_Resource_Exception extends Zym_App_Exception
 {}

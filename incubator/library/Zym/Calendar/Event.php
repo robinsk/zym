@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Calendar
+ * @package    Zym_Calendar
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -17,7 +17,7 @@
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Calendar
+ * @package    Zym_Calendar
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

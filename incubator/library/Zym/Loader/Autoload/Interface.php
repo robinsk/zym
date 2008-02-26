@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Loader
  * @subpackage Autoload
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -22,7 +22,7 @@
  * @category Zym
  * @package Zym_Loader
  * @subpackage Autoload
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 interface Zym_Loader_Autoload_Interface
 {

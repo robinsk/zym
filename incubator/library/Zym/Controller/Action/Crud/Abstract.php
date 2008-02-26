@@ -9,9 +9,9 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Controller
+ * @package    Zym_Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
@@ -28,9 +28,9 @@ require_once 'Zym/Controller/Action/Abstract.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Controller
+ * @package    Zym_Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action_Abstract

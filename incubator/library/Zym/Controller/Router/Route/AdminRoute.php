@@ -8,8 +8,9 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym_Controller
- * @package    Router
+ * @category   Zym
+ * @package    Zym_Controller
+ * @subpackage Router_Route
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -21,8 +22,9 @@ require_once 'Zend/Controller/Router/Route.php';
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym_Controller
- * @package    Router
+ * @category   Zym
+ * @package    Zym_Controller
+ * @subpackage Router_Route
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

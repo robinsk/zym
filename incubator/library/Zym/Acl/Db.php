@@ -8,7 +8,8 @@
  * with this package in the file LICENSE.txt.
  *
  * @author     Jurrien Stutterheim
- * @category   Zym_Acl
+ * @category   Zym
+ * @package    Zym_Acl
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -36,7 +37,8 @@ require_once 'Zend/Acl/Role.php';
 
 /**
  * @author     Jurrien Stutterheim
- * @category   Zym_Acl
+ * @category   Zym
+ * @package    Zym_Acl
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

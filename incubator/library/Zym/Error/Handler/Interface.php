@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Error
  * @subpackage Handler
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -20,7 +20,7 @@
  * @category Zym
  * @package Zym_Error
  * @subpackage Handler
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 interface Zym_Error_Handler_Interface
 {

@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Loader
  * @subpackage Autoload
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -32,7 +32,7 @@ require_once 'Zym/Loader/Autoload/Interface.php';
  * @category Zym
  * @package Zym_Loader
  * @subpackage Autoload
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Loader_Autoload_Doctrine implements Zym_Loader_Autoload_Interface
 {

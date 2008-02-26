@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_App
  * @subpackage Resource_Mail_Transport
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -20,7 +20,7 @@
  * @category Zym
  * @package Zym_App
  * @subpackage Resource_Mail_Transport
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 interface Zym_App_Resource_Mail_Transport_Interface
 {

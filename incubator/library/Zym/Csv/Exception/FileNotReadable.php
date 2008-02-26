@@ -9,9 +9,8 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    CSV
- * @subpackage Exception
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @package    Zym_Csv
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
@@ -23,9 +22,8 @@ require_once 'Zym/Exception.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    CSV
- * @subpackage Exception
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @package    Zym_Csv
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Csv_Exception_FileNotReadable extends Zym_Exception

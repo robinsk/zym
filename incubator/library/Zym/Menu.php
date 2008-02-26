@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Menu
+ * @package    Zym_Menu
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -22,7 +22,7 @@ require_once 'Zym/Menu/Abstract.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Menu
+ * @package    Zym_Menu
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

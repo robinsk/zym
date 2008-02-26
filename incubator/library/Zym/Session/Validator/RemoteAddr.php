@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Session
  * @subpackage Validator
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -34,7 +34,7 @@ require_once 'Zend/Session/Validator/Interface.php';
  * @category Zym
  * @package Zym_Session
  * @subpackage Validator
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Session_Validator_RemoteAddr extends Zend_Session_Validator_Abstract implements Zend_Session_Validator_Interface 
 {   

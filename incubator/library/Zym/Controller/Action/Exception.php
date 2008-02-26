@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
@@ -30,7 +30,7 @@ require_once 'Zym/Controller/Action/Exception/Interface.php';
  * @category Zym
  * @package Zym_Controller
  * @subpackage Action
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Controller_Action_Exception extends Zym_Controller_Exception
     implements Zym_Controller_Action_Exception_Interface
