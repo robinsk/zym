@@ -122,19 +122,18 @@ class Zym_Notification
 	public function post($name, $sender = null, array $data = array())
 	{
 	    $events = array_keys($this->_observers);
-	    $hasWildcard = strpos($name, $this->_wildcard) !== false;
-        $cleanName = str_ireplace($this->_wildcard, '', $name);
+	    $hasWildcard = $this->_hasWildCard($name);
+        $cleanName = $this->_removeWildCard($name);
 
         if (!$hasWildcard) {
             $this->_post($name, $sender, $data);
         }
 
 	    foreach ($events as $event) {
-	        $cleanEvent = str_ireplace($this->_wildcard, '', $event);
+	        $cleanEvent = $this->_removeWildCard($event);
 
 	        if (($hasWildcard && strpos($event, $cleanName) === 0) ||
-	            (strpos($event, $this->_wildcard) !== false &&
-                 strpos($event, $cleanEvent) === 0)) {
+	            ($this->_hasWildCard($event) && strpos($event, $cleanEvent) === 0)) {
                 $this->_post($event, $sender, $data);
             }
         }
@@ -148,6 +147,28 @@ class Zym_Notification
 	    }
 
 		return $this;
+	}
+
+	/**
+	 * Check if the string contains a wildcard
+	 *
+	 * @param string $string
+	 * @return boolean
+	 */
+	protected function _hasWildCard($string)
+	{
+	    return strpos($string, $this->_wildcard) !== false;
+	}
+
+	/**
+	 * Remove the wildcard from the string
+	 *
+	 * @param string $string
+	 * @return string
+	 */
+	protected function _removeWildCard($string)
+	{
+	    return str_ireplace($this->_wildcard, '', $string);
 	}
 
     /**
