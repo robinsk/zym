@@ -74,7 +74,7 @@ class Zym_Notification
      */
     public static function get($namespace = 'default')
     {
-        if (!self::$_instances[$namespace]) {
+        if (!array_key_exists($namespace, self::$_instances)) {
             self::$_instances[$namespace] = new self();
         }
 
@@ -88,7 +88,7 @@ class Zym_Notification
      */
     public static function remove($namespace)
     {
-        if (self::$_instances[$namespace]) {
+        if (array_key_exists($namespace, self::$_instances)) {
             unset(self::$_instances[$namespace]);
         }
     }
