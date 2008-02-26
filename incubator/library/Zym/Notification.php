@@ -132,7 +132,7 @@ class Zym_Notification
 	    foreach ($events as $event) {
 	        $cleanEvent = $this->_removeWildCard($event);
 
-	        if (($hasWildcard && strpos($event, $cleanName) === 0) ||
+	        if (($hasWildcard && strpos($cleanEvent, $cleanName) === 0) ||
 	            ($this->_hasWildCard($event) && strpos($event, $cleanEvent) === 0)) {
                 $this->_post($event, $sender, $data);
             }
