@@ -34,8 +34,15 @@ class Zym_Db_Table_Abstract extends Zend_Db_Table_Abstract
      */
     public function isIdentity($column)
     {
-        if (!isset($this->_metadata[$column])) {
-            return false;
+        if (!array_key_exists($column, $this->_metadata)) {
+            /**
+             * @see Zym_Db_Table_Exception_ColumnNotInTable
+             */
+            require_once 'Zym/Db/Table/Exception/ColumnNotInTable.php';
+
+            $message = sprintf('Specified column "%s" is not in the table', $column);
+
+            throw new Zym_Db_Table_Exception_ColumnNotInTable($message);
         }
 
         return (bool) $this->_metadata[$column]['IDENTITY'];
