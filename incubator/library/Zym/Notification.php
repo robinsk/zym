@@ -351,35 +351,3 @@ class Zym_Notification
 	    return array_key_exists($event, $this->_observers);
 	}
 }
-
-class Foo
-{
-    protected $_notification = null;
-
-    public function __construct()
-    {
-        $this->_notification = Zym_Notification::get();
-        $this->_notification->attach($this, 'foo');
-    }
-
-    public function __destruct()
-    {
-        $this->_notification->detach($this);
-    }
-
-    public function bar()
-    {
-        $this->_notification->post('foo', $this);
-    }
-
-    public function update($notification)
-    {
-        var_dump($notification);
-    }
-}
-
-$foo = new Foo();
-$foo->bar();
-unset($foo);
-
-var_dump(Zym_Notification::get()->eventHasObserver($foo, 'foo'));
