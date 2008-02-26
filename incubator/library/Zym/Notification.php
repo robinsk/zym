@@ -62,9 +62,9 @@ class Zym_Notification
 	/**
 	 * Singleton instance
 	 *
-	 * @var Zym_Notification
+	 * @var array
 	 */
-	protected static $_instances;
+	protected static $_instances = array();
 
     /**
      * Get a notification instance from the internal registry
