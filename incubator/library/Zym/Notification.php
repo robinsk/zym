@@ -74,7 +74,7 @@ class Zym_Notification
      */
     public static function get($namespace = 'default')
     {
-        if (!array_key_exists($namespace, self::$_instances)) {
+        if (!self::has($namespace)) {
             self::$_instances[$namespace] = new self();
         }
 
@@ -88,9 +88,19 @@ class Zym_Notification
      */
     public static function remove($namespace)
     {
-        if (array_key_exists($namespace, self::$_instances)) {
+        if (self::has($namespace)) {
             unset(self::$_instances[$namespace]);
         }
+    }
+
+    /**
+     * Check if the namespace is already set
+     *
+     * @return boolean
+     */
+    public static function has($namespace)
+    {
+        return array_key_exists($namespace, self::$_instances);
     }
 
 	/**
@@ -138,7 +148,7 @@ class Zym_Notification
             }
         }
 
-	    if (array_key_exists($this->_wildcard, $this->_observers) &&
+	    if ($this->eventIsRegistered($this->_wildcard) &&
 	        !empty($this->_observers[$this->_wildcard])) {
 	        $notification = new Zym_Notification_Message($name, $sender, $data);
 
@@ -257,11 +267,11 @@ class Zym_Notification
 	    $observerHash = spl_object_hash($observer);
 
 	    foreach ($events as $event) {
-            if (!array_key_exists($event, $this->_observers)) {
+            if (!$this->eventIsRegistered($event)) {
                 $this->reset($event);
             }
 
-            if (!array_key_exists($observerHash, $this->_observers[$event])) {
+            if (!$this->eventHasObserver($observerHash, $event)) {
                 $this->_observers[$event][$observerHash] = $this->_getObserverRegistration($observer, $callback);
             }
         }
@@ -288,13 +298,29 @@ class Zym_Notification
 
 	    foreach ($events as $event) {
     	    if ($this->eventIsRegistered($event) &&
-    	        array_key_exists($observerHash, $this->_observers[$event])) {
+    	        $this->eventHasObserver($observerHash, $event)) {
     	        unset($this->_observers[$event][$observerHash]);
     	    }
         }
 
 	    return $this;
 	}
+
+    /**
+     * Check if the observer is registered for the specified event
+     *
+     * @param object $observer
+     * @param string $event
+     * @return boolean
+     */
+    public function eventHasObserver($observer, $event)
+    {
+        if (is_object($observer)) {
+            $observerHash = spl_object_hash($observer);
+        }
+
+        return array_key_exists($observerHash, $this->_observers[$event]);
+    }
 
 	/**
 	 * Clear an event.
@@ -325,3 +351,35 @@ class Zym_Notification
 	    return array_key_exists($event, $this->_observers);
 	}
 }
+
+class Foo
+{
+    protected $_notification = null;
+
+    public function __construct()
+    {
+        $this->_notification = Zym_Notification::get();
+        $this->_notification->attach($this, 'foo');
+    }
+
+    public function __destruct()
+    {
+        $this->_notification->detach($this);
+    }
+
+    public function bar()
+    {
+        $this->_notification->post('foo', $this);
+    }
+
+    public function update($notification)
+    {
+        var_dump($notification);
+    }
+}
+
+$foo = new Foo();
+$foo->bar();
+unset($foo);
+
+var_dump(Zym_Notification::get()->eventHasObserver($foo, 'foo'));
