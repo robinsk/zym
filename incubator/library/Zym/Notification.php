@@ -43,7 +43,7 @@ class Zym_Notification
      *
      * @var string
      */
-    protected $_defaultCallback = 'notify';
+    protected $_defaultCallback = 'update';
 
     /**
      * Wildcard for the catch-all event
@@ -64,20 +64,33 @@ class Zym_Notification
 	 *
 	 * @var Zym_Notification
 	 */
-	protected static $_instance;
+	protected static $_instances;
 
     /**
-     * Singleton getInstance()
+     * Get a notification instance from the internal registry
      *
+     * @param string name
      * @return Zym_Notification
      */
-    public static function getInstance()
+    public static function get($namespace = 'default')
     {
-        if (!self::$_instance) {
-            self::$_instance = new self();
+        if (!self::$_instances[$namespace]) {
+            self::$_instances[$namespace] = new self();
         }
 
-        return self::$_instance;
+        return self::$_instances[$namespace];
+    }
+
+    /**
+     * Remove a notification instance from the internal registry
+     *
+     * @param string $name
+     */
+    public static function remove($namespace)
+    {
+        if (self::$_instances[$namespace]) {
+            unset(self::$_instances[$namespace]);
+        }
     }
 
 	/**
@@ -98,79 +111,6 @@ class Zym_Notification
 	    return $this->_wildcard;
 	}
 
-    /**
-     * Register an observer for the specified notification
-     *
-     * @param object $observer
-     * @param string|array $events
-     * @param string $callback
-     */
-    public static function attach($observer, $events = null, $callback = null)
-    {
-        $notificationCenter = self::getInstance();
-        $notificationCenter->attachObserver($observer, $events, $callback);
-    }
-
-    /**
-     * Register an observer to catch all notifications
-     *
-     * @param object $observer
-     * @param string $callback
-     */
-    public static function attachCatchAll($observer, $callback = null)
-    {
-        $notificationCenter = self::getInstance();
-        $notificationCenter->attachCatchAllObserver($observer, $callback);
-    }
-
-    /**
-     * Remove an observer
-     *
-     * @param object $observer
-     * @param string|array $event
-     */
-    public static function detach($observer, $events = null)
-    {
-        $notificationCenter = self::getInstance();
-        $notificationCenter->detachObserver($observer, $events);
-    }
-
-    /**
-     * Detach an observer from the catch all notifications
-     *
-     * @param object $observer
-     */
-    public static function detachCatchAll($observer)
-    {
-        $notificationCenter = self::getInstance();
-        $notificationCenter->detachCatchAllObserver($observer);
-    }
-
-    /**
-     * Post a notification
-     *
-     * @param string $name
-     * @param object $sender
-     * @param array $data
-     */
-    public static function post($name, $sender = null, array $data = array())
-    {
-        $notificationCenter = self::getInstance();
-        $notificationCenter->postNotification($name, $sender, $data);
-    }
-
-    /**
-     * Clear an event.
-     * If no event is specified all events will be cleared.
-     *
-     * @param string $event
-     */
-    public static function reset($event = null)
-    {
-        $notificationCenter = self::getInstance();
-        $notificationCenter->resetEvent($event);
-    }
-
 	/**
 	 * Post a notification
 	 *
@@ -179,38 +119,29 @@ class Zym_Notification
 	 * @param array $data
 	 * @return Zym_Notification
 	 */
-	public function postNotification($name, $sender = null, array $data = array())
+	public function post($name, $sender = null, array $data = array())
 	{
-	    if (strpos($name, $this->_wildcard) !== false) {
-	        $cleanName = str_ireplace($this->_wildcard, '', $name);
+	    $events = array_keys($this->_observers);
+	    $hasWildcard = strpos($name, $this->_wildcard) !== false;
+        $cleanName = str_ireplace($this->_wildcard, '', $name);
 
-	        if (!empty($cleanName)) {
-	            $events = array_keys($this->_observers);
+        if (!$hasWildcard) {
+            $this->_post($name, $sender, $data);
+        }
 
-    	        foreach ($events as $event) {
-    	        	if ($this->_checkWildcardEvents($event) || strpos($event, $cleanName) === 0) {
-    	        	    $this->_post($event, $sender, $data);
-    	        	}
-    	        }
-	        }
-	    } else {
-	        $events = array_keys($this->_observers);
-
-	        foreach ($events as $event) {
-	        	if ($this->_checkWildcardEvents($event)) {
-                    $this->_post($event, $sender, $data);
-                }
-	        }
-
-	        $this->_post($name, $sender, $data);
-	    }
+	    foreach ($events as $event) {
+	        if (($hasWildcard && strpos($event, $cleanName) === 0) ||
+	             $this->_checkWildcardEvents($event)) {
+                $this->_post($event, $sender, $data);
+            }
+        }
 
 	    if (isset($this->_observers[$this->_wildcard]) && !empty($this->_observers[$this->_wildcard])) {
 	        $notification = new Zym_Notification_Message($name, $sender, $data);
 
     	    foreach ($this->_observers[$this->_wildcard] as $observerData) {
     	    	$this->_postNotification($notification, $observerData);
-    	    }
+       	    }
 	    }
 
 		return $this;
@@ -226,6 +157,25 @@ class Zym_Notification
 	    return strpos($event, $this->_wildcard) !== false &&
                strpos($event, str_ireplace($this->_wildcard, '', $event)) === 0;
 	}
+
+    /**
+     * Actually post the notification
+     *
+     * @throws Zym_Notification_Exception_MethodNotImplemented
+     * @param string $name
+     * @param object $sender
+     * @param array $data
+     */
+    protected function _post($name, $sender = null, array $data = array())
+    {
+        if ($this->eventIsRegistered($name)) {
+            $notification = new Zym_Notification_Message($name, $sender, $data);
+
+            foreach ($this->_observers[$name] as $observerData) {
+                $this->_postNotification($notification, $observerData);
+            }
+        }
+    }
 
 	/**
 	 * Post the notification
@@ -259,25 +209,6 @@ class Zym_Notification
 	}
 
 	/**
-	 * Actually post the notification
-	 *
-	 * @throws Zym_Notification_Exception_MethodNotImplemented
-	 * @param string $name
-	 * @param object $sender
-	 * @param array $data
-	 */
-	protected function _post($name, $sender = null, array $data = array())
-	{
-    	if ($this->eventIsRegistered($name)) {
-            $notification = new Zym_Notification_Message($name, $sender, $data);
-
-            foreach ($this->_observers[$name] as $observerData) {
-                $this->_postNotification($notification, $observerData);
-            }
-        }
-	}
-
-	/**
 	 * Get an array with observer registration data
 	 *
 	 * @param object $observer
@@ -298,7 +229,7 @@ class Zym_Notification
 	 * @param string $callback
 	 * @return Zym_Notification
 	 */
-	public function attachObserver($observer, $events = null, $callback = null)
+	public function attach($observer, $events = null, $callback = null)
 	{
 	    if (!$events) {
 	        $events = $this->_wildcard;
@@ -331,7 +262,7 @@ class Zym_Notification
 	 * @param string|array $event
 	 * @return Zym_Notification
 	 */
-	public function detachObserver($observer, $events = null)
+	public function detach($observer, $events = null)
 	{
         if (!$events) {
             $events = array_keys($this->_observers);
@@ -358,7 +289,7 @@ class Zym_Notification
 	 * @param string $event
      * @return Zym_Notification
 	 */
-	public function resetEvent($event = null)
+	public function reset($event = null)
 	{
 	    if (empty($event)) {
 	        $this->_observers = array();
