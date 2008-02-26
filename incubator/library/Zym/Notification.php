@@ -60,14 +60,6 @@ class Zym_Notification
 	protected $_observers = array();
 
 	/**
-	 * A collection of observers that will receive all notifications
-	 *
-	 * @var array
-	 */
-	protected $_catchAllObservers = array();
-
-
-	/**
 	 * Singleton instance
 	 *
 	 * @var Zym_Notification
