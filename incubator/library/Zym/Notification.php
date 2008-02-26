@@ -122,23 +122,24 @@ class Zym_Notification
 	public function post($name, $sender = null, array $data = array())
 	{
 	    $events = array_keys($this->_observers);
-	    $hasWildcard = $this->_hasWildCard($name);
-        $cleanName = $this->_removeWildCard($name);
+	    $hasWildcard = $this->_hasWildcard($name);
+        $cleanName = $this->_removeWildcard($name);
 
         if (!$hasWildcard) {
             $this->_post($name, $sender, $data);
         }
 
 	    foreach ($events as $event) {
-	        $cleanEvent = $this->_removeWildCard($event);
+	        $cleanEvent = $this->_removeWildcard($event);
 
 	        if (($hasWildcard && strpos($cleanEvent, $cleanName) === 0) ||
-	            ($this->_hasWildCard($event) && strpos($event, $cleanEvent) === 0)) {
+	            ($this->_hasWildcard($event) && strpos($event, $cleanEvent) === 0)) {
                 $this->_post($event, $sender, $data);
             }
         }
 
-	    if (isset($this->_observers[$this->_wildcard]) && !empty($this->_observers[$this->_wildcard])) {
+	    if (array_key_exists($this->_wildcard, $this->_observers) &&
+	        !empty($this->_observers[$this->_wildcard])) {
 	        $notification = new Zym_Notification_Message($name, $sender, $data);
 
     	    foreach ($this->_observers[$this->_wildcard] as $observerData) {
@@ -155,7 +156,7 @@ class Zym_Notification
 	 * @param string $string
 	 * @return boolean
 	 */
-	protected function _hasWildCard($string)
+	protected function _hasWildcard($string)
 	{
 	    return strpos($string, $this->_wildcard) !== false;
 	}
@@ -166,7 +167,7 @@ class Zym_Notification
 	 * @param string $string
 	 * @return string
 	 */
-	protected function _removeWildCard($string)
+	protected function _removeWildcard($string)
 	{
 	    return str_ireplace($this->_wildcard, '', $string);
 	}
@@ -245,7 +246,7 @@ class Zym_Notification
 	public function attach($observer, $events = null, $callback = null)
 	{
 	    if (!$events) {
-	        $events = $this->_wildcard;
+	        $events = array($this->_wildcard);
 	    }
 
 	    if (!$callback) {
@@ -304,7 +305,7 @@ class Zym_Notification
 	 */
 	public function reset($event = null)
 	{
-	    if (empty($event)) {
+	    if (!$event) {
 	        $this->_observers = array();
         } else {
             $this->_observers[$event] = array();
