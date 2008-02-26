@@ -148,7 +148,7 @@ class Zym_Notification
             }
         }
 
-	    if ($this->eventIsRegistered($this->_wildcard) &&
+	    if ($this->isRegistered($this->_wildcard) &&
 	        !empty($this->_observers[$this->_wildcard])) {
 	        $notification = new Zym_Notification_Message($name, $sender, $data);
 
@@ -192,7 +192,7 @@ class Zym_Notification
      */
     protected function _post($name, $sender = null, array $data = array())
     {
-        if ($this->eventIsRegistered($name)) {
+        if ($this->isRegistered($name)) {
             $notification = new Zym_Notification_Message($name, $sender, $data);
 
             foreach ($this->_observers[$name] as $observerData) {
@@ -267,11 +267,11 @@ class Zym_Notification
 	    $observerHash = spl_object_hash($observer);
 
 	    foreach ($events as $event) {
-            if (!$this->eventIsRegistered($event)) {
+            if (!$this->isRegistered($event)) {
                 $this->reset($event);
             }
 
-            if (!$this->eventHasObserver($observerHash, $event)) {
+            if (!$this->hasObserver($observerHash, $event)) {
                 $this->_observers[$event][$observerHash] = $this->_getObserverRegistration($observer, $callback);
             }
         }
@@ -297,30 +297,14 @@ class Zym_Notification
         $observerHash = spl_object_hash($observer);
 
 	    foreach ($events as $event) {
-    	    if ($this->eventIsRegistered($event) &&
-    	        $this->eventHasObserver($observerHash, $event)) {
+    	    if ($this->isRegistered($event) &&
+    	        $this->hasObserver($observerHash, $event)) {
     	        unset($this->_observers[$event][$observerHash]);
     	    }
         }
 
 	    return $this;
 	}
-
-    /**
-     * Check if the observer is registered for the specified event
-     *
-     * @param object $observer
-     * @param string $event
-     * @return boolean
-     */
-    public function eventHasObserver($observer, $event)
-    {
-        if (is_object($observer)) {
-            $observerHash = spl_object_hash($observer);
-        }
-
-        return array_key_exists($observerHash, $this->_observers[$event]);
-    }
 
 	/**
 	 * Clear an event.
@@ -346,8 +330,24 @@ class Zym_Notification
 	 * @param string $event
 	 * @return boolean
 	 */
-	public function eventIsRegistered($event)
+	public function isRegistered($event)
 	{
 	    return array_key_exists($event, $this->_observers);
 	}
+
+    /**
+     * Check if the observer is registered for the specified event
+     *
+     * @param object $observer
+     * @param string $event
+     * @return boolean
+     */
+    public function hasObserver($observer, $event)
+    {
+        if (is_object($observer)) {
+            $observerHash = spl_object_hash($observer);
+        }
+
+        return array_key_exists($observerHash, $this->_observers[$event]);
+    }
 }
