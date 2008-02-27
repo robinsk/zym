@@ -1,0 +1,31 @@
+<sect1 id="zym.controller.plugin.layoutswitcher">
+    <title>Zym_Controller_Plugin_LayoutSwitcher</title>
+
+    <para>
+        The <code>Zym_Controller_Plugin_LayoutSwitcher</code> provides two plugins that allow you to switch the active layout for Zend_Layout.
+        The first plugin is the <code>Zym_Controller_Plugin_LayoutSwitcher_Module</code> plugin. As the name suggests it switches layouts based on the current active module.
+        The second plugin is the <code>Zym_Controller_Plugin_LayoutSwitcher_Router</code> plugin. It allows you to switch layouts based on the currently active route.
+    </para>
+
+    <para>
+        Before registering either one of these plugins to the front controller, you need to configure the plugin.
+        This is done by instantiating the desired plugin and adding routes/modules to it with the addLayout() method.
+        The addLayout() method takes two arguments: the layout name and the "rule" name. The rule is either the name of the route or the name of the module, depending on which plugin you are configuring.
+        After adding the plugin to the front controller everything is set.
+    </para>
+
+    <programlisting role="php"><![CDATA[
+// Route layout switcher: will swith the active layout to admineLayout.phtml when the route called 'admin' is used.
+$routeLayoutSwitcher = new Zym_Controller_Plugin_LayoutSwitcher_Route();
+$routeLayoutSwitcher->addLayout('adminLayout', 'admin');
+$frontController->registerPlugin($routeLayoutSwitcher);
+
+// Module layout switcher: will swith the active layout to blogLayout.phtml when the blog module is requested.
+$moduleLayoutSwitcher = new Zym_Controller_Plugin_LayoutSwitcher_Module();
+$moduleLayoutSwitcher->addLayout('blogLayout', 'blog');
+$frontController->registerPlugin($moduleLayoutSwitcher);
+]]></programlisting>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->
