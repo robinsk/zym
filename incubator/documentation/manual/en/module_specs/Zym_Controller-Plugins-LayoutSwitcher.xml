@@ -2,16 +2,16 @@
     <title>Zym_Controller_Plugin_LayoutSwitcher</title>
 
     <para>
-        The <code>Zym_Controller_Plugin_LayoutSwitcher</code> provides two plugins that allow you to switch the active layout for Zend_Layout.
-        The first plugin is the <code>Zym_Controller_Plugin_LayoutSwitcher_Module</code> plugin. As the name suggests it switches layouts based on the current active module.
-        The second plugin is the <code>Zym_Controller_Plugin_LayoutSwitcher_Router</code> plugin. It allows you to switch layouts based on the currently active route.
+        The <code>Zym_Controller_Plugin_LayoutSwitcher</code> package is a collection of two plugins that allow you to dynamically select a layout for Zend_Layout during the routing process.
+        The first plugin, called <code>Zym_Controller_Plugin_LayoutSwitcher_Module</code>, selects the layout based on the requested module.
+        The second plugin, called <code>Zym_Controller_Plugin_LayoutSwitcher_Router</code>, selects the layout based on the requested route.
+        Both of these plugins fire at <code>preDispatch()</code>, so they work as expected when using the <code>_forward()</code> during the routing process to forward to a different module or route.
     </para>
 
     <para>
-        Before registering either one of these plugins to the front controller, you need to configure the plugin.
-        This is done by instantiating the desired plugin and adding routes/modules to it with the addLayout() method.
-        The addLayout() method takes two arguments: the layout name and the "rule" name. The rule is either the name of the route or the name of the module, depending on which plugin you are configuring.
-        After adding the plugin to the front controller everything is set.
+        Rules can be added to the plugins with the <code>addLayout()</code> method. This method takes two arguments: the layout name and the rule name.
+        The rule name is either the name of the route or the name of the module (depending on which plugin you are configuring).
+        If no matching rule is found during the routing process, it will default to Zend_Layout's layout configuration.
     </para>
 
     <programlisting role="php"><![CDATA[
