@@ -116,7 +116,12 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
     public function preDispatch()
     {
         if (empty($this->_subFormActions)) {
-            $this->_throwException('Multiform has not been assigned any actions');
+            /**
+             * @see Zym_Controller_MultiPageForm_Exception_NoActions
+             */
+            require_once 'Zym/Controller/Action/Helper/MultiPageForm/Exception/NoActions.php';
+
+            throw new Zym_Controller_MultiPageForm_Exception_NoActions('Multiform has not been assigned any actions');
         }
 
         $action = $this->getRequest()->getActionName();
@@ -265,7 +270,14 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
         $action = $form->getName();
 
         if (!$this->isSubformAction($action)) {
-            $this->_throwException(sprintf('"%s" is not a valid action', $action));
+            /**
+             * @see Zym_Controller_Action_Helper_MultiPageForm_Exception_InvalidAction
+             */
+            require_once 'Zym/Controller/Action/Helper/MultiPageForm/Exception/InvalidAction.php';
+
+            $message = sprintf('"%s" is not a valid action', $action);
+
+            throw new Zym_Controller_Action_Helper_MultiPageForm_Exception_InvalidAction($message);
         }
 
         $formValues = $form->getValues();
@@ -328,7 +340,12 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
             $formName = $subForm->getName();
 
             if (empty($formName)) {
-                $this->_throwException('A subform needs to have a name.');
+                /**
+                 * @see Zym_Controller_MultiPageForm_Exception_NoName
+                 */
+                require_once 'Zym/Controller/Action/Helper/MultiPageForm/Exception/NoName.php';
+
+                throw new Zym_Controller_MultiPageForm_Exception_NoName('A subform needs to have a name.');
             }
         }
 
@@ -343,7 +360,12 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
     public function getForm()
     {
         if (!$this->_form) {
-            $this->_throwException('No form instance set.');
+            /**
+             * @see Zym_Controller_Action_Helper_MultiPageForm_Exception_FormNotSet
+             */
+            require_once 'Zym/Controller/Action/Helper/MultiPageForm/Exception/FormNotSet.php';
+
+            throw new Zym_Controller_Action_Helper_MultiPageForm_Exception_FormNotFound('No form instance set.');
         }
 
         return $this->_form;
@@ -376,7 +398,14 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
         $subForm = $this->_form->getSubForm($formName);
 
         if (empty($subForm)) {
-            $this->_throwException(sprintf('No form by the name of "%s" was registered.', $formName));
+            /**
+             * @see Zym_Controller_Action_Helper_MultiPageForm_Exception_FormNotFound
+             */
+            require_once 'Zym/Controller/Action/Helper/MultiPageForm/Exception/FormNotFound.php';
+
+            $message = sprintf('No form by the name of "%s" was registered.', $formName);
+
+            throw new Zym_Controller_Action_Helper_MultiPageForm_Exception_FormNotFound($message);
         }
 
         $subForm->populate($this->getValues($formName));
@@ -561,30 +590,17 @@ class Zym_Controller_Action_Helper_MultiPageForm extends Zend_Controller_Action_
      */
     public function clear()
     {
-        $this->_session->valid = array();
-        $this->_session->value = array();
+        $valid = array();
+        $value = array();
 
-        foreach ($this->_subFormActions as $id) {
-            if (!isset($this->_session->valid[$id])) {
-                $this->_session->valid[$id] = false;
-                $this->_session->value[$id] = array();
+        foreach ($this->_subFormActions as $action) {
+            if (!isset($valid[$action])) {
+                $valid[$action] = false;
+                $value[$action] = array();
             }
         }
-    }
 
-    /**
-     * Throw an exception
-     *
-     * @param string $message
-     * @throws Zym_Controller_Exception
-     */
-    protected function _throwException($message)
-    {
-        /**
-         * @see Zym_Controller_Exception
-         */
-        require_once 'Zym/Controller/Exception.php';
-
-        throw new Zym_Controller_Exception($message);
+        $this->_session->valid = $valid;
+        $this->_session->value = $value;
     }
 }
