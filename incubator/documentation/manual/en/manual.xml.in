@@ -23,6 +23,7 @@
     <chapter id="zym.controller">
         <title>Zym_Controller</title>
         <xi:include href="module_specs/Zym_Controller-Action.xml" />
+        <xi:include href="module_specs/Zym_Controller-ActionHelper-MultiPageForm.xml" />
         <xi:include href="module_specs/Zym_Controller-Plugins-LayoutSwitcher.xml" />
     </chapter>
 

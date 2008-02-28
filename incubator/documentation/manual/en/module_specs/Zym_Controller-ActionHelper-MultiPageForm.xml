@@ -1,0 +1,90 @@
+<sect1 id="zym.controller.actionhelper.multipageform">
+    <title>Zym_Controller_Action_Helper_MultiPageForm</title>
+
+    <para>
+        The MultiPageForm action helper provides a generic way to enable multi-page forms with Zend_Form. It collects the form data from each page and makes it available as a whole at the end of the ride.
+    </para>
+
+    <para>
+        The helper is setup in the controller's <code>init()</code> method. You will need to create a Zend_Form instance that contains one subform for each page.
+        The <code>setForm()</code> method sets the Zend_Form instance for the helper. Next, you need to bind the subforms to controller actions. This is done by providing the <code>setActions()</code> method an array with action names that correspond with the subform names.
+        E.g.: the action helper will look for a subform called <code>survey</code> when controller's <code>surveyAction()</code> is requested.
+    </para>
+
+    <programlisting role="php"><![CDATA[
+class MyForm extends Zend_Form
+{
+    public function __construct($options = null)
+    {
+        parent::__construct($options);
+
+        $orderForm = new Zend_Form_SubForm();
+        // Setup the rest of the form...
+        $this->addSubForm($orderForm, 'order');
+
+
+        $userForm = new Zend_Form_SubForm();
+        // Setup the rest of the form...
+        $this->addSubForm($userForm, 'order');
+
+        $surveyForm = new Zend_Form_SubForm();
+        // Setup the rest of the form...
+        $this->addSubForm($surveyForm, 'order');
+    }
+}
+]]></programlisting>
+
+    <programlisting role="php"><![CDATA[
+class MyformController extends Zend_Controller_Action
+{
+    public function init()
+    {
+        $this->_helper->multiPageForm->setForm(new MyForm());
+        $this->_helper->multiPageForm->setActions(array('order', 'user', 'survey'));
+    }
+
+    public function indexAction()
+    {
+        $this->_helper->multiPageForm->clear();
+        $this->getHelper('Redirector')->gotoAndExit('order');
+    }
+
+    public function orderAction()
+    {
+        // custom logic for order action
+    }
+
+    public function userAction()
+    {
+        // custom logic for user action
+    }
+
+    public function surveyAction()
+    {
+        // custom logic for survey action
+    }
+
+    public function processAction()
+    {
+        $data = $this->_helper->multiPageForm->getFormData();
+
+        /**
+         * After fetching the data you'd probably want to clear the form
+         * so it can go for another round.
+         */
+        $this->_helper->multiPageForm->clear();
+
+        /**
+         * Display a success screen for this demo.
+         * In real-life use you'd probably write the data to the DB here.
+         * Note that all data in the $data array is filtered and validated,
+         * so you don't have to do that here anymore.
+         */
+        $this->view->formData = $data;
+    }
+}
+]]></programlisting>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

@@ -14,7 +14,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-// @TODO: Allow custom mapping of forms to action?
+
 /**
  * @see Zend_Session_Namespace
  */
@@ -26,6 +26,9 @@ require_once 'Zend/Session/Namespace.php';
 require_once 'Zend/Controller/Action/Helper/Abstract.php';
 
 /**
+ * @TODO: Allow custom mapping of forms to action?
+ * @TODO: Update to the latest Zend_Form API.
+ *
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Controller
