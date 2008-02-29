@@ -217,7 +217,7 @@ class Zym_Notification
 
 	    if ($observer instanceof Zym_Notification_Interface &&
             $callback == $this->_defaultCallback) {
-            $observer->update($message);
+            $observer->notify($message);
         } else {
             if (!method_exists($observer, $callback)) {
                 /**
