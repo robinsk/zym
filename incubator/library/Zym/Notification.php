@@ -45,7 +45,7 @@ class Zym_Notification
      *
      * @var string
      */
-    protected $_defaultCallback = 'update';
+    protected $_defaultCallback = 'notify';
 
     /**
      * Wildcard for the catch-all event
