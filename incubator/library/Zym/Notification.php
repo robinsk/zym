@@ -340,16 +340,20 @@ class Zym_Notification
     /**
      * Check if the observer is registered for the specified event
      *
-     * @param object $observer
+     * @param object|string &$observer either spl_object_hash or the object itself
      * @param string $event
      * @return boolean
      */
-    public function hasObserver($observer, $event)
+    public function hasObserver(&$observer, $event)
     {
         if (is_object($observer)) {
             $observerHash = spl_object_hash($observer);
+        } else if (is_string($observer)) {
+            $observerHash = $observer;
+        } else {
+            return false;
         }
-
+        
         return array_key_exists($observerHash, $this->_observers[$event]);
     }
 }
