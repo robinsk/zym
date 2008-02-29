@@ -144,8 +144,9 @@ class Zym_Notification
 	    foreach ($events as $event) {
 	        $cleanEvent = $this->_removeWildcard($event);
 
-	        if (($hasWildcard && strpos($cleanEvent, $cleanName) === 0) ||
-	            ($this->_hasWildcard($event) && strpos($event, $cleanEvent) === 0)) {
+	        if (!empty($cleanEvent) &&
+	            (($hasWildcard && strpos($cleanEvent, $cleanName) === 0) ||
+	            ($this->_hasWildcard($event) && strpos($event, $cleanEvent) === 0))) {
                 $this->_post($event, $sender, $data);
             }
         }
@@ -353,7 +354,7 @@ class Zym_Notification
         } else {
             return false;
         }
-        
+
         return array_key_exists($observerHash, $this->_observers[$event]);
     }
 }

@@ -24,9 +24,9 @@
 interface Zym_Notification_Interface
 {
     /**
-     * Update the observer by passing the Zym_Notification instance
+     * Notify the observer by passing the Zym_Notification instance
      *
      * @param Zym_Notification $notification
      */
-    public function update(Zym_Notification $notification);
+    public function notify(Zym_Notification $notification);
 }
