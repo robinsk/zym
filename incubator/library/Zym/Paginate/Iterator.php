@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Paginate_Collection
+ * @see Zym_Paginate_Abstract
  */
-require_once 'Zym/Paginate/Collection.php';
+require_once 'Zym/Paginate/Abstract.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,52 +26,34 @@ require_once 'Zym/Paginate/Collection.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Paginate_Iterator extends Zym_Paginate_Collection
+class Zym_Paginate_Iterator extends Zym_Paginate_Abstract
 {
+    /**
+     * The iterator
+     *
+     * @var Iterator
+     */
+    protected $_iterator = null;
+
     /**
      * Constructor
      *
-     * @var Iterator $dataSet
+     * @var Iterator $iterator
      */
-    public function __construct(Iterator $dataSet)
+    public function __construct(Iterator $iterator)
     {
-        $this->_dataSet = $dataSet;
+        $this->_iterator = $iterator;
     }
 
     /**
-     * Get all pages
+     * Get a page
      *
-     * @return array
+     * @var int $page
      */
-    public function getAllPages()
+    public function getPage($page)
     {
-        if (empty($this->_pages)) {
-            $this->_pages = $this->_paginate();
-        }
+        $offset = ((int) $page - 1) * $this->getRowLimit();
 
-        return $this->_pages;
-    }
-
-    /**
-     * Paginate the data set
-     */
-    protected function _paginate()
-    {
-        $this->_rowCount = count($this->_dataSet);
-
-        $page = 0;
-        $items = 0;
-
-        foreach ($this->_dataSet as $value) {
-            $items++;
-
-            $this->_pages[$page][] = $value;
-
-            if ($items % $this->_rowLimit === 0) {
-                $page++;
-            }
-        }
-
-        $this->_pageCount = $page + 1;
+        return new LimitIterator($this->_iterator, $offset, $this->getRowLimit());
     }
 }

@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Paginate_Collection
+ * @see Zym_Paginate_Abstract
  */
-require_once 'Zym/Paginate/Collection.php';
+require_once 'Zym/Paginate/Abstract.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,8 +26,22 @@ require_once 'Zym/Paginate/Collection.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Paginate_Array extends Zym_Paginate_Collection
+class Zym_Paginate_Array extends Zym_Paginate_Abstract
 {
+    /**
+     * The paginated dataset
+     *
+     * @var array
+     */
+    protected $_pages = null;
+
+    /**
+     * The dataset
+     *
+     * @var array
+     */
+    protected $_dataSet = null;
+
     /**
      * Constructor
      *
@@ -36,6 +50,30 @@ class Zym_Paginate_Array extends Zym_Paginate_Collection
     public function __construct(array $dataSet)
     {
         $this->_dataSet = $dataSet;
+    }
+
+    /**
+     * Get a page
+     *
+     * @throws Zym_Paginate_Exception_PageNotFound
+     * @var int $page
+     */
+    public function getPage($page)
+    {
+        $pages = $this->getAllPages();
+
+        $key = $page - 1;
+
+        if (!array_key_exists($key, $pages)) {
+            /**
+             * @see Zym_Paginate_Exception_PageNotFound
+             */
+            require_once 'Zym/Paginate/Exception/PageNotFound.php';
+
+            throw new Zym_Paginate_Exception_PageNotFound(sprintf('Page "%s" not found', $page));
+        }
+
+        return $pages[$key];
     }
 
     /**
@@ -85,9 +123,9 @@ class Zym_Paginate_Array extends Zym_Paginate_Collection
      */
     protected function _paginateNumeric()
     {
-        $this->_pages = array_chunk($this->_dataSet, $this->_rowLimit);
+        $this->_pages     = array_chunk($this->_dataSet, $this->_rowLimit);
         $this->_pageCount = count($this->_pages);
-        $this->_rowCount = count($this->_dataSet);
+        $this->_rowCount  = count($this->_dataSet);
     }
 
     /**

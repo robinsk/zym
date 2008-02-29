@@ -147,12 +147,14 @@ class Zym_Notification
 	        if (!empty($cleanEvent) &&
 	            (($hasWildcard && strpos($cleanEvent, $cleanName) === 0) ||
 	            ($this->_hasWildcard($event) && strpos($event, $cleanEvent) === 0))) {
+
                 $this->_post($event, $sender, $data);
             }
         }
 
 	    if ($this->isRegistered($this->_wildcard) &&
 	        !empty($this->_observers[$this->_wildcard])) {
+
 	        $notification = new Zym_Notification_Message($name, $sender, $data);
 
     	    foreach ($this->_observers[$this->_wildcard] as $observerData) {
@@ -217,6 +219,7 @@ class Zym_Notification
 
 	    if ($observer instanceof Zym_Notification_Interface &&
             $callback == $this->_defaultCallback) {
+
             $observer->notify($message);
         } else {
             if (!method_exists($observer, $callback)) {
