@@ -43,6 +43,7 @@ class Zym_Paginate_Iterator extends Zym_Paginate_Abstract
     public function __construct(Iterator $iterator)
     {
         $this->_iterator = $iterator;
+        $this->_rowCount = count($iterator);
     }
 
     /**
