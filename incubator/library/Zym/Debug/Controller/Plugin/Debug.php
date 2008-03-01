@@ -11,7 +11,7 @@
  * @package Zym_Debug
  * @subpackage Controller_Plugin
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -26,7 +26,7 @@ require_once 'Zym/Debug.php';
 
 /**
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Debug
  * @subpackage Controller_Plugin

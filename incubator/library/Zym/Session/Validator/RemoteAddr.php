@@ -11,7 +11,7 @@
  * @package Zym_Session
  * @subpackage Validator
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -30,7 +30,7 @@ require_once 'Zend/Session/Validator/Interface.php';
  * @todo expand this component to handle HTTP_X_FORWARDED_FOR etc...
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Session
  * @subpackage Validator

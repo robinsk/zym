@@ -11,7 +11,7 @@
  * @package Zym_App
  * @subpackage Resource
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -33,7 +33,7 @@ require_once('Zend/View.php');
  * Setup view
  * 
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_App
  * @subpackage Resource

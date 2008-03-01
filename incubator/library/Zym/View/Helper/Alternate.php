@@ -11,16 +11,17 @@
  * @package Zym_View
  * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
- * Alternator class (Ripped from naneau ;) )
+ * Alternator class
  *
- * Alternates between set values
+ * Alternates between set values such as in creating stripped table
+ * rows.
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @package Zym_View
  * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
@@ -49,7 +50,7 @@ class Zym_View_Helper_Alternate implements Iterator
      */
     public function alternate(array $values = null)
     {
-        if (count($values)) {
+        if ($values !== null) {
             $this->setValues($values);
         }
 
@@ -85,7 +86,8 @@ class Zym_View_Helper_Alternate implements Iterator
      */
     public function current()
     {
-        return $this->_values[$this->key()];
+        $key = $this->key();
+        return $this->_values[$key];
     }
 
     /**
@@ -95,6 +97,7 @@ class Zym_View_Helper_Alternate implements Iterator
      */
     public function key()
     {
+        // Gracefully crap itself
         if (!count($this->_values)) {
             $this->_values = array(null);
         }
@@ -131,7 +134,8 @@ class Zym_View_Helper_Alternate implements Iterator
      */
     public function valid()
     {
-        return isset($this->_values[$this->key()]);
+        $key = $this->key();
+        return isset($this->_values[$key]);
     }
 
     /**
@@ -139,7 +143,7 @@ class Zym_View_Helper_Alternate implements Iterator
      *
      * @return
      */
-    public function getNext()
+    public function getValue()
     {
         $this->next();
         return $this->current();
@@ -152,6 +156,6 @@ class Zym_View_Helper_Alternate implements Iterator
      */
     public function __toString()
     {
-        return (string) $this->getNext();
+        return (string) $this->getValue();
     }
 }

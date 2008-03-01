@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Error
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -27,7 +27,7 @@ require_once 'Zym/Error/Handler/Interface.php';
  * Global Error Handler
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Error
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)

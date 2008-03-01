@@ -11,7 +11,7 @@
  * @package Zym_Log
  * @subpackage Writer
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -31,7 +31,7 @@ require_once 'Zend/Log/Writer/Abstract.php';
  * derived from Zend_Log_Writer_Db. ;)
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Log
  * @subpackage Writer

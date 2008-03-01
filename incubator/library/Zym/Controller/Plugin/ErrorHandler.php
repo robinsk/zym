@@ -11,7 +11,7 @@
  * @package Zym_Controller
  * @subpackage Plugin
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -39,7 +39,7 @@ require_once 'Zend/Controller/Plugin/ErrorHandler.php';
  * </pre>
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Controller
  * @subpackage Plugin

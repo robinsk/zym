@@ -10,7 +10,7 @@
  * @category Zym
  * @package Zym_Js
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -22,7 +22,7 @@
  * Ported to PHP5 from {@link http://elfz.laacz.lv/beautify/}
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Js
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)

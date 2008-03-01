@@ -11,7 +11,7 @@
  * @package Zym_Session
  * @subpackage Validator
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -28,7 +28,7 @@ require_once 'Zend/Session/Validator/Interface.php';
  * Validate a session using a cookie value
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Session
  * @subpackage Validator

@@ -11,7 +11,7 @@
  * @package Zym_Controller
  * @subpackage Action_Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -30,7 +30,7 @@ require_once 'Zend/Session/Namespace.php';
  * on the next request. Useful for redirecting to previous page after login.
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Controller
  * @subpackage Action_Helper
