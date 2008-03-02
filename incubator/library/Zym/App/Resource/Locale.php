@@ -60,7 +60,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEVELOPMENT => array(
-            'cache' => true
+            'cache' => false
         ),
     
         Zym_App::ENV_DEFAULT => array(
