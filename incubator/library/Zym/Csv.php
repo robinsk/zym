@@ -77,7 +77,7 @@ class Zym_Csv implements Iterator
             /**
              * @see Zym_Csv_Exception_FileNotExists
              */
-            require_once 'Zym/CSV/Exception/FileNotExists.php';
+            require_once 'Zym/Csv/Exception/FileNotExists.php';
 
             throw new Zym_Csv_Exception_FileNotExists(sprintf('The file "%s" cannot be found.', $file));
         }
@@ -86,7 +86,7 @@ class Zym_Csv implements Iterator
             /**
              * @see Zym_Csv_Exception_FileNotReadable
              */
-            require_once 'Zym/CSV/Exception/FileNotReadable.php';
+            require_once 'Zym/Csv/Exception/FileNotReadable.php';
 
             throw new Zym_Csv_Exception_FileNotReadable(sprintf('File "%s" was found, but cannot be read.', $file));
         }
