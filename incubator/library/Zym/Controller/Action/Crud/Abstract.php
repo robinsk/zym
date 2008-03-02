@@ -78,7 +78,7 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     /**
      * Get the table for this model
      *
-     * @return Zend_Db_Table_Abstract
+     * @return Zym_Db_Table_Abstract
      */
     protected function _getTable()
     {
@@ -92,10 +92,10 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
     /**
      * Set the table
      *
-     * @param Zend_Db_Table_Abstract $table
+     * @param Zym_Db_Table_Abstract $table
      * @return Zym_Controller_Action_Crud_Abstract
      */
-    protected function _setTable(Zend_Db_Table_Abstract $table)
+    protected function _setTable(Zym_Db_Table_Abstract $table)
     {
         $this->_table = $table;
 
@@ -352,21 +352,16 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
 
     /**
      * Check if a special submit button is used and act accordingly.
-     * @TODO make this nice...
+     * @TODO make this nicer...
      */
     protected function _handlePostAction()
     {
-        $postDataKeys = array_keys($this->getRequest()->getPost());
+        $postData = $this->getRequest()->getPost();
 
-        foreach ($postDataKeys as $key) {
-        	if (strpos($key, '_') === 0) {
-        	    switch ($key) {
-        	        case '_cancel':
-        	            $this->_goto($this->_getListAction());
-        	            break;
-        	    }
-        	    break;
-        	}
+        switch (true) {
+            case array_key_exists('_cancel', $postData);
+                $this->_goto($this->_getListAction());
+                break;
         }
     }
 
@@ -386,11 +381,8 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
             $row = $table->createRow();
         }
 
-        $tableInfo = $table->info();
-        $metaData = $tableInfo[Zend_Db_Table_Abstract::METADATA];
-
         foreach ($formValues as $key => $value) {
-            if (isset($row->$key) && !(bool) $metaData[$key]['IDENTITY']) {
+            if (isset($row->$key) && !$table->isIdentity($key)) {
                 $row->$key = $value;
             }
         }
