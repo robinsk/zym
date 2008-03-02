@@ -58,24 +58,52 @@ class Zym_Csv implements Iterator
     protected $_delimiter = null;
 
     /**
+     * Column headers
+     *
+     * @var array
+     */
+    protected $_headers = array();
+
+    /**
      * Open the CSV file.
      *
      * @param string $file
      * @param string $delimiter
      * @throws Zym_Csv_Exception_FileNotReadable
      */
-    public function __construct($file, $delimiter = ',')
+    public function __construct($file, $delimiter = ',', $readHeaders = true)
     {
-        $this->filePointer = @fopen($file, 'r');
-        $this->delimiter = $delimiter;
+        if (!file_exists($file)) {
+            /**
+             * @see Zym_Csv_Exception_FileNotExists
+             */
+            require_once 'Zym/CSV/Exception/FileNotExists.php';
 
-        if (empty($this->filePointer)) {
+            throw new Zym_Csv_Exception_FileNotExists(sprintf('The file "%s" cannot be found.', $file));
+        }
+
+        if (!is_readable($file)) {
             /**
              * @see Zym_Csv_Exception_FileNotReadable
              */
             require_once 'Zym/CSV/Exception/FileNotReadable.php';
 
-            throw new Zym_Csv_Exception_FileNotReadable(sprintf('The file "%s" cannot be read.', $file));
+            throw new Zym_Csv_Exception_FileNotReadable(sprintf('File "%s" was found, but cannot be read.', $file));
+        }
+
+        $this->filePointer = fopen($file, 'r');
+        $this->delimiter = $delimiter;
+
+        if ($readHeaders) {
+            $headerRow = $this->current();
+
+            $headers = array();
+
+            foreach ($headerRow as $column) {
+            	$headers[] = $column;
+            }
+
+            $this->_headers = $headers;
         }
     }
 
@@ -99,7 +127,17 @@ class Zym_Csv implements Iterator
         $this->currentElement = fgetcsv($this->filePointer, self::ROW_LENGTH, $this->delimiter);
         $this->rowCounter += 1;
 
-        return $this->currentElement;
+        if (!empty($this->_headers)) {
+            $return = array();
+
+            foreach ($this->_headers as $index => $header) {
+            	$return[$header] = $this->_currentElement[$index];
+            }
+
+            return $return;
+        } else {
+            return $this->currentElement;
+        }
     }
 
     /**
