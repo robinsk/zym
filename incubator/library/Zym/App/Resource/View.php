@@ -81,13 +81,11 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     'scriptPath'             => null,
                     'scriptPathNoController' => null
                 ),
-                
-                'flag' => array(
-                    'neverController' => null,
-                    'neverRender'     => null,
-                    'noController'    => null,
-                    'noRender'        => null
-                )
+
+                'neverController' => null,
+                'neverRender'     => null,
+                'noController'    => null,
+                'noRender'        => null
             )
         )
     );
@@ -105,6 +103,10 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         if ($viewRenderer->view instanceof Zend_View_Abstract) {
             $view = $viewRenderer->view;
         } else {
+            /**
+             * @see Zend_View
+             */
+            require_once('Zend/View.php');
             $view = new Zend_View();
             
             // Pass view renderer the view
@@ -120,7 +122,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
      * Setup the view
      *
      * @param Zend_View_Abstract $view
-     * @return Zym_App_Resource_View
+     * @param Zend_Config $config
      */
     protected function _setupView(Zend_View_Abstract $view, Zend_Config $viewConfig)
     {
@@ -162,47 +164,77 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         if ($viewConfig->escape) {
             $view->setEscape($viewConfig->escape);
         }
-        
-        return $this;
     }
     
     /**
      * Setup view renderer
      *
      * @param Zend_Controller_Action_Helper_ViewRenderer $viewRenderer
-     * @return Zym_App_Resource_View
+     * @param Zend_Config $config
      */
-    protected function _setupViewRenderer(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $viewRendererConfig) 
+    protected function _setupViewRenderer(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config) 
+    {
+        // Setup path spec
+        $this->_viewRendererSpec($viewRenderer, $config);
+        
+        // Add the run features
+        $this->_viewRendererFlags($viewRenderer, $config);
+        
+        // Set suffix
+        $this->_viewRendererSuffix($viewRenderer, $config);
+    }
+    
+    /**
+     * Setup VR, base, filter, helper and script spec
+     *
+     * @param Zend_Controller_Action_Helper_ViewRenderer $viewRenderer
+     * @param Zend_Config $config
+     */
+    protected function _viewRendererSpec(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
     {
         // Add base, filter, helper and script paths
         $specKeys = array('basePath', 'scriptPath', 'scriptPathNoController');
         foreach($specKeys as $key) {
             // No setting set, continue
-            if ($viewRendererConfig->spec->{$key} === null) {
+            if ($config->spec->{$key} === null) {
                 continue;
             }
             
             $method = 'setView' . ucfirst($key) . 'Spec';
-            call_user_func_array(array($viewRenderer, $method), array($viewRendererConfig->spec->{$key}));
+            call_user_func_array(array($viewRenderer, $method), array($config->spec->{$key}));
         }
-        
-        // Add the run features
+    }
+    
+    /**
+     * Setup VR runtime flags
+     *
+     * @param Zend_Controller_Action_Helper_ViewRenderer $viewRenderer
+     * @param Zend_Config $config
+     */
+    protected function _viewRendererFlags(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
+    {
         $flagKeys = array('neverRender', 'neverController', 'noController', 'noRender');
         foreach($flagKeys as $key) {
             // No setting set, continue
-            if ($viewRendererConfig->flag->{$key} === null) {
+            if ($config->{$key} === null) {
                 continue;
             }
             
             $method = 'set' . ucfirst($key);
-            call_user_func_array(array($viewRenderer, $method), array((bool) $viewRendererConfig->flag->{$key}));
+            call_user_func_array(array($viewRenderer, $method), array((bool) $config->{$key}));
         }
-        
-        // Set suffix
-        if ($viewRendererConfig->suffix !== null) {
-            $viewRendererConfig->setViewSuffix($viewRendererConfig->suffix);
+    }
+    
+    /**
+     * Set VR view suffix
+     *
+     * @param Zend_Controller_Action_Helper_ViewRenderer $viewRenderer
+     * @param Zend_Config $config
+     */
+    protected function _viewRendererSuffix(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
+    {
+        if ($config->suffix !== null) {
+            $viewRenderer->setViewSuffix($config->suffix);
         }
-        
-        return $this;
     }
 }

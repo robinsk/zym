@@ -14,11 +14,8 @@
  */
 
 /**
- * @see Zym_App_Registry_Exception
- */
-require_once('Zym/App/Registry/Exception.php');
-
-/**
+ * Object registry for communication between resources
+ * 
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -78,6 +75,10 @@ class Zym_App_Registry
                 $assertClass = implode(' ', $assertClass);
             }
             
+            /**
+             * @see Zym_App_Registry_Exception
+             */
+            require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception(
                 "The requested index \"$index\" does not contain an object of type(s) \"$assertClass\""
             );
@@ -115,9 +116,13 @@ class Zym_App_Registry
     {
         if ($this->isAlias($index)) {
             $this->removeAlias($index);
-        } elseif ($this->_hasData($index)) {
+        } else if ($this->_hasData($index)) {
             $this->_removeData($index);
         } else {
+            /**
+             * @see Zym_App_Registry_Exception
+             */
+            require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception(
                 'Cannot remove index "'. $index . '" because it does not exist'
             );
@@ -156,6 +161,10 @@ class Zym_App_Registry
     {
         // Make sure index is an actual data index
         if (!$this->_hasData($index)) {
+            /**
+             * @see Zym_App_Registry_Exception
+             */
+            require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception(
                 'The provided index "' . $index . '" is not an index of an existing data index'
             );
@@ -163,12 +172,17 @@ class Zym_App_Registry
 
         // Make sure the alias is not already set
         if ($this->aliasExists($alias)) {
+            /**
+             * @see Zym_App_Registry_Exception
+             */
+            require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception(
                 'An alias of the name "'. $alias . '" is already registered'
             );
         }
 
-        $this->_alias[$this->_normalizeIndex($index)][] = $this->_normalizeIndex($alias);
+        $normalizedIndex = $this->_normalizeIndex($index);
+        $this->_alias[$normalizedIndex][] = $this->_normalizeIndex($alias);
         return $this;
     }
 
@@ -180,7 +194,8 @@ class Zym_App_Registry
      */
     public function hasAlias($index)
     {
-        return (bool) count($this->_aliasMap[$this->_normalizeIndex($index)]);
+        $index = $this->_normalizeIndex($index);
+        return (bool) count($this->_aliasMap[$index]);
     }
 
     /**
@@ -234,9 +249,13 @@ class Zym_App_Registry
             	   unset($this->_aliasMap[$dataIndex][$aliasIndex]);
                 }
             }
-        } elseif ($this->_hasData($index)) { // Handle data input
+        } else if ($this->_hasData($index)) { // Handle data input
             unset($this->_aliasMap[$index]);
         } else {
+            /**
+             * @see Zym_App_Registry_Exception
+             */
+            require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception(
                 'Cannot remove alias "' . $index . '" because it/none exist'
             );
@@ -278,6 +297,10 @@ class Zym_App_Registry
         	}
         }
 
+        /**
+         * @see Zym_App_Registry_Exception
+         */
+        require_once('Zym/App/Registry/Exception.php');
         throw new Zym_App_Registry_Exception(
             'An alias with the name "' . $alias . '" does not exist'
         );
@@ -334,6 +357,10 @@ class Zym_App_Registry
             return $this->_data[$this->_normalizeIndex($index)];
         }
 
+        /**
+         * @see Zym_App_Registry_Exception
+         */
+        require_once('Zym/App/Registry/Exception.php');
         throw new Zym_App_Registry_Exception('Index "' . $index . '" does not exist');
     }
 
@@ -346,7 +373,8 @@ class Zym_App_Registry
      */
     protected function _setDataItem($index, $value)
     {
-        $this->_data[$this->_normalizeIndex($index)] = $value;
+        $index = $this->_normalizeIndex($index);
+        $this->_data[$index] = $value;
         return $this;
     }
 
@@ -366,6 +394,10 @@ class Zym_App_Registry
         if ($this->_hasData($index)) {
             unset($this->_data[$this->_normalizeIndex($index)]);
         } else {
+            /**
+             * @see Zym_App_Registry_Exception
+             */
+            require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception('Index "' . $index . '" does not exist');
         }
 
