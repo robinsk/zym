@@ -14,8 +14,7 @@
         <copyright>
             <year><?dbtimestamp format="Y"?></year>
             <holder>
-                Zym
-                (<ulink url="http://www.zym-project.com/" />)
+                Zym (<ulink url="http://www.zym-project.com/" />)
             </holder>
         </copyright>
     </bookinfo>
@@ -25,6 +24,11 @@
         <xi:include href="module_specs/Zym_Controller-Action.xml" />
         <xi:include href="module_specs/Zym_Controller-ActionHelper-MultiPageForm.xml" />
         <xi:include href="module_specs/Zym_Controller-Plugins-LayoutSwitcher.xml" />
+    </chapter>
+
+    <chapter id="zym.db">
+        <title>Zym_Db</title>
+        <xi:include href="module_specs/Zym_Db-Table.xml" />
     </chapter>
 
     <chapter id="zym.dto">

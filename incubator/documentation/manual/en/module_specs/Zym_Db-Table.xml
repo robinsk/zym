@@ -1,0 +1,75 @@
+<sect1 id="zym.dt.table">
+    <title>Zym_Db_Table_Abstract</title>
+
+    <para>
+        <code>Zym_Db_Table_Abstract</code> adds some functionality that isn't present in Zend_Db_Table_Abstract.
+    </para>
+
+    <para>
+        The first method is the <code>isIdentity()</code> method. It will return a boolean true if the provided column name is the primary, auto-incrementing key and a boolean false otherwise.
+        If the specified column does not exist, it will throw a <code>Zym_Db_Table_Exception_ColumnNotInTable</code> exception.
+    </para>
+
+    <programlisting role="php"><![CDATA[
+$table = new Foo_Table();
+$isIdentity = $table->isIdentity('id');
+
+if ($isIdentity) {
+    // The column 'id' is set to auto-increment and as the primary key
+} else {
+    // The column 'id' is not an auto-incrementing primary key
+}
+]]></programlisting>
+
+    <para>
+        The second method is the <code>addReference()</code> method. It will add an entry to the reference map. For more information on the reference map, please see the <ulink url="http://framework.zend.com/manual/en/zend.db.table.relationships.html">Zend Framework documentation</ulink> on Zend_Db_Table_Relations.
+        Below is an example from the Zend Framework documentation. First we'll see how to add references the conventional way, after which the same references will be added through the <code>addReference()</code> method.
+    </para>
+
+    <programlisting role="php"><![CDATA[
+// The example from the manual
+class Bugs extends Zend_Db_Table_Abstract
+{
+    protected $_name            = 'bugs';
+
+    protected $_dependentTables = array('BugsProducts');
+
+    protected $_referenceMap    = array(
+        'Reporter' => array(
+            'columns'           => 'reported_by',
+            'refTableClass'     => 'Accounts',
+            'refColumns'        => 'account_name'
+        ),
+        'Engineer' => array(
+            'columns'           => 'assigned_to',
+            'refTableClass'     => 'Accounts',
+            'refColumns'        => 'account_name'
+        ),
+        'Verifier' => array(
+            'columns'           => array('verified_by'),
+            'refTableClass'     => 'Accounts',
+            'refColumns'        => array('account_name')
+        )
+    );
+}
+
+// Using addReference()
+class Bugs extends Zend_Db_Table_Abstract
+{
+    protected $_name            = 'bugs';
+
+    protected $_dependentTables = array('BugsProducts');
+
+    public function init()
+    {
+        $this->addReference('Reporter', 'reported_by', 'Accounts', 'account_name')
+             ->addReference('Engineer', 'assigned_to', 'Accounts', 'account_name')
+             ->addReference('Verifier', array('verified_by'), 'Accounts', array('account_name'));
+    }
+}
+]]></programlisting>
+
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->
