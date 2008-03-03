@@ -73,6 +73,7 @@ abstract class Zym_Cache extends Zend_Cache
             self::setDefaultBackend($config);
         }
 
+        // Set config
         $map = array('frontend', 'backend');
         foreach ($map as $item) {
             if (isset($config->{$item})) {
@@ -123,6 +124,16 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function getFrontendOptions($frontend)
     {
+        if (!isset(self::$_frontendOptions[$frontend]) || !is_array(self::$_frontendOptions[$frontend])) {
+            /**
+             * @see Zym_Cache_Exception
+             */
+            require_once 'Zym/Cache/Exception.php';
+            throw new Zym_Cache_Exception(
+                'Frontend options for "' . $frontend . '" are not set'
+            );
+        }
+        
         return self::$_frontendOptions[$frontend];
     }
 
@@ -145,19 +156,17 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function getBackendOptions($backend)
     {
-        if ($backend === null) {
-            $backend = self::getDefaultBackend();
-
-            if (!$backend) {
-                /**
-                 * @see Zym_Cache_Exception
-                 */
-                require_once 'Zym/Cache/Exception.php';
-                throw new Zym_Cache_Exception(
-                    'A default backend must be set before getting backend options from it'
-                );
-            }
+        if (!isset(self::$_backendOptions[$backend]) || !is_array(self::$_backendOptions[$backend])) {
+            /**
+             * @see Zym_Cache_Exception
+             */
+            require_once 'Zym/Cache/Exception.php';
+            throw new Zym_Cache_Exception(
+                'Backend options for "' . $backend . '" are not set'
+            );
         }
+        
+        return self::$_backendOptions[$backend];
     }
 
     /**
@@ -174,8 +183,8 @@ abstract class Zym_Cache extends Zend_Cache
             $backend = self::getDefaultBackend();
         }
 
-        $frontendOptions = $this->_arrayMergeRecursiveOverwrite(self::getFrontendOptions($frontend), $frontendOptions);
-        $backendOptions = $this->_arrayMergeRecursiveOverwrite(self::getBackendOptions($backend), $backendOptions);
+        $frontendOptions = self::_arrayMergeRecursiveOverwrite(self::getFrontendOptions($frontend), $frontendOptions);
+        $backendOptions  = self::_arrayMergeRecursiveOverwrite(self::getBackendOptions($backend), $backendOptions);
 
         return parent::factory($frontend, $backend, $frontendOptions, $backendOptions);
     }
@@ -188,12 +197,12 @@ abstract class Zym_Cache extends Zend_Cache
      * @param array $array2
      * @return array
      */
-    protected function _arrayMergeRecursiveOverwrite($array1, $array2)
+    protected static function _arrayMergeRecursiveOverwrite($array1, $array2)
     {
         if (is_array($array1) && is_array($array2)) {
             foreach ($array2 as $key => $value) {
                 if (isset($array1[$key])) {
-                    $array1[$key] = $this->_arrayMergeRecursiveOverwrite($array1[$key], $value);
+                    $array1[$key] = self::_arrayMergeRecursiveOverwrite($array1[$key], $value);
                 } else {
                     $array1[$key] = $value;
                 }
