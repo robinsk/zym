@@ -125,16 +125,12 @@ abstract class Zym_Cache extends Zend_Cache
     public static function getFrontendOptions($frontend)
     {
         if (!isset(self::$_frontendOptions[$frontend]) || !is_array(self::$_frontendOptions[$frontend])) {
-            /**
-             * @see Zym_Cache_Exception
-             */
-            require_once 'Zym/Cache/Exception.php';
-            throw new Zym_Cache_Exception(
-                'Frontend options for "' . $frontend . '" are not set'
-            );
+            $config = array();
+        } else {
+            $config = self::$_frontendOptions[$frontend];
         }
         
-        return self::$_frontendOptions[$frontend];
+        return $config;
     }
 
     /**
@@ -157,16 +153,12 @@ abstract class Zym_Cache extends Zend_Cache
     public static function getBackendOptions($backend)
     {
         if (!isset(self::$_backendOptions[$backend]) || !is_array(self::$_backendOptions[$backend])) {
-            /**
-             * @see Zym_Cache_Exception
-             */
-            require_once 'Zym/Cache/Exception.php';
-            throw new Zym_Cache_Exception(
-                'Backend options for "' . $backend . '" are not set'
-            );
+            $config = array();
+        } else {
+            $config = self::$_backendOptions[$backend];
         }
         
-        return self::$_backendOptions[$backend];
+        return $config;
     }
 
     /**
@@ -182,9 +174,17 @@ abstract class Zym_Cache extends Zend_Cache
         if ($backend === null) {
             $backend = self::getDefaultBackend();
         }
+        
+        // We can't use a Zend_Cache_Backend instance
+        if ($backend instanceof Zend_Cache_Backend) {
+            $backend = get_class($backend);
+        }
 
-        $frontendOptions = self::_arrayMergeRecursiveOverwrite(self::getFrontendOptions($frontend), $frontendOptions);
-        $backendOptions  = self::_arrayMergeRecursiveOverwrite(self::getBackendOptions($backend), $backendOptions);
+        $frontendOptions = self::_arrayMergeRecursiveOverwrite(self::getFrontendOptions($frontend), 
+                                                              (array) $frontendOptions);
+        
+        $backendOptions  = self::_arrayMergeRecursiveOverwrite(self::getBackendOptions($backend),
+                                                              (array) $backendOptions);
 
         return parent::factory($frontend, $backend, $frontendOptions, $backendOptions);
     }

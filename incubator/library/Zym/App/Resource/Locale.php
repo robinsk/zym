@@ -129,6 +129,8 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
     protected function _setDefault(Zend_Config $config)
     {
         $locale = $config->default;
-        call_user_func(array($this->_class, 'setDefault'), $locale);
+        if (!empty($locale)) {
+            call_user_func(array($this->_class, 'setDefault'), $locale);
+        }
     }
 }
