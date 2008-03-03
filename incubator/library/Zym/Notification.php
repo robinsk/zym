@@ -350,12 +350,14 @@ class Zym_Notification
      */
     public function hasObserver(&$observer, $event)
     {
+        if (!$this->isRegistered($event)) {
+            return false;
+        }
+
         if (is_object($observer)) {
             $observerHash = spl_object_hash($observer);
-        } else if (is_string($observer)) {
-            $observerHash = $observer;
         } else {
-            return false;
+            $observerHash = (string) $observer;
         }
 
         return array_key_exists($observerHash, $this->_observers[$event]);
