@@ -21,7 +21,7 @@ require_once 'Zym/App/Resource/Abstract.php';
 
 /**
  * Setup php environment
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -30,7 +30,7 @@ require_once 'Zym/App/Resource/Abstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
-{   
+{
     /**
      * Default Config
      *
@@ -40,16 +40,16 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
         Zym_App::ENV_DEVELOPMENT => array(
             'error_reporting' => 8191 // E_ALL | E_STRICT
         ),
-        
+
         Zym_App::ENV_DEFAULT     => array(
             'date' => array(
                 'force_default_timezone' => false
             ),
-            
+
             'include_path' => array()
         )
     );
-    
+
     /**
      * Array of items to skip from ini_set()
      *
@@ -60,14 +60,14 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
         'date.force_default_timezone',
         'include_path'
     );
-    
+
     /**
      * Set as high priority to load first in the dispatch
      *
      * @var integer
      */
     protected $_priority = self::PRIORITY_HIGH;
-    
+
     /**
      * Setup
      *
@@ -77,10 +77,10 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
     {
         // Parse for php config and set them
         $this->_parseConfig($config);
-        
+
         // Set/Force default timezone?
         $this->_forceDefaultTimezone($config->date);
-        
+
         // Set include path
         $this->_setIncludePath($config);
     }
@@ -96,51 +96,51 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
     protected function _parseConfig(Zend_Config $config, $location = null)
     {
         foreach ($config as $namespace => $child) {
-            $key = $location . '.' . $namespace;
+            $key = (!empty($location) ? $location . '.' : '') . $namespace;
 
             // Skip if it's not a php config item
             if (in_array($key, $this->_customConfigMap)) {
                 continue;
             }
-            
+
             // Go deeper
             if ($child instanceof Zend_Config) {
                 $this->_parseConfig($child, $key);
                 continue;
             }
-            
+
             ini_set($key, $child);
         }
-        
+
         /* Snippet of code from discussion
             $queue = array();
-        
+
             array_push(array('location' => null,
                              'config'   => $config));
-        
+
             while(!empty($queue)) {
                 $tmpNode = array_pop($queue);
                 $tmpConfig = $tmpNode['config'];
-                
+
                 $key = $tmpNode['location'] . '.' . $tmpConfig->namespace;
-        
+
                 // Skip if it's not a php config item
                 if (in_array($key, $this->_customConfigMap)) {
                     continue;
                 }
-        
+
                 // Go deeper
                 if ($tmpConfig->child instanceof Zend_Config) {
                     array_push(array('location' => $key,
                                      'config'   => $tmpConfig->child));
                     continue;
                 }
-        
+
                 ini_set($key, $tmpConfig->child);
             }
         */
     }
-    
+
     /**
      * Force default timezone
      *
@@ -150,16 +150,16 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
     {
         if ((bool) $config->force_default_timezone) {
             $timezone = @date_default_timezone_get();
-            
+
             // Set default timezone
             date_default_timezone_set($timezone);
         }
     }
-    
+
     /**
      * Parse include_path element and normalize with PATH_SEPARATORS
-     * 
-     * If an an array (Zend_Config) is found, convert those with 
+     *
+     * If an an array (Zend_Config) is found, convert those with
      * PATH_SEPARATORS and shift them infront of the current include path
      *
      * @param Zend_Config $config
@@ -171,7 +171,7 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
         if (!$config->include_path) {
             return;
         }
-        
+
         // Handle array
         if ($config->include_path instanceof Zend_Config) {
             $paths = implode(PATH_SEPARATOR, $config->include_path->toArray());
@@ -179,15 +179,15 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
             // Normalize include path string
             $paths = str_replace(array(':', ';'), PATH_SEPARATOR, $config->include_path);
         }
-        
+
         set_include_path($paths . get_include_path());
     }
-    
+
     /**
      * Kill magic quotes gpc
-     * 
+     *
      * Strips the crap that magic quotes does...
-     * 
+     *
      * @todo Discuss whether or not to include this hack...
      * @param Zend_Config $config
      */
@@ -205,7 +205,7 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
                     $in[] =& $in[$k][$key];
                 }
             }
-            
+
             unset($in);
         }
     }
