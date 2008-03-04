@@ -13,7 +13,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-
+// @todo utilize key() current() next() etc functions
 /**
  * @see Zym_ArrayData_Interface
  */
