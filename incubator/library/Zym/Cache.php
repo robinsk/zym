@@ -113,7 +113,7 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function setFrontendOptions($frontend, $options = array())
     {
-        self::$_frontendOptions[$frontend] = $options;
+        self::$_frontendOptions[strtolower($frontend)] = $options;
     }
 
     /**
@@ -124,6 +124,8 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function getFrontendOptions($frontend)
     {
+        $frontend = strtolower($frontend);
+        
         if (!isset(self::$_frontendOptions[$frontend]) || !is_array(self::$_frontendOptions[$frontend])) {
             $config = array();
         } else {
@@ -141,7 +143,7 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function setBackendOptions($backend, array $options = array())
     {
-        self::$_backendOptions[$backend] = $options;
+        self::$_backendOptions[strtolower($backend)] = $options;
     }
 
     /**
@@ -152,6 +154,7 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function getBackendOptions($backend)
     {
+        $backend = strtolower($backend);
         if (!isset(self::$_backendOptions[$backend]) || !is_array(self::$_backendOptions[$backend])) {
             $config = array();
         } else {

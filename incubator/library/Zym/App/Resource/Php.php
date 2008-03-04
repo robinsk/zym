@@ -76,7 +76,7 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         // Parse for php config and set them
-        $this->_recurseConfig($config);
+        $this->_parseConfig($config);
         
         // Set/Force default timezone?
         $this->_forceDefaultTimezone($config->date);
@@ -93,7 +93,7 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      * @param Zend_Config $config
      * @param string      $location Current dimension
      */
-    protected function _recurseConfig(Zend_Config $config, $location = null)
+    protected function _parseConfig(Zend_Config $config, $location = null)
     {
         foreach ($config as $namespace => $child) {
             $key = $location . '.' . $namespace;
@@ -105,12 +105,40 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
             
             // Go deeper
             if ($child instanceof Zend_Config) {
-                $this->_recurseConfig($child, $key);
+                $this->_parseConfig($child, $key);
                 continue;
             }
             
             ini_set($key, $child);
         }
+        
+        /* Snippet of code from discussion
+            $queue = array();
+        
+            array_push(array('location' => null,
+                             'config'   => $config));
+        
+            while(!empty($queue)) {
+                $tmpNode = array_pop($queue);
+                $tmpConfig = $tmpNode['config'];
+                
+                $key = $tmpNode['location'] . '.' . $tmpConfig->namespace;
+        
+                // Skip if it's not a php config item
+                if (in_array($key, $this->_customConfigMap)) {
+                    continue;
+                }
+        
+                // Go deeper
+                if ($tmpConfig->child instanceof Zend_Config) {
+                    array_push(array('location' => $key,
+                                     'config'   => $tmpConfig->child));
+                    continue;
+                }
+        
+                ini_set($key, $tmpConfig->child);
+            }
+        */
     }
     
     /**

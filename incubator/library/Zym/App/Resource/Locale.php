@@ -71,6 +71,13 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
     );
 
     /**
+     * Locale class
+     *
+     * @var string
+     */
+    protected $_class;
+    
+    /**
      * PreSetup
      *
      * @param Zend_Config $config
