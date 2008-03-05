@@ -50,6 +50,8 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
     public function __construct(array $dataSet)
     {
         $this->_dataSet = $dataSet;
+
+        $this->_paginateDataSet();
     }
 
     /**
@@ -83,15 +85,34 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
      */
     public function getAllPages()
     {
-        if (!$this->_pages) {
-            if ($this->_isAssocArray($this->_dataSet)) {
-                $this->_paginateAssoc();
-            } else {
-                $this->_paginateNumeric();
-            }
-        }
-
         return $this->_pages;
+    }
+
+    /**
+     * Set the amount of items per page
+     *
+     * @param int $limit;
+     * @return Zym_Paginate_Abstract
+     */
+    public function setRowLimit($limit)
+    {
+        parent::setRowLimit($limit);
+
+        $this->_paginateDataSet();
+
+        return $this;
+    }
+
+    /**
+     * Paginate the dataset
+     */
+    protected function _paginateDataSet()
+    {
+        if ($this->_isAssocArray($this->_dataSet)) {
+            $this->_paginateAssoc();
+        } else {
+            $this->_paginateNumeric();
+        }
     }
 
     /**
@@ -134,20 +155,23 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
     protected function _paginateAssoc()
     {
         $this->_rowCount = count($this->_dataSet);
+        $rowLimit = $this->getRowLimit();
+        $pages = array();
 
-        $page = 0;
+        $pageCount = 0;
         $items = 0;
 
         foreach ($this->_dataSet as $key => $value) {
             $items++;
 
-            $this->_pages[$page][$key] = $value;
+            $pages[$pageCount][$key] = $value;
 
-            if ($items % $this->_rowLimit === 0) {
-                $page++;
+            if ($items % $rowLimit === 0) {
+                $pageCount++;
             }
         }
 
-        $this->_pageCount = $page + 1;
+        $this->_pages = $pages;
+        $this->_pageCount = $pageCount;
     }
 }

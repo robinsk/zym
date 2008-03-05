@@ -157,7 +157,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
             $page = $this->getCurrentPageNumber();
         }
 
-        return ((int) $page * $this->getRowLimit()) + (int) $item;
+        return (((int) $page - 1) * $this->getRowLimit()) + (int) $item;
     }
 
     /**
@@ -167,7 +167,9 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getPageCount()
     {
-        if ($this->_pageCount < 1) {
+        /*
+        if ($this->_pageCount === 0) {
+             @TODO do we even need this?
             $rowCount = $this->getRowCount();
 
             $floor = floor($rowCount / $this->_rowLimit);
@@ -175,6 +177,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
 
             $this->_pageCount = $floor + ($rest > 0 ? 1 : 0);
         }
+        */
 
         return $this->_pageCount;
     }
@@ -182,20 +185,10 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
     /**
      * Get the amount of rows
      *
-     * @throws Zym_Paginate_Exception_NoRows
      * @return int
      */
     public function getRowCount()
     {
-        if ($this->_rowCount < 1) {
-            /**
-             * @see Zym_Paginate_Exception_NoRows
-             */
-            require_once 'Zym/Paginate/Exception/NoRows.php';
-
-            throw new Zym_Paginate_Exception_NoRows('No rows');
-        }
-
         return $this->_rowCount;
     }
 
@@ -323,6 +316,15 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getPreviousPageNumber()
     {
+        if (!$this->hasPrevious()) {
+            /**
+             * @see Zym_Paginate_Exception_NoPreviousPage
+             */
+            require_once 'Zym/Paginate/Exception/NoPreviousPage.php';
+
+            throw new Zym_Paginate_Exception_NoPreviousPage('No previous page');
+        }
+
         return $this->getCurrentPageNumber() - 1;
     }
 
