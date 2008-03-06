@@ -172,6 +172,6 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
         }
 
         $this->_pages = $pages;
-        $this->_pageCount = $pageCount;
+        $this->_pageCount = count($pages);
     }
 }

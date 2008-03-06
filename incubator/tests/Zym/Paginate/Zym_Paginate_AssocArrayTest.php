@@ -30,7 +30,7 @@ class Zym_Paginate_AssocArrayTest extends PHPUnit_Framework_TestCase
     }
 
     public function testPageCount()
-    {;
+    {
         $this->assertEquals(5, $this->Zym_Paginate_Array->getPageCount());
     }
 
