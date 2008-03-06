@@ -1,0 +1,10 @@
+<sect1 id="zym.paginate.iterator">
+    <title>Zym_Paginate_Iterator</title>
+
+    <programlisting role="php"><![CDATA[
+$data = new ArrayObject(range(1,100)); // Create an array containing the numbers 1 to 100.
+$paginate = new Zym_Paginate_Iterator($data->getIterator());
+$paginate->setRowLimit(15); // I want to show 15 items per page. Setting this is optional, it will default to 10.
+$page3 = $paginate->getPage(3); // Get page 3
+]]></programlisting>
+</sect1>
