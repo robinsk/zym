@@ -169,6 +169,16 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->Zym_Paginate_Array->getCurrentPageNumber());
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
         $this->assertEquals(1, $this->Zym_Paginate_Array->getCurrentPageNumber());
+
+        try {
+            $this->Zym_Paginate_Array->setCurrentPageNumber(100);
+            $this->fail('No exception throw');
+        } catch (Zym_Paginate_Exception_PageNotFound $e) {
+            $this->assertType('Zym_Paginate_Exception_PageNotFound', $e);
+            $this->assertEquals('Page "100" not found', $e->getMessage());
+        }
+
+        $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
     public function testGetCurrentPageNumber()
@@ -219,6 +229,8 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
             $this->assertType('Zym_Paginate_Exception_NoNextPage', $e);
             $this->assertEquals('No next page', $e->getMessage());
         }
+
+        $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
     /**
@@ -230,6 +242,17 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     {
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
         $this->assertEquals(2, $this->Zym_Paginate_Array->getNextPageNumber());
+
+        $this->Zym_Paginate_Array->setCurrentPageNumber(5);
+
+        try {
+            $this->Zym_Paginate_Array->getNextPageNumber();
+        } catch (Zym_Paginate_Exception_NoNextPage $e) {
+            $this->assertType('Zym_Paginate_Exception_NoNextPage', $e);
+            $this->assertEquals('No next page', $e->getMessage());
+        }
+
+        $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
     /**

@@ -64,9 +64,7 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
     {
         $pages = $this->getAllPages();
 
-        $key = $page - 1;
-
-        if (!array_key_exists($key, $pages)) {
+        if (!$this->hasPageNumber($page)) {
             /**
              * @see Zym_Paginate_Exception_PageNotFound
              */
@@ -75,7 +73,7 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
             throw new Zym_Paginate_Exception_PageNotFound(sprintf('Page "%s" not found', $page));
         }
 
-        return $pages[$key];
+        return $pages[$page - 1];
     }
 
     /**

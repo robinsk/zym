@@ -115,6 +115,17 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
     }
 
     /**
+     * Check if the page number exists
+     *
+     * @param int $page
+     * @return boolean
+     */
+    public function hasPageNumber($page)
+    {
+        return $page <= $this->_pageCount;
+    }
+
+    /**
      * Check if there are pages available
      *
      * @return boolean
@@ -223,6 +234,15 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function setCurrentPageNumber($page)
     {
+        if (!$this->hasPageNumber($page)) {
+            /**
+             * @see Zym_Paginate_Exception_PageNotFound
+             */
+            require_once 'Zym/Paginate/Exception/PageNotFound.php';
+
+            throw new Zym_Paginate_Exception_PageNotFound(sprintf('Page "%s" not found', $page));
+        }
+
         $this->_currentPage = (int) $page;
 
         return $this;
@@ -286,6 +306,15 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getNextPageNumber()
     {
+        if (!$this->hasNext()) {
+            /**
+             * @see Zym_Paginate_Exception_NoNextPage
+             */
+            require_once 'Zym/Paginate/Exception/NoNextPage.php';
+
+            throw new Zym_Paginate_Exception_NoNextPage('No next page');
+        }
+
         return $this->getCurrentPageNumber() + 1;
     }
 
