@@ -133,78 +133,43 @@ class Zym_Notification
 	 */
 	public function post($name, $sender = null, array $data = array())
 	{
-	    $events = array_keys($this->_observers);
-	    $hasWildcard = $this->_hasWildcard($name);
-        $cleanName = $this->_removeWildcard($name);
+        $notification = new Zym_Notification_Message($name, $sender, $data);
+        $toNotify = array();
 
-        if (!$hasWildcard) {
-            $this->_post($name, $sender, $data);
+	    if ($this->isRegistered($name)) {
+	        $toNotify[] = $name;
         }
 
-	    foreach ($events as $event) {
-	        $cleanEvent = $this->_removeWildcard($event);
+	    if ($this->isRegistered($this->_wildcard)) {
+            $toNotify[] = $this->_wildcard;
+        }
 
-	        if (!empty($cleanEvent) &&
-	            (($hasWildcard && strpos($cleanEvent, $cleanName) === 0) ||
-	            ($this->_hasWildcard($event) && strpos($event, $cleanEvent) === 0))) {
+        $events = array_keys($this->_observers);
 
-                $this->_post($event, $sender, $data);
+        foreach ($events as $event) {
+            $cleanEvent = str_ireplace($this->_wildcard, '', $event);
+
+            if (!empty($cleanEvent) &&
+                strpos($event, $this->_wildcard) !== false &&
+                strpos($event, $cleanEvent) === 0) {
+
+                $toNotify[] = $event;
             }
         }
 
-	    if ($this->isRegistered($this->_wildcard) &&
-	        !empty($this->_observers[$this->_wildcard])) {
+        $notified = array();
 
-	        $notification = new Zym_Notification_Message($name, $sender, $data);
-
-    	    foreach ($this->_observers[$this->_wildcard] as $observerData) {
-    	    	$this->_postNotification($notification, $observerData);
-       	    }
-	    }
+        foreach ($toNotify as $event) {
+            foreach ($this->_observers[$event] as $observerHash => $observerData) {
+                if (!in_array($observerHash, $notified)) {
+                    $notified[] = $observerHash;
+                    $this->_postNotification($notification, $observerData);
+                }
+            }
+        }
 
 		return $this;
 	}
-
-	/**
-	 * Check if the string contains a wildcard
-	 *
-	 * @param string $string
-	 * @return boolean
-	 */
-	protected function _hasWildcard($string)
-	{
-	    return strpos($string, $this->_wildcard) !== false;
-	}
-
-	/**
-	 * Remove the wildcard from the string
-	 *
-	 * @param string $string
-	 * @return string
-	 */
-	protected function _removeWildcard($string)
-	{
-	    return str_ireplace($this->_wildcard, '', $string);
-	}
-
-    /**
-     * Actually post the notification
-     *
-     * @throws Zym_Notification_Exception_MethodNotImplemented
-     * @param string $name
-     * @param object $sender
-     * @param array $data
-     */
-    protected function _post($name, $sender = null, array $data = array())
-    {
-        if ($this->isRegistered($name)) {
-            $notification = new Zym_Notification_Message($name, $sender, $data);
-
-            foreach ($this->_observers[$name] as $observerData) {
-                $this->_postNotification($notification, $observerData);
-            }
-        }
-    }
 
 	/**
 	 * Post the notification
