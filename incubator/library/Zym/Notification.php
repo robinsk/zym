@@ -133,30 +133,24 @@ class Zym_Notification
 	 */
 	public function post($name, $sender = null, array $data = array())
 	{
-        $notification = new Zym_Notification_Message($name, $sender, $data);
         $toNotify = array();
-
-	    if ($this->isRegistered($name)) {
-	        $toNotify[] = $name;
-        }
-
-	    if ($this->isRegistered($this->_wildcard)) {
-            $toNotify[] = $this->_wildcard;
-        }
-
         $events = array_keys($this->_observers);
 
         foreach ($events as $event) {
-            $cleanEvent = str_ireplace($this->_wildcard, '', $event);
-
-            if (!empty($cleanEvent) &&
-                strpos($event, $this->_wildcard) !== false &&
-                strpos($event, $cleanEvent) === 0) {
-
+            if ($event == $name || $event == $this->_wildcard) {
                 $toNotify[] = $event;
+            } else {
+                if (strpos($event, $this->_wildcard) !== false) {
+                    $cleanEvent = str_ireplace($this->_wildcard, '', $event);
+
+                    if (strpos($event, $cleanEvent) === 0) {
+                        $toNotify[] = $event;
+                    }
+                }
             }
         }
 
+        $notification = new Zym_Notification_Message($name, $sender, $data);
         $notified = array();
 
         foreach ($toNotify as $event) {
