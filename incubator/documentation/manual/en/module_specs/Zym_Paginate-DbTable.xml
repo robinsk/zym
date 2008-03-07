@@ -1,6 +1,11 @@
 <sect1 id="zym.paginate.dbtable">
     <title>Zym_Paginate_DbTable</title>
 
+    <para>
+        The paginator is likely to return a wrong row count when trying to paginate (complex) joined queries. This is an issue that might not get addressed in the future.
+        Consider creating a View for those complex queries and select the desired data from there.
+    </para>
+
     <programlisting role="php"><![CDATA[
 class Foo_Table extends Zend_Db_Table_Abstract
 {

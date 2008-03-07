@@ -38,6 +38,14 @@
         <xi:include href="module_specs/Zym_Notification-Registering.xml" />
         <xi:include href="module_specs/Zym_Notification-Posting.xml" />
     </chapter>
+    
+    <chapter id="zym.paginate">
+        <title>Zym_Dto</title>
+        <xi:include href="module_specs/Zym_Paginate.xml" />
+        <xi:include href="module_specs/Zym_Paginate-Array.xml" />
+        <xi:include href="module_specs/Zym_Paginate-DbTable.xml" />
+        <xi:include href="module_specs/Zym_Paginate-Iterator.xml" />
+    </chapter>
 
     <appendix id="appendix.copyright">
         <title>Copyright Information</title>
