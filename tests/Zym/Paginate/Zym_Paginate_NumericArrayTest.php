@@ -1,5 +1,5 @@
 <?php
-require_once 'trunk/incubator/library/Zym/Paginate/Array.php';
+require_once 'trunk/Zym/Paginate/Array.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Paginate_NumericArrayTest test case.

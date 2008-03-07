@@ -1,5 +1,5 @@
 <?php
-require_once 'trunk/incubator/library/Zym/Paginate/Iterator.php';
+require_once 'trunk/library/Zym/Paginate/Iterator.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Paginate_Iterator test case.

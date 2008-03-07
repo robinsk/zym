@@ -23,6 +23,13 @@
         <title>Zym_Db</title>
         <xi:include href="module_specs/Zym_Db-Table.xml" />
     </chapter>
+    
+    <chapter id="zym.paginate">
+        <title>Zym_Paginate</title>
+        <xi:include href="module_specs/Zym_Paginate.xml" />
+        <xi:include href="module_specs/Zym_Paginate-Array.xml" />
+        <xi:include href="module_specs/Zym_Paginate-Iterator.xml" />
+    </chapter>
 
     <appendix id="appendix.copyright">
         <title>Copyright Information</title>
