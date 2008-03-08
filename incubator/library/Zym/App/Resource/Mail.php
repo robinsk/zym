@@ -55,7 +55,6 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
         )
     );
 
-
     /**
      * Setup mail
      *
@@ -115,7 +114,13 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
         return $transport;
     }
     
-    
+    /**
+     * Parse transport map
+     *
+     * @param string $item
+     * @param array $map
+     * @return string
+     */
     protected function _parseTransportMap($item, array $map)
     {
         $path = null;

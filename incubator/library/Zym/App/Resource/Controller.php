@@ -63,7 +63,10 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             'throw_exceptions' => false,
         
             'module' => array(
-                'directory'       => array(),
+                'directory'       => array(
+                    'modules'
+                ),
+                
                 'controller_name' => null
             ),
             
@@ -208,6 +211,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             foreach ($dirArray as $key => $dir) {
                 // addControllerDirectory(), addModuleDirectory()
                 $addDirectoryFunc = 'add' . ucfirst($name) . 'Directory';
+                $dir = $this->getApp()->getHome($dir);
                 call_user_func_array(array($this->getFrontController(), $addDirectoryFunc), array($dir, $key));
             }
         }

@@ -70,7 +70,7 @@ abstract class Zym_Cache extends Zend_Cache
     public static function setConfig(Zend_Config $config)
     {
         if (!empty($config->default_backend)) {
-            self::setDefaultBackend($config);
+            self::setDefaultBackend($config->default_backend);
         }
 
         // Set config
@@ -79,7 +79,7 @@ abstract class Zym_Cache extends Zend_Cache
             if (isset($config->{$item})) {
                 foreach ($config->{$item} as $end => $config) {
                     $setConfigFunc = 'set' . ucfirst($item) . 'Options';
-                    $this->$setConfigFunc($end, $config->toArray());
+                    self::$setConfigFunc($end, $config->toArray());
                 }
             }
         }

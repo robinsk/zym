@@ -20,12 +20,12 @@
 require_once 'Zym/App/Resource/Abstract.php';
 
 /**
- * @see Zend_Mail
+ * @see Zym_Cache
  */
-require_once 'Zend/Mail.php';
+require_once 'Zym/Cache.php';
 
 /**
- * Mail component configuration
+ * Cache component configuration
  * 
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
@@ -34,24 +34,60 @@ require_once 'Zend/Mail.php';
  * @subpackage Resource
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
-{
-    /**
-     * Default transport adapter prefix
-     *
-     */
-    const DEFAULT_TRANSPORT_PREFIX = 'Zym_App_Resource_Mail_Transport';
-    
+class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
+{   
     /**
      * Default config
      *
      * @var array
      */
     protected $_defaultConfig = array(
-        Zym_App::ENV_DEFAULT => array(
-            'default_transport' => null,        
-            'transport'         => array(),
-            'transport_map'     => array()
+        Zym_App::ENV_DEVELOPMENT => array(
+            'frontend' => array(
+                'core' => array(
+                    'caching' => false
+                ),
+                
+                'output' => array(
+                    'caching' => false
+                ),
+                
+                'function' => array(
+                    'caching' => false
+                ),
+                
+                'class' => array(
+                    'caching' => false
+                ),
+                
+                'file' => array(
+                    'caching' => false
+                ),
+                
+                'page' => array(
+                    'caching' => false
+                )
+            )
+        ),
+        
+        Zym_App::ENV_DEFAULT     => array(
+            'default_backend' => 'file',
+        
+            'frontend' => array(
+                'core' => array(
+                    'automatic_serialization' => true
+                )
+            ),
+            
+            'backend' => array(
+                'file' => array(
+                    'cache_dir' => 'cache' // Relative to Zym_App::PATH_TEMP
+                ),
+                
+                'sqlite' => array(
+                    'cache_db_complete_path' => 'cache/cache.sqlite'
+                )
+            )
         )
     );
 
@@ -63,89 +99,33 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
      */
     public function setup(Zend_Config $config)
     {
-        // Don't do anything if we already have our default obj
-        if ($config->default_transport instanceof Zend_Mail_Transport_Abstract) {
-            Zend_Mail::setDefaultTransport($config->default_transport);
-            return;
-        }
+        Zym_Cache::setConfig($config);
         
-        // Do we skip?
-        if (!$config->default_transport) {
-            return;
-        }
-        
-        // Transport Config
-        $transport = $this->_loadTransport($config);
-        
-        // Set default mail transport
-        Zend_Mail::setDefaultTransport($transport);
+        // Set file cache dir
+        $this->_prependTempPath($config->backend);        
     }
     
     /**
-     * Load transport settings
+     * Prepend temp path to paths
      *
      * @param Zend_Config $config
-     * @return Zend_Mail_Transport_Abstract
      */
-    protected function _loadTransport(Zend_Config $config)
+    protected function _prependTempPath(Zend_Config $config)
     {
-        // Make lowercase
-        $defaultTransport = strtolower($config->default_transport);
-        $transportMap     = array_change_key_case($config->transport_map->toArray(), CASE_LOWER);
-        
-        // Load transport
-        $transportConfig = null;
-        if ($config->transport->$defaultTransport instanceof Zend_Config) {
-            $transportConfig = $config->transport->$defaultTransport;
+        // File
+        $fileOptions = Zym_Cache::getBackendOptions('file');
+        if (isset($fileOptions['cache_dir'])) {
+            $fileOptions = $this->getApp()->getPath(Zym_App::PATH_TEMP, $fileOptions['cache_dir']);
         }
         
-        $transportClass = $this->_parseTransportMap($defaultTransport, $transportMap);
-        $transport = call_user_func(array($transportClass, 'getTransport'), $transportConfig);
-
-        if (!$transport instanceof Zend_Mail_Transport_Abstract) {
-            /**
-             * @see Zym_App_Resource_Mail_Exception
-             */
-            require_once 'Zym/App/Resource/Mail/Exception.php';
-            throw new Zym_App_Resource_Mail_Exception(
-                'Could not load mail transport "' . $defaultTransport . '"'
-            );
+        Zym_Cache::setBackendOptions('file', $fileOptions);
+        
+        // Sqlite
+        $sqliteOptions = Zym_Cache::getBackendOptions('sqlite');
+        if (isset($sqliteOptions['cache_db_complete_path'])) {
+            $sqliteOptions = $this->getApp()->getPath(Zym_App::PATH_TEMP, $sqliteOptions['cache_db_complete_path']);
         }
         
-        return $transport;
-    }
-    
-    
-    protected function _parseTransportMap($item, array $map)
-    {
-        $path = null;
-        
-        if (array_key_exists($item, $map)) {
-            $mapItem = $map[$item];
-            if (isset($mapItem['prefix']) && isset($mapItem['path'])) {
-                $namespace = $prefix;
-                $path = $mapItem['path'];
-            } else if (is_string($mapItem)) {
-                // Assume prefix was given
-                $namespace = $mapItem;
-            }
-            
-            // Make sure we have a class prefix
-            if (!$namespace) {
-                /**
-                 * @see Zym_App_Resource_Mail_Exception
-                 */
-                require_once 'Zym/App/Resource/Mail/Exception.php';
-                throw new Zym_App_Resource_Mail_Exception(
-                    'Could not determine transport map classname of "' . $item . '"'
-                );
-            }
-        } else {
-            $namespace = self::DEFAULT_TRANSPORT_PREFIX;
-        }
-        
-        $classname = rtrim($namespace, '_') . '_' . ucfirst($item);
-        Zend_Loader::loadClass($classname, $path);
-        return $classname;
+        Zym_Cache::setBackendOptions('sqlite', $sqliteOptions);
     }
 }
