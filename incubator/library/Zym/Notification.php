@@ -20,6 +20,11 @@
 require_once 'Zym/Notification/Message.php';
 
 /**
+ * @see Zym_Notification_Registration
+ */
+require_once 'Zym/Notification/Registration.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Notification
@@ -28,18 +33,6 @@ require_once 'Zym/Notification/Message.php';
  */
 class Zym_Notification
 {
-    /**
-     * Constant for the observer key
-     *
-     */
-    const OBSERVER_KEY = 'observer';
-
-    /**
-     * Constant for the callback key
-     *
-     */
-    const CALLBACK_KEY = 'callback';
-
     /**
      * The default callback method name
      *
@@ -169,12 +162,12 @@ class Zym_Notification
 	 * Post the notification
 	 *
 	 * @param Zym_Notification_Message $message
-	 * @param array $observerData
+	 * @param Zym_Notification_Registration $observerData
 	 */
-	protected function _postNotification(Zym_Notification_Message $message, $observerData)
+	protected function _postNotification(Zym_Notification_Message $message, Zym_Notification_Registration $registration)
 	{
-	    $observer = $observerData[self::OBSERVER_KEY];
-        $callback = $observerData[self::CALLBACK_KEY];
+	    $observer = $registration->getObserver();
+        $callback = $registration->getCallback();
 
 	    if ($observer instanceof Zym_Notification_Interface &&
             $callback == $this->_defaultCallback) {
@@ -196,19 +189,6 @@ class Zym_Notification
             $observer->$callback($message);
         }
 	}
-
-	/**
-	 * Get an array with observer registration data
-	 *
-	 * @param object $observer
-	 * @param string $callback
-	 * @return array
-	 */
-    protected function _getObserverRegistration($observer, $callback)
-    {
-        return array(self::OBSERVER_KEY => $observer,
-                     self::CALLBACK_KEY => $callback);
-    }
 
 	/**
 	 * Register an observer for the specified notification
@@ -237,7 +217,9 @@ class Zym_Notification
             }
 
             if (!$this->hasObserver($observerHash, $event)) {
-                $this->_observers[$event][$observerHash] = $this->_getObserverRegistration($observer, $callback);
+                $registration = new Zym_Notification_Registration($observer, $callback);
+
+                $this->_observers[$event][$observerHash] = $registration;
             }
         }
 
