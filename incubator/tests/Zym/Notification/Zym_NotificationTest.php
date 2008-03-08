@@ -1,5 +1,6 @@
 <?php
 require_once 'trunk/incubator/library/Zym/Notification.php';
+require_once 'trunk/incubator/library/Zym/Notification/Interface.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Notification test case.
@@ -16,24 +17,18 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
     protected function setUp ()
     {
         parent::setUp();
-        // TODO Auto-generated Zym_NotificationTest::setUp()
-        $this->Zym_Notification = Zym_Notification::get(/* parameters */);
+
+        $this->Zym_Notification = Zym_Notification::get();
     }
     /**
      * Cleans up the environment after running a test.
      */
     protected function tearDown ()
     {
-        // TODO Auto-generated Zym_NotificationTest::tearDown()
         $this->Zym_Notification = null;
         parent::tearDown();
     }
-    /**
-     * Constructs the test case.
-     */
-    public function __construct ()
-    {    // TODO Auto-generated constructor
-    }
+
     /**
      * Tests Zym_Notification->attach()
      */
@@ -44,7 +39,10 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
         $this->Zym_Notification->attach($this, 'test');
         $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
         $this->assertTrue($hasObserver);
+        $this->Zym_Notification->attach($this);
+        $this->assertTrue($this->Zym_Notification->hasObserver($this, '*'));
         $this->Zym_Notification->detach($this);
+        $this->Zym_Notification->reset();
     }
     /**
      * Tests Zym_Notification->detach()
@@ -97,7 +95,7 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
         $this->Zym_Notification->attach($this, 'foo');
         $hasObserver = $this->Zym_Notification->hasObserver($this, 'foo');
         $this->assertTrue($hasObserver);
-        $this->Zym_Notification->detach($this);
+        $this->Zym_Notification->reset();
     }
     /**
      * Tests Zym_Notification->isRegistered()
@@ -107,34 +105,87 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
         $this->Zym_Notification->attach($this, 'foo');
         $isRegistered = $this->Zym_Notification->isRegistered('foo');
         $this->assertTrue($isRegistered);
-        $this->Zym_Notification->detach($this);
+        $this->Zym_Notification->reset();
     }
     /**
      * Tests Zym_Notification->post()
      */
-    public function testPost ()
+    public function testPost()
     {
-        // TODO Auto-generated Zym_NotificationTest->testPost()
-        $this->markTestIncomplete("post test not implemented");
-        $this->Zym_Notification->post(/* parameters */);
+        $interfaceTest = new TestNotificationInterface();
+        $this->Zym_Notification->attach($interfaceTest, 'foo');
+        $this->Zym_Notification->attach($interfaceTest);
+        $this->Zym_Notification->post('foo', 'bar', array('baz'));
+
+        $notifications = $interfaceTest->getNotifications();
+        $this->assertEquals(1, count($notifications));
+
+        $interfaceTest2 = new TestNotificationInterface();
+        $this->Zym_Notification->attach($interfaceTest2, 'fo*');
+        $this->Zym_Notification->attach($interfaceTest2);
+        $this->Zym_Notification->post('foo', 'bar', array('baz'));
+
+        $notifications = $interfaceTest2->getNotifications();
+        $this->assertEquals(1, count($notifications));
+
+        $customMethodTest = new TestNotification();
+        $this->Zym_Notification->attach($customMethodTest, 'foo', 'msgMe');
+        $this->Zym_Notification->post('foo', 'bar', array('baz'));
+
+        $notifications = $customMethodTest->getNotifications();
+        $this->assertEquals(1, count($notifications));
+
+        $customMethodTest2 = new TestNotification();
+        $this->Zym_Notification->attach($customMethodTest2, 'foo', 'doesNotExist');
+
+        try {
+            $this->Zym_Notification->post('foo', 'bar', array('baz'));
+            $this->fail('Didnt throw exception');
+        } catch (Zym_Notification_Exception_MethodNotImplemented $e) {
+            $this->assertType('Zym_Notification_Exception_MethodNotImplemented', $e);
+        }
     }
-    /**
-     * Tests Zym_Notification::remove()
-     */
-    public function testRemove ()
-    {
-        // TODO Auto-generated Zym_NotificationTest::testRemove()
-        $this->markTestIncomplete("remove test not implemented");
-        Zym_Notification::remove(/* parameters */);
-    }
+
     /**
      * Tests Zym_Notification->reset()
      */
     public function testReset ()
     {
-        // TODO Auto-generated Zym_NotificationTest->testReset()
-        $this->markTestIncomplete("reset test not implemented");
-        $this->Zym_Notification->reset(/* parameters */);
+        $this->Zym_Notification->attach($this, 'test');
+        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $this->assertTrue($hasObserver);
+        $this->Zym_Notification->reset();
+        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $this->assertFalse($hasObserver);
     }
 }
 
+class TestNotification
+{
+    protected $_notifications = array();
+
+    public function msgMe($notification)
+    {
+        $this->_notifications[] = $notification;
+    }
+
+    public function getNotifications()
+    {
+        return $this->_notifications;
+    }
+}
+
+class TestNotificationInterface implements Zym_Notification_Interface
+{
+    protected $_notifications = array();
+
+    public function notify(Zym_Notification_Message $notification)
+    {
+        $this->_notifications[] = $notification;
+    }
+
+    public function getNotifications()
+    {
+        return $this->_notifications;
+    }
+}
