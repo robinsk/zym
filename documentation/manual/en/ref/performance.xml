@@ -1,0 +1,58 @@
+<sect1 id="performance">
+    <title>Performance hints</title>
+    <para>
+        This document describes some methods to increase performance in your Zend Framework based applications.
+    </para>
+
+    <sect2 id="performance.prerequire">
+        <title>Pre-requiring often used files</title>
+        <para>
+            Some often used files, like the ViewRenderer, are included inside a class method. On hosts where opcode caches like APC aren't enabled this increases performances.
+            However, on hosts where opcode caches are enabled this actually decreses performance.
+        </para>
+
+        <para>
+            One way of speeding things up when using an opcode cache is by including often used files in you bootstrap. Below is a list of often used classes.
+            This list is not absolute and not all of these classes are used by everybody. So, if for example you don't use a database, don't include Zend_Db classes.
+        </para>
+
+        <programlisting role="php"><![CDATA[
+Zend_Cache
+Zend_Config_Xml
+Zend_Controller_Action
+Zend_Controller_Action_HelperBroker // Also included by Zend_Controller_Front
+Zend_Controller_Action_Helper_ViewRenderer
+Zend_Controller_Dispatcher_Standard
+Zend_Controller_Front
+Zend_Controller_Plugin_ErrorHandler
+Zend_Controller_Request_Http
+Zend_Controller_Response_Http
+Zend_Controller_Router_Rewrite
+Zend_Db_Table_Row_Abstract
+Zend_Db_Table_Rowset_Abstract
+Zend_Db_Table_Select
+Zend_Exception
+Zend_Filter_Inflector
+Zend_Layout_Controller_Action_Helper_Layout
+Zend_Layout_Controller_Plugin_Layout
+Zend_Loader // Also included by Zend_Controller_Front
+Zend_Registry
+Zend_View
+Zend_View_Helper_Doctype
+Zend_View_Helper_HeadMeta
+Zend_View_Helper_HeadScript
+Zend_View_Helper_HeadStyle
+Zend_View_Helper_HeadTitle
+Zend_View_Helper_Layout
+Zend_View_Helper_Placeholder_Container
+Zend_View_Helper_Placeholder_Registry
+
+Zym_App_Resource_*
+Zym_Controller_Response_Http
+Zym_Controller_Action_Abstract
+]]></programlisting>
+    </sect2>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

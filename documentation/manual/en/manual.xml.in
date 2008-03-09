@@ -31,12 +31,14 @@
         <xi:include href="module_specs/Zym_Paginate-Iterator.xml" />
     </chapter>
 
+	<appendix id="appendix.performance">
+        <title>Performance hints</title>
+        <xi:include href="ref/performance.xml" />
+    </appendix>
+
     <appendix id="appendix.copyright">
         <title>Copyright Information</title>
         <xi:include href="ref/copyrights.xml" />
     </appendix>
     <index id="the.index" />
 </book>
-<!--
-vim:se ts=4 sw=4 et:
--->
