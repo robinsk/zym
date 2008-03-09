@@ -37,6 +37,13 @@ require_once 'Zym/Cache.php';
 class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
 {   
     /**
+     * Priority
+     *
+     * @var integer
+     */
+    protected $_priority = self::PRIORITY_HIGH;
+    
+    /**
      * Default config
      *
      * @var array
@@ -91,7 +98,6 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
         )
     );
 
-
     /**
      * Setup mail
      *
@@ -100,7 +106,7 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         Zym_Cache::setConfig($config);
-        
+
         // Set file cache dir
         $this->_prependTempPath($config->backend);        
     }
@@ -115,15 +121,15 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
         // File
         $fileOptions = Zym_Cache::getBackendOptions('file');
         if (isset($fileOptions['cache_dir'])) {
-            $fileOptions = $this->getApp()->getPath(Zym_App::PATH_TEMP, $fileOptions['cache_dir']);
+            $fileOptions['cache_dir'] = $this->getApp()->getPath(Zym_App::PATH_TEMP, $fileOptions['cache_dir']);
         }
-        
+
         Zym_Cache::setBackendOptions('file', $fileOptions);
         
         // Sqlite
         $sqliteOptions = Zym_Cache::getBackendOptions('sqlite');
         if (isset($sqliteOptions['cache_db_complete_path'])) {
-            $sqliteOptions = $this->getApp()->getPath(Zym_App::PATH_TEMP, $sqliteOptions['cache_db_complete_path']);
+            $sqliteOptions['cache_db_complete_path'] = $this->getApp()->getPath(Zym_App::PATH_TEMP, $sqliteOptions['cache_db_complete_path']);
         }
         
         Zym_Cache::setBackendOptions('sqlite', $sqliteOptions);

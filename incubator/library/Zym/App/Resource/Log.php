@@ -140,3 +140,12 @@ class Zym_App_Resource_Log extends Zym_App_Resource_Abstract
         //$log->setEventItem('ipAddr', $_SERVER['REMOTE_ADDR']);
     }
 }
+$a = array(
+    'writer' => array(
+        'foo' => array(
+            'filter'
+        )
+    ),
+    'filter' => array(),
+    'event'  => array()
+);

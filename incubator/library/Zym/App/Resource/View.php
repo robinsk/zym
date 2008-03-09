@@ -96,26 +96,35 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
      */
     public function setup(Zend_Config $config)
     {
-        // Get view renderer
-        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
-        
-        // Use view from view renderer if possible
-        if ($viewRenderer->view instanceof Zend_View_Abstract) {
-            $view = $viewRenderer->view;
-        } else {
-            /**
-             * @see Zend_View
-             */
-            require_once('Zend/View.php');
-            $view = new Zend_View();
+        if ((!$view = $this->getCache('view')) || (!$viewRenderer = $this->getCache('viewRenderer'))) {
+            // Get view renderer
+            $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
             
-            // Pass view renderer the view
-            $viewRenderer->setView($view);
+            // Use view from view renderer if possible
+            if ($viewRenderer->view instanceof Zend_View_Abstract) {
+                $view = $viewRenderer->view;
+            } else {
+                /**
+                 * @see Zend_View
+                 */
+                require_once('Zend/View.php');
+                $view = new Zend_View();
+                
+                // Pass view renderer the view
+                $viewRenderer->setView($view);
+            }
+            
+            // Do setup
+            $this->_setupView($view, $config->view);
+            $this->_setupViewRenderer($viewRenderer, $config->view_renderer);
+            
+            // Save
+            $this->saveCache($viewRenderer, 'viewRenderer');
+            $this->saveCache($view, 'view');
         }
         
-        // Do setup
-        $this->_setupView($view, $config->view);
-        $this->_setupViewRenderer($viewRenderer, $config->view_renderer);
+        Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+        $viewRenderer->setView($view);
     }
     
     /**

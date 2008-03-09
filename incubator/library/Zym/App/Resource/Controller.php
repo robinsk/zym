@@ -94,7 +94,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             
             'request'    => null,
             'response'   => 'Zym_Controller_Response_Http',
-            'dispatcher' => 'Zym_Controller_Dispatcher_Standard',
+            'dispatcher' => null,
             'router'     => null
         )
     );

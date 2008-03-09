@@ -34,11 +34,24 @@ require_once 'Zend/Controller/Front.php';
  * @subpackage Resource
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
+class Zym_App_Resource_Route extends Zym_App_Resource_Abstract
 {
     /**
-     * Setup autoloader
+     * Default config
      *
+     * @var array
+     */
+    protected $_defaultConfig = array(
+        Zym_App::ENV_DEVELOPMENT => array(),
+        Zym_App::ENV_PRODUCTION  => array(),
+        Zym_App::ENV_TEST        => array(),
+        Zym_App::ENV_DEFAULT     => array()
+    );
+    
+    /**
+     * Setup
+     *
+     * @param Zend_Config $config
      */
     public function setup(Zend_Config $config)
     {

@@ -77,9 +77,9 @@ abstract class Zym_Cache extends Zend_Cache
         $map = array('frontend', 'backend');
         foreach ($map as $item) {
             if (isset($config->{$item})) {
-                foreach ($config->{$item} as $end => $config) {
+                foreach ($config->get($item) as $end => $endConfig) {
                     $setConfigFunc = 'set' . ucfirst($item) . 'Options';
-                    self::$setConfigFunc($end, $config->toArray());
+                    self::$setConfigFunc($end, $endConfig->toArray());
                 }
             }
         }
@@ -102,6 +102,15 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function getDefaultBackend()
     {
+        if (self::$_defaultBackend == null) {
+            /**
+             * @see Zym_Cache_Exception
+             */
+            require_once 'Zym/Cache/Exception.php';
+            throw new Zym_Cache_Exception(
+                'Cannot retrieve default backend  because it has not been set.'
+            );
+        }
         return self::$_defaultBackend;
     }
 
@@ -111,7 +120,7 @@ abstract class Zym_Cache extends Zend_Cache
      * @param string $frontend
      * @param array $options
      */
-    public static function setFrontendOptions($frontend, $options = array())
+    public static function setFrontendOptions($frontend, array $options = array())
     {
         self::$_frontendOptions[strtolower($frontend)] = $options;
     }

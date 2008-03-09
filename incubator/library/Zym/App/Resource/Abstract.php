@@ -102,8 +102,11 @@ abstract class Zym_App_Resource_Abstract
      * Construct
      * 
      */
-    public function __construct(Zend_Config $config = null, $environment = null)
+    public function __construct(Zym_App $app, Zend_Config $config = null, $environment = null)
     {
+        // Set app
+        $this->setApp($app);
+        
         // Set config
         if ($config) {
             $this->setConfig($config, $environment);
@@ -156,6 +159,7 @@ abstract class Zym_App_Resource_Abstract
      * Return a Zend_Config object populated with appropriate properties and
      * reasonable default values for this resource type.
      *
+     * @param string $environment
      * @return Zend_Config
      */
     public function getDefaultConfig($environment = null)
@@ -200,10 +204,14 @@ abstract class Zym_App_Resource_Abstract
      * @return Zym_App_Resource_Abstract
      */
     public function setConfig(Zend_Config $config, $environment = null)
-    {
-        // Merge default config with user config
-        $defaultConfig = $this->getDefaultConfig($environment);
-        $this->_config = $this->_mergeConfig($defaultConfig, $config);
+    {   
+        if (!($this->_config = $this->getCache('config'))) {
+            // Merge default config with user config
+            $defaultConfig = $this->getDefaultConfig($environment);
+            $this->_config = $this->_mergeConfig($defaultConfig, $config);
+        
+            $this->saveCache($this->_config);
+        }
         
         return $this;
     }
@@ -270,6 +278,48 @@ abstract class Zym_App_Resource_Abstract
         }
 
         return $registry;
+    }
+    
+    /**
+     * Get cache object
+     *
+     * @param string $id
+     * @return Zend_Cache_Core|mixed
+     */
+    public function getCache($id = null)
+    {
+        if ($id !== null) {
+            return $this->getApp()->getCache()->load($this->_makeCacheId($id));
+        }
+        
+        return $this->getApp()->getCache();
+    }
+    
+    /**
+     * Save cache proxy
+     *
+     * @param mixed $value
+     * @param string $id
+     * @return boolean
+     */
+    public function saveCache($value, $id = null)
+    {
+        return $this->getApp()->getCache()->save($value, $this->_makeCacheId($id));
+    }
+    
+    /**
+     * Make cache id
+     *
+     * @param string $id
+     * @return string
+     */
+    protected function _makeCacheId($id)
+    {
+        if ($id == null) {
+            return null;
+        }
+        
+        return get_class($this) . '__' . $this->getApp()->getEnvironment() . '__' . $id;
     }
     
     /**

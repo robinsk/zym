@@ -19,6 +19,11 @@
 require_once 'Zym/App/Registry.php';
 
 /**
+ * @see Zend_Config
+ */
+require_once 'Zend/Config.php';
+
+/**
  * @see Zend_Loader
  */
 require_once 'Zend/Loader.php';
@@ -91,6 +96,13 @@ class Zym_App
     protected static $_instance;
     
     /**
+     * Cache object
+     *
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
+    
+    /**
      * Zend_Config
      *
      * @var Zend_Config
@@ -103,28 +115,57 @@ class Zym_App
      * @var array
      */
     protected $_defaultConfig = array(
-        'home' => '../',
+        self::ENV_PRODUCTION  => array(),
         
-        'namespace' => array(
-            'SpotSec' => 'Zym_App_Resource'
+        self::ENV_DEVELOPMENT => array(
+            'throw_exceptions' => true,
+            'cache' => array(
+                'enabled' => false
+            )
         ),
         
-        'path' => array(
-            self::PATH_CONFIG => 'config',
-            self::PATH_TEMP => 'temp',
-        ),
+        self::ENV_TEST        => array(),
         
-        'default_resource' => array(
-            'disabled' => false,
-            'config' => '%s.xml',
-            'environment' => null,
-            'namespace' => null,
-            'priority' => null
-        ),
+        self::ENV_DEFAULT     => array(
+            'name' => 'App',
         
-        'resource' => array(),        
-        'registry' => null
+            'home' => '../',
+            
+            'throw_exceptions' => false,
+        
+            'namespace' => array(
+                'Zym' => 'Zym_App_Resource'
+            ),
+            
+            'path' => array(
+                self::PATH_CONFIG => 'config',
+                self::PATH_TEMP => 'temp',
+            ),
+            
+            'default_resource' => array(
+                'disabled' => false,
+                'config' => '%s.xml',
+                'environment' => null,
+                'namespace' => null,
+                'priority' => null
+            ),
+            
+            'cache' => array(
+                'enabled' => true,
+                'prefix'  => null
+            ),
+            
+            'resource' => array(),        
+            'registry' => null
+        )
     );
+    
+    /**
+     * Default config object cache
+     *
+     * @var Zend_Config
+     */
+    private $_defaultConfigObject;
     
     /**
      * Environment
@@ -167,7 +208,7 @@ class Zym_App
      * @var array
      */
     protected $_scriptPaths = array(
-        'SpotSec' => array(
+        'Zym' => array(
             'dir'    => 'Zym/Application/',
             'prefix' => 'Zym_App_'
         )
@@ -211,12 +252,13 @@ class Zym_App
      */
     public function setConfig($config, $format = null)
     {
-        $configObj = $this->_loadConfig($config, $this->getEnvironment(), $format);
+        $environment = $this->getEnvironment();
+        $configObj = $this->_loadConfig($config, $environment, $format);
         
         // Merge default config with user config
-        $defaultConfig = $this->getDefaultConfig();
+        $defaultConfig = $this->getDefaultConfig($environment);
         $this->_config = $this->_mergeConfig($defaultConfig, $configObj);
-                        
+            
         return $this;
     }
 
@@ -238,28 +280,156 @@ class Zym_App
      * Return a Zend_Config object populated with appropriate properties and
      * reasonable default values for this resource type.
      *
+     * @param  string $environment
      * @return Zend_Config
      */
-    public function getDefaultConfig()
+    public function getDefaultConfig($environment = null)
     {
-        return new Zend_Config($this->_defaultConfig);
+        // Cache config obj
+        if (!$this->_defaultConfigObject instanceof Zend_Config) {
+            // Set default environment if environment doesn't exist
+            if ($environment === null || !array_key_exists($environment, $this->_defaultConfig)) {
+                $environment = Zym_App::ENV_DEFAULT;
+            }
+            
+            // Merge environment with default environment
+            if (array_key_exists($environment, $this->_defaultConfig)) {
+                $config = $this->_defaultConfig[$environment];
+                if ($environment !== Zym_App::ENV_DEFAULT && array_key_exists(Zym_App::ENV_DEFAULT, $this->_defaultConfig)) {
+                    $config = $this->_mergeConfig($this->_defaultConfig[Zym_App::ENV_DEFAULT], $config);
+                }
+            } else {
+                $config = array();
+            }
+            
+            $this->_defaultConfigObject = new Zend_Config($config);
+        }
+        
+        return $this->_defaultConfigObject;
     }
     
     /**
      * Get path
      *
      * @param string $key
+     * @param string $append
      * @return Zend_Config
      */
-    public function getPath($key)
+    public function getPath($key, $append = null)
     {
-        $path = self::_normalizePath($this->getConfig()->home)
-                . DIRECTORY_SEPARATOR
-                . self::_normalizePath($this->getConfig()->path->{$key});
-                
+        // Return root instead
+        $relativeRoot = substr((string) $append, 0, 1);
+        if (in_array($relativeRoot, array('/', '\\'))) { // We don't support windows specific format
+            return $append;                              // Use '/' as it works on all platforms
+        }
+        
+        $config = $this->getConfig();
+        
+        if (isset($config->path->{$key})) {
+            $path = $this->getHome(self::_normalizePath($config->path->{$key}));
+        } else {
+            /**
+             * @see Zym_App_Exception
+             */
+            require_once 'Zym/App/Exception.php';
+            throw new Zym_App_Exception(sprintf('Path "%s" does not exist.', $key));
+        }
+        
+        // Append for relative paths
+        if (!empty($append)) {
+            $path .= $append;
+        }
+        
         return $path;
     }
+    
+    /**
+     * Get home directory
+     * 
+     * The home directory is the current working directory for this bootstrap
+     * class. By referencing from the home, it allows this component to be
+     * CLI friendly.
+     * 
+     * Providing append allows it to append to the home path another path.
+     * If the appending path is absolute, it will return the path instead.
+     *
+     * @param string $append 
+     * @return string
+     */
+    public function getHome($append = null)
+    {
+        // Return root instead
+        $relativeRoot = substr((string) $append, 0, 1);
+        if (in_array($relativeRoot, array('/', '\\'))) { // We don't support windows specific format
+            return $append;                              // Use '/' as it works on all platforms
+        }
+        
+        $config = $this->getConfig();
+        
+        if (!isset($config->home)) {
+            /**
+             * @see Zym_App_Exception
+             */
+            require_once 'Zym/App/Exception.php';
+            throw new Zym_App_Exception('Config key "home" is not set');
+        }
+        
+        $home = self::_normalizePath($config->home);
+        
+        // Append home for relative paths
+        if (!empty($append)) {
+            $home .= $append;
+        }
+        
+        return $home;
+    }
 
+    /**
+     * Set cache object
+     *
+     * @param Zend_Cache_Core $cache
+     */
+    public function setCache(Zend_Cache_Core $cache)
+    {
+        $this->_cache = $cache;
+    }
+    
+    /**
+     * Get cache object
+     *
+     * @param string $id
+     * @return Zend_Cache_Core|mixed
+     */
+    public function getCache($id = null)
+    {
+        // Sanity check
+        if (!$this->_cache instanceof Zend_Cache_Core) {
+            /**
+             * @see Zym_App_Exception
+             */
+            require_once('Zym/Application/Exception.php');
+            throw new Zym_App_Exception('Cache object has not been set.');
+        }
+        
+        if ($id !== null) {
+            return $this->_cache->load($this->_makeCacheId($id));
+        }
+        
+        return $this->_cache;
+    }
+    
+    /**
+     * Save cache proxy
+     *
+     * @param mixed $value
+     * @param string $id
+     * @return boolean
+     */
+    public function saveCache($value, $id = null)
+    {
+        return $this->getCache()->save($value, $this->_makeCacheId($id));
+    }
+    
     /**
      * Add a script path to the stack
      *
@@ -269,12 +439,12 @@ class Zym_App
      */
     public function addResourcePath($id, $path, $prefix = 'Zym_App_Resource')
     {
-        // Make sure it ends in a PATH_SEPARATOR
-        if (substr($path, -1, 1) != DIRECTORY_SEPARATOR) {
+        // Make sure it ends in a DIRECTORY_SEPARATOR
+        if (substr($path, -1, 1) != '/\\') {
             $path .= DIRECTORY_SEPARATOR;
         }
 
-        // Make sure it ends in a PATH_SEPARATOR
+        // Make sure it ends in a _
         $prefix = rtrim($prefix, '_') . '_';
 
         $info['dir']    = $path;
@@ -418,7 +588,7 @@ class Zym_App
      */
     public function setExceptionHandler(Zym_App_ExceptionHandler_Abstract $handler)
     {
-        $handler->setApplication($this);
+        $handler->setApp($this);
         $this->_exceptionHandler = $handler;
         return $this;
     }
@@ -474,6 +644,32 @@ class Zym_App
             // Get config
             $config = $this->getConfig();
             
+            // Cache setup
+            if (!$this->_cache instanceof Zend_Cache_Core) {
+                /**
+                 * @see Zend_Cache
+                 */
+                require_once('Zend/Cache.php');
+                
+                if ($config->cache->enabled) {
+                    if (!extension_loaded('apc')) {
+                        /**
+                         * @see Zym_App_Exception
+                         */
+                        require_once 'Zym/App/Exception.php';
+                        throw new Zym_App_Exception(
+                            'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature.'
+                        );
+                    }
+                    
+                    $this->_cache = Zend_Cache::factory('Core', 'Apc', array(
+                        'automatic_serialization' => true,
+                        'cache_id_prefix' => $config->cache->prefix
+                    ));
+                } else {
+                    $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
+                }
+            }
             // Load namespaces
             $this->_parseNamespaces($config);
 
@@ -526,58 +722,73 @@ class Zym_App
      */
     protected function _parseResources(Zend_Config $config)
     {
+        if (!$config->get('resource') instanceof Zend_Config) {
+            return;
+        }
+        
         // Lets handle resources provided by config
-        foreach ($config->resource as $name => $resource) {            
-            // Get default resource config
-            $defaultResConfig = $config->default_resource->toArray();
-            
-            // Convert placeholder to filename
-            if (is_string($defaultResConfig['config'])) {
-                $defaultResConfig['config'] = sprintf($defaultResConfig['config'], $name);
-            }
-            
-            // Merge default config with actual config
-            $resource = $this->_mergeConfig($defaultResConfig, $resource);
-
-            // Run if enabled
-            if ((isset($resource->disabled) && $resource->disabled === '') || $resource->disabled) {
-                continue;
-            }
-
-            // Load resource config
-            if (!$resource->config instanceof Zend_Config) {
-                // Load a resource config from file specified
-                $resConfigFile = $this->getPath(self::PATH_CONFIG) 
-                                    . DIRECTORY_SEPARATOR 
-                                    . $this->_normalizePath($resource->config);
-                                    
-                // Make sure it exists      
-                if (file_exists($resConfigFile)) {
-                    // Create config obj
-                    $environment = $resource->environment ? $resource->environment : $this->getEnvironment();
-                    $resConfig = $this->_loadConfig($resConfigFile, $environment);
-                } else {
-                    $resConfig = new Zend_Config(array());
+        foreach ($config->get('resource') as $name => $resource) {   
+            if (!$resource = $this->getCache('resource_' . $name)) {         
+                // Get default resource config
+                $defaultResConfig = $config->get('default_resource')->toArray();
+                
+                // Convert placeholder to filename
+                if (is_string($defaultResConfig['config'])) {
+                    $defaultResConfig['config'] = sprintf($defaultResConfig['config'], $name);
                 }
-            } else {
-                // Use the config provided
-                $resConfig = $resource->config;
+                
+                // Merge default config with actual config
+                $resource = $this->_mergeConfig($defaultResConfig, $resource);
+    
+                // Run if enabled
+                if ((isset($resource->disabled) && $resource->get('disabled') === '') || $resource->get('disabled')) {
+                    continue;
+                }
+                
+                $this->getCache()->save($resource);
+            }
+            
+            // Environment
+            $environment = $resource->get('environment') ? $resource->get('environment') : $this->getEnvironment();
+            $namespace   = $resource->get('namespace')   ? $resource->get('namespace')   : null;
+            
+            // Load resource config
+            if (!$resConfig = $this->getCache('resource_config_' . $name)) {
+                if (!$resource->get('config') instanceof Zend_Config) {
+                    // Load a resource config from file specified
+                    $resConfigFile = $this->getPath(self::PATH_CONFIG, $resource->get('config'));
+                                        
+                    // Make sure it exists      
+                    if (file_exists($resConfigFile)) {
+                        // Create config obj
+                        $resConfig = $this->_loadConfig($resConfigFile, $environment);
+                    } else {
+                        $resConfig = new Zend_Config(array());
+                    }
+                } else {
+                    // Use the config provided
+                    $resConfig = $resource->get('config');
+                }
+                                    
+                $this->getCache()->save($resConfig);
             }
             
             // Load resource object
-            $namespace = $resource->namespace ? trim($resource->namespace) : null;
             $loadedScript = $this->_loadResource($name, $namespace);
             
-            $script = new $loadedScript($resConfig, $environment);
-            $script->setApp($this);
+            $script = new $loadedScript($this, $resConfig, $environment);
             
             // Set custom priority
-           // if ($resource->priority) {
-                
-           // }
+            if (!empty($resource->priority)) {
+                $script->setPriority($resource->get('priority'));
+            }
             
             // Make sure that it's a valid script
             if (!$script instanceof Zym_App_Resource_Abstract) {
+                /**
+                 * @see Zym_App_Exception
+                 */
+                require_once 'Zym/App/Exception.php';
                 throw new Zym_App_Exception(
                     "Resource script \"$name\" is not an instance of Zym_App_Resource_Abstract"
                 );
@@ -605,6 +816,10 @@ class Zym_App
         if ($namespace !== null) {
             $ns = strtolower($namespace);
             if (!isset($scriptPaths[$ns])) {
+                /**
+                 * @see Zym_App_Exception
+                 */
+                require_once 'Zym/App/Exception.php';
                 throw new Zym_App_Exception(
                     "Cannot use namespace '$namespace' for  script '$name' because it does not exist"
                 );
@@ -629,32 +844,13 @@ class Zym_App
             }
         }
 
+        /**
+         * @see Zym_App_Exception
+         */
+        require_once 'Zym/App/Exception.php';
         throw new Zym_App_Exception(
             'Application resource script by name "' . $name . '" not found.'
         );
-    }
-    
-    
-    protected function _loadResourceDefaultEnv($name, $environment, $namespace = null)
-    {
-        if ($namespace === null) {
-            $scriptPaths = $this->getResourcePaths();
-            
-            if (!isset($scriptPaths[$namespace])) {
-                throw new Zym_App_Exception(
-                    "Cannot use namespace '$namespace' for  script '$name' because it does not exist"
-                );
-            }
-            
-            $path = explode('_', $scriptPaths[$namespace]);
-            $namespace = $path[0];
-        }
-        $file = '../data' . "/$namespace/config/$name.xml";
-        
-        if (file_exists($file)) {
-            $config = new Zend_Config_Xml($file, $environment);
-        }
-        return $config;
     }
     
     /**
@@ -696,14 +892,14 @@ class Zym_App
     /**
      * Normalize a path
      *
-     * Trims and removes and leading /\
+     * Trims and removes and leading /\ and adds /
      * 
      * @param string $path
      * @return string
      */
     protected static function _normalizePath($path)
     {
-        return rtrim(trim($path), '/\\');
+        return rtrim(trim($path), '/\\') . '/';
     }
     
     /**
@@ -798,5 +994,20 @@ class Zym_App
         $configObj = new $configClass($config, $environment);
         
         return $configObj;
+    }
+    
+    /**
+     * Make cache id
+     *
+     * @param string $id
+     * @return string
+     */
+    protected function _makeCacheId($id)
+    {
+        if ($id == null) {
+            return null;
+        }
+        
+        return get_class($this) . '__' . $this->getEnvironment() .'__' . $id;
     }
 }
