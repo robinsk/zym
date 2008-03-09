@@ -101,7 +101,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function valid()
     {
-        return $this->_iteratorPage < $this->getPageCount();
+        return $this->_iteratorPage <= $this->getPageCount();
     }
 
     /**

@@ -52,10 +52,10 @@ class Zym_View_Helper_PaginateNavigation
     const MARKUP_LIST_ITEM   = 'listItem';
     const MARKUP_LIST_ACTIVE = 'activeListItem';
 
-    protected $_markupListStart = '<div id="MVHPContainer"><ul id="MVHPList">';
+    protected $_markupListStart = '<div id="ZVHPContainer"><ul id="ZVHPList">';
     protected $_markupListEnd = '</ul></div>';
     protected $_markupListItem = '<li><a href="%s">%s</a></li>';
-    protected $_markupListItemActive = '<li id="MVHPActiveItem"><a href="%s" id="MVHPCurrent">%s</a></li>';
+    protected $_markupListItemActive = '<li id="ZVHPActiveItem"><a href="%s" id="ZVHPCurrent">%s</a></li>';
     /**
      * @var Zend_View_Interface
      */
@@ -118,12 +118,14 @@ class Zym_View_Helper_PaginateNavigation
     protected function _renderPreviousNavigation(Zym_Paginate_Abstract $paginate,
                                                  $targetLocation, $currentPageAttribute, $translations)
     {
+        $xhtml = '';
+
         if ($paginate->hasPrevious()) {
             $firstPageLocation = array_merge($targetLocation,
                                              array($currentPageAttribute => 1));
 
             $previousPageLocation = array_merge($targetLocation,
-                                                array($currentPageAttribute => $paginate->getPreviousPageNr()));
+                                                array($currentPageAttribute => $paginate->getPreviousPageNumber()));
 
             $xhtml .= sprintf($this->_markupListItem,
                               $this->_view->url($firstPageLocation, null, true),
@@ -133,15 +135,19 @@ class Zym_View_Helper_PaginateNavigation
                               $this->_view->url($previousPageLocation, null, true),
                               $translations[self::L10N_KEY_PREVIOUS]);
         }
+
+        return $xhtml;
     }
 
     protected function _renderPages(Zym_Paginate_Abstract $paginate, $targetLocation,
                                     $currentPageAttribute)
     {
+        $xhtml = '';
+
         foreach ($paginate as $pageNumber) {
             $pageLocation = array_merge($targetLocation, array($currentPageAttribute => $pageNumber));
 
-            if ($paginate->isCurrentPageNr($pageNumber)) {
+            if ($paginate->isCurrentPageNumber($pageNumber)) {
                 $xhtml .= sprintf($this->_markupListItemActive,
                                   $this->_view->url($pageLocation, null, true),
                                   $pageNumber);
@@ -151,17 +157,21 @@ class Zym_View_Helper_PaginateNavigation
                                   $pageNumber);
             }
         }
+
+        return $xhtml;
     }
 
     protected function _renderNextNavigation(Zym_Paginate_Abstract $paginate,
                                              $targetLocation, $currentPageAttribute, $translations)
     {
+        $xhtml = '';
+
         if ($paginate->hasNext()) {
             $lastPageLocation = array_merge($targetLocation,
-                                            array($currentPageAttribute => $paginate->getLastPageNr()));
+                                            array($currentPageAttribute => $paginate->getPageCount()));
 
             $nextPageLocation = array_merge($targetLocation,
-                                            array($currentPageAttribute => $paginate->getNextPageNr()));
+                                            array($currentPageAttribute => $paginate->getNextPageNumber()));
 
             $xhtml .= sprintf($this->_markupListItem,
                               $this->_view->url($nextPageLocation, null, true),
@@ -170,5 +180,7 @@ class Zym_View_Helper_PaginateNavigation
                               $this->_view->url($lastPageLocation, null, true),
                               $translations[self::L10N_KEY_LAST]);
         }
+
+        return $xhtml;
     }
 }
