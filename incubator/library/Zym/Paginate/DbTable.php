@@ -73,4 +73,23 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
 
         return $this->_table->fetchAll($this->_select);
     }
+
+    /**
+     * Get the total amount of pages
+     *
+     * @return int
+     */
+    public function getPageCount()
+    {
+        if ($this->_pageCount === 0 && $this->_rowCount > 0) {
+            $rowCount = $this->getRowCount();
+
+            $floor = floor($rowCount / $this->_rowLimit);
+            $rest = $rowCount % $this->_rowLimit;
+
+            $this->_pageCount = $floor + ($rest > 0 ? 1 : 0);
+        }
+
+        return (int) $this->_pageCount;
+    }
 }

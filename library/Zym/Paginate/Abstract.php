@@ -65,7 +65,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function current()
     {
-        return $this->_iteratorPage;
+        return (int) $this->_iteratorPage;
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function key()
     {
-        return $this->_iteratorPage;
+        return (int) $this->_iteratorPage;
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function count()
     {
-        return $this->getPageCount();
+        return (int) $this->getPageCount();
     }
 
     /**
@@ -178,16 +178,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getPageCount()
     {
-        if ($this->_pageCount === 0) {
-            $rowCount = $this->getRowCount();
-
-            $floor = floor($rowCount / $this->_rowLimit);
-            $rest = $rowCount % $this->_rowLimit;
-
-            $this->_pageCount = $floor + ($rest > 0 ? 1 : 0);
-        }
-
-        return $this->_pageCount;
+        return (int) $this->_pageCount;
     }
 
     /**
@@ -197,7 +188,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getRowCount()
     {
-        return $this->_rowCount;
+        return (int) $this->_rowCount;
     }
 
     /**
@@ -312,7 +303,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
             throw new Zym_Paginate_Exception_NoNextPage('No next page');
         }
 
-        return $this->getCurrentPageNumber() + 1;
+        return (int) $this->getCurrentPageNumber() + 1;
     }
 
     /**
@@ -351,7 +342,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
             throw new Zym_Paginate_Exception_NoPreviousPage('No previous page');
         }
 
-        return $this->getCurrentPageNumber() - 1;
+        return (int) $this->getCurrentPageNumber() - 1;
     }
 
     /**

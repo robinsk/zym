@@ -1,5 +1,5 @@
 <?php
-require_once 'trunk/Zym/Paginate/Array.php';
+require_once 'trunk/library/Zym/Paginate/Array.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Paginate_NumericArrayTest test case.
@@ -24,6 +24,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
             $tmp = 'item' . $i;
             $mockData[] = 'v' . $tmp;
         }
+
         $this->mockData = $mockData;
 
         $this->Zym_Paginate_Array = new Zym_Paginate_Array($this->mockData);
@@ -91,7 +92,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     /**
      * Tests Zym_Paginate_Array->getPage()
      */
-    public function testGetPage ()
+    public function testGetPage()
     {
         $page = array('vitem1', 'vitem2');
 
