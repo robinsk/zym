@@ -9,14 +9,14 @@
     <programlisting role="php"><![CDATA[
 class Foo_Table extends Zend_Db_Table_Abstract
 {
-    public function getCoolStuffByPage($page = 1, $perpage = 10)
+    public function getCoolStuffPaginator($perpage = 10)
     {
         $select = $this->select()->where('status=?', 'cool');
 
         $paginate = new Zym_Paginate_DbTable($this, $select);
         $paginate->setRowLimit($perpage);
 
-        return $paginate->getPage($page);
+        return $paginate;
     }
 }
 ]]></programlisting>
