@@ -51,6 +51,39 @@ Zym_App_Resource_*
 Zym_Controller_Response_Http
 Zym_Controller_Action_Abstract
 ]]></programlisting>
+
+<programlisting role="php"><![CDATA[
+// Copy/paste this to pre-require these files for increased performance with opcode caches.
+require_once 'Zend/Cache';
+require_once 'Zend/Config/Xml';
+require_once 'Zend/Controller/Action';
+require_once 'Zend/Controller/Action/Helper/ViewRenderer';
+require_once 'Zend/Controller/Dispatcher/Standard';
+require_once 'Zend/Controller/Front';
+require_once 'Zend/Controller/Plugin/ErrorHandler';
+require_once 'Zend/Controller/Request/Http';
+require_once 'Zend/Controller/Response/Http';
+require_once 'Zend/Controller/Router/Rewrite';
+require_once 'Zend/Db/Table/Row/Abstract';
+require_once 'Zend/Db/Table/Rowset/Abstract';
+require_once 'Zend/Db/Table/Select';
+require_once 'Zend/Exception';
+require_once 'Zend/Filter/Inflector';
+require_once 'Zend/Layout/Controller/Action/Helper/Layout';
+require_once 'Zend/Layout/Controller/Plugin/Layout';
+require_once 'Zend/Registry';
+require_once 'Zend/View';
+require_once 'Zend/View/Helper/Doctype';
+require_once 'Zend/View/Helper/HeadMeta';
+require_once 'Zend/View/Helper/HeadScript';
+require_once 'Zend/View/Helper/HeadStyle';
+require_once 'Zend/View/Helper/HeadTitle';
+require_once 'Zend/View/Helper/Layout';
+require_once 'Zend/View/Helper/Placeholder/Container';
+require_once 'Zend/View/Helper/Placeholder/Registry';
+require_once 'Zym/Controller/Response/Http';
+require_once 'Zym/Controller/Action/Abstract';
+]]></programlisting>
     </sect2>
 </sect1>
 <!--
