@@ -30,14 +30,6 @@
         <xi:include href="module_specs/Zym_Dto.xml" />
     </chapter>
 
-    <chapter id="zym.notification">
-        <title>Zym_Notification</title>
-        <xi:include href="module_specs/Zym_Notification.xml" />
-        <xi:include href="module_specs/Zym_Notification-Center.xml" />
-        <xi:include href="module_specs/Zym_Notification-Registering.xml" />
-        <xi:include href="module_specs/Zym_Notification-Posting.xml" />
-    </chapter>
-
     <appendix id="appendix.copyright">
         <title>Copyright Information</title>
         <xi:include href="ref/copyrights.xml" />

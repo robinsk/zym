@@ -2,61 +2,74 @@
   <title>Zym_Notification</title>
 
   <para>
-    A notification encapsulates information about an event, such as a row
-    saved to a database or a dispatchLoopStartup in the front controller.
+    <code>Zym_Notification</code> provides an infrastructure to relay messages between objects that don't necessarily know eachother.
+    This provides a loose coupling between components and makes your app more flexible.
   </para>
-  
-  <para>
-    When an object would like to respond to an event, it registers itself with 
-    <link linkend="zym.notification.center"><code>Zym_Notification_Center</code></link>.
-    
-    When an event is triggered, <link linkend="zym.notification.center"><code>Zym_Notification_Center</code></link> will
-    broadcast a notification to registered objects.
-  </para>  
-  
-  <sect2 id="zym.notification.message-passing">
-    <title>Message Passing</title>
-    
-    <para>
-      The standard way to pass information between objects is message
-      passing—one object invokes the method of another object. However, message
-      passing requires that the object sending the message know who the receiver
-      is and what messages it responds to. At times, this tight coupling of two
-      objects is undesirable—most notably because it would join together two
-      otherwise independent subsystems.
-    </para>
-  </sect2>
-  
-  <sect2 id="zym.notification.message-broadcast">
-    <title>Broadcast</title>
-    
-    <para>
-      For these cases, a broadcast model is
-      introduced: An object posts a notification, which is dispatched to the
-      appropriate observers through the Zym_Notification_Center. A
-      Zym_Notification object (referred to as a notification) contains a name,
-      an object, and an optional array. The name is a tag identifying the
-      notification.
-    </para>
-    
-    <para>
-      The object is any object that the poster of the notification
-      wants to send to observers of that notification (typically, it is the
-      object that posted the notification). The array stores other related
-      objects if any. Any object may post a notification. Other objects can
-      register themselves with the notification center as observers to receive
-      notifications when they are posted. The notification center takes care of
-      broadcasting notifications to the registered observers, if any. The object
-      posting the notification, the object included in the notification, and the
-      observer of the notification may all be different objects or the same
-      object. Objects that post notifications need not know anything about the
-      observers. On the other hand, observers need to know at least the
-      notification name. Using the notification system is similar to using
-      delegates, but it has these advantages: Any number of objects may receive
-      the notification, not just the delegate object. This precludes returning a
-      value. An object may receive any message you like from the notification
-      center, not just the predefined delegate methods. The object posting the
-      notification does not even have to know the observer exists.
-    </para>
-  </sect2>
+
+  <sect2 id="zym.notification.registering">
+	  <title>(Un)registering to a notification</title>
+
+	  <para>Registering to a notification is done at <code>Zym_Notification</code>:</para>
+
+	  <programlisting role="php"><![CDATA[
+$notification = Zym_Notification::get();
+$notification->attach($theReceivingObject, ‘testEvent’);
+]]></programlisting>
+
+	  <para>In this snippet an object is attached to the testEvent notification.
+	  All posts that are sent to the ‘testEvent’ notification will be passed to
+	  the $receivingObject. By default the notifications will be posted to the
+	  notify() method. An optional third parameter in the attach() method allows
+	  you to use a custom method.</para>
+
+	  <programlisting role="php"><![CDATA[
+$notification = Zym_Notification::get();
+$notification->attach($theReceivingObject, ‘testEvent’, ‘customMethod’);
+]]></programlisting>
+
+	  <para>In this case, all ‘testEvent’ notifications will be posted to the
+	  customMethod() method in $theReceivingObject. There is a special attach
+	  method called attachCatchAll(). An object that is registered to the
+	  catch-all will receive all notifications. If you want to unregister an
+	  object from the notification center you can call the detach() method. This
+	  method takes one mandatory and one optional argument. The first argument is
+	  the object you want to detach. The second, optional, argument is the
+	  notification that you want to detach the object from. If the second argument
+	  is left blank, the notification center will remove the object from all
+	  notifications. Don’t forget to detach an object from the
+	  notification center when it’s destroyed! See the next section for an example
+	  of how to make sure this gets done. Receiving a notification By default the
+	  notifications are sent to the notify() method of the receiver.</para>
+
+	  <programlisting role="php"><![CDATA[
+class MyClass
+{
+  protected $_notification= null;
+
+  public function __construct()
+  {
+    $this->_notification = Zym_Notification::get();
+    $this->_notification->attach($this, 'testEvent');
+  }
+
+  public function __destruct()
+  {
+    $this->_notification->detach($this);
+  }
+
+  public function notify(Zym_Notification $notification)
+  {
+    if ('testEvent' == $notification->getName()) {
+      Zend_Registry::get('log')->log('testEvent was triggered and received by MyClass!');
+    }
+  }
+}
+]]></programlisting>
+
+	  <para>In the example above the MyClass instance is automatically registered
+	  to the ‘testEvent’ notification at instantiation. If and when the
+	  ‘testEvent’ notification is sent, the notify() method will receive it so it
+	  can be processed. Note the __destruct() method which explicitly detaches the
+	  object from the notification center.</para>
+	</sect2>
 </sect1>
