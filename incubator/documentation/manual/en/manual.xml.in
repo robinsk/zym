@@ -21,7 +21,6 @@
 
     <chapter id="zym.controller">
         <title>Zym_Controller</title>
-        <xi:include href="module_specs/Zym_Controller-Action.xml" />
         <xi:include href="module_specs/Zym_Controller-ActionHelper-MultiPageForm.xml" />
         <xi:include href="module_specs/Zym_Controller-Plugins-LayoutSwitcher.xml" />
     </chapter>
@@ -37,11 +36,6 @@
         <xi:include href="module_specs/Zym_Notification-Center.xml" />
         <xi:include href="module_specs/Zym_Notification-Registering.xml" />
         <xi:include href="module_specs/Zym_Notification-Posting.xml" />
-    </chapter>
-    
-    <chapter id="zym.paginate">
-        <title>Zym_Paginate</title>
-        <xi:include href="module_specs/Zym_Paginate-DbTable.xml" />
     </chapter>
 
     <appendix id="appendix.copyright">

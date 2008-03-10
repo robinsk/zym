@@ -2,7 +2,7 @@
     <title>Zym_Paginate</title>
 
     <para>
-        <code>Zym_Paginate</code> provides a generic way to paginate data. It provides support for two different collections out of the box.
-        It supports both numeric and associative PHP arrays and <code>Iterator</code> instances.
+        <code>Zym_Paginate</code> provides a generic way to paginate data. It provides support for three different collections out of the box.
+        It supports both numeric and associative PHP arrays, database data through <code>Zend_Db_Table</code> and <code>Iterator</code> instances.
     </para>
 </sect1>

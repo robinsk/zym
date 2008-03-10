@@ -19,6 +19,11 @@
         </copyright>
     </bookinfo>
 
+	<chapter id="zym.controller">
+        <title>Zym_Controller</title>
+        <xi:include href="module_specs/Zym_Controller-Action.xml" />
+    </chapter>
+
     <chapter id="zym.db">
         <title>Zym_Db</title>
         <xi:include href="module_specs/Zym_Db-Table.xml" />
@@ -28,6 +33,7 @@
         <title>Zym_Paginate</title>
         <xi:include href="module_specs/Zym_Paginate.xml" />
         <xi:include href="module_specs/Zym_Paginate-Array.xml" />
+        <xi:include href="module_specs/Zym_Paginate-DbTable.xml" />
         <xi:include href="module_specs/Zym_Paginate-Iterator.xml" />
     </chapter>
 
