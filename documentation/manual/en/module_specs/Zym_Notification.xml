@@ -36,8 +36,7 @@ $notification->attach($theReceivingObject, ‘testEvent’, ‘customMethod’);
 	  the object you want to detach. The second, optional, argument is the
 	  notification that you want to detach the object from. If the second argument
 	  is left blank, the notification center will remove the object from all
-	  notifications. Don’t forget to detach an object from the
-	  notification center when it’s destroyed! See the next section for an example
+	  notifications. Don’t forget to detach an object when it’s destroyed! See the next section for an example
 	  of how to make sure this gets done. Receiving a notification By default the
 	  notifications are sent to the notify() method of the receiver.</para>
 
