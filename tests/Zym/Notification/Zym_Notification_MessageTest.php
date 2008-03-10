@@ -1,5 +1,5 @@
 <?php
-require_once 'trunk/incubator/library/Zym/Notification/Message.php';
+require_once 'trunk/library/Zym/Notification/Message.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Notification_Message test case.

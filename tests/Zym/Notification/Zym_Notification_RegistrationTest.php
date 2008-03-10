@@ -1,5 +1,5 @@
 <?php
-require_once 'trunk/incubator/library/Zym/Notification/Registration.php';
+require_once 'trunk/library/Zym/Notification/Registration.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Notification_Registration test case.

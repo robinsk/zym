@@ -1,6 +1,6 @@
 <?php
-require_once 'trunk/incubator/library/Zym/Notification.php';
-require_once 'trunk/incubator/library/Zym/Notification/Interface.php';
+require_once 'trunk/library/Zym/Notification.php';
+require_once 'trunk/library/Zym/Notification/Interface.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * Zym_Notification test case.

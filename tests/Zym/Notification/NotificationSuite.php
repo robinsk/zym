@@ -1,8 +1,8 @@
 <?php
 require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'trunk/incubator/tests/Zym/Notification/Zym_NotificationTest.php';
-require_once 'trunk/incubator/tests/Zym/Notification/Zym_Notification_MessageTest.php';
-require_once 'trunk/incubator/tests/Zym/Notification/Zym_Notification_RegistrationTest.php';
+require_once 'trunk/tests/Zym/Notification/Zym_NotificationTest.php';
+require_once 'trunk/tests/Zym/Notification/Zym_Notification_MessageTest.php';
+require_once 'trunk/tests/Zym/Notification/Zym_Notification_RegistrationTest.php';
 /**
  * Static test suite.
  */
