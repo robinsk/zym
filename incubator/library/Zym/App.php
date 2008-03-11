@@ -19,6 +19,11 @@
 require_once 'Zym/App/Registry.php';
 
 /**
+ * @see Zend_Cache
+ */
+require_once('Zend/Cache.php');
+
+/**
  * @see Zend_Config
  */
 require_once 'Zend/Config.php';
@@ -643,33 +648,10 @@ class Zym_App
         try {
             // Get config
             $config = $this->getConfig();
-            
+
             // Cache setup
-            if (!$this->_cache instanceof Zend_Cache_Core) {
-                /**
-                 * @see Zend_Cache
-                 */
-                require_once('Zend/Cache.php');
-                
-                if ($config->cache->enabled) {
-                    if (!extension_loaded('apc')) {
-                        /**
-                         * @see Zym_App_Exception
-                         */
-                        require_once 'Zym/App/Exception.php';
-                        throw new Zym_App_Exception(
-                            'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature.'
-                        );
-                    }
-                    
-                    $this->_cache = Zend_Cache::factory('Core', 'Apc', array(
-                        'automatic_serialization' => true,
-                        'cache_id_prefix' => $config->cache->prefix
-                    ));
-                } else {
-                    $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
-                }
-            }
+            $this->_setupCache($config);
+            
             // Load namespaces
             $this->_parseNamespaces($config);
 
@@ -725,29 +707,29 @@ class Zym_App
         if (!$config->get('resource') instanceof Zend_Config) {
             return;
         }
-        
+
         // Lets handle resources provided by config
-        foreach ($config->get('resource') as $name => $resource) {   
+        foreach ($config->get('resource') as $name => $rawResConfig) {   
             if (!$resource = $this->getCache('resource_' . $name)) {         
                 // Get default resource config
                 $defaultResConfig = $config->get('default_resource')->toArray();
-                
+
                 // Convert placeholder to filename
                 if (is_string($defaultResConfig['config'])) {
                     $defaultResConfig['config'] = sprintf($defaultResConfig['config'], $name);
                 }
                 
                 // Merge default config with actual config
-                $resource = $this->_mergeConfig($defaultResConfig, $resource);
-    
-                // Run if enabled
-                if ((isset($resource->disabled) && $resource->get('disabled') === '') || $resource->get('disabled')) {
-                    continue;
-                }
-                
+                $resource = $this->_mergeConfig($defaultResConfig, $rawResConfig);
+                            
                 $this->getCache()->save($resource);
             }
             
+            // Run if enabled
+            if ($resource->get('disabled') === '' || $resource->get('disabled')) {
+                continue;
+            }
+
             // Environment
             $environment = $resource->get('environment') ? $resource->get('environment') : $this->getEnvironment();
             $namespace   = $resource->get('namespace')   ? $resource->get('namespace')   : null;
@@ -1009,5 +991,34 @@ class Zym_App
         }
         
         return get_class($this) . '__' . $this->getEnvironment() .'__' . $id;
+    }
+    
+    /**
+     * Setup Cache
+     *
+     * @param Zend_Config $config
+     */
+    protected function _setupCache(Zend_Config $config)
+    {
+        if (!$this->_cache instanceof Zend_Cache_Core) {
+            if ($config->get('cache')->get('enabled')) {
+                if (!extension_loaded('apc')) {
+                    /**
+                     * @see Zym_App_Exception
+                     */
+                    require_once 'Zym/App/Exception.php';
+                    throw new Zym_App_Exception(
+                        'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature.'
+                    );
+                }
+                
+                $this->_cache = Zend_Cache::factory('Core', 'Apc', array(
+                    'automatic_serialization' => true,
+                    'cache_id_prefix' => $config->get('cache')->get('prefix')
+                ));
+            } else {
+                $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
+            }
+        }
     }
 }
