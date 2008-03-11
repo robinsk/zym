@@ -62,7 +62,7 @@ class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         // Use non-default autoload function?
-        $class = $config->class;
+        $class = $config->get('class');
         
         // Allow loading multiple loaders
         if ($class instanceof Zend_Config) {
@@ -73,8 +73,6 @@ class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
         
         // Register autoload
         foreach ($classes as $loader) {
-            $loader = trim($loader);
-            
             // Should we load autoloaders?
             if (!class_exists($loader)) {
                 Zend_Loader::loadClass($loader);

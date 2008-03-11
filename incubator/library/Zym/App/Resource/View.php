@@ -25,6 +25,11 @@ require_once('Zym/App/Resource/Abstract.php');
 require_once('Zend/Controller/Action/HelperBroker.php');
 
 /**
+ * @see Zend_Controller_Action_Helper_ViewRenderer
+ */
+require_once('Zend/Controller/Action/Helper/ViewRenderer.php');
+
+/**
  * @see Zend_View
  */
 require_once('Zend/View.php');
@@ -104,10 +109,6 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
             if ($viewRenderer->view instanceof Zend_View_Abstract) {
                 $view = $viewRenderer->view;
             } else {
-                /**
-                 * @see Zend_View
-                 */
-                require_once('Zend/View.php');
                 $view = new Zend_View();
                 
                 // Pass view renderer the view

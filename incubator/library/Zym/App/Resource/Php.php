@@ -38,7 +38,8 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEVELOPMENT => array(
-            'error_reporting' => 8191 // E_ALL | E_STRICT
+            'error_reporting' => 8191, // E_ALL | E_STRICT
+            'display_errors'  => true
         ),
 
         Zym_App::ENV_DEFAULT     => array(
@@ -148,7 +149,8 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      */
     protected function _forceDefaultTimezone(Zend_Config $config)
     {
-        if ((bool) $config->force_default_timezone) {
+        // Support <force_default_timezone />
+        if ($config->get('force_default_timezone') || $config->get('force_default_timezone')  === '') {
             $timezone = @date_default_timezone_get();
 
             // Set default timezone
