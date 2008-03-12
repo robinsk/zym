@@ -48,7 +48,7 @@ class Zym_Csv implements Iterator
      *
      * @var int
      */
-    protected $_rowCounter = null;
+    protected $_rowCounter = 0;
 
     /**
      * The delimiter for the CSV file.
@@ -113,7 +113,7 @@ class Zym_Csv implements Iterator
      */
     public function rewind()
     {
-        $this->rowCounter = 0;
+        $this->_rowCounter = 0;
         rewind($this->filePointer);
     }
 
@@ -125,7 +125,10 @@ class Zym_Csv implements Iterator
     public function current()
     {
         $this->currentElement = fgetcsv($this->filePointer, self::ROW_LENGTH, $this->delimiter);
-        $this->rowCounter += 1;
+
+        if ($this->next()) {
+            $this->_rowCounter += 1;
+        }
 
         if (!empty($this->_headers)) {
             $return = array();
@@ -147,7 +150,7 @@ class Zym_Csv implements Iterator
      */
     public function key()
     {
-        return $this->rowCounter;
+        return $this->_rowCounter;
     }
 
     /**
@@ -171,15 +174,7 @@ class Zym_Csv implements Iterator
      */
     public function valid()
     {
-        if (!$this->next()) {
-            if (is_resource($this->filePointer)) {
-                fclose($this->filePointer);
-            }
-
-            return false;
-        }
-
-        return true;
+        return $this->next();
     }
 
     /**
