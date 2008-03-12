@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_ArrayData
+ * @package    Zym_Array
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -17,19 +17,12 @@
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_ArrayData
+ * @package    Zym_Array
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_ArrayData_Interface
+interface Zym_Array_From_Interface
 {
-    /**
-     * Return an array
-     *
-     * @return array
-     */
-    public function toArray();
-
     /**
      * Load data from an array
      *
