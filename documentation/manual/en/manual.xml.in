@@ -19,6 +19,11 @@
         </copyright>
     </bookinfo>
 
+	<chapter id="zym.array">
+        <title>Zym_Array</title>
+        <xi:include href="module_specs/Zym_Array.xml" />
+    </chapter>
+
 	<chapter id="zym.controller">
         <title>Zym_Controller</title>
         <xi:include href="module_specs/Zym_Controller-Action.xml" />
@@ -40,6 +45,11 @@
         <xi:include href="module_specs/Zym_Paginate-Array.xml" />
         <xi:include href="module_specs/Zym_Paginate-DbTable.xml" />
         <xi:include href="module_specs/Zym_Paginate-Iterator.xml" />
+    </chapter>
+    
+    <chapter id="zym.version">
+        <title>Zym_Version</title>
+        <xi:include href="module_specs/Zym_Version.xml" />
     </chapter>
 
 	<appendix id="appendix.performance">
