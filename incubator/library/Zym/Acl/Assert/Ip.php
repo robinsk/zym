@@ -57,6 +57,20 @@ class Zym_Acl_Assert_Ip implements Zend_Acl_Assert_Interface
     protected $_rangeRegex = '/(\d-\d)/';
 
     /**
+     * Range start and end characters
+     *
+     * @var string|array
+     */
+    protected $_rangeSentinels = array('(', ')');
+
+    /**
+     * Range delimiter
+     *
+     * @var string
+     */
+    protected $_rangeDelimiter = '-';
+
+    /**
      * Constructor
      *
      * @param array $addresses
@@ -107,12 +121,12 @@ class Zym_Acl_Assert_Ip implements Zend_Acl_Assert_Interface
 
                 $range = array_pop($exploded);
 
-                $range = str_replace(array('(', ')'), '', $range);
+                $range = str_replace($this->_rangeSentinels, '', $range);
 
                 $ipStart = implode($this->_separator, $exploded);
 
                 if (strpos($ip, $ipStart) === 0) {
-                    list($rangeStart, $rangeEnd) = explode('-', $range);
+                    list($rangeStart, $rangeEnd) = explode($this->_rangeDelimiter, $range);
 
                     for ($i = $rangeStart; $i <= $rangeEnd; $i++) {
                         $checkIp = implode($this->_separator, array($ipStart, $i));
