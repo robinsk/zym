@@ -30,8 +30,31 @@ class Zym_Acl_Assert_Ip implements Zend_Acl_Assert_Interface
 {
     /**
      * IP address whitelist
+     *
+     * @var array
      */
     protected $_addresses = array();
+
+    /**
+     * The wildcard
+     *
+     * @var string
+     */
+    protected $_wildcard = '*';
+
+    /**
+     * IP address separator
+     *
+     * @var string
+     */
+    protected $_separator = '.';
+
+    /**
+     * Regex to match IP ranges
+     *
+     * @var string
+     */
+    protected $_rangeRegex = '/(\d-\d)/';
 
     /**
      * Constructor
@@ -40,9 +63,7 @@ class Zym_Acl_Assert_Ip implements Zend_Acl_Assert_Interface
      */
     public function __construct(array $addresses = array())
     {
-        if (!empty($addresses)) {
-            $this->_addresses = $addresses;
-        }
+        $this->_addresses = $addresses;
     }
 
     /**
@@ -72,35 +93,29 @@ class Zym_Acl_Assert_Ip implements Zend_Acl_Assert_Interface
      */
     protected function _isCleanIP($ip)
     {
-        $wildCard = '*';
-        $separator = '.';
-        $regxMatch = '/(\d-\d)/';
-
         foreach ($this->_addresses as $ipAddress) {
             if ($ip == $ipAddress) {
                 return true;
-            }
-
-            if (strpos($ipAddress, $wildCard) !== false) {
-                $wildcardIp = str_replace($wildCard, '', $ipAddress);
+            } else if (strpos($ipAddress, $this->_wildcard) !== false) {
+                $wildcardIp = str_replace($this->_wildcard, '', $ipAddress);
 
                 if (strpos($ip, $wildcardIp) === 0) {
                     return true;
                 }
-            } else if (preg_match($regxMatch, $ipAddress) == 1) {
-                $exploded = explode($separator, $ipAddress);
+            } else if (preg_match($this->_rangeRegex, $ipAddress) == 1) {
+                $exploded = explode($this->_separator, $ipAddress);
 
                 $range = array_pop($exploded);
 
                 $range = str_replace(array('(', ')'), '', $range);
 
-                $ipStart = implode($separator, $exploded);
+                $ipStart = implode($this->_separator, $exploded);
 
                 if (strpos($ip, $ipStart) === 0) {
                     list($rangeStart, $rangeEnd) = explode('-', $range);
 
                     for ($i = $rangeStart; $i <= $rangeEnd; $i++) {
-                        $checkIp = implode($separator, array($ipStart, $i));
+                        $checkIp = implode($this->_separator, array($ipStart, $i));
 
                         if ($ip == $checkIp) {
                             return true;
