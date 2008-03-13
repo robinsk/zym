@@ -35,27 +35,33 @@ class Zym_View_Helper_PaginateNavigation
     const L10N_KEY_NEXT     = 'next';
 
     /**
-     * Style constants
+     * Translations or the buttons
      *
+     * @var array
      */
-    const STYLE_CONTAINER = 'container';
-    const STYLE_LIST      = 'list';
-    const STYLE_ACTIVE    = 'active';
-    const STYLE_CURRENT   = 'current';
+    protected $_translations = array();
 
     /**
-     * Markup constants
+     * The target location
      *
+     * @var array
      */
-    const MARKUP_LIST_START  = 'listStart';
-    const MARKUP_LIST_END    = 'listEnd';
-    const MARKUP_LIST_ITEM   = 'listItem';
-    const MARKUP_LIST_ACTIVE = 'activeListItem';
+    protected $_targetLocation = array();
 
-    protected $_markupListStart = '<div id="ZVHPContainer"><ul id="ZVHPList">';
-    protected $_markupListEnd = '</ul></div>';
-    protected $_markupListItem = '<li><a href="%s">%s</a></li>';
-    protected $_markupListItemActive = '<li id="ZVHPActiveItem"><a href="%s" id="ZVHPCurrent">%s</a></li>';
+    /**
+     * The url attribute for the current page
+     *
+     * @var string
+     */
+    protected $_currentPageAttrib = 'page';
+
+    /**
+     * The number of page items to display
+     *
+     * @var int
+     */
+    protected $_pageLimit = 11;
+
     /**
      * @var Zend_View_Interface
      */
@@ -84,101 +90,162 @@ class Zym_View_Helper_PaginateNavigation
      * @return string
      */
     public function paginateNavigation(Zym_Paginate_Abstract $paginate, $targetLocation,
-                                       $currentPageAttribute = 'page',
+                                       $limit = 11, $currentPageAttribute = 'page',
                                        $translations = array(self::L10N_KEY_FIRST    => '&lt;&lt; First',
                                                              self::L10N_KEY_PREVIOUS => '&lt; Previous',
                                                              self::L10N_KEY_NEXT     => 'Next &gt;',
                                                              self::L10N_KEY_LAST     => 'Last &gt;&gt;'))
     {
+        $this->_translations = $translations;
+        $this->_targetLocation = $targetLocation;
+        $this->_currentPageAttrib = $currentPageAttribute;
+        $this->_pageLimit = $limit;
+
         $xhtml = $this->_renderPaginationStart();
 
-        $xhtml .= $this->_renderPreviousNavigation($paginate, $targetLocation,
-                                                   $currentPageAttribute, $translations);
+        $xhtml .= $this->_renderPreviousNavigation($paginate);
 
-        $xhtml .= $this->_renderPages($paginate, $targetLocation, $currentPageAttribute);
+        $xhtml .= $this->_renderPages($paginate);
 
-        $xhtml .= $this->_renderNextNavigation($paginate, $targetLocation,
-                                               $currentPageAttribute, $translations);
+        $xhtml .= $this->_renderNextNavigation($paginate);
 
         $xhtml .= $this->_renderPaginationEnd();
 
         return $xhtml;
     }
 
+    /**
+     * Render the opening tags for the pagination
+     *
+     * @return string
+     */
     protected function _renderPaginationStart()
     {
-        return $this->_markupListStart;
+        return '<div id="ZVHPContainer"><ul id="ZVHPList">';
     }
 
+    /**
+     * Render the closing tags for the pagination
+     *
+     * @return string
+     */
     protected function _renderPaginationEnd()
     {
-        return $this->_markupListEnd;
+        return '</ul></div>';
     }
 
-    protected function _renderPreviousNavigation(Zym_Paginate_Abstract $paginate,
-                                                 $targetLocation, $currentPageAttribute, $translations)
+    /**
+     * Render a normal list item
+     *
+     * @param array $location
+     * @param string $text
+     * @return string
+     */
+    protected function _renderListItem(array $location, $text)
+    {
+        return sprintf('<li><a href="%s">%s</a></li>',
+                       $this->_view->url($location, null, true),
+                       $text);
+    }
+
+    /**
+     * Render the active list item
+     *
+     * @param array $location
+     * @param string $text
+     * @return string
+     */
+    protected function _renderActiveListItem(array $location, $text)
+    {
+        return sprintf('<li id="ZVHPActiveItem"><a href="%s" id="ZVHPCurrent">%s</a></li>',
+                       $this->_view->url($location, null, true),
+                       $text);
+    }
+
+    /**
+     * Render the naviagtion to get to previous pages
+     *
+     * @param Zym_Paginate_Abstract $paginate
+     * @return string
+     */
+    protected function _renderPreviousNavigation(Zym_Paginate_Abstract $paginate)
     {
         $xhtml = '';
 
         if ($paginate->hasPrevious()) {
-            $firstPageLocation = array_merge($targetLocation,
-                                             array($currentPageAttribute => 1));
+            $firstPageLocation = array_merge($this->_targetLocation,
+                                             array($this->_currentPageAttrib => 1));
 
-            $previousPageLocation = array_merge($targetLocation,
-                                                array($currentPageAttribute => $paginate->getPreviousPageNumber()));
+            $previousPageLocation = array_merge($this->_targetLocation,
+                                                array($this->_currentPageAttrib => $paginate->getPreviousPageNumber()));
 
-            $xhtml .= sprintf($this->_markupListItem,
-                              $this->_view->url($firstPageLocation, null, true),
-                              $translations[self::L10N_KEY_FIRST]);
+            $xhtml .= $this->_renderListItem($firstPageLocation, $this->_translations[self::L10N_KEY_FIRST]);
 
-            $xhtml .= sprintf($this->_markupListItem,
-                              $this->_view->url($previousPageLocation, null, true),
-                              $translations[self::L10N_KEY_PREVIOUS]);
+            $xhtml .= $this->_renderListItem($previousPageLocation, $this->_translations[self::L10N_KEY_PREVIOUS]);
         }
 
         return $xhtml;
     }
 
-    protected function _renderPages(Zym_Paginate_Abstract $paginate, $targetLocation,
-                                    $currentPageAttribute)
+    /**
+     * Render the page navigation
+     *
+     * @param Zym_Paginate_Abstract $paginate
+     * @param int $limit
+     * @return string
+     */
+    protected function _renderPages(Zym_Paginate_Abstract $paginate)
     {
         $xhtml = '';
 
-        foreach ($paginate as $pageNumber) {
-            $pageLocation = array_merge($targetLocation, array($currentPageAttribute => $pageNumber));
+        $currentPageNumber = $paginate->getCurrentPageNumber();
+        $centerOffset = floor($this->_pageLimit / 2);
+        $lastPageNumber = $paginate->getPageCount();
 
-            if ($paginate->isCurrentPageNumber($pageNumber)) {
-                $xhtml .= sprintf($this->_markupListItemActive,
-                                  $this->_view->url($pageLocation, null, true),
-                                  $pageNumber);
+        if ($currentPageNumber <= $centerOffset) {
+            $startNumber = 1;
+            $endNumber = $this->_pageLimit;
+        } else if ($currentPageNumber >= $lastPageNumber - $centerOffset) {
+            $startNumber = $lastPageNumber - $this->_pageLimit + 1;
+            $endNumber = $lastPageNumber;
+        } else {
+            $startNumber = $currentPageNumber - $centerOffset;
+            $endNumber = $currentPageNumber + $centerOffset;
+        }
+
+        for ($i = $startNumber; $i <= $endNumber; $i++) {
+            $pageLocation = array_merge($this->_targetLocation, array($this->_currentPageAttrib => $i));
+
+            if ($i == $currentPageNumber) {
+                $xhtml .= $this->_renderActiveListItem($pageLocation, $i);
             } else {
-                $xhtml .= sprintf($this->_markupListItem,
-                                  $this->_view->url($pageLocation, null, true),
-                                  $pageNumber);
+                $xhtml .= $this->_renderListItem($pageLocation, $i);
             }
         }
 
         return $xhtml;
     }
 
-    protected function _renderNextNavigation(Zym_Paginate_Abstract $paginate,
-                                             $targetLocation, $currentPageAttribute, $translations)
+    /**
+     * Render the naviagtion to get to next pages
+     *
+     * @param Zym_Paginate_Abstract $paginate
+     * @return string
+     */
+    protected function _renderNextNavigation(Zym_Paginate_Abstract $paginate)
     {
         $xhtml = '';
 
         if ($paginate->hasNext()) {
-            $lastPageLocation = array_merge($targetLocation,
-                                            array($currentPageAttribute => $paginate->getPageCount()));
+            $lastPageLocation = array_merge($this->_targetLocation,
+                                            array($this->_currentPageAttrib => $paginate->getPageCount()));
 
-            $nextPageLocation = array_merge($targetLocation,
-                                            array($currentPageAttribute => $paginate->getNextPageNumber()));
+            $nextPageLocation = array_merge($this->_targetLocation,
+                                            array($this->_currentPageAttrib => $paginate->getNextPageNumber()));
 
-            $xhtml .= sprintf($this->_markupListItem,
-                              $this->_view->url($nextPageLocation, null, true),
-                              $translations[self::L10N_KEY_NEXT]);
-            $xhtml .= sprintf($this->_markupListItem,
-                              $this->_view->url($lastPageLocation, null, true),
-                              $translations[self::L10N_KEY_LAST]);
+            $xhtml .= $this->_renderListItem($nextPageLocation, $this->_translations[self::L10N_KEY_NEXT]);
+
+            $xhtml .= $this->_renderListItem($lastPageLocation, $this->_translations[self::L10N_KEY_LAST]);
         }
 
         return $xhtml;

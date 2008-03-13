@@ -107,7 +107,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
     /**
      * Get the number of pages
      *
-     * @return int;
+     * @return int
      */
     public function count()
     {
@@ -204,7 +204,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
     /**
      * Set the amount of items per page
      *
-     * @param int $limit;
+     * @param int $limit
      * @return Zym_Paginate_Abstract
      */
     public function setRowLimit($limit)
