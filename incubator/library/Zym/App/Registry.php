@@ -15,7 +15,7 @@
 
 /**
  * Object registry for communication between resources
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -66,7 +66,7 @@ class Zym_App_Registry
 
         // Get data
         $data = $this->_getData($index);
-        
+
         // Validate data
         if ($this->_assertClass($assertClass, $data)) {
             if (is_object($assertClass)) {
@@ -74,7 +74,7 @@ class Zym_App_Registry
             } else if (is_array($assertClass)) {
                 $assertClass = implode(' ', $assertClass);
             }
-            
+
             /**
              * @see Zym_App_Registry_Exception
              */
@@ -83,7 +83,7 @@ class Zym_App_Registry
                 "The requested index \"$index\" does not contain an object of type(s) \"$assertClass\""
             );
         }
-        
+
         return $data;
     }
 
@@ -182,7 +182,9 @@ class Zym_App_Registry
         }
 
         $normalizedIndex = $this->_normalizeIndex($index);
-        $this->_alias[$normalizedIndex][] = $this->_normalizeIndex($alias);
+        $normalizedAliad = $this->_normalizeIndex($alias);
+
+        $this->_alias[$normalizedIndex][$normalizedAliad] = $normalizedAliad;
         return $this;
     }
 
@@ -208,8 +210,8 @@ class Zym_App_Registry
     public function aliasExists($alias)
     {
         $alias = $this->_normalizeIndex($alias);
-        foreach ($this->_aliasMap as $dataIndex => $aliases) {
-        	if (in_array($alias, $aliases)) {
+        foreach ($this->_aliasMap as $aliases) {
+        	if (isset($aliases[$alias])) {
         	    return true;
         	}
         }
@@ -238,26 +240,25 @@ class Zym_App_Registry
      * @param string $index
      * @return Zym_App_Registry
      */
-    public function removeAlias($index)
+    public function removeAlias($alias)
     {
-        $index = $this->_normalizeIndex($index);
+        $alias = $this->_normalizeIndex($alias);
 
-        if ($this->isAlias($index)) { // Handle alias input
+        if ($this->isAlias($alias)) { // Handle alias input
             foreach ($this->_aliasMap as $dataIndex => $aliases) {
-                if (in_array($index, $aliases)) {
-            	   $aliasIndex = array_search($index, $aliases);
-            	   unset($this->_aliasMap[$dataIndex][$aliasIndex]);
+                if (isset($aliases[$alias])) {
+            	   unset($this->_aliasMap[$dataIndex][$alias]);
                 }
             }
-        } else if ($this->_hasData($index)) { // Handle data input
-            unset($this->_aliasMap[$index]);
+        } else if ($this->_hasData($alias)) { // Handle data input
+            unset($this->_aliasMap[$alias]);
         } else {
             /**
              * @see Zym_App_Registry_Exception
              */
             require_once('Zym/App/Registry/Exception.php');
             throw new Zym_App_Registry_Exception(
-                'Cannot remove alias "' . $index . '" because it/none exist'
+                'Cannot remove alias "' . $alias . '" because it/none exist'
             );
         }
 
@@ -292,7 +293,7 @@ class Zym_App_Registry
     {
         $alias = $this->_normalizeIndex($alias);
         foreach ($this->_aliasMap as $dataIndex => $aliases) {
-        	if (in_array($alias, $aliases)) {
+        	if (isset($aliases[$alias])) {
         	    return $dataIndex;
         	}
         }
@@ -329,7 +330,7 @@ class Zym_App_Registry
         $this->_aliasMap = $aliasMap;
         return $this;
     }
-    
+
     /**
      * Check if a data index exists
      *
@@ -415,7 +416,7 @@ class Zym_App_Registry
         $index = str_replace(' ', '', (string) $index);
         return strtolower($index);
     }
-    
+
     /**
      * Validate an object
      *
@@ -425,15 +426,15 @@ class Zym_App_Registry
     protected function _assertClass($class, $obj)
     {
         if (is_object($class)) {
-            $assertClass = array($class);
+            $class = array($class);
         }
-        
+
         foreach ((array) $class as $class) {
             if ($class instanceof $obj) {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
