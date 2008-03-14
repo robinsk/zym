@@ -31,7 +31,7 @@ require_once 'Zend/Controller/Front.php';
 class Zym_View_Helper_BaseUrl
 {
     /**
-     * Returns site base url
+     * Returns site's base url
      *
      * $file is appended to the base url for simplicity
      *
