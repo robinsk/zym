@@ -48,27 +48,27 @@ class Zym_Timer_Manager implements Countable
      *
      * @param string $name
      * @param string $group
-     * @return Zym_Timer_Timer
+     * @return Zym_Timer
      */
     public function getTimer($name, $group = null)
     {
         if (!isset($this->_timers[$group][$name])) {
             $timer = new Zym_Timer();
-            $this->setTimer($name, $timer, $group);
+            $this->addTimer($name, $timer, $group);
         }
         
         return $this->_timers[$group][$name];
     }
     
     /**
-     * Set a timer instance
+     * Add a timer instance
      *
      * @param string $name
      * @param Zym_Timer_Timer $timer
      * @param string $group
-     * @return Zym_Timer_TimerManager
+     * @return Zym_Timer_Manager
      */
-    public function setTimer($name, Zym_Timer $timer, $group = null)
+    public function addTimer($name, Zym_Timer $timer, $group = null)
     {
         // Set timer
         $this->_timers[$group][$name] = $timer;
