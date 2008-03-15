@@ -180,7 +180,6 @@ class Zym_App_Registry
     /**
      * Check if an aliases of a name exists
      *
-     * @todo Refractor the loop
      * @param string $alias
      * @return boolean
      */
@@ -199,7 +198,6 @@ class Zym_App_Registry
     /**
      * Check if the index name is an alias
      *
-     * @todo Refractor the loop
      * @param string $index
      * @return boolean
      */
@@ -213,7 +211,6 @@ class Zym_App_Registry
      * Removes an alias or aliaes. If a data index was provided then it will
      * remove all aliases associated with it. If an alias was provided it will unlink it.
      *
-     * @todo Refractor the loop
      * @param string $index
      * @return Zym_App_Registry
      */
@@ -256,7 +253,6 @@ class Zym_App_Registry
     /**
      * Get the name of a data index from an alias
      *
-     * @todo Refractor the loop
      * @param string $alias
      * @return string
      */
