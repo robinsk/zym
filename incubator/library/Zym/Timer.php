@@ -135,15 +135,25 @@ class Zym_Timer
     }
 
     /**
-     * Get runtimes
+     * Get runtimes of complete start and stop's
      *
-     * @return array
+     * @return integer
      */
     public function getRun()
     {
-        return $this->_totalTime;
+        return array_sum($this->_totalTime);
     }
 
+    /**
+     * Get runtimes of complete start and stop's
+     *
+     * @return array
+     */
+    public function getRunAsArray()
+    {
+        return $this->_totalTime;
+    }
+    
     /**
      * Whether the timer is running
      *
