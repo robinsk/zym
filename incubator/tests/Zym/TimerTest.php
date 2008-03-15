@@ -142,26 +142,26 @@ class Zym_TimerTest extends PHPUnit_Framework_TestCase
     }
     
 	public function testGetRunAsArray()
-	{
-	    $timer = clone $this->_timer;
-	    
-	    for ($x = 0; $x <= 5; ++$x) {
-	       $timer->start();
-	       $timer->stop();
-	    }
-	    
-	    $this->assertEquals(5, count($timer->getRunAsArray()));
-	}
-	
-	public function testReset()
-	{
-	    $timer = new Zym_Timer();
-	    $timer->start();
-	    $timer->stop();
-	    
-	    $timer->reset();
-	    
+    {
+        $timer = clone $this->_timer;
+        
+        for ($x = 0; $x <= 5; ++$x) {
+           $timer->start();
+           $timer->stop();
+        }
+        
+        $this->assertEquals(5, count($timer->getRunAsArray()));
+    }
+    
+    public function testReset()
+    {
+        $timer = new Zym_Timer();
+        $timer->start();
+        $timer->stop();
+        
+        $timer->reset();
+        
         $this->assertAttributeEquals(null, '_start', $timer);
         $this->assertAttributeEquals(array(), '_totalTime', $timer);
-	}
+    }
 }
