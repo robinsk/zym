@@ -39,20 +39,12 @@ class Zym_Timer
     protected $_totalTime = array();
 
     /**
-     * Stop flag
-     *
-     * @var boolean
-     */
-    protected $_stopped = false;
-
-    /**
      * Start the timer
      *
      */
     public function start()
     {
         $this->_start = microtime(true);
-        $this->_stopped = false;
     }
 
     /**
@@ -72,7 +64,7 @@ class Zym_Timer
 
         $spentTime = microtime(true) - $this->_start;
         $this->_totalTime[] = $spentTime;
-        $this->_stopped = true;
+        $this->_start = null;
 
         return $spentTime;
     }
@@ -85,7 +77,7 @@ class Zym_Timer
     public function getCalls()
     {
         $calls = count($this->_totalTime);
-        if ($calls < 1 && $this->_start !== null || $this->_stopped == false) {
+        if ($this->_start !== null) {
             $calls++;
         }
 
@@ -102,21 +94,19 @@ class Zym_Timer
         $elapsedTime = array_sum($this->_totalTime);
 
         // No elapsed time or currently running? take/add current running time
-        if ($elapsedTime == 0 && $this->_start !== null) {
-            $elapsedTime = microtime(true) - $this->_start;
-        } else if ($this->_start !== null && $this->_stopped == false) {
+        if ($this->_start !== null) {
             $elapsedTime += microtime(true) - $this->_start;
         }
-
+        
         return $elapsedTime;
     }
 
     /**
-     * Get average runtime
+     * Get elapsed average
      *
      * @return integer
      */
-    public function getAverage()
+    public function getElapsedAverage()
     {
         $calls = $this->getCalls();
         if ($calls == 0) {
@@ -143,7 +133,30 @@ class Zym_Timer
     {
         return array_sum($this->_totalTime);
     }
+    
+    /**
+     * Get runtime average
+     *
+     * @return integer
+     */
+    public function getRunAverage()
+    {
+        $calls = $this->getCalls();
+        if ($calls == 0) {
+            // @todo do we throw an exception or return 0?
+            /**
+             * @see Zym_Timer_Exception
+             */
+            require_once 'Zym/Timer/Exception.php';
+            throw new Zym_Timer_Exception(
+                'Cannot get average time because timer has not been started'
+            );
+        }
 
+        $averageTime = $this->getRun() / $calls;
+        return $averageTime;
+    }
+    
     /**
      * Get runtimes of complete start and stop's
      *
@@ -161,6 +174,19 @@ class Zym_Timer
      */
     public function isStarted()
     {
-        return !$this->_stopped;
+        return (bool) $this->_start;
+    }
+    
+    /**
+     * Reset object
+     *
+     * @return Zym_Timer
+     */
+    public function reset()
+    {
+        $this->_start     = null;
+        $this->_totalTime = array();
+        
+        return $this;
     }
 }
