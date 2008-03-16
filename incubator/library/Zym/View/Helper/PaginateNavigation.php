@@ -63,11 +63,11 @@ class Zym_View_Helper_PaginateNavigation
     protected $_pageLimit = 11;
 
     /**
-     * Translation instance
+     * Translation helper instance
      *
-     * @var Zend_Translate_Adapter
+     * @var Zend_View_Helper_Translate
      */
-    protected $_l10nAdapter = null;
+    protected $_translateHelper = null;
 
     /**
      * @var Zend_View_Interface
@@ -88,33 +88,25 @@ class Zym_View_Helper_PaginateNavigation
     /**
      * Make a navigation menu for paginated items
      *
-     * @param int $pageCount
-     * @param int $currentPage
+     * @param Zym_Paginate_Abstract $paginate
      * @param array $targetLocation
+     * @param int $limit
      * @param string $currentPageAttribute
-     * @param string $translations
-     * @param string $styles
      * @return string
      */
     public function paginateNavigation(Zym_Paginate_Abstract $paginate,
-                                       $targetLocation, $translation = null,
-                                       $limit = 11, $currentPageAttribute = 'page')
+                                       array $targetLocation, $limit = 11,
+                                       $currentPageAttribute = 'page')
     {
-        if ($translation instanceof Zend_Translate_Adapter) {
-            $this->_l10nAdapter = $translation;
-        } elseif ($translation instanceof Zend_Translate) {
-        	$this->_l10nAdapter = $translation->getAdapter();
-        } else {
-            $this->_l10nAdapter = null;
-        }
+        $this->_translateHelper = $this->_view->translate();
 
-        if (!$this->_l10nAdapter) {
+        if (!$this->_translateHelper->getTranslator()) {
             $this->_translations = $this->_getDefaultTranslations();
         } else {
-            $this->_translations = array(self::L10N_KEY_FIRST    => $this->_l10nAdapter->translate(self::L10N_KEY_FIRST),
-                                         self::L10N_KEY_PREVIOUS => $this->_l10nAdapter->translate(self::L10N_KEY_PREVIOUS),
-                                         self::L10N_KEY_NEXT     => $this->_l10nAdapter->translate(self::L10N_KEY_NEXT),
-                                         self::L10N_KEY_LAST     => $this->_l10nAdapter->translate(self::L10N_KEY_LAST));
+            $this->_translations = array(self::L10N_KEY_FIRST    => $this->_translateHelper->translate(self::L10N_KEY_FIRST),
+                                         self::L10N_KEY_PREVIOUS => $this->_translateHelper->translate(self::L10N_KEY_PREVIOUS),
+                                         self::L10N_KEY_NEXT     => $this->_translateHelper->translate(self::L10N_KEY_NEXT),
+                                         self::L10N_KEY_LAST     => $this->_translateHelper->translate(self::L10N_KEY_LAST));
         }
 
         $this->_targetLocation = $targetLocation;
