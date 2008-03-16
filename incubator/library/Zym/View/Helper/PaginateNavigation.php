@@ -63,6 +63,13 @@ class Zym_View_Helper_PaginateNavigation
     protected $_pageLimit = 11;
 
     /**
+     * Translation instance
+     *
+     * @var Zend_Translate_Adapter
+     */
+    protected $_l10nAdapter = null;
+
+    /**
      * @var Zend_View_Interface
      */
     protected $_view;
@@ -89,14 +96,27 @@ class Zym_View_Helper_PaginateNavigation
      * @param string $styles
      * @return string
      */
-    public function paginateNavigation(Zym_Paginate_Abstract $paginate, $targetLocation,
-                                       $limit = 11, $currentPageAttribute = 'page',
-                                       $translations = array(self::L10N_KEY_FIRST    => '&lt;&lt; First',
-                                                             self::L10N_KEY_PREVIOUS => '&lt; Previous',
-                                                             self::L10N_KEY_NEXT     => 'Next &gt;',
-                                                             self::L10N_KEY_LAST     => 'Last &gt;&gt;'))
+    public function paginateNavigation(Zym_Paginate_Abstract $paginate,
+                                       $targetLocation, $translation = null,
+                                       $limit = 11, $currentPageAttribute = 'page')
     {
-        $this->_translations = $translations;
+        if ($translation instanceof Zend_Translate_Adapter) {
+            $this->_l10nAdapter = $translation;
+        } elseif ($translation instanceof Zend_Translate) {
+        	$this->_l10nAdapter = $translation->getAdapter();
+        } else {
+            $this->_l10nAdapter = null;
+        }
+
+        if (!$this->_l10nAdapter) {
+            $this->_translations = $this->_getDefaultTranslations();
+        } else {
+            $this->_translations = array(self::L10N_KEY_FIRST    => $this->_l10nAdapter->translate(self::L10N_KEY_FIRST),
+                                         self::L10N_KEY_PREVIOUS => $this->_l10nAdapter->translate(self::L10N_KEY_PREVIOUS),
+                                         self::L10N_KEY_NEXT     => $this->_l10nAdapter->translate(self::L10N_KEY_NEXT),
+                                         self::L10N_KEY_LAST     => $this->_l10nAdapter->translate(self::L10N_KEY_LAST));
+        }
+
         $this->_targetLocation = $targetLocation;
         $this->_currentPageAttrib = $currentPageAttribute;
         $this->_pageLimit = $limit;
@@ -112,6 +132,19 @@ class Zym_View_Helper_PaginateNavigation
         $xhtml .= $this->_renderPaginationEnd();
 
         return $xhtml;
+    }
+
+    /**
+     * Get the default translation strings
+     *
+     * @return array
+     */
+    protected function _getDefaultTranslations()
+    {
+        return array(self::L10N_KEY_FIRST    => '&lt;&lt; First',
+                     self::L10N_KEY_PREVIOUS => '&lt; Previous',
+                     self::L10N_KEY_NEXT     => 'Next &gt;',
+                     self::L10N_KEY_LAST     => 'Last &gt;&gt;');
     }
 
     /**
