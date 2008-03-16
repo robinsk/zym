@@ -26,20 +26,60 @@
 class Zym_View_Helper_PaginateNavigation
 {
     /**
-     * Language constants
+     * Default label for First button
      *
+     * @var string
      */
-    const L10N_KEY_FIRST    = 'first';
-    const L10N_KEY_LAST     = 'last';
-    const L10N_KEY_PREVIOUS = 'previous';
-    const L10N_KEY_NEXT     = 'next';
+    protected $_labelFirst = '&lt;&lt; First';
 
     /**
-     * Translations or the buttons
+     * Default label for Last button
      *
-     * @var array
+     * @var string
      */
-    protected $_translations = array();
+    protected $_labelLast = 'Last &gt;&gt;';
+
+    /**
+     * Default label for Previous button
+     *
+     * @var string
+     */
+    protected $_labelPrevious = '&lt; Previous';
+
+    /**
+     * Default label for Next button
+     *
+     * @var string
+     */
+    protected $_labelNext = 'Next &gt;';
+
+    /**
+     * Default translation key for First button
+     *
+     * @var string
+     */
+    protected $_labelFirstKey = 'PaginateFirst';
+
+    /**
+     * Default translation key for Last button
+     *
+     * @var string
+     */
+    protected $_labelLastKey = 'PaginateLast';
+
+    /**
+     * Default translation key for Previous button
+     *
+     * @var string
+     */
+    protected $_labelPreviousKey = 'PaginatePrevious';
+
+    /**
+     * Default translation key for Next button
+     *
+     * @var string
+     */
+    protected $_labelNextKey = 'PaginateNext';
 
     /**
      * The target location
@@ -61,13 +101,6 @@ class Zym_View_Helper_PaginateNavigation
      * @var int
      */
     protected $_pageLimit = 11;
-
-    /**
-     * Translation helper instance
-     *
-     * @var Zend_View_Helper_Translate
-     */
-    protected $_translateHelper = null;
 
     /**
      * @var Zend_View_Interface
@@ -98,15 +131,13 @@ class Zym_View_Helper_PaginateNavigation
                                        array $targetLocation, $limit = 11,
                                        $currentPageAttribute = 'page')
     {
-        $this->_translateHelper = $this->_view->translate();
+        $translateHelper = $this->_view->translate();
 
-        if (!$this->_translateHelper->getTranslator()) {
-            $this->_translations = $this->_getDefaultTranslations();
-        } else {
-            $this->_translations = array(self::L10N_KEY_FIRST    => $this->_translateHelper->translate(self::L10N_KEY_FIRST),
-                                         self::L10N_KEY_PREVIOUS => $this->_translateHelper->translate(self::L10N_KEY_PREVIOUS),
-                                         self::L10N_KEY_NEXT     => $this->_translateHelper->translate(self::L10N_KEY_NEXT),
-                                         self::L10N_KEY_LAST     => $this->_translateHelper->translate(self::L10N_KEY_LAST));
+        if ($translateHelper->getTranslator() instanceof Zend_Translate_Adapter) {
+            $this->_labelFirst = $translateHelper->translate($this->_labelFirstKey);
+            $this->_labelLast = $translateHelper->translate($this->_labelLastKey);
+            $this->_labelNext = $translateHelper->translate($this->_labelNextKey);
+            $this->_labelPrevious = $translateHelper->translate($this->_labelPreviousKey);
         }
 
         $this->_targetLocation = $targetLocation;
@@ -124,19 +155,6 @@ class Zym_View_Helper_PaginateNavigation
         $xhtml .= $this->_renderPaginationEnd();
 
         return $xhtml;
-    }
-
-    /**
-     * Get the default translation strings
-     *
-     * @return array
-     */
-    protected function _getDefaultTranslations()
-    {
-        return array(self::L10N_KEY_FIRST    => '&lt;&lt; First',
-                     self::L10N_KEY_PREVIOUS => '&lt; Previous',
-                     self::L10N_KEY_NEXT     => 'Next &gt;',
-                     self::L10N_KEY_LAST     => 'Last &gt;&gt;');
     }
 
     /**
@@ -204,9 +222,9 @@ class Zym_View_Helper_PaginateNavigation
             $previousPageLocation = array_merge($this->_targetLocation,
                                                 array($this->_currentPageAttrib => $paginate->getPreviousPageNumber()));
 
-            $xhtml .= $this->_renderListItem($firstPageLocation, $this->_translations[self::L10N_KEY_FIRST]);
+            $xhtml .= $this->_renderListItem($firstPageLocation, $this->_labelFirst);
 
-            $xhtml .= $this->_renderListItem($previousPageLocation, $this->_translations[self::L10N_KEY_PREVIOUS]);
+            $xhtml .= $this->_renderListItem($previousPageLocation, $this->_labelPrevious);
         }
 
         return $xhtml;
@@ -268,9 +286,9 @@ class Zym_View_Helper_PaginateNavigation
             $nextPageLocation = array_merge($this->_targetLocation,
                                             array($this->_currentPageAttrib => $paginate->getNextPageNumber()));
 
-            $xhtml .= $this->_renderListItem($nextPageLocation, $this->_translations[self::L10N_KEY_NEXT]);
+            $xhtml .= $this->_renderListItem($nextPageLocation, $this->_labelNext);
 
-            $xhtml .= $this->_renderListItem($lastPageLocation, $this->_translations[self::L10N_KEY_LAST]);
+            $xhtml .= $this->_renderListItem($lastPageLocation, $this->_labelLast);
         }
 
         return $xhtml;
