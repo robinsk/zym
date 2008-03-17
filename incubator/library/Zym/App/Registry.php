@@ -76,7 +76,7 @@ class Zym_App_Registry
             }
 
             $message = sprintf('The requested index "%s" does not contain an object of type(s) "%s"', $index, $assertClass);
-            $this->_throwException($message);
+            throw $this->_getException($message);
         }
 
         return $data;
@@ -114,7 +114,7 @@ class Zym_App_Registry
         } else if ($this->_hasData($index)) {
             $this->_removeData($index);
         } else {
-            $this->_throwException(sprintf('Cannot remove index "%s" because it does not exist', $index));
+            throw $this->_getException(sprintf('Cannot remove index "%s" because it does not exist', $index));
         }
 
         return $this;
@@ -150,12 +150,12 @@ class Zym_App_Registry
     {
         // Make sure index is an actual data index
         if (!$this->_hasData($index)) {
-            $this->_throwException(sprintf('The provided index "%s" is not an index of an existing data index', $index));
+            throw $this->_getException(sprintf('The provided index "%s" is not an index of an existing data index', $index));
         }
 
         // Make sure the alias is not already set
         if ($this->aliasExists($alias)) {
-            $this->_throwException(sprintf('An alias of the name "%s" is already registered', $alias));
+            throw $this->_getException(sprintf('An alias of the name "%s" is already registered', $alias));
         }
 
         $normalizedIndex = $this->_normalizeIndex($index);
@@ -227,7 +227,7 @@ class Zym_App_Registry
         } else if ($this->_hasData($alias)) { // Handle data input
             unset($this->_aliasMap[$alias]);
         } else {
-            $this->_throwException(sprintf('Cannot remove alias "%s" because it/none exist', $alias));
+            throw $this->_getException(sprintf('Cannot remove alias "%s" because it/none exist', $alias));
         }
 
         return $this;
@@ -265,7 +265,7 @@ class Zym_App_Registry
         	}
         }
 
-        return $this->_throwException(sprintf('An alias with the name "%s" does not exist', $alias));
+        return throw $this->_getException(sprintf('An alias with the name "%s" does not exist', $alias));
     }
 
     /**
@@ -319,7 +319,7 @@ class Zym_App_Registry
             return $this->_data[$this->_normalizeIndex($index)];
         }
 
-        return $this->_throwException(sprintf('Index "%s" does not exist', $index));
+        return throw $this->_getException(sprintf('Index "%s" does not exist', $index));
     }
 
     /**
@@ -352,7 +352,7 @@ class Zym_App_Registry
         if ($this->_hasData($index)) {
             unset($this->_data[$this->_normalizeIndex($index)]);
         } else {
-            $this->_throwException(sprintf('Index "%s" does not exist', $index));
+            throw $this->_getException(sprintf('Index "%s" does not exist', $index));
         }
 
         return $this;
@@ -397,13 +397,13 @@ class Zym_App_Registry
      * @param string $message
      * @throws Zym_App_Registry_Exception
      */
-    protected function _throwException($message)
+    protected function _getException($message)
     {
         /**
          * @see Zym_App_Registry_Exception
          */
         require_once 'Zym/App/Registry/Exception.php';
 
-        throw new Zym_App_Registry_Exception($message);
+        return new Zym_App_Registry_Exception($message);
     }
 }

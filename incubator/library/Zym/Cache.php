@@ -102,7 +102,7 @@ abstract class Zym_Cache extends Zend_Cache
      */
     public static function getDefaultBackend()
     {
-        if (self::$_defaultBackend == null) {
+        if (self::$_defaultBackend === null) {
             /**
              * @see Zym_Cache_Exception
              */
@@ -111,6 +111,7 @@ abstract class Zym_Cache extends Zend_Cache
                 'Cannot retrieve default backend  because it has not been set.'
             );
         }
+        
         return self::$_defaultBackend;
     }
 
