@@ -19,6 +19,11 @@
 require_once 'Zend/Filter/Interface.php';
 
 /**
+ * @see Zend_Locale_Format
+ */
+require_once 'Zend/Locale/Format.php';
+
+/**
  * Converts values to floats
  *
  * @author Geoffrey Tran
@@ -30,6 +35,23 @@ require_once 'Zend/Filter/Interface.php';
 class Zym_Filter_Float implements Zym_Filter_Interface
 {
     /**
+     * Zend Locale Format options
+     *
+     * @var array
+     */
+    protected $_options = array();
+    
+    /**
+     * Construct
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = array())
+    {
+        $this->_options = $options;
+    }
+    
+    /**
      * Defined by Zend_Filter_Interface
      *
      * Returns (float) $value
@@ -39,11 +61,6 @@ class Zym_Filter_Float implements Zym_Filter_Interface
      */
     public function filter($value)
     {
-        $locale = localeconv();
-
-        $valueFiltered = str_replace($locale['decimal_point'], '.', (string) $value);
-        $valueFiltered = str_replace($locale['thousands_sep'], '', $valueFiltered);
-
-        return floatval($valueFiltered);
+        return (float) Zend_Locale_Format::getFloat($value, $this->_options);
     }
 }
