@@ -26,13 +26,7 @@ final class Zym_Version
      * Framework version
      *
      */
-    const VERSION = '0.1dev';
-
-    /**
-     * Framework build
-     *
-     */
-    const BUILD = 'SVN';
+    const VERSION = '0.1svn';
 
     /**
      * Compare the specified Framework version string $version
