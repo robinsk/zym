@@ -16,6 +16,12 @@
  */
 
 /**
+ * @see Zym_View_Helper_Abstract
+ */
+require_once 'Zym/View/Helper/Abstract.php';
+
+/**
+ * @TODO: Add doctrine style pagination
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_View
@@ -23,7 +29,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_View_Helper_PaginateNavigation
+class Zym_View_Helper_PaginateNavigation extends Zym_View_Helper_Abstract
 {
     /**
      * Default label for First button
@@ -101,22 +107,6 @@ class Zym_View_Helper_PaginateNavigation
      * @var int
      */
     protected $_pageLimit = 11;
-
-    /**
-     * @var Zend_View_Interface
-     */
-    protected $_view;
-
-    /**
-     * Set the view object
-     *
-     * @param Zend_View_Interface $view
-     * @return void
-     */
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->_view = $view;
-    }
 
     /**
      * Make a navigation menu for paginated items
