@@ -26,7 +26,7 @@
  * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Helper_Alternate implements Iterator
+class Zym_View_Helper_Cycle implements Iterator
 {
     /**
      * Counter
