@@ -70,7 +70,8 @@ class Zym_Validate_Float extends Zend_Validate_Abstract
      * Defined by Zend_Validate_Interface
      *
      * Returns true if and only if $value is a floating-point value
-     *
+     * 
+     * @todo http://framework.zend.com/issues/browse/ZF-2895
      * @param  string $value
      * @return boolean
      */
@@ -80,8 +81,7 @@ class Zym_Validate_Float extends Zend_Validate_Abstract
 
         $this->_setValue($valueString);
 
-        $valueFiltered = Zend_Locale_Format::toFloat($valueString, $options);
-
+        $valueFiltered = Zend_Locale_Format::isFloat($valueString, $options);
         if (strval(floatval($valueFiltered)) != $valueFiltered) {
             $this->_error();
             return false;
