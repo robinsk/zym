@@ -81,7 +81,7 @@ class Zym_Validate_Float extends Zend_Validate_Abstract
 
         $this->_setValue($valueString);
 
-        $valueFiltered = Zend_Locale_Format::isFloat($valueString, $options);
+        $valueFiltered = Zend_Locale_Format::isFloat($valueString, $this->_options);
         if (strval(floatval($valueFiltered)) != $valueFiltered) {
             $this->_error();
             return false;

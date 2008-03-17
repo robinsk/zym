@@ -412,7 +412,7 @@ class Zym_App
             /**
              * @see Zym_App_Exception
              */
-            require_once('Zym/Application/Exception.php');
+            require_once('Zym/App/Exception.php');
             throw new Zym_App_Exception('Cache object has not been set.');
         }
         

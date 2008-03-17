@@ -16,7 +16,7 @@
 /**
  * @see Zym_Exception
  */
-require_once 'Zym/Exception';
+require_once 'Zym/Exception.php';
 
 /**
  * Validate exception class
