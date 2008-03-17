@@ -79,7 +79,7 @@ class Zym_Path
      */
     public function addDirectory($directory)
     {
-        ini_set('include_path', ini_get('include_path') . ':' . $directory);
+        ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $directory);
 
         return $this;
     }
