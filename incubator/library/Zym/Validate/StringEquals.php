@@ -29,11 +29,11 @@ require_once 'Zend/Validate/Abstract.php';
  */
 class Zym_Validate_StringEquals extends Zend_Validate_Abstract
 {
-	/**
-	 * Validation key for not equal
-	 *
-	 */
-	const NOT_EQUAL = 'notEqual';
+    /**
+     * Validation key for not equal
+     *
+     */
+    const NOT_EQUAL = 'notEqual';
 
     /**
      * Validation failure message template definitions
