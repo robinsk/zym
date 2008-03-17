@@ -73,22 +73,13 @@ abstract class Zym_View_Helper_Abstract
     public function getView()
     {
         if (!$this->_view instanceof Zend_View_Abstract) {
-            // Attempt to get the view instance form the viewrenderer
-            if (Zend_Controller_Action_HelperBroker::hasHelper('viewRenderer')) {
-                $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-
-                $this->_view = $viewRenderer->view;
-
-                if (!$this->_view instanceof Zend_View_Abstract) {
-                    /**
-                     * @see Zym_View_Helper_Exception
-                     */
-                    require_once 'Zym/View/Helper/Exception.php';
-                    throw new Zym_View_Helper_Exception(
-                        'A view object of instance Zend_View_Abstract is not set to this helper.'
-                    );
-                }
-            }
+            /**
+             * @see Zym_View_Helper_Exception
+             */
+            require_once 'Zym/View/Helper/Exception.php';
+            throw new Zym_View_Helper_Exception(
+                'A view object of instance Zend_View_Abstract is not set to this helper.'
+            );
         }
 
         return $this->_view;
