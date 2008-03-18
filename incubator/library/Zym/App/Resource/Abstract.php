@@ -205,7 +205,7 @@ abstract class Zym_App_Resource_Abstract
      */
     public function setConfig(Zend_Config $config, $environment = null)
     {   
-        if (!($this->_config = $this->getCache('config'))) {
+        if (!($this->_config = $this->getCache('__config'))) {
             // Merge default config with user config
             $defaultConfig = $this->getDefaultConfig($environment);
             $this->_config = $this->_mergeConfig($defaultConfig, $config);

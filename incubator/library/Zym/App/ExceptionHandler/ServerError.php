@@ -14,7 +14,6 @@
  * @license http://www.zym-project.com/license New BSD License
  */
 
-
 /**
  * @see Zym_App_ExceptionHandler_Abstract
  */
@@ -33,7 +32,7 @@ require_once('Zym/App/ExceptionHandler/Abstract.php');
 class Zym_App_ExceptionHandler_ServerError extends Zym_App_ExceptionHandler_Abstract
 {
     /**
-     * Handle Boostrap exceptions
+     * Handle Bootstrap exceptions
      *
      * @param Exception $e
      */

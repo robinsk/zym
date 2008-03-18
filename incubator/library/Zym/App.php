@@ -157,7 +157,7 @@ class Zym_App
             
             'cache' => array(
                 'enabled' => true,
-                'prefix'  => null
+                'prefix'  => '%s__'
             ),
             
             'resource' => array(),        
@@ -1000,25 +1000,32 @@ class Zym_App
      */
     protected function _setupCache(Zend_Config $config)
     {
-        if (!$this->_cache instanceof Zend_Cache_Core) {
-            if ($config->get('cache')->get('enabled')) {
-                if (!extension_loaded('apc')) {
-                    /**
-                     * @see Zym_App_Exception
-                     */
-                    require_once 'Zym/App/Exception.php';
-                    throw new Zym_App_Exception(
-                        'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature.'
-                    );
-                }
-                
-                $this->_cache = Zend_Cache::factory('Core', 'Apc', array(
-                    'automatic_serialization' => true,
-                    'cache_id_prefix' => $config->get('cache')->get('prefix')
-                ));
-            } else {
-                $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
-            }
+        if ($this->_cache instanceof Zend_Cache_Core) {
+            return;
+        } else if ($config->get('cache')->get('enabled')) {
+            $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
+            return;
         }
+        
+        if (!extension_loaded('apc')) {
+            /**
+             * @see Zym_App_Exception
+             */
+            require_once 'Zym/App/Exception.php';
+            throw new Zym_App_Exception(
+                'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature.'
+            );
+        }
+            
+        // Allow only Alnum
+        $pattern = '/[^a-zA-Z0-9]/';
+        $appName = preg_replace($pattern, '', (string) $config->get('name'));
+        $prefix = sprintf($config->get('cache')->get('prefix'), $appName);
+        
+        $this->_cache = Zend_Cache::factory('Core', 'Apc', array(
+            'automatic_serialization' => true,
+            'cache_id_prefix' => $prefix
+        ));
+
     }
 }

@@ -30,7 +30,7 @@ abstract class Zym_App_ExceptionHandler_Abstract
      *
      * @var Zym_App
      */
-    protected $_app = null;
+    protected $_app;
     
     /**
      * Get Application
@@ -62,7 +62,7 @@ abstract class Zym_App_ExceptionHandler_Abstract
      */
     public function getRegistry($index = null)
     {
-        $registry = $this->getApplication()->getRegistry();
+        $registry = $this->getApp()->getRegistry();
         if ($index !== null) {
             return $registry->get($index);
         }
