@@ -265,7 +265,7 @@ class Zym_App_Registry
         	}
         }
 
-        return throw $this->_getException(sprintf('An alias with the name "%s" does not exist', $alias));
+        throw $this->_getException(sprintf('An alias with the name "%s" does not exist', $alias));
     }
 
     /**
@@ -319,7 +319,7 @@ class Zym_App_Registry
             return $this->_data[$this->_normalizeIndex($index)];
         }
 
-        return throw $this->_getException(sprintf('Index "%s" does not exist', $index));
+        throw $this->_getException(sprintf('Index "%s" does not exist', $index));
     }
 
     /**
