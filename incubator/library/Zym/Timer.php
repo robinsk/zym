@@ -54,7 +54,7 @@ class Zym_Timer
      */
     public function stop()
     {
-        if ($this->_stopped == true) {
+        if ($this->_start == false) {
             /**
              * @see Zym_Timer_Exception
              */
