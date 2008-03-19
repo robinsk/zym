@@ -57,14 +57,15 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      */
     public function setup(Zend_Config $config)
     {
+        $sessionConfig = $config->get('config');
         // Setup config
-        Zend_Session::setOptions($config->config->toArray());
+        Zend_Session::setOptions($sessionConfig->toArray());
         
         // save_path handler
-        $this->_prependSavePath($config->get('config'));
+        $this->_prependSavePath($sessionConfig);
         
         // Autostart session?
-        if ($config->auto_start) {
+        if ($config->get('auto_start')) {
             // Start session
             Zend_Session::start();
         }
@@ -80,7 +81,7 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
         $savePath = $config->get('save_path');
         $configArray = array(
             'save_path' => $this->getApp()
-                                ->getPath(Zym_app::PATH_TEMP, $savePath)
+                                ->getPath(Zym_App::PATH_TEMP, $savePath)
         );
 
         Zend_Session::setOptions($configArray);
