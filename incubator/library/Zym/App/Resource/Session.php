@@ -58,6 +58,7 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         $sessionConfig = $config->get('config');
+        
         // Setup config
         Zend_Session::setOptions($sessionConfig->toArray());
         

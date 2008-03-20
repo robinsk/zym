@@ -15,7 +15,7 @@
  */
 
 /**
- * Zend_Session_Namespace
+ * @see Zend_Session_Namespace
  */
 require_once 'Zend/Session/Namespace.php';
 

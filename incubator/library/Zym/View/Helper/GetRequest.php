@@ -15,7 +15,7 @@
  */
 
 /**
- * Zend_Controller_Front
+ * @see Zend_Controller_Front
  */
 require_once 'Zend/Controller/Front.php';
 

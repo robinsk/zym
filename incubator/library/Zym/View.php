@@ -9,34 +9,33 @@
  *
  * @category Zym
  * @package Zym_View
- * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
- * @see Zend_Controller_Front
+ * @see Zym_View_Abstract
  */
-require_once 'Zend/Controller/Front.php';
+require_once 'Zym/View/Abstract.php';
 
 /**
- * Get response obj
+ * View component
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
+ * @category Zym
  * @package Zym_View
- * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Helper_GetResponse
-{
+class Zym_View extends Zym_View_Abstract 
+{    
     /**
-     * Get the response  object
+     * Includes the view script in a scope with only public $this variables.
      *
-     * @return string
+     * @param string The view script to execute.
      */
-    public function getResponse()
+    protected function _run()
     {
-        return Zend_Controller_Front::getInstance()->getResponse();
+        include 'view://' . func_get_arg(0);
     }
 }
