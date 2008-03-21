@@ -39,12 +39,12 @@ class Zym_View_Filter_ShortTags
         }
         
         $pattern = array(
-            '/<\?=\s*(.*?);*\s*/is',
-            '/<\?(?!php)\s*(.*?)/is'
+            '/<\?=\s*(.*?)\s*%>/is', // <?=
+            '/<\?(?!php)\s*(.*?)/is', // <?
         );
         
         $replace = array(
-            '<?php echo$1 ',
+            '<?php echo$1 ?>',
             '<?php $1'
         );
         
@@ -71,10 +71,12 @@ $a = array(
     ?>',
 
     '<?php echo "<?=$this->test; ?>"',
-    '<?xml'
+    '<?xml',
+    '<?php echo "<?xml"; ?>'
 );
 foreach ($a as $ab) {
     echo htmlentities($filter->filter($ab)) . '</br></br>';
 }
 
-echo '</pre></body>';*/
+echo '</pre></body>';
+//(?<!<\?php)<\?(?!php)=\s*(.*?);*\s*\?>*/
