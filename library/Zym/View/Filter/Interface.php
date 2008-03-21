@@ -15,16 +15,6 @@
  */
 
 /**
- * @see Zym_View_Helper_Abstract
- */
-require_once 'Zym/View/Helper/Abstract.php';
-
-/**
- * @see Zym_View_Filter_Interface
- */
-require_once 'Zym/View/Filter/Interface.php';
-
-/**
  * Abstract view filter
  *
  * @author Geoffrey Tran
@@ -33,8 +23,7 @@ require_once 'Zym/View/Filter/Interface.php';
  * @subpackage Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-abstract class Zym_View_Filter_Abstract extends Zym_View_Helper_Abstract 
-    implements Zym_View_Filter_Interface
+interface Zym_View_Filter_Interface
 {
     /**
      * Filter
@@ -42,5 +31,5 @@ abstract class Zym_View_Filter_Abstract extends Zym_View_Helper_Abstract
      * @param  string $buffer
      * @return string
      */
-    abstract public function filter($buffer);
+    public function filter($buffer);
 }
