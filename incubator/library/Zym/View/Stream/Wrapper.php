@@ -25,6 +25,13 @@
 class Zym_View_Stream_Wrapper
 {
     /**
+     * View object
+     *
+     * @var Zym_View_Abstract
+     */
+    protected static $_view;
+    
+    /**
      * Current stream position.
      *
      * @var integer
@@ -97,7 +104,8 @@ class Zym_View_Stream_Wrapper
             $opened_path = $this->_path;
         }
         
-        // process data
+        // Process data
+        $this->_data = $this->_filter($this->_data);
         
         // file_get_contents() won't update PHP's stat cache, so performing
         // another stat() on it will hit the filesystem again.  Since the file
@@ -248,6 +256,49 @@ class Zym_View_Stream_Wrapper
         }
         
         return $noErrors ? @stat($host) : stat($host);
+    }
+    
+    /**
+     * Set View
+     *
+     * @param Zym_View_Abstract $view
+     */
+    public static function setView(Zym_View_Abstract $view)
+    {
+        self::$_view = $view;
+    }
+    
+    /**
+     * Get view
+     *
+     * @return Zym_View_Abstract
+     */
+    public static function getView()
+    {
+        return self::$_view;
+    }
+    
+
+    /**
+     * Applies the filter callback to a buffer.
+     *
+     * @param string $buffer The buffer contents.
+     * @return string The filtered buffer.
+     */
+    protected function _filter($buffer)
+    {
+        $view = self::getView();
+        $streamFilters = $view->getStreamFilters();
+        
+        // Loop through each filter class
+        foreach ($streamFilters as $name) {
+            // Load and apply the filter class
+            $filter = $view->getFilter($name);
+            $buffer = call_user_func(array($filter, 'filter'), $buffer);
+        }
+
+        // Done!
+        return $buffer;
     }
     
     /**
