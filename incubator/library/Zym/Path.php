@@ -53,19 +53,29 @@ class Zym_Path
     public function addApplicationPath($path)
     {
         $directoryIterator = new DirectoryIterator($path);
+        $ingoreDirs = array('models', 'views', 'controllers');
+
+        $dirs = array();
 
         foreach ($directoryIterator as $file) {
-            if ($file->isDir() && !$file->isDot() && strpos($file->getFilename(), '.') !== 0) {
+            $filename = $file->getFilename();
+
+            if ($file->isDir() && !$file->isDot() && strpos($filename, '.') !== 0
+                && !in_array($filename, $ingoreDirs)) {
                 $path = $file->getPathname();
 
                 foreach ($this->_dirs as $directory) {
                     $directory = $path . '/' . $directory;
 
                     if (file_exists($directory)) {
-                	   $this->addDirectory($directory);
+                        $dirs[] = $directory;
                     }
                 }
             }
+        }
+
+        if (!empty($dirs)) {
+            $this->addDirectory(implode(PATH_SEPARATOR, $dirs));
         }
 
         return $this;
