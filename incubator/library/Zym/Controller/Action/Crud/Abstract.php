@@ -72,8 +72,17 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
 
     /**
      * Default page number for pagination
+     *
+     * @var int
      */
     protected $_defaultPageNr = 1;
+
+    /**
+     * Primary ID key
+     *
+     * @var string
+     */
+    protected $_primaryIdKey = null;
 
     /**
      * Get the table for this model
@@ -171,9 +180,13 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     protected function _getPrimaryIdKey()
     {
-        $info = $this->_getTable()->info();
+        if ($this->_primaryIdKey == null) {
+            $info = $this->_getTable()->info();
 
-        return (string) array_shift($info[Zend_Db_Table_Abstract::PRIMARY]);
+            $this->_primaryIdKey = (string) array_shift($info[Zend_Db_Table_Abstract::PRIMARY]);
+        }
+
+        return $this->_primaryIdKey;
     }
 
     /**
@@ -282,17 +295,17 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
         $limit = (int) $this->_getParam('limit', $this->_defaultPageLimit);
         $page  = (int) $this->_getParam('page', $this->_defaultPageNr);
 
-        $select = $this->_getListSelect();
+        $paginate = new Zym_Paginate_DbTable($this->_getTable(), $this->_getListSelect());
 
-        if ($limit > 0 && $page > 0) {
-            $select->limitPage($page, $limit);
+        if ($limit > 0) {
+            $paginate->setRowLimit($limit);
         }
 
-        $rows = $this->_getTable()->fetchAll($select);
+        if ($page > 0 && $paginate->hasPageNumber($page)) {
+            $paginate->setCurrentPageNumber($page);
+        }
 
-        $this->view->limit = $limit;
-        $this->view->page = $page;
-        $this->view->rows = $rows;
+        $this->view->items = $paginate;
     }
 
     /**
