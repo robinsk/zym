@@ -66,6 +66,11 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      */
     public function __construct(array $config = array())
     {
+        // Stream protocol
+        if (array_key_exists('streamProtocol', $config)) {
+            $this->addFilter($config['streamProtocol']);
+        }
+        
         // Stream wrapper
         if (array_key_exists('streamWrapper', $config)) {
             $this->setStreamWrapper($config['streamWrapper']);
@@ -103,7 +108,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
         foreach ((array) $name as $val) {
             $this->_streamFilter[] = $val;
         }
-        
+
         return $this;
     }
 
@@ -159,6 +164,8 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     /**
      * Set view stream wrapper class
      *
+     * Set to null to disable streams
+     * 
      * @param string $class
      * @return Zym_View_Abstract
      */
