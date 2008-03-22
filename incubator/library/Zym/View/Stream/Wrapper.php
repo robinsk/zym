@@ -9,17 +9,19 @@
  *
  * @category Zym
  * @package Zym_View
+ * @subpackage Stream
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
- * View component
+ * View stream wrapper component
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_View
+ * @subpackage Stream
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_View_Stream_Wrapper
