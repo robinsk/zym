@@ -15,7 +15,7 @@
  */
 
 /**
- * Converts short tags to full <?php
+ * Converts asp tags to full <?php
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
@@ -23,8 +23,7 @@
  * @subpackage Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-/*'/(?:>\'|."|[^\'"|])<\?(?!php)(?:=|php|\s*echo|\s)?\s*(.*?)\s*(?:;\s*|)\?>(?:\'<|"<|[^"\'])/isS',*/ // <?= handling        
-class Zym_View_Filter_ShortTags
+class Zym_View_Filter_AspTags
 {
     /**
      * Filter
@@ -35,19 +34,19 @@ class Zym_View_Filter_ShortTags
     public function filter($buffer)
     {
         // Don't parse if short_tags is enabled
-        if (ini_get('short_tags')) {
+        if (ini_get('asp_tags')) {
             return $buffer;
         }
         
         $pattern = array(
-            '/<\\?(?:php|=)?(.*?)\\?>/xisS', // <?= handling
+            '/<\%(?:=)?(.*?)\%>/xisS', // <?= handling
         );
         
         $out = preg_replace_callback($pattern, array($this, '_callBack'), $buffer);
 
         return $out;
     }
-    
+
     /**
      * Preg callback
      *
@@ -59,7 +58,7 @@ class Zym_View_Filter_ShortTags
         // Split up into readable vars
         list($full, $body) = $match;
         
-        // Parse <?=
+        // Parse <%=
         if ($this->_isEcho($full)) {
             return "<?php echo $body ?>";
         }
@@ -70,13 +69,13 @@ class Zym_View_Filter_ShortTags
     /**
      * Check if a string is an echo tag 
      * 
-     * <?= ?> style
+     * <%= %> style
      *
      * @param string $string
      * @return boolean
      */
     protected function _isEcho($string)
     {
-        return (substr($string, 0, 3) === '<?=');
+        return (substr($string, 0, 3) === '<%=');
     }
 }

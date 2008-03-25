@@ -43,7 +43,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      * Stack of Zend_View_Filter names to apply as stream filters.
      * @var array
      */
-    private $_streamFilter = array('ShortTags');
+    private $_streamFilter = array();
     
     /**
      * Stream protocol to use
