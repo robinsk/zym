@@ -1,16 +1,52 @@
 <?php
-require_once 'trunk/library/Zym/Notification.php';
-require_once 'trunk/library/Zym/Notification/Interface.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 /**
- * Zym_Notification test case.
+ * Zym
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Notification
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
+ */
+
+/**
+ * @see PHPUnit_Framework_TestCase
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
+
+/**
+ * @see Zym_Notification_Notification
+ */
+require_once 'trunk/library/Zym/Notification.php';
+
+/**
+ * @see Zym_Notification_Interface
+ */
+require_once 'trunk/library/Zym/Notification/Interface.php';
+
+/**
+ * Test for Zym_Notification
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Notification
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_NotificationTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Zym_Notification instance
+     *
      * @var Zym_Notification
      */
     private $Zym_Notification;
+
     /**
      * Prepares the environment before running a test.
      */
@@ -160,30 +196,66 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
     }
 }
 
+/**
+ * Test class for receiving a notification without the interface
+ */
 class TestNotification
 {
+    /**
+     * Notifications
+     *
+     * @var array
+     */
     protected $_notifications = array();
 
+    /**
+     * Notify method
+     *
+     * @var Zym_Notification_Message $notification
+     */
     public function msgMe($notification)
     {
         $this->_notifications[] = $notification;
     }
 
+    /**
+     * Get the notifications
+     *
+     * @return array
+     */
     public function getNotifications()
     {
         return $this->_notifications;
     }
 }
 
+/**
+ * Test class for receiving a notification with the interface
+ */
 class TestNotificationInterface implements Zym_Notification_Interface
 {
+    /**
+     * Notifications
+     *
+     * @var array
+     */
     protected $_notifications = array();
 
+    /**
+     * Notify method
+     *
+     * @var Zym_Notification_Message $notification
+     */
     public function notify(Zym_Notification_Message $notification)
     {
         $this->_notifications[] = $notification;
     }
 
+    /**
+     * Get the notifications
+     *
+     * @return array
+     */
     public function getNotifications()
     {
         return $this->_notifications;

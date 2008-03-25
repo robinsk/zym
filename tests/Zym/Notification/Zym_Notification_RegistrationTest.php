@@ -1,8 +1,37 @@
 <?php
-require_once 'trunk/library/Zym/Notification/Registration.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 /**
- * Zym_Notification_Registration test case.
+ * Zym
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Notification
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
+ */
+
+/**
+ * @see PHPUnit_Framework_TestCase
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
+
+/**
+ * @see Zym_Notification_Registration
+ */
+require_once 'trunk/library/Zym/Notification/Registration.php';
+
+/**
+ * Test for Zym_Notification_Registration
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Notification
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Notification_RegistrationTest extends PHPUnit_Framework_TestCase
 {

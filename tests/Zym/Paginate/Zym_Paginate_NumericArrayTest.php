@@ -1,11 +1,45 @@
 <?php
-require_once 'trunk/library/Zym/Paginate/Array.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 /**
- * Zym_Paginate_NumericArrayTest test case.
+ * Zym
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Paginate
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
+ */
+
+/**
+ * @see PHPUnit_Framework_TestCase
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
+
+/**
+ * @see Zym_Paginate_Array
+ */
+require_once 'trunk/library/Zym/Paginate/Array.php';
+
+/**
+ * Test suite for Zym_Notification_Message
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Paginate
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Mock data
+     *
+     * @var array
+     */
     private $mockData = array();
 
     /**
@@ -39,18 +73,27 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    /**
+     * Test current() method
+     */
     public function testCurrent()
     {
         $this->Zym_Paginate_Array->rewind();
         $this->assertEquals(1, $this->Zym_Paginate_Array->current());
     }
 
+    /**
+     * Test key() method
+     */
     public function testKey()
     {
         $this->Zym_Paginate_Array->rewind();
         $this->assertEquals(1, $this->Zym_Paginate_Array->key());
     }
 
+    /**
+     * Test next() method
+     */
     public function testNext()
     {
         $this->Zym_Paginate_Array->next();
@@ -58,17 +101,26 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->rewind();
     }
 
+    /**
+     * Test rewind() method
+     */
     public function testRewind()
     {
         $this->Zym_Paginate_Array->rewind();
         $this->assertEquals(1, $this->Zym_Paginate_Array->key());
     }
 
+    /**
+     * Test valid() method
+     */
     public function testValid()
     {
         $this->assertTrue($this->Zym_Paginate_Array->valid());
     }
 
+    /**
+     * Test count() method
+     */
     public function testCount()
     {
         $this->assertEquals(5, $this->Zym_Paginate_Array->count());
@@ -107,11 +159,17 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Test hasPages() method
+     */
     public function testHasPages()
     {
         $this->assertTrue($this->Zym_Paginate_Array->hasPages());
     }
 
+    /**
+     * Test hasNext() method
+     */
     public function testHasNext()
     {
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
@@ -123,6 +181,9 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
+    /**
+     * Test hasPrevious() method
+     */
     public function testHasPrevious()
     {
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
@@ -134,6 +195,9 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
+    /**
+     * Test getItemNumber() method
+     */
     public function testGetItemNumber()
     {
         $itemNumber = $this->Zym_Paginate_Array->getItemNumber(1, 3);
@@ -142,21 +206,33 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $itemNumber2);
     }
 
+    /**
+     * Test getPageCount() method
+     */
     public function testGetPageCount()
     {
         $this->assertEquals(5, $this->Zym_Paginate_Array->getPageCount());
     }
 
+    /**
+     * Test getRowCount() method
+     */
     public function testGetRowCount()
     {
         $this->assertEquals(10, $this->Zym_Paginate_Array->getRowCount());
     }
 
+    /**
+     * Test getRowLimit() method
+     */
     public function testGetRowLimit()
     {
         $this->assertEquals(2, $this->Zym_Paginate_Array->getRowLimit());
     }
 
+    /**
+     * Test setRow() method
+     */
     public function testSetRowLimit()
     {
         $this->Zym_Paginate_Array->setRowLimit(5);
@@ -164,6 +240,9 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->setRowLimit(2);
     }
 
+    /**
+     * Test setCurrentPageNumber() method
+     */
     public function testSetCurrentPageNumber()
     {
         $this->Zym_Paginate_Array->setCurrentPageNumber(2);
@@ -182,6 +261,9 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
+    /**
+     * Test getCurrentPageNumber() method
+     */
     public function testGetCurrentPageNumber()
     {
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
@@ -191,6 +273,9 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 
+    /**
+     * Test isCurrentPageNumber() method
+     */
     public function testIsCurrentPageNumber()
     {
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
@@ -198,9 +283,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get the current page
-     *
-     * @return Zend_Db_Table_Rowset_Abstract|array
+     * Test getCurrentPage() method
      */
     public function testGetCurrentPage()
     {
@@ -211,10 +294,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get the next page
-     *
-     * @throws Zym_Paginate_Exception_NoNextPage
-     * @return Zend_Db_Table_Rowset_Abstract|array
+     * Test getNextPage() method
      */
     public function testGetNextPage()
     {
@@ -235,9 +315,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get the next page number
-     *
-     * @return int
+     * Test getNextPageNumber() method
      */
     public function testGetNextPageNumber()
     {
@@ -257,10 +335,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get the previous page
-     *
-     * @throws Zym_Paginate_Exception_NoPreviousPage
-     * @return Zend_Db_Table_Rowset_Abstract|array
+     * Test getPreviousPage() method
      */
     public function testGetPreviousPage()
     {
@@ -282,9 +357,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get previous page nr
-     *
-     * @return int
+     * Test getPreviousPageNumber() method
      */
     public function testGetPreviousPageNumber()
     {
@@ -304,4 +377,3 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array->setCurrentPageNumber(1);
     }
 }
-

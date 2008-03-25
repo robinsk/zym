@@ -1,21 +1,50 @@
 <?php
-require_once 'trunk/library/Zym/Db/Table/Abstract.php';
-require_once 'PHPUnit/Framework/TestCase.php';
+/**
+ * Zym
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Db
+ * @subpackage Table
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
+ */
 
-class Zym_Db_Table_Abstract_Test extends Zym_Db_Table_Abstract
-{
-    protected $_name = 'zym_db_table';
-}
+/**
+ * @see Zym_Db_Table_Abstract
+ */
+require_once 'trunk/library/Zym/Db/Table/Abstract.php';
+
+/**
+ * @see PHPUnit_Framework_TestCase
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * Zym_Db_Table_Abstract test case.
+ * @TODO Create a DB test environment once and for all
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Db
+ * @subpackage Table
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Table instance
+     *
      * @var Zym_Db_Table_Abstract
      */
     private $Zym_Db_Table_Abstract;
+
     /**
      * Prepares the environment before running a test.
      */
@@ -31,6 +60,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
 
         $this->Zym_Db_Table_Abstract = new Zym_Db_Table_Abstract_Test();
     }
+
     /**
      * Cleans up the environment after running a test.
      */
@@ -55,6 +85,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $reference);
     }
+
     /**
      * Tests Zym_Db_Table_Abstract->isIdentity()
      */
@@ -66,3 +97,10 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
     }
 }
 
+/**
+ * Custom table class used for testing
+ */
+class Zym_Db_Table_Abstract_Test extends Zym_Db_Table_Abstract
+{
+    protected $_name = 'zym_db_table';
+}

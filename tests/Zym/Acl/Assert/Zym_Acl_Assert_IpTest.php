@@ -1,15 +1,52 @@
 <?php
+/**
+ * Zym
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Notification
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
+ */
+
+/**
+ * @see Zym_Acl_Assert_Ip
+ */
 require_once 'trunk/library/Zym/Acl/Assert/Ip.php';
+
+/**
+ * @see PHPUnit_Framework_TestCase
+ */
 require_once 'PHPUnit/Framework/TestCase.php';
+
 /**
  * Zym_Acl_Assert_Ip test case.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Notification
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Assert_Ip instance
+     *
      * @var Zym_Acl_Assert_Ip
      */
     private $Zym_Acl_Assert_Ip;
+
+    /**
+     * Acl instance
+     *
+     * @var Zend_Acl
+     */
     private $Zend_Acl;
 
     /**
@@ -26,6 +63,7 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
         $this->Zym_Acl_Assert_Ip = new Zym_Acl_Assert_Ip($whitelist);
         $this->Zend_Acl = new Zend_Acl();
     }
+
     /**
      * Cleans up the environment after running a test.
      */
@@ -49,6 +87,9 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($allowed);
     }
 
+    /**
+     * Tests assert() for the wildcard IP
+     */
     public function testAssertWildcard()
     {
         $_SERVER['REMOTE_ADDR'] = '5.6.7.8';
@@ -60,6 +101,9 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($allowed);
     }
 
+    /**
+     * Tests assert() for a ranged IP address
+     */
     public function testAssertRange()
     {
         $_SERVER['REMOTE_ADDR'] = '7.8.9.0';
@@ -83,4 +127,3 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($allowed);
     }
 }
-

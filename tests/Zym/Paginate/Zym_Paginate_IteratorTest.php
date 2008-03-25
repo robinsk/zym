@@ -1,8 +1,37 @@
 <?php
-require_once 'trunk/library/Zym/Paginate/Iterator.php';
-require_once 'PHPUnit/Framework/TestCase.php';
 /**
- * Zym_Paginate_Iterator test case.
+ * Zym
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Paginate
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
+ */
+
+/**
+ * @see PHPUnit_Framework_TestCase
+ */
+require_once 'PHPUnit/Framework/TestCase.php';
+
+/**
+ * @see Zym_Paginate_Iterator
+ */
+require_once 'trunk/library/Zym/Paginate/Iterator.php';
+
+/**
+ * Test suite for Zym_Notification_Message
+ *
+ * @author     Jurrien Stutterheim
+ * @category   Zym_Tests
+ * @package    Zym_Paginate
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_Paginate_IteratorTest extends PHPUnit_Framework_TestCase
 {
@@ -37,6 +66,9 @@ class Zym_Paginate_IteratorTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    /**
+     * Test the getPage method
+     */
     public function testGetPage ()
     {
         $page = $this->Zym_Paginate_Iterator->getPage(2);
