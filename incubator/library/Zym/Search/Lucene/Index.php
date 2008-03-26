@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zend_Search_Lucene_Index_Term
+ */
+require_once 'Zend/Search/Lucene/Index/Term.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Search_Lucene
@@ -102,7 +107,7 @@ class Zym_Search_Lucene_Index
      * Index an Zym_Search_Lucene_Indexable_Interface
      *
      * @throws Zym_Search_Lucene_Exception
-     * @param Zym_Search_Lucene_Indexable_Interface|array $indexable
+     * @param Zym_Search_Lucene_Indexable_Interface|array $indexables
      * @param boolean $update
      * @param string $searchField
      * @return Zym_Search_Lucene_Index
@@ -147,31 +152,13 @@ class Zym_Search_Lucene_Index
 	 *
 	 * @param Zym_Search_Lucene_Query_Interface $query
 	 * @param int $resultSetLimit
-	 * @param Zend_Cache_Core $cache
 	 * @return array
 	 */
-    public function search(Zym_Search_Lucene_Query_Interface $query, $resultSetLimit = null, Zend_Cache_Core $cache = null)
+    public function search(Zym_Search_Lucene_Query_Interface $query, $resultSetLimit = 0)
     {
-        if ($resultSetLimit != null) {
-            Zend_Search_Lucene::setResultSetLimit($resultSetLimit);
-        }
+        Zend_Search_Lucene::setResultSetLimit((int) $resultSetLimit);
 
-        $results = null;
-
-        if ($cache != null) {
-            $results = $cache->load($query->toString());
-        }
-
-        if (empty($results)) {
-            $results = $this->_searchIndex->find($query->getQueryHash());
-        }
-
-        if ($cache != null && !empty($results)) {
-            $cache->clean(Zend_Cache::CLEANING_MODE_OLD);
-            $cache->save($results);
-        }
-
-        return $results;
+        return $this->_searchIndex->find($query->toString());
     }
 
     /**
