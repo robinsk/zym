@@ -31,4 +31,11 @@ interface Zym_Search_Lucene_Query_Interface
      * @return string
      */
     public function toString();
+
+    /**
+     * Get a unique hash for this query
+     *
+     * @return string
+     */
+    public function getQueryHash();
 }

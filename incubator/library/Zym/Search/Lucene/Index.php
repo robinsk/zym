@@ -26,40 +26,16 @@ class Zym_Search_Lucene_Index
     /**
      * Record ID key
      *
+     * @var string
      */
-	const RECORDID = 'ZSLPKID';
-
-	/**
-	 * Record ID cant be null exception
-	 *
-	 */
-	const RECORD_ID_CANT_BE_NULL_EXCEPTION = 'Record ID can\'t be null';
-
-	/**
-	 * Exception
-	 *
-	 */
-	const DOCUMENT_NOT_ZSLD_EXCEPTION = 'The document is not an instance of Zend_Search_Lucene_Document, so it can\'t be indexed.';
-
-	/**
-	 * Default resultset limit
-	 *
-	 */
-	const RESULTSET_LIMIT = 1000;
+	protected $_recordId = 'ZSLPKID';
 
     /**
      * The search index
      *
      * @var Zend_Search_Lucene_Interface
      */
-    protected $_searchIndex;
-
-    /**
-     * A collection of Indexables for batch processing
-     *
-     * @var array
-     */
-    protected $_indexables = array();
+    protected $_searchIndex = null;
 
     /**
      * Construct the indexer
@@ -88,8 +64,12 @@ class Zym_Search_Lucene_Index
      * @param string $searchField
      * @return Zym_Search_Lucene_Index
      */
-    public function delete($id, $searchField = self::RECORDID)
+    public function delete($id, $searchField = null)
     {
+        if (!$searchField) {
+            $searchField = $this->_recordId;
+        }
+
 		$docIds = $this->getDocumentIDsByID($id, $searchField);
 
 		foreach ($docIds as $id) {
@@ -106,8 +86,12 @@ class Zym_Search_Lucene_Index
      * @param string $searchField
      * @return array
      */
-    public function getDocumentIDsByID($id, $searchField = self::RECORDID)
+    public function getDocumentIDsByID($id, $searchField = null)
     {
+        if (!$searchField) {
+            $searchField = $this->_recordId;
+        }
+
         $term = new Zend_Search_Lucene_Index_Term($id, $searchField);
         $docIds = $this->_searchIndex->termDocs($term);
 
@@ -123,13 +107,17 @@ class Zym_Search_Lucene_Index
      * @param string $searchField
      * @return Zym_Search_Lucene_Index
      */
-	public function index(Zym_Search_Lucene_Indexable_Interface $indexable, $update = true, $searchField = self::RECORDID)
+	public function index(Zym_Search_Lucene_Indexable_Interface $indexable, $update = true, $searchField = null)
 	{
+	    if (!$searchField) {
+            $searchField = $this->_recordId;
+        }
+
 		if ($update) {
 			$recordId = $indexable->getRecordID();
 
 			if (!$recordId) {
-			    $this->_throwException(self::RECORD_ID_CANT_BE_NULL_EXCEPTION);
+			    $this->_throwException('Record ID can\'t be null');
 			}
 
 			$this->delete($recordId, $searchField);
@@ -138,7 +126,7 @@ class Zym_Search_Lucene_Index
 		$document = $indexable->getSearchDocument();
 
 		if (!$document instanceof Zend_Search_Lucene_Document) {
-			$this->_throwException(self::DOCUMENT_NOT_ZSLD_EXCEPTION);
+			$this->_throwException('The document is not an instance of Zend_Search_Lucene_Document, so it can\'t be indexed.');
 		}
 
 		$this->_searchIndex->addDocument($document);
@@ -149,27 +137,15 @@ class Zym_Search_Lucene_Index
 	/**
 	 * Add an indexable to the list
 	 *
-	 * @param Zym_Search_Lucene_Indexable_Interface $indexable
-	 * @return Zym_Search_Lucene_Index
-	 */
-	public function addIndexable(Zym_Search_Lucene_Indexable_Interface $indexable)
-	{
-		$this->_indexables[] = $indexable;
-
-		return $this;
-	}
-
-	/**
-	 * Process the list of indexables
-	 *
+	 * @param array $indexables
 	 * @param boolean $update
 	 * @return Zym_Search_Lucene_Index
 	 */
-	public function processBatch($update = true)
+	public function indexMultiple(array $indexables, $update = true)
 	{
-		foreach ($this->_indexables as $indexable) {
-			$this->index($indexable, $update);
-		}
+	    foreach ($indexables as $indexable) {
+            $this->index($indexable, $update);
+        }
 
 		return $this;
 	}
@@ -182,23 +158,20 @@ class Zym_Search_Lucene_Index
 	 * @param Zend_Cache_Core $cache
 	 * @return array
 	 */
-    public function search(Zym_Search_Lucene_Query_Interface $query, $resultSetLimit = self::RESULTSET_LIMIT, Zend_Cache_Core $cache = null)
+    public function search(Zym_Search_Lucene_Query_Interface $query, $resultSetLimit = null, Zend_Cache_Core $cache = null)
     {
-        if ($resultSetLimit > 0) {
+        if ($resultSetLimit != null) {
             Zend_Search_Lucene::setResultSetLimit($resultSetLimit);
         }
 
         $results = null;
-        $queryString = $query->toString();
-
-        $cacheName = md5($queryString);
 
         if ($cache != null) {
-            $results = $cache->load($cacheName);
+            $results = $cache->load($query->toString());
         }
 
         if (empty($results)) {
-            $results = $this->_searchIndex->find($queryString);
+            $results = $this->_searchIndex->find($query->getQueryHash());
         }
 
         if ($cache != null && !empty($results)) {
