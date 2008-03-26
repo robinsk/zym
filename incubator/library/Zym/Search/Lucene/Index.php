@@ -102,50 +102,42 @@ class Zym_Search_Lucene_Index
      * Index an Zym_Search_Lucene_Indexable_Interface
      *
      * @throws Zym_Search_Lucene_Exception
-     * @param Zym_Search_Lucene_Indexable_Interface $indexable
+     * @param Zym_Search_Lucene_Indexable_Interface|array $indexable
      * @param boolean $update
      * @param string $searchField
      * @return Zym_Search_Lucene_Index
      */
-	public function index(Zym_Search_Lucene_Indexable_Interface $indexable, $update = true, $searchField = null)
+	public function index($indexables, $update = true, $searchField = null)
 	{
-	    if (!$searchField) {
-            $searchField = $this->_recordId;
-        }
+	    $indexables = (array) $indexables;
 
-		if ($update) {
-			$recordId = $indexable->getRecordID();
-
-			if (!$recordId) {
-			    $this->_throwException('Record ID can\'t be null');
-			}
-
-			$this->delete($recordId, $searchField);
-		}
-
-		$document = $indexable->getSearchDocument();
-
-		if (!$document instanceof Zend_Search_Lucene_Document) {
-			$this->_throwException('The document is not an instance of Zend_Search_Lucene_Document, so it can\'t be indexed.');
-		}
-
-		$this->_searchIndex->addDocument($document);
-
-		return $this;
-	}
-
-	/**
-	 * Add an indexable to the list
-	 *
-	 * @param array $indexables
-	 * @param boolean $update
-	 * @return Zym_Search_Lucene_Index
-	 */
-	public function indexMultiple(array $indexables, $update = true)
-	{
 	    foreach ($indexables as $indexable) {
-            $this->index($indexable, $update);
-        }
+	        if (!$indexable instanceof Zym_Search_Lucene_Indexable_Interface) {
+	            $this->_throwException('The object needs to have Zym_Search_Lucene_Indexable_Interface implemented.');
+	        }
+
+	    	if (!$searchField) {
+                $searchField = $this->_recordId;
+            }
+
+            if ($update) {
+                $recordId = $indexable->getRecordID();
+
+                if (!$recordId) {
+                    $this->_throwException('Record ID can\'t be null');
+                }
+
+                $this->delete($recordId, $searchField);
+            }
+
+            $document = $indexable->getSearchDocument();
+
+            if (!$document instanceof Zend_Search_Lucene_Document) {
+                $this->_throwException('The document is not an instance of Zend_Search_Lucene_Document, so it can\'t be indexed.');
+            }
+
+            $this->_searchIndex->addDocument($document);
+	    }
 
 		return $this;
 	}
