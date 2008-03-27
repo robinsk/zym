@@ -40,15 +40,30 @@ class Zym_Log_Writer_Syslog extends Zend_Log_Writer_Abstract
 	 */
 	public function __construct($ident, $option, $facility)
 	{
-		// Define syslog related constants
-		define_syslog_variables();
-
+	    if ($ident === null && $option === null && $facility === null) {
+	        return;
+	    }
+	    
 		// Open connection to syslog
-		openlog($ident, $option, $facility);
+		$result = openlog($ident, $option, $facility);
+		if ($result === false) {
+		    /**
+		     * @see Zym_Log_Writer_Exception
+		     */
+		    require_once 'Zym/Log/Writer/Exception.php';
+		    throw new Zym_Log_Writer_Exception(
+		        'Failed to open a connection to syslog'
+		    );
+		}
 	}
 
     /**
-     * Formatting is not possible on this writer
+     * Set a new formatter for this writer
+     *
+     * Not supported!
+     *
+     * @param  Zend_Log_Formatter_Interface $formatter
+     * @return void
      */
     public function setFormatter($formatter)
     {

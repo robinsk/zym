@@ -43,8 +43,15 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
      *
      * @var array
      */
-    static protected $_redirect = array();
-
+    protected static $_redirect = array();
+    
+    /**
+     * Zend_Session storage object
+     *
+     * @var Zend_Session_Namespace
+     */
+    protected static $_session;
+    
     /**
      * $_namespace - Instance namespace, default is 'default'
      *
@@ -58,13 +65,6 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
      * @var array
      */
     protected $_expirationHops = array();
-
-    /**
-     * Zend_Session storage object
-     *
-     * @var Zend_Session_Namespace
-     */
-    static protected $_session = null;
 
     /**
      * Construct
@@ -174,6 +174,21 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
     }
 
     /**
+     * Clear url redirect
+     *
+     * @return bool True if url were cleared, false if none existed
+     */
+    public function clearRedirect()
+    {
+        if ($this->hasRedirect()) {
+            unset(self::$_redirect[$this->getNamespace()]);
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
      * Whether a url redirect has been set this request
      *
      * @return bool
@@ -194,21 +209,21 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
             return self::$_session->{$this->getNamespace()};
         }
     }
-
+    
     /**
      * Clear url redirect
      *
      * @return bool True if url were cleared, false if none existed
      */
-    public function clearRedirect()
+    public function clearCurrentRedirect()
     {
-        if ($this->hasRedirect()) {
+        if ($this->hasCurrentRedirect()) {
             unset(self::$_session->{$this->getNamespace()});
             return true;
         }
 
         return false;
-    }
+    }    
 
     /**
      * Extend the url redirect
