@@ -43,12 +43,12 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
-            'layout_path' => 'layout',
-            'layout' => 'default',
+            'layout_path' => 'app/layouts',
+            'layout'      => 'default',
             'mvc_enabled' => null,
             'content_key' => null,
-            'inflector' => null,
-            'view' => null
+            'inflector'   => null,
+            'view'        => null
         )
     );
 

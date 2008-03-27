@@ -133,7 +133,7 @@ class Zym_App_ExceptionHandler_Standard extends Zym_App_ExceptionHandler_Abstrac
     
             // Setup for dispatching error (TODO: Fix this and dispatch the controller manually)
             $frontController = Zend_Controller_Front::getInstance();
-            $frontController->addModuleDirectory($this->getApp()->getConfig()->home)
+            $frontController->addModuleDirectory($this->getApp()->getHome())
                             ->setRequest($request)
                             ->setResponse($response)
                             ->throwExceptions(true);

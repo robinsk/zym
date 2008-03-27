@@ -64,7 +64,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
         
             'module' => array(
                 'directory'       => array(
-                    'modules'
+                    'app/modules'
                 ),
                 
                 'controller_name' => null
@@ -200,18 +200,19 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     protected function _addControllerAndModuleDirectories(Zend_Config $config)
     {
         $moduleAndControllerMap = array(
-            'module' => $config->module->directory,
-            'controller' => $config->controller->directory
+            'module' => $config->get('module')->get('directory'),
+            'controller' => $config->get('controller')->get('directory')
         );
-        
+
         foreach ($moduleAndControllerMap as $name => $dirObj) {
             $dirArray = ($dirObj instanceof Zend_Config) ? $dirObj->toArray() : (array) $dirObj;
-            
+
             // Add a module or a controller directory
             foreach ($dirArray as $key => $dir) {
                 // addControllerDirectory(), addModuleDirectory()
                 $addDirectoryFunc = 'add' . ucfirst($name) . 'Directory';
                 $dir = $this->getApp()->getHome($dir);
+                
                 call_user_func_array(array($this->getFrontController(), $addDirectoryFunc), array($dir, $key));
             }
         }

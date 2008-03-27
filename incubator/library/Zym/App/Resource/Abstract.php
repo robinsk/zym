@@ -341,6 +341,10 @@ abstract class Zym_App_Resource_Abstract
                 }
             }
         } else {
+            if (is_array($array1) && trim($array2) === '') {
+                return $array1;
+            }
+            
             $array1 = $array2;
         }
         

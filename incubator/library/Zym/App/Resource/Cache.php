@@ -121,7 +121,7 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
         // File
         $fileOptions = Zym_Cache::getBackendOptions('file');
         if (isset($fileOptions['cache_dir'])) {
-            $fileOptions['cache_dir'] = $this->getApp()->getPath(Zym_App::PATH_TEMP, $fileOptions['cache_dir']);
+            $fileOptions['cache_dir'] = $this->getApp()->getPath(Zym_App::PATH_DATA, $fileOptions['cache_dir']);
         }
 
         Zym_Cache::setBackendOptions('file', $fileOptions);

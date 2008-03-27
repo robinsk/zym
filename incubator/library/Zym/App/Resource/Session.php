@@ -82,7 +82,7 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
         $savePath = $config->get('save_path');
         $configArray = array(
             'save_path' => $this->getApp()
-                                ->getPath(Zym_App::PATH_TEMP, $savePath)
+                                ->getPath(Zym_App::PATH_DATA, $savePath)
         );
 
         Zend_Session::setOptions($configArray);

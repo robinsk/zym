@@ -67,11 +67,6 @@ class Zym_App
      */
     const ENV_DEFAULT     = 'default';
     
-    /**
-     * Cache directory
-     *
-     */
-    const PATH_CACHE = 'cache';
     
     /**
      * Config directory
@@ -84,14 +79,20 @@ class Zym_App
      *
      */
     const PATH_TEMP = 'temp';
+    
+    /**
+     * Web ddirectory
+     *
+     */
     const PATH_WEB = 'web';
-    const PATH_MODULES = 'modules';
-    const PATH_LIBRARIES = 'libraries';
-    const PATH_LAYOUT = 'layout';
+    
+    
+    const PATH_APP = 'app';
+    const PATH_LIBRARY = 'library';
+    const PATH_LAYOUTS = 'layouts';
     const PATH_DATA = 'data';
-    const PATH_SESSION = 'session';
-    const PATH_TEST = 'test';
-    const PATH_LOG = 'log';
+    const PATH_TESTS = 'tests';
+
     
     /**
      * Instance
@@ -144,7 +145,8 @@ class Zym_App
             
             'path' => array(
                 self::PATH_CONFIG => 'config',
-                self::PATH_TEMP => 'temp',
+                self::PATH_DATA   => 'data',
+                self::PATH_TEMP   => 'temp',
             ),
             
             'default_resource' => array(
@@ -903,6 +905,10 @@ class Zym_App
                 }
             }
         } else {
+            if (is_array($array1) && trim($array2) === '') {
+                return $array1;
+            }
+            
             $array1 = $array2;
         }
         
@@ -1001,8 +1007,13 @@ class Zym_App
     protected function _setupCache(Zend_Config $config)
     {
         if ($this->_cache instanceof Zend_Cache_Core) {
+            // Disable cache
+            if (!$config->get('cache')->get('enabled')) {
+                $this->_cache->setOption('caching', false);
+            }
+            
             return;
-        } else if ($config->get('cache')->get('enabled')) {
+        } else if (!$config->get('cache')->get('enabled')) {
             $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
             return;
         }
