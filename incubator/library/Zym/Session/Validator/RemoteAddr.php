@@ -20,11 +20,6 @@
 require_once 'Zend/Session/Validator/Abstract.php';
 
 /**
- * @see Zend_Session_Validator_Interface
- */
-require_once 'Zend/Session/Validator/Interface.php';
-
-/**
  * Validate a session using a user's IP address
  * 
  * @todo expand this component to handle HTTP_X_FORWARDED_FOR etc...
@@ -36,8 +31,8 @@ require_once 'Zend/Session/Validator/Interface.php';
  * @subpackage Validator
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Session_Validator_RemoteAddr extends Zend_Session_Validator_Abstract implements Zend_Session_Validator_Interface 
-{   
+class Zym_Session_Validator_RemoteAddr extends Zend_Session_Validator_Abstract
+{
     /**
      * Setup the validator
      *

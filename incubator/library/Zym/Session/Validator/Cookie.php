@@ -20,11 +20,6 @@
 require_once 'Zend/Session/Validator/Abstract.php';
 
 /**
- * @see Zend_Session_Validator_Interface
- */
-require_once 'Zend/Session/Validator/Interface.php';
-
-/**
  * Validate a session using a cookie value
  *
  * @author Geoffrey Tran
@@ -34,7 +29,7 @@ require_once 'Zend/Session/Validator/Interface.php';
  * @subpackage Validator
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Session_Validator_Cookie extends Zend_Session_Validator_Abstract implements Zend_Session_Validator_Interface 
+class Zym_Session_Validator_Cookie extends Zend_Session_Validator_Abstract
 {
     /**
      * Cookie key
