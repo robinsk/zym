@@ -298,34 +298,37 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
      */
     protected function _getExceptionInfo(array $exceptions, Zend_Controller_Request_Abstract $request)
     {
+        /**
+         * @see Zym_Controller_Plugin_ErrorHandler_Data
+         */
+        require_once 'Zym/Controller/Plugin/ErrorHandler/Data.php';
+        
         // Get exception information
-        $error            = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-        $exception        = $exceptions[0];
-        $exceptionType    = get_class($exception);
-        $error->exception = $exception;
-
+        $exception     = $exceptions[0];
+        $exceptionType = get_class($exception);
+        $type          = '';
+        
         switch ($exceptionType) {
             case 'Zend_Controller_Dispatcher_Exception':
-                $error->type = self::EXCEPTION_NO_CONTROLLER;
+                $type = self::EXCEPTION_NO_CONTROLLER;
                 break;
 
             case 'Zend_Controller_Action_Exception':
-                $error->type = self::EXCEPTION_NO_ACTION;
+                $type = self::EXCEPTION_NO_ACTION;
                 break;
 
             default:
                 // Check if exception implements an action interface
                 if ($exception instanceof Zym_Controller_Action_Exception_Interface) {
-                    $error->type = self::EXCEPTION_NO_ACTION;
+                    $type = self::EXCEPTION_NO_ACTION;
                 } else {
-                    $error->type = self::EXCEPTION_OTHER;
+                    $type = self::EXCEPTION_OTHER;
                 }
 
                 break;
         }
-        
-        // Keep a copy of the original request
-        $error->request = clone $request;
+
+        $error = new Zym_Controller_Plugin_ErrorHandler_Data($type, $exception, clone $request);
 
         return $error;
     }
