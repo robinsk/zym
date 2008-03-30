@@ -21,7 +21,7 @@ require_once 'Zym/App/Registry.php';
 /**
  * @see Zend_Cache
  */
-require_once('Zend/Cache.php');
+require_once 'Zend/Cache.php';
 
 /**
  * @see Zend_Config
@@ -136,8 +136,6 @@ class Zym_App
             'name' => 'App',
         
             'home' => '../',
-            
-            'throw_exceptions' => false,
         
             'namespace' => array(
                 'Zym' => 'Zym_App_Resource'
@@ -180,13 +178,6 @@ class Zym_App
      * @var string
      */
     protected $_environment = self::ENV_PRODUCTION;
-    
-    /**
-     * ExceptionHandler instance
-     *
-     * @var Zym_App_ExceptionHandler_Abstract
-     */
-    protected $_exceptionHandler;
     
     /**
      * Force default priority
@@ -588,37 +579,6 @@ class Zym_App
     }
     
     /**
-     * Set exception handler
-     *
-     * @param Zym_App_ExceptionHandler_Abstract $handler
-     * @return Zym_App
-     */
-    public function setExceptionHandler(Zym_App_ExceptionHandler_Abstract $handler)
-    {
-        $handler->setApp($this);
-        $this->_exceptionHandler = $handler;
-        return $this;
-    }
-
-    /**
-     * Get the exeption handler
-     *
-     * @return Zym_App_ExceptionHandler_Abstract
-     */
-    public function getExceptionHandler()
-    {
-        if (!$this->_exceptionHandler instanceof Zym_App_ExceptionHandler_Abstract) {
-            /**
-             * @see Zym_App_ExceptionHandler_Standard
-             */
-            require_once('Zym/App/ExceptionHandler/Standard.php');
-            $this->setExceptionHandler(new Zym_App_ExceptionHandler_Standard());
-        }
-        
-        return $this->_exceptionHandler;
-    }
-    
-    /**
      * Set environment
      *
      * @param string $env
@@ -647,37 +607,27 @@ class Zym_App
      */
     public function dispatch()
     {
-        try {
-            // Get config
-            $config = $this->getConfig();
+        // Get config
+        $config = $this->getConfig();
+        
+        // Cache setup
+        $this->_setupCache($config);
+        
+        // Load namespaces
+        $this->_parseNamespaces($config);
 
-            // Cache setup
-            $this->_setupCache($config);
-            
-            // Load namespaces
-            $this->_parseNamespaces($config);
-
-            // Load resources
-            $this->_parseResources($config);
-            
-            // Sort dispatch order
-            $scripts = $this->getResources();
-            usort($scripts, array($this, '_dispatchSort'));
-            $this->setResources($scripts);
-            
-            // Init script dispatch loop
-            foreach ($scripts as $resource) {                
-                // Dispatch
-                $resource->dispatch();
-            }
-        } catch (Exception $e) {
-            // Debug mode?
-            if ($this->getConfig()->throw_exceptions) {
-                throw $e;
-            }
-            
-            // Let the exception handler deal with it
-            $this->getExceptionHandler()->handle($e);
+        // Load resources
+        $this->_parseResources($config);
+        
+        // Sort dispatch order
+        $scripts = $this->getResources();
+        usort($scripts, array($this, '_dispatchSort'));
+        $this->setResources($scripts);
+        
+        // Init script dispatch loop
+        foreach ($scripts as $resource) {                
+            // Dispatch
+            $resource->dispatch();
         }
     }
     
