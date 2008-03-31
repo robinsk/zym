@@ -61,14 +61,14 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     'base' => array(),
         
                     'filter' => array(
-                        'SpotSec' => array(
+                        'Zym' => array(
                             'prefix' => 'Zym_View_Filter',
                             'path'   => 'Zym/View/Filter'
                         )
                     ),
                     
                     'helper' => array(
-                        'SpotSec' => array(
+                        'Zym' => array(
                             'prefix' => 'Zym_View_Helper',
                             'path'   => 'Zym/View/Helper'
                         )
@@ -164,7 +164,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 call_user_func_array(array($view, $method), array(trim($path), $prefix));
             }
         }
-        
+
         // Set encoding
         if ($viewConfig->encoding) {
             $view->setEncoding($viewConfig->encoding);

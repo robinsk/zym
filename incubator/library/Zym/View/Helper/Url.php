@@ -22,7 +22,7 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
 /**
  * @see Zend_View_Helper_Url
  */
- require_once 'Zend/View/Helper/Url.php';
+require_once 'Zend/View/Helper/Url.php';
 
 /**
  * @author Geoffrey Tran
@@ -49,7 +49,7 @@ class Zym_View_Helper_Url extends Zend_View_Helper_Url
      * @param  boolean $encode
      * @return string|Zym_View_Helper_Url
      */
-    public function url(array $urlOptions = null, $name = null, $reset = false, $encode = true)
+    public function url($urlOptions = null, $name = null, $reset = false, $encode = true)
     {
         if ($urlOptions === null) {
             return $this;
@@ -71,11 +71,11 @@ class Zym_View_Helper_Url extends Zend_View_Helper_Url
      */
     public function simple($action, $controller = null, $module = null, array $params = null)
     {
-        if (!$this>_actionHelper instanceof Zend_Controller_Action_Helper_Url) {
+        if (!$this->_actionHelper instanceof Zend_Controller_Action_Helper_Url) {
             $this->_actionHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
         }
         
-        return $this->_actionHelper->url($action, $controller, $module, $params);
+        return $this->_actionHelper->simple($action, $controller, $module, $params);
     }
 
     /**
@@ -88,7 +88,7 @@ class Zym_View_Helper_Url extends Zend_View_Helper_Url
      */
     public function route(array $urlOptions = array(), $name = null, $reset = false, $encode = true)
     {
-        parent::url($urlOptions, $name, $reset, $encode);
+        return parent::url($urlOptions, $name, $reset, $encode);
     }
 
     /**
