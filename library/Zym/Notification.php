@@ -55,6 +55,13 @@ class Zym_Notification
 	protected $_observers = array();
 
 	/**
+	 * Collection of available events.
+	 *
+	 * @var array
+	 */
+	protected $_events = array();
+
+	/**
 	 * Singleton instance
 	 *
 	 * @var array
@@ -95,7 +102,7 @@ class Zym_Notification
      */
     public static function has($namespace)
     {
-        return array_key_exists($namespace, self::$_instances);
+        return isset(self::$_instances[$namespace]);
     }
 
 	/**
@@ -127,14 +134,13 @@ class Zym_Notification
 	public function post($name, $sender = null, array $data = array())
 	{
         $toNotify = array();
-        $events = array_keys($this->_observers);
 
-        foreach ($events as $event) {
+        foreach ($this->_events as $event) {
             if ($event == $name || $event == $this->_wildcard) {
                 $toNotify[] = $event;
             } else {
                 if (strpos($event, $this->_wildcard) !== false) {
-                    $cleanEvent = str_ireplace($this->_wildcard, '', $event);
+                    $cleanEvent = str_replace($this->_wildcard, '', $event);
 
                     if (strpos($event, $cleanEvent) === 0) {
                         $toNotify[] = $event;
@@ -147,47 +153,37 @@ class Zym_Notification
         $notified = array();
 
         foreach ($toNotify as $event) {
-            foreach ($this->_observers[$event] as $observerHash => $observerData) {
-                if (!in_array($observerHash, $notified)) {
-                    $notified[] = $observerHash;
-                    $this->_postNotification($notification, $observerData);
+            foreach ($this->_observers[$event] as $observerHash => $registration) {
+                if (!isset($notified[$observerHash])) {
+                    $notified[$observerHash] = $observerHash;
+
+                    $observer = $registration->getObserver();
+                    $callback = $registration->getCallback();
+
+                    if ($observer instanceof Zym_Notification_Interface &&
+                        $callback == $this->_defaultCallback) {
+
+                        $observer->notify($notification);
+                    } else {
+                        if (!method_exists($observer, $callback)) {
+                            /**
+                             * @see Zym_Notification_Exception_MethodNotImplemented
+                             */
+                            require_once 'Zym/Notification/Exception/MethodNotImplemented.php';
+
+                            $message = sprintf('Method "%s" is not implemented in class "%s"',
+                                               $callback, get_class($observer));
+
+                            throw new Zym_Notification_Exception_MethodNotImplemented($message);
+                        }
+
+                        $observer->$callback($message);
+                    }
                 }
             }
         }
 
 		return $this;
-	}
-
-	/**
-	 * Post the notification
-	 *
-	 * @param Zym_Notification_Message $message
-	 * @param Zym_Notification_Registration $observerData
-	 */
-	protected function _postNotification(Zym_Notification_Message $message, Zym_Notification_Registration $registration)
-	{
-	    $observer = $registration->getObserver();
-        $callback = $registration->getCallback();
-
-	    if ($observer instanceof Zym_Notification_Interface &&
-            $callback == $this->_defaultCallback) {
-
-            $observer->notify($message);
-        } else {
-            if (!method_exists($observer, $callback)) {
-                /**
-                 * @see Zym_Notification_Exception_MethodNotImplemented
-                 */
-                require_once 'Zym/Notification/Exception/MethodNotImplemented.php';
-
-                $message = sprintf('Method "%s" is not implemented in class "%s"',
-                                   $callback, get_class($observer));
-
-                throw new Zym_Notification_Exception_MethodNotImplemented($message);
-            }
-
-            $observer->$callback($message);
-        }
 	}
 
 	/**
@@ -216,6 +212,8 @@ class Zym_Notification
                 $this->reset($event);
             }
 
+            $this->_events[$event] = $event;
+
             if (!$this->hasObserver($observerHash, $event)) {
                 $registration = new Zym_Notification_Registration($observer, $callback);
 
@@ -236,7 +234,7 @@ class Zym_Notification
 	public function detach($observer, $events = null)
 	{
         if (!$events) {
-            $events = array_keys($this->_observers);
+            $events = $this->_events;
         } else {
             $events = (array) $events;
         }
@@ -244,9 +242,13 @@ class Zym_Notification
         $observerHash = spl_object_hash($observer);
 
 	    foreach ($events as $event) {
-    	    if ($this->isRegistered($event) &&
+	        if ($this->isRegistered($event) &&
     	        $this->hasObserver($observerHash, $event)) {
     	        unset($this->_observers[$event][$observerHash]);
+
+    	        if (empty($this->_observers[$event])) {
+    	            unset($this->_events[$event]);
+    	        }
     	    }
         }
 
@@ -279,7 +281,7 @@ class Zym_Notification
 	 */
 	public function isRegistered($event)
 	{
-	    return array_key_exists($event, $this->_observers);
+	    return isset($this->_observers[$event]);
 	}
 
     /**
@@ -301,6 +303,6 @@ class Zym_Notification
             $observerHash = (string) $observer;
         }
 
-        return array_key_exists($observerHash, $this->_observers[$event]);
+        return isset($this->_observers[$event][$observerHash]);
     }
 }
