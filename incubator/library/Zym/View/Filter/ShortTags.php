@@ -35,7 +35,7 @@ class Zym_View_Filter_ShortTags
     public function filter($buffer)
     {
         // Don't parse if short_tags is enabled
-        if (ini_get('short_tags')) {
+        if (ini_get('short_open_tags')) {
             return $buffer;
         }
         
