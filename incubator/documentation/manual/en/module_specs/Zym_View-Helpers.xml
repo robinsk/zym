@@ -1,0 +1,28 @@
+<sect1 id="zym.view.helpers" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>List of View Helpers</title>
+   
+        <para>
+            <code>Zym_View</code> brings you some extra view helpers:
+        </para>
+
+        <itemizedlist>
+        
+            <listitem><para>
+                <code>fileSize($fileSize, $precision):</code> It formats filesize
+                in bytes to human readable string with appropriate unit.
+            </para>
+            <para>
+            The precision of the filesize can be set with the second parameter
+            (default value is 3).
+            </para>
+
+            <programlisting role="php">
+                <![CDATA[echo $this->fileSize(1024);
+                //will print '1 KB']]>
+            </programlisting>
+            </listitem>
+        </itemizedlist>
+</sect1>
+<!--
+vim:se ts=4 sw=4 et:
+-->

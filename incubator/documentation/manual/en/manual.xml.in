@@ -30,6 +30,11 @@
         <title>Zym_Dto</title>
         <xi:include href="module_specs/Zym_Dto.xml" />
     </chapter>
+    
+    <chapter id="zym.view">
+        <title>Zym_View</title>
+        <xi:include href="module_specs/Zym_View-Helpers.xml" />
+    </chapter>
 
     <appendix id="appendix.copyright">
         <title>Copyright Information</title>
