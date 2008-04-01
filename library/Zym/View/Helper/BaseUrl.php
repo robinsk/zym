@@ -45,7 +45,7 @@ class Zym_View_Helper_BaseUrl
         $baseUrl = $request->getBaseUrl();
         
         // Remove trailing slashes
-        $file = ($file !== null) ? trim($file, '/\\') : null;
+        $file = ($file !== null) ? ltrim($file, '/\\') : null;
         
         // Build return
         $return = $baseUrl . ($file ? ('/' . $file) : '');

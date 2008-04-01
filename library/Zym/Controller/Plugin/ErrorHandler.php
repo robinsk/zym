@@ -319,12 +319,19 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
 
             default:
                 // Check if exception implements an action interface
-                if ($exception instanceof Zym_Controller_Action_Exception_Interface) {
-                    $type = self::EXCEPTION_NO_ACTION;
-                } else {
-                    $type = self::EXCEPTION_OTHER;
+                switch (strtolower(get_class($exception))) {
+                    case 'zym_controller_dispatcher_exception_interface':
+                        $type = self::EXCEPTION_NO_CONTROLLER;
+                        break;
+                        
+                    case 'zym_controller_action_exception_interface':
+                        $type = self::EXCEPTION_NO_ACTION;
+                        break;
+                    
+                    default:
+                        $type = self::EXCEPTION_OTHER;
+                        break;
                 }
-
                 break;
         }
 
