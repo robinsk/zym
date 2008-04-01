@@ -45,12 +45,12 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
         Zym_App::ENV_DEFAULT     => array(
             'date' => array(
                 'force_default_timezone' => false,
-                'timezone' => 'GMT'
+                'timezone' => 'Europe/London'
             ),
 
             'error_reporting' => 341, // E_PARSE | E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR | E_USER_ERROR
             'display_errors' => false,
-            
+
             'include_path' => array()
         )
     );
