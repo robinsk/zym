@@ -16,7 +16,7 @@
  */
 
 /**
- * @author      Martin Hujer
+ * @author     Martin Hujer
  * @category   Zym
  * @package    Zym_View
  * @subpackage Helper
@@ -25,38 +25,52 @@
  */
 class Zym_View_Helper_FileSize
 {
-    private $_sizeKilobytes = 1024;
+    /**
+     * Size of one Kilobyte
+     */
+    const SIZE_KILOBYTES = 1024;
     
-    private $_sizeMegabytes = 1048576;
+    /**
+     * Size of one Megabyte
+     */
+    const SIZE_MEGABYTES = 1048576;
     
-    private $_sizeGigabytes = 1073741824;
+    /**
+     * Size of one Gigabyte
+     */
+    const SIZE_GIGABYTES = 1073741824;
     
-    private $_sizeTerabytes = 1099511627776;
+    /**
+     * Size of one Terabyte
+     */
+    const SIZE_TERABYTES = 1099511627776;
     
     /**
      * Formats filesize with specified precision
      * 
-     * @param integer $filesize Filesize in bytes
+     * @param integer $fileSize Filesize in bytes
      * @param integer $precision Precision
      */
-    public function fileSize($filesize, $precision = 3)
+    public function fileSize($fileSize, $precision = 3)
     {
-        if ($filesize >= $this->_sizeTerabytes) {
-            $newFilesize = round(($filesize/$this->_sizeTerabytes), $precision);
-            return $newFilesize . ' TB';
-        } elseif ($filesize >= $this->_sizeGigabytes) {
-            $newFilesize = round(($filesize/$this->_sizeGigabytes), $precision);
-            return $newFilesize . ' GB';
-        } elseif ($filesize >= $this->_sizeMegabytes) {
-            $newFilesize = round(($filesize/$this->_sizeMegabytes), $precision);
-            return $newFilesize . ' MB';
-        } elseif ($filesize >= $this->_sizeKilobytes) {
-            $newFilesize = round(($filesize/$this->_sizeKilobytes), $precision);
-            return $newFilesize . ' KB';
+        if ($fileSize >= self::SIZE_TERABYTES) {
+            $newFilesize = $fileSize/self::SIZE_TERABYTES;
+            $sizeName = 'TB';
+        } elseif ($fileSize >= self::SIZE_GIGABYTES) {
+            $newFilesize = $fileSize/self::SIZE_GIGABYTES;
+            $sizeName = 'GB';
+        } elseif ($fileSize >= self::SIZE_MEGABYTES) {
+            $newFilesize = $fileSize/self::SIZE_MEGABYTES;
+            $sizeName = 'MB';
+        } elseif ($fileSize >= self::SIZE_KILOBYTES) {
+            $newFilesize = $fileSize/self::SIZE_KILOBYTES;
+            $sizeName = 'KB';
         } else {
-            return $filesize . ' B';
+            $newFilesize = $fileSize;
+            $sizeName = 'B';
         }
+        $newFilesize = round($newFilesize, $precision);
+        return $newFilesize . ' ' . $sizeName;
     }
-    
    
 }

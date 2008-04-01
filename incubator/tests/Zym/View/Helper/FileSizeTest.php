@@ -38,13 +38,25 @@ class Zym_View_Helper_FileSizeTest extends PHPUnit_Framework_TestCase
      */
     public function testFileSize ()
     {
-        $this->assertEquals("0 B", $this->_fs->fileSize(0));
-        $this->assertEquals("1 B", $this->_fs->fileSize(1));
-        $this->assertEquals("1 KB", $this->_fs->fileSize(1024));
-        $this->assertEquals("1 MB", $this->_fs->fileSize(1048576));
-        $this->assertEquals("1 GB", $this->_fs->fileSize(1073741824));
-        $this->assertEquals("1 TB", $this->_fs->fileSize(1073741824*1024));
-        $this->assertEquals("1024 TB", $this->_fs->fileSize(1073741824*1024*1024));
+        $equals = array(
+            "0 B" => 0,
+            "1 B" => 1,
+            "1 KB" => 1024,
+        	"1 MB" => 1024*1024,
+            "1 GB" => 1024*1024*1024,
+            "1 TB" => 1024*1024*1024*1024,
+            "1024 TB" => 1024*1024*1024*1024*1024
+        );
+        foreach ($equals as $result => $size) {
+            $this->assertEquals($result, $this->_fs->fileSize($size));
+        }
+    }
+
+    /**
+     * Test filesize convert with specified precision
+     */
+    public function testFileSizePrecision()
+    {
         $this->assertEquals("976.563 KB", $this->_fs->fileSize(1000000, 3));
         $this->assertEquals("976.5625 KB", $this->_fs->fileSize(1000000, 4));
         $this->assertEquals("976.5625 KB", $this->_fs->fileSize(1000000, 10));
