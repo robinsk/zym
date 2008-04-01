@@ -177,7 +177,7 @@ class Zym_Notification
                             throw new Zym_Notification_Exception_MethodNotImplemented($message);
                         }
 
-                        $observer->$callback($message);
+                        $observer->$callback($notification);
                     }
                 }
             }
