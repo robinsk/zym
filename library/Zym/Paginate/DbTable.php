@@ -66,6 +66,7 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
      * Get a page
      *
      * @var int $page
+     * @return Zend_Db_Table_Rowset_Abstract
      */
     public function getPage($page)
     {

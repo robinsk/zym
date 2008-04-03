@@ -50,6 +50,7 @@ class Zym_Paginate_Iterator extends Zym_Paginate_Abstract
      * Get a page
      *
      * @var int $page
+     * @return LimitIterator
      */
     public function getPage($page)
     {

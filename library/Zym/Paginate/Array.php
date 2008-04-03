@@ -59,6 +59,7 @@ class Zym_Paginate_Array extends Zym_Paginate_Abstract
      *
      * @throws Zym_Paginate_Exception_PageNotFound
      * @var int $page
+     * @return array
      */
     public function getPage($page)
     {
