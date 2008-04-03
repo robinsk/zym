@@ -243,6 +243,11 @@ class Zym_View_Helper_PaginateNavigation extends Zym_View_Helper_Abstract
             $endNumber = $lastPageNumber;
         } else {
             $startNumber = $currentPageNumber - $centerOffset;
+
+            if ($this->_pageLimit % 2 == 0) {
+                $startNumber++;
+            }
+
             $endNumber = $currentPageNumber + $centerOffset;
         }
 
