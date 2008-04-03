@@ -1,0 +1,24 @@
+<? $this->headTitle('Paginate Demo') ?>
+<div>
+    <h1>Pagination</h1>
+    
+    <? $this->headStyle()->captureStart(); ?>
+    ul#ZVHPList li {
+        display: inline;
+    }
+    <? $this->headStyle()->captureEnd(); ?>
+<?
+    $items = $this->paginate->getCurrentPage();
+    
+    $i = 1;
+    foreach ($items as $item) {
+        printf('%d. %s<br />', $this->paginate->getItemNumber($i), $item);
+    
+        $i++;
+    }
+    
+    if ($this->paginate->getPageCount() > 1) {
+        echo $this->paginateNavigation($this->paginate, $this->getRequest()->getParams(), 2);
+    }
+?>
+</div>

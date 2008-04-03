@@ -1,0 +1,27 @@
+<? $this->headTitle('Demos') ?>
+<div>
+    <h1>Playground</h1>
+    
+    <p>
+        Welcome to Zym's playground, below are links to various demos of Zym
+        and/or Zend Framework's features. While these demo's are primary to
+        demonstrate Zym, users of ZF can benefit greatly from them as many
+        aspects are only slightly modified or unchanged.
+    </p>
+    
+    <p>Playground areas:</p>
+    <ul>
+        <li>
+            <a href="<?= $this->url(array('controller' => 'error')) ?>">Error</a>
+        </li>
+        <li>
+            <a href="<?= $this->url(array('controller' => 'flash-messenger')) ?>">Flash Messenger</a>
+        </li>
+        <li>
+            <a href="<?= $this->url(array('controller' => 'notification')) ?>">Notification</a>
+        </li>
+        <li>
+            <a href="<?= $this->url(array('controller' => 'paginate')) ?>">Pagination</a>
+        </li>
+    </ul>
+</div>

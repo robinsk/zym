@@ -1,0 +1,148 @@
+/* A CSS Framework by Mike Stenhouse of Content with Style */
+
+/* SITE SPECIFIC LAYOUT */
+body {
+    margin: 0;
+    padding: 0;
+    background: white url("../images/bg.gif") top left repeat-x;
+    text-align: center;
+}
+
+div#page {
+    width: 780px;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+
+/* HEADER */
+div#header {
+    margin: 0 0 5em 0;
+    padding: 6px 0 2px 10px;
+    text-align: left;
+}
+
+div#branding {
+    float: left;
+    width: 40%;
+    margin: 0;
+    padding: 10px 0 10px 30px;
+    text-align: left;
+}
+
+div#search {
+    float: right;
+    width: 49%;
+    margin: 0;
+    padding: 40px 40px 0 0;
+    text-align: right;
+}
+/* END HEADER */
+
+
+/* CONTENT */
+div#content {
+}
+
+/* MAIN */
+div#main {
+}
+
+div#main form ul li {
+    list-style-type: none;
+    margin-left: 0;
+}
+
+div#flash {
+    color: #7B4B09;
+    border: 1px solid #F0DCA1;
+    background-color: #FFFBC9;
+    padding-top: 15px;
+    padding-left: 25px;
+}
+/* END MAIN */
+
+/* SUB */
+div#sub ul li {
+    list-style-type: none;
+    margin-left: 0;
+}
+
+div#sub p.line {
+    border-top: 1px dotted #ccc;
+    margin: 15px 0;
+}
+
+/* END SUB */
+
+/* END CONTENT */
+
+
+/* FOOTER */
+div#footer {
+    color: #444;
+    padding: 0 39px;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+div#footer div#divider {
+    margin: 0 0 4px 0;
+    border-top: 1px solid #ccc;
+}
+
+div#footer div#divider div {
+    margin: 1px 0 0 0;
+    border-top: 6px solid #ebf5fc;
+}
+
+div#footer .left {
+    float: left;
+}
+
+div#footer .right {
+    float: right;
+}
+/* END FOOTER */
+/* END LAYOUT */
+
+/* UL.SUBNAV */
+ul.subnav {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8em;
+    list-style: none;
+}
+
+ul.subnav li {
+    margin: 0 0 1em 0;
+    padding: 0;
+    list-style: none;
+}
+
+ul.subnav li a,
+ul.subnav li a:link,
+ul.subnav li a:visited,
+ul.subnav li a:active {
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+ul.subnav li a:hover {
+    text-decoration: underline;
+}
+
+ul.subnav li strong {
+    padding: 0 0 0 12px;
+    background: url("../images/subnav-highlight.gif") left top no-repeat transparent;
+}
+
+ul.subnav li strong a,
+ul.subnav li strong a:link,
+ul.subnav li strong a:visited,
+ul.subnav li strong a:active {
+    color: white;
+    background-color: black;
+}
+/* END UL.SUBNAV */

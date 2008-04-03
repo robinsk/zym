@@ -1,0 +1,20 @@
+<? $this->headTitle('Internal Server Error') ?>
+<div>
+    <h1>Internal Server Error</h1>
+    
+    <p>
+        This is an error page from Demo_ErrorController and was dispatched
+        because <strong>an exception occured in the Demo module.</strong> 
+    </p>
+    
+    <p>
+        If the Demo module did not have an ErrorController or did not register one
+        to handle this event, it would be passed on to Default_ErrorController.
+        At that location, if the default error controller does not exist, 
+        or did not handle the problem an exception would be thrown.
+    </p>
+
+    <a href="<?= $this->url(array('action' => 'internal', 'controller' => 'error'), 'default', true) ?>">
+        Click here to see the default modules's internal error
+    </a>
+</div>

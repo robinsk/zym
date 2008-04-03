@@ -1,0 +1,145 @@
+<?= $this->xmlDeclaration() . "\n" ?>
+<?= $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT) . "\n" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <!-- Start: Meta Tags -->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <?= $this->headMeta() . "\n" ?>
+        <!-- End: Meta Tags -->
+        
+        <!-- Title -->
+        <?= $this->headTitle() . "\n" ?>
+        
+        <!-- Start: Link Tags -->
+        <?= $this->headLink() . "\n" ?>
+        
+        <!--[if lte IE 6]>
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('zym/styles/ie/png-fix.css') ?>" />
+        <![endif]-->
+        <!-- End: Link Tags -->
+        
+        <!-- Start: Styles -->
+        <style type="text/css" media="screen">
+            @import url("<?= $this->baseUrl('styles/tools.css') ?>");
+            @import url("<?= $this->baseUrl('styles/typo.css') ?>");
+            @import url("<?= $this->baseUrl('styles/forms.css') ?>");
+            @import url("<?= $this->baseUrl('styles/layout-navtop-subright.css') ?>");
+            @import url("<?= $this->baseUrl('styles/layout.css') ?>");
+        </style>
+        <?= $this->headStyle() . "\n" ?>
+        <!-- End: Styles -->
+        
+        <!-- Start: Scripts -->
+        <script type="text/javascript" src="<?= $this->baseUrl('scripts/dojo/1.1.0/dojo/dojo.js') ?>"></script>
+        <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js') ?>"></script>
+        <script type="text/javascript">
+        //<![CDATA[
+            app.layout.init();
+        //]]>
+        </script>
+        
+        <?= $this->headScript() . "\n" ?>
+        <!-- End: Scripts -->
+    </head>
+    
+    <body>
+        <div id="page">
+            <!-- Start: Header -->
+            <div id="header" class="clearfix">
+                <!-- Start: Branding -->
+                <div id="branding">
+                    <h1>Zym Framework</h1>
+                    <p>Add flavor to your ZF</p>
+                </div>
+                <!-- End: Branding -->
+                
+                <!-- Start: Search -->
+                <!--
+                <div id="search">
+                    <form method="post" action="<?= $this->url() ?>">
+                        <div>
+                            <label for="search-site">Search</label>
+                            <input type="text" name="search" id="search-site" />
+                            <input type="submit" value="Go" />
+                        </div>
+                    </form>
+                </div>
+                -->
+                <!-- End: Search -->
+            </div>
+            <!-- End: Header -->
+            
+            <!-- Start: Content -->
+            <div id="content" class="clearfix">
+                <div id="main">
+                    <div id="flash-container">
+                        <? if (count($this->flashMessenger())) : ?>
+                        <div id="flash">
+                            <span>Message</span>
+                            <?= $this->htmlList($this->flashMessenger()->getMessages()); ?>
+                        </div>
+                        <? endif; ?>
+                    </div>
+                    <?= $this->layout()->content . "\n" ?>
+                </div>
+                
+                <div id="sub">
+                    <h2>Local</h2>
+                    <ul>
+                        <li><a href="somewhere.html">Content page 1</a></li>
+                        <li><a href="somewhere.html">Content page 2</a></li>
+                        <li><a href="somewhere.html">Content page 3</a></li>
+                        <li><a href="somewhere.html">Content page 4</a></li>
+                        <li><a href="somewhere.html">Content page 5</a></li>
+                        <li><a href="somewhere.html">Content page 6</a></li>
+                    </ul>
+                    
+                    <p class="line" />
+                    
+                    <p>
+                        Proin pellentesque ullamcorper ipsum. Sed tincidunt tincidunt mi. 
+                        Vestibulum magna wisi, vehicula eu, ullamcorper et, egestas in, tortor.
+                    </p>
+                </div>
+                
+                <!-- Start: Navigation -->
+                <div id="nav">
+                    <div class="wrapper">
+                        <h2 class="accessibility">Navigation</h2>
+                        <ul class="clearfix">
+                            <li class="pad">&nbsp;</li>
+                            <li>
+                                <strong>
+                                    <a href="<?= $this->url(array(), 'default', true) ?>">Home</a>
+                                </strong>
+                            </li>
+                            <li class="last"><a href="<?= $this->url(array('module' => 'demo'), 'default', true) ?>">Demos</a></li>
+                         </ul>
+                    </div>
+                </div>
+                <!-- End: Navigation -->
+            </div>
+            <!-- End: Content -->
+            
+            <!-- Start: Footer -->
+            <div id="footer" class="clearfix">
+                <div id="divider">
+                    <div />
+                </div>
+                
+                <span class="left">
+                    <a href="<?= $this->url(array(), 'default', true) ?>">Home</a>
+                </span>
+                
+                <span class="right">
+                    Copyright <?= date('Y') ?> &copy; <a href="http://www.zym-project.com">Zym</a>
+                </span>
+            </div>
+            <!-- End: Footer -->
+        </div>
+
+        <div id="extra1">&nbsp;</div>
+        <div id="extra2">&nbsp;</div>
+    </body>
+</html>
+<!-- This design was created by jugend from http://www.pluitsolutions.com -->

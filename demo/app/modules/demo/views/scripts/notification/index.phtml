@@ -1,0 +1,19 @@
+<? $this->headTitle('Notification Demo') ?>
+<div>
+    <h1>Notification</h1>
+    <p>
+        Zym_Notification provides an infrastructure to relay messages between 
+        objects that don't necessarily know each other. This provides a loose 
+        coupling between components and makes your app more flexible.
+    </p>
+    
+    <div>
+        <h2>Sandy</h2>
+        <?= $this->action('notify-sandy', 'notification', 'demo') ?>
+    </div>
+    
+    <div>
+        <h2>Bill</h2>
+        <?= $this->action('notify-bill', 'notification', 'demo') ?>
+    </div>
+</div>

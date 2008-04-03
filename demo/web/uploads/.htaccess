@@ -1,0 +1,5 @@
+# Prevent cgi execution
+Options -ExecCGI
+
+# Prevent script execution
+RemoveHandler .php .phtml .php3 .php4 .php5

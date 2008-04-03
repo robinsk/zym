@@ -1,0 +1,33 @@
+<? $this->headTitle('Error Demo') ?>
+<div>
+    <h1>Error Demo</h1>
+    
+    <p>
+        Below are some demo's of Zym's error handling system, do not be alarmed
+        by the fact that you may have encountered a bug. Chances are the demo's
+        below are doing what they are suppose to.
+    </p>
+    
+    <div>
+        <h2>404 Page not found</h2>
+        <p>
+            This demo will show you what happens when a user visits a page
+            or url that does not exist.
+            <a href="<?= $this->url(array('action' => 'some-fake-page')) ?>">
+                Click Here
+            </a>
+        </p>
+    </div>
+    
+    <div>
+        <h2>Uncaught Exception</h2>
+        <p>
+            This demo demonstrates what happens when an uncaught exception occurs.
+            The page you will see should be an internal error. This is the
+            correct behavior if the environment is currently set to production.
+            <a href="<?= $this->url(array('action' => 'exception')) ?>">
+                Click Here
+            </a>
+        </p>
+    </div>
+</div>

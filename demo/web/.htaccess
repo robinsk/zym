@@ -1,0 +1,59 @@
+### Server defaults
+ServerSignature Off
+ 
+AddType video/x-flv .flv
+AddType application/x-shockwave-flash .swf
+AddType image/x-icon .ico
+ 
+#AddDefaultCharset UTF-8
+#AddLanguage en-US .html .htm .txt .xml .php
+ 
+#SetEnv TZ GMT
+#SetEnv SERVER_ADMIN webmaster@localhost
+
+# Prevent directory listing
+IndexIgnore *
+
+# Follow symbolic links
+Options +FollowSymLinks
+
+# Disable access to .htaccess & .htpasswd
+<Files ~ "^\.ht">
+	Order allow,deny
+	Deny from all
+	Allow from localhost
+</Files>
+
+### PHP settings
+# Register globals
+php_flag register_globals off
+
+# Magic quotes
+php_flag magic_quotes_gpc off
+
+# Session auto starting
+php_flag session.autostart on
+
+# Short open tags
+php_flag short_open_tag on
+
+# Mod rewrite configuration
+<IfModule mod_rewrite.c>
+	# URL Rewriting
+	RewriteEngine on
+
+	# Rewrite base
+	# RewriteBase /
+
+	# Add trailing slash if url does not have it
+	RewriteCond %{REQUEST_METHOD}    GET
+	RewriteCond %{REQUEST_FILENAME}  !-f
+	RewriteCond ${REQUEST_FILENAME}  !-d
+	RewriteCond %{REQUEST_URI}       !(\.|/$)
+	RewriteRule (.*) %{REQUEST_URI}/ [L,R=301]
+	
+	# Rewrite urls to index.php
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
