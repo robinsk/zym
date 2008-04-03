@@ -49,7 +49,7 @@ class Zym_View_Helper_Url extends Zend_View_Helper_Url
      * @param  boolean $encode
      * @return string|Zym_View_Helper_Url
      */
-    public function url($urlOptions = null, $name = null, $reset = false, $encode = true)
+    public function url(array $urlOptions = null, $name = null, $reset = false, $encode = true)
     {
         if ($urlOptions === null) {
             return $this;
