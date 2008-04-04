@@ -1,5 +1,5 @@
-<?= $this->xmlDeclaration() . "\n" ?>
-<?= $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT) . "\n" ?>
+<?= $this->xmlDeclaration() . "\n"; ?>
+<?= $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT) . "\n"; ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <!-- Start: Meta Tags -->
@@ -11,34 +11,33 @@
         <?= $this->headTitle() . "\n" ?>
         
         <!-- Start: Link Tags -->
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/tools.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/typo.css');  ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/forms.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout-navtop-subright.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout.css'); ?>" />
         <?= $this->headLink() . "\n" ?>
         
         <!--[if lte IE 6]>
-        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('zym/styles/ie/png-fix.css') ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('zym/styles/ie/png-fix.css'); ?>" />
         <![endif]-->
         <!-- End: Link Tags -->
         
         <!-- Start: Styles -->
-        <style type="text/css" media="screen">
-            @import url("<?= $this->baseUrl('styles/tools.css') ?>");
-            @import url("<?= $this->baseUrl('styles/typo.css') ?>");
-            @import url("<?= $this->baseUrl('styles/forms.css') ?>");
-            @import url("<?= $this->baseUrl('styles/layout-navtop-subright.css') ?>");
-            @import url("<?= $this->baseUrl('styles/layout.css') ?>");
-        </style>
         <?= $this->headStyle() . "\n" ?>
         <!-- End: Styles -->
         
         <!-- Start: Scripts -->
-        <script type="text/javascript" src="<?= $this->baseUrl('scripts/dojo/1.1.0/dojo/dojo.js') ?>"></script>
-        <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js') ?>"></script>
+        <script type="text/javascript" src="<?= $this->baseUrl('scripts/dojo/dojo/dojo.js'); ?>"></script>
+        <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js'); ?>"></script>
         <script type="text/javascript">
         //<![CDATA[
+            // Bootstrap
             app.layout.init();
         //]]>
         </script>
         
-        <?= $this->headScript() . "\n" ?>
+        <?= $this->headScript() . "\n"; ?>
         <!-- End: Scripts -->
     </head>
     
@@ -80,7 +79,7 @@
                         </div>
                         <? endif; ?>
                     </div>
-                    <?= $this->layout()->content . "\n" ?>
+                    <?= $this->layout()->content . "\n"; ?>
                 </div>
                 
                 <div id="sub">
@@ -110,10 +109,10 @@
                             <li class="pad">&nbsp;</li>
                             <li>
                                 <strong>
-                                    <a href="<?= $this->url(array(), 'default', true) ?>">Home</a>
+                                    <a href="<?= $this->url(array(), 'default', true); ?>">Home</a>
                                 </strong>
                             </li>
-                            <li class="last"><a href="<?= $this->url(array('module' => 'demo'), 'default', true) ?>">Demos</a></li>
+                            <li class="last"><a href="<?= $this->url(array('module' => 'demo'), 'default', true); ?>">Demos</a></li>
                          </ul>
                     </div>
                 </div>
@@ -128,7 +127,7 @@
                 </div>
                 
                 <span class="left">
-                    <a href="<?= $this->url(array(), 'default', true) ?>">Home</a>
+                    <a href="<?= $this->url(array(), 'default', true); ?>">Home</a>
                 </span>
                 
                 <span class="right">
