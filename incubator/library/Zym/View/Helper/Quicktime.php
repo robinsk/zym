@@ -53,7 +53,7 @@ class Zym_View_Helper_Quicktime extends Zym_View_Helper_Object
      * @param array $params Params for in the object tag
      * @return string
      */
-    public function flash($data, array $attribs = array(), array $params = array())
+    public function quicktime($data, array $attribs = array(), array $params = array())
     {
         $attribs = array_merge($this->_attribs, $attribs);
 
