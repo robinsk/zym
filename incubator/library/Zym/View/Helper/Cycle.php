@@ -48,7 +48,7 @@ class Zym_View_Helper_Cycle implements Iterator
      * @param array $values Shortcut to setValues()
      * @return Zym_View_Helper_Alternate
      */
-    public function alternate(array $values = null)
+    public function cycle(array $values = null)
     {
         if ($values !== null) {
             $this->setValues($values);

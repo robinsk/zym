@@ -28,7 +28,7 @@ require_once 'Zym/View/Helper/Object.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_View_Helper_Flash extends Zym_View_Helper_Object
+class Zym_View_Helper_ObjectFlash extends Zym_View_Helper_Object
 {
     /**
      * Default file type for a flash applet
@@ -45,7 +45,7 @@ class Zym_View_Helper_Flash extends Zym_View_Helper_Object
      * @param array $params Params for in the object tag
      * @return string
      */
-    public function flash($data, array $attribs = array(), array $params = array())
+    public function objectFlash($data, array $attribs = array(), array $params = array())
     {
         $params['movie'] = $data;
 

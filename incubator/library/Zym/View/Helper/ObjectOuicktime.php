@@ -28,7 +28,7 @@ require_once 'Zym/View/Helper/Object.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_View_Helper_Quicktime extends Zym_View_Helper_Object
+class Zym_View_Helper_ObjectQuicktime extends Zym_View_Helper_Object
 {
     /**
      * Default file type for a flash applet
@@ -46,14 +46,14 @@ class Zym_View_Helper_Quicktime extends Zym_View_Helper_Object
                                 'codebase' => 'http://www.apple.com/qtactivex/qtplugin.cab');
 
     /**
-     * Output a flash movie object tag
+     * Output a quicktime movie object tag
      *
-     * @param string $data The flash file
+     * @param string $data The quicktime file
      * @param array $attribs Attribs for the object tag
      * @param array $params Params for in the object tag
      * @return string
      */
-    public function quicktime($data, array $attribs = array(), array $params = array())
+    public function objectQuicktime($data, array $attribs = array(), array $params = array())
     {
         $attribs = array_merge($this->_attribs, $attribs);
 

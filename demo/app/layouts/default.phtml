@@ -4,11 +4,11 @@
     <head>
         <!-- Start: Meta Tags -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <?= $this->headMeta() . "\n" ?>
+        <?= $this->headMeta() . "\n"; ?>
         <!-- End: Meta Tags -->
         
         <!-- Title -->
-        <?= $this->headTitle() . "\n" ?>
+        <?= $this->headTitle() . "\n"; ?>
         
         <!-- Start: Link Tags -->
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/tools.css'); ?>" />
@@ -16,7 +16,7 @@
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/forms.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout-navtop-subright.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout.css'); ?>" />
-        <?= $this->headLink() . "\n" ?>
+        <?= $this->headLink() . "\n"; ?>
         
         <!--[if lte IE 6]>
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('zym/styles/ie/png-fix.css'); ?>" />
@@ -24,7 +24,7 @@
         <!-- End: Link Tags -->
         
         <!-- Start: Styles -->
-        <?= $this->headStyle() . "\n" ?>
+        <?= $this->headStyle() . "\n"; ?>
         <!-- End: Styles -->
         
         <!-- Start: Scripts -->
@@ -55,7 +55,7 @@
                 <!-- Start: Search -->
                 <!--
                 <div id="search">
-                    <form method="post" action="<?= $this->url() ?>">
+                    <form method="post" action="<?= $this->url(); ?>">
                         <div>
                             <label for="search-site">Search</label>
                             <input type="text" name="search" id="search-site" />
@@ -79,6 +79,8 @@
                         </div>
                         <? endif; ?>
                     </div>
+                    
+                    <?/* Output content */?>
                     <?= $this->layout()->content . "\n"; ?>
                 </div>
                 
@@ -131,7 +133,7 @@
                 </span>
                 
                 <span class="right">
-                    Copyright <?= date('Y') ?> &copy; <a href="http://www.zym-project.com">Zym</a>
+                    Copyright <?= date('Y'); ?> &copy; <a href="http://www.zym-project.com">Zym</a>
                 </span>
             </div>
             <!-- End: Footer -->

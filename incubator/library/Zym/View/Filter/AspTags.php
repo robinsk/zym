@@ -60,10 +60,10 @@ class Zym_View_Filter_AspTags
         
         // Parse <%=
         if ($this->_isEcho($full)) {
-            return "<?php echo $body ?>";
+            return "<?php echo $body; ?>";
         }
 
-        return "<?php $body ?>";
+        return "<?php $body; ?>";
     }
     
     /**

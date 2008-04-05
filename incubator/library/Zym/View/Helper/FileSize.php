@@ -54,21 +54,22 @@ class Zym_View_Helper_FileSize
     public function fileSize($fileSize, $precision = 3)
     {
         if ($fileSize >= self::SIZE_TERABYTES) {
-            $newFilesize = $fileSize/self::SIZE_TERABYTES;
+            $newFilesize = $fileSize / self::SIZE_TERABYTES;
             $sizeName = 'TB';
-        } elseif ($fileSize >= self::SIZE_GIGABYTES) {
-            $newFilesize = $fileSize/self::SIZE_GIGABYTES;
+        } else if ($fileSize >= self::SIZE_GIGABYTES) {
+            $newFilesize = $fileSize / self::SIZE_GIGABYTES;
             $sizeName = 'GB';
-        } elseif ($fileSize >= self::SIZE_MEGABYTES) {
-            $newFilesize = $fileSize/self::SIZE_MEGABYTES;
+        } else if ($fileSize >= self::SIZE_MEGABYTES) {
+            $newFilesize = $fileSize / self::SIZE_MEGABYTES;
             $sizeName = 'MB';
-        } elseif ($fileSize >= self::SIZE_KILOBYTES) {
-            $newFilesize = $fileSize/self::SIZE_KILOBYTES;
+        } else if ($fileSize >= self::SIZE_KILOBYTES) {
+            $newFilesize = $fileSize / self::SIZE_KILOBYTES;
             $sizeName = 'KB';
         } else {
             $newFilesize = $fileSize;
             $sizeName = 'B';
         }
+        
         $newFilesize = round($newFilesize, $precision);
         return $newFilesize . ' ' . $sizeName;
     }

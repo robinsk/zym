@@ -35,7 +35,7 @@ class Zym_View_Helper_GetSession
      *
      * @return string
      */
-    public function getSession($namespace = null, $singleInstance = false)
+    public function getSession($namespace = 'Default', $singleInstance = false)
     {
         return new Zend_Session_Namespace($namespace, $singleInstance);
     }

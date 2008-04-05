@@ -23,7 +23,6 @@
  * @subpackage Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-/*'/(?:>\'|."|[^\'"|])<\?(?!php)(?:=|php|\s*echo|\s)?\s*(.*?)\s*(?:;\s*|)\?>(?:\'<|"<|[^"\'])/isS',*/ // <?= handling        
 class Zym_View_Filter_ShortTags
 {
     /**
@@ -61,10 +60,10 @@ class Zym_View_Filter_ShortTags
         
         // Parse <?=
         if ($this->_isEcho($full)) {
-            return "<?php echo $body ?>";
+            return "<?php echo $body; ?>";
         }
 
-        return "<?php $body ?>";
+        return "<?php $body; ?>";
     }
     
     /**
