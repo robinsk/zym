@@ -28,12 +28,41 @@ require_once 'Zym/View/Helper/Abstract.php';
  * @subpackage Helper_Html
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract 
+abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract
 {
-    
+    /**
+     * Newline
+     */
+    const NEWLINE = "\n";
+
+    /**
+     * The tag closing bracket
+     *
+     * @var string
+     */
+    protected $_closingBracket = null;
+
+    /**
+     * Get the tag closing bracket
+     *
+     * @return string
+     */
+    public function getClosingBracket()
+    {
+        if (!$this->_closingBracket) {
+            if ($this->_isXhtml()) {
+                $this->_closeBracket = ' />';
+            } else {
+                $this->_closeBracket = '>';
+            }
+        }
+
+        return $this->_closingBracket;
+    }
+
     /**
      * Is doctype XHTML?
-     * 
+     *
      * @return boolean
      */
     protected function _isXhtml()
@@ -41,7 +70,7 @@ abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract
         $doctype = $this->getView()->doctype();
         return $doctype->isXhtml();
     }
-    
+
     /**
      * Converts an associative array to a string of tag attributes.
      *
@@ -55,19 +84,19 @@ abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract
     protected function _htmlAttribs(array $attribs)
     {
         $view = $this->getView();
-        
+
         $xhtml = '';
         foreach ($attribs as $key => $val) {
             $key = $view->escape($key);
-            
+
             if (is_array($val)) {
                 $val = implode(' ', $val);
             } else if ($val === null) {
                 continue;
             }
-            
+
             $val = $view->escape($val);
-            
+
             $xhtml .= " $key=\"$val\"";
         }
 

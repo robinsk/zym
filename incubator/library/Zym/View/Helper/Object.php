@@ -48,6 +48,8 @@ class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract
 
         // Params
         $paramHtml = '';
+        $closingBracket = $this->getClosingBracket();
+
         foreach ($params as $param => $options) {
             if (is_string($options)) {
                 $options = array('value' => $options);
@@ -56,24 +58,18 @@ class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract
             $options = array_merge($options,
                                    array('name' => $param));
 
-            $paramHtml .= '<param ' . $this->_htmlAttribs($options);
-
-            if ($this->_isXhtml()) {
-                $paramHtml .= ' />';
-            } else {
-                $paramHtml .= '>';
-            }
+            $paramHtml .= '<param ' . $this->_htmlAttribs($options) . $closingBracket;
         }
 
         // Content
         if (is_array($content)) {
-            $content = implode("\n", $content);
+            $content = implode(self::NEWLINE, $content);
         }
 
         // Object header
-        $xhtml = '<object ' . $this->_htmlAttribs($attribs) . ">\n"
-                 . ($paramHtml ? $paramHtml . "\n" : '')
-                 . ($content   ? $content . "\n"   : '')
+        $xhtml = '<object ' . $this->_htmlAttribs($attribs) . '>' . self::NEWLINE
+                 . ($paramHtml ? $paramHtml . self::NEWLINE : '')
+                 . ($content   ? $content . self::NEWLINE : '')
                  . '</object>';
 
         return $xhtml;
