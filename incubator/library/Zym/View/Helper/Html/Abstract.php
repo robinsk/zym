@@ -62,7 +62,10 @@ abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract
             
             if (is_array($val)) {
                 $val = implode(' ', $val);
+            } else if ($val === null) {
+                continue;
             }
+            
             $val = $view->escape($val);
             
             $xhtml .= " $key=\"$val\"";

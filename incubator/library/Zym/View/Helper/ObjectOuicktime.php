@@ -67,8 +67,14 @@ class Zym_View_Helper_ObjectQuicktime extends Zym_View_Helper_Object
      */
     public function objectQuicktime($data, array $attribs = array(), array $params = array(), $content = null)
     {
+        // Attrs
         $attribs = array_merge($this->_attribs, $attribs);
-
-        return $this->object($data, self::TYPE, $attribs, $params, $content);
+        
+        // Params
+        $params = array_merge(array(
+            'src' => $data
+        ), $params);
+        
+        return $this->object(null, self::TYPE, $attribs, $params, $content);
     }
 }

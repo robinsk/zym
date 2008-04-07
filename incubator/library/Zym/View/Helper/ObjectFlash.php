@@ -35,7 +35,26 @@ class Zym_View_Helper_ObjectFlash extends Zym_View_Helper_Object
      * 
      */
     const TYPE = 'application/x-shockwave-flash';
-
+    
+    /**
+     * Object classid
+     *
+     */
+    const ATTRIB_CLASSID  = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
+    
+    /**
+     * Object Codebase
+     *
+     */
+    const ATTRIB_CODEBASE = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab';
+    
+    /**
+     * Default attributes
+     *
+     * @var array
+     */
+    protected $_attribs = array('classid'  => self::ATTRIB_CLASSID,
+                                'codebase' => self::ATTRIB_CODEBASE);
     /**
      * Output a flash movie object tag
      *
@@ -47,10 +66,14 @@ class Zym_View_Helper_ObjectFlash extends Zym_View_Helper_Object
      */
     public function objectFlash($data, array $attribs = array(), array $params = array(), $content = null)
     {
+        // Attrs
+        $attribs = array_merge($this->_attribs, $attribs);
+        
+        // Params
         $params = array_merge(array(
             'movie' => $data
         ), $params);
 
-        return $this->object($data, self::TYPE, $attribs, $params, $content);
+        return $this->object(null, self::TYPE, $attribs, $params, $content);
     }
 }
