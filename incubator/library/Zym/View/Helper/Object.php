@@ -16,6 +16,11 @@
  */
 
 /**
+ * @see Zym_View_Helper_Html_Abstract
+ */
+require_once 'Zym/View/Helper/Html/Abstract.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_View
@@ -23,43 +28,55 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_View_Helper_Object
+class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract 
 {
     /**
      * Output an object set
      *
      * @param string $data The data file
      * @param string $type Data file type
-     * @param array $attribs Attribs for the object tag
-     * @param array $params Params for in the object tag
+     * @param array  $attribs Attribs for the object tag
+     * @param array  $params Params for in the object tag
+     * @param string $content Alternative content for object
      * @return string
      */
-    public function object($data, $type, array $attribs = array(), array $params = array())
+    public function object($data, $type, array $attribs = array(), array $params = array(), $content = null)
     {
-        $xhtml = '<object data="' . $data . '" type="' . $type . '"';
+        // Merge data and type
+        $attribs = array_merge(array(
+            'data' => $data,
+            'type' => $type
+        ), $attribs);
 
-        foreach ($attribs as $attrib => $value) {
-        	$xhtml .= ' ' . $attrib . '="' . $value . '"';
-        }
-
-        $xhtml .= '>';
-
+        // Params
+        $paramHtml = '';
         foreach ($params as $param => $options) {
-        	$xhtml .= '<param name="' . $param . '"';
-
-        	if (is_string($options)) {
-        	    $options = array('value' => $options);
-        	}
-
-        	foreach ($options as $key => $value) {
-        		$xhtml .= ' ' . $key . '="' . $value . '"';
-        	}
-
-        	$xhtml .= ' />';
+            if (is_string($options)) {
+                $options = array('value' => $options);
+            }
+            
+            $options = array_merge($options, array(
+                'name' => $param
+            ));
+            
+            if ($this->_isXhtml()) {
+                $paramHtml .= "<param {$this->_htmlAttribs($options)} />";
+            } else {
+                $paramHtml .= "<param {$this->_htmlAttribs($options)}>";
+            }
+        }
+        
+        // Content
+        if (is_array($content)) {
+            $content = implode("\n", $content);
         }
 
-        $xhtml .= '</object>';
-
+        // Object header
+        $xhtml = "<object {$this->_htmlAttribs($attribs)}>\n" . 
+                    ($paramHtml ? "$paramHtml\n" : '') .
+                    ($content   ? "$content\n"   : '') .
+                 "</object>";
+        
         return $xhtml;
     }
 }

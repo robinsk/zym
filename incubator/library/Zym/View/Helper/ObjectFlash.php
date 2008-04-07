@@ -32,23 +32,25 @@ class Zym_View_Helper_ObjectFlash extends Zym_View_Helper_Object
 {
     /**
      * Default file type for a flash applet
-     *
-     * @var string
+     * 
      */
-    protected $_type = 'application/x-shockwave-flash';
+    const TYPE = 'application/x-shockwave-flash';
 
     /**
      * Output a flash movie object tag
      *
      * @param string $data The flash file
-     * @param array $attribs Attribs for the object tag
-     * @param array $params Params for in the object tag
+     * @param array  $attribs Attribs for the object tag
+     * @param array  $params Params for in the object tag
+     * @param string $content Alternative content
      * @return string
      */
-    public function objectFlash($data, array $attribs = array(), array $params = array())
+    public function objectFlash($data, array $attribs = array(), array $params = array(), $content = null)
     {
-        $params['movie'] = $data;
+        $params = array_merge(array(
+            'movie' => $data
+        ), $params);
 
-        return $this->object($data, $this->_type, $attribs, $params);
+        return $this->object($data, self::TYPE, $attribs, $params, $content);
     }
 }
