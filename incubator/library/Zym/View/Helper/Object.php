@@ -28,7 +28,7 @@ require_once 'Zym/View/Helper/Html/Abstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract 
+class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract
 {
     /**
      * Output an object set
@@ -43,10 +43,8 @@ class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract
     public function object($data, $type, array $attribs = array(), array $params = array(), $content = null)
     {
         // Merge data and type
-        $attribs = array_merge(array(
-            'data' => $data,
-            'type' => $type
-        ), $attribs);
+        $attribs = array_merge(array('data' => $data,
+                                     'type' => $type), $attribs);
 
         // Params
         $paramHtml = '';
@@ -54,29 +52,30 @@ class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract
             if (is_string($options)) {
                 $options = array('value' => $options);
             }
-            
-            $options = array_merge($options, array(
-                'name' => $param
-            ));
-            
+
+            $options = array_merge($options,
+                                   array('name' => $param));
+
+            $paramHtml .= '<param ' . $this->_htmlAttribs($options);
+
             if ($this->_isXhtml()) {
-                $paramHtml .= "<param {$this->_htmlAttribs($options)} />";
+                $paramHtml .= ' />';
             } else {
-                $paramHtml .= "<param {$this->_htmlAttribs($options)}>";
+                $paramHtml .= '>';
             }
         }
-        
+
         // Content
         if (is_array($content)) {
             $content = implode("\n", $content);
         }
 
         // Object header
-        $xhtml = "<object {$this->_htmlAttribs($attribs)}>\n" . 
-                    ($paramHtml ? "$paramHtml\n" : '') .
-                    ($content   ? "$content\n"   : '') .
-                 "</object>";
-        
+        $xhtml = '<object ' . $this->_htmlAttribs($attribs) . ">\n"
+                 . ($paramHtml ? $paramHtml . "\n" : '')
+                 . ($content   ? $content . "\n"   : '')
+                 . '</object>';
+
         return $xhtml;
     }
 }

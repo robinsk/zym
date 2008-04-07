@@ -41,13 +41,13 @@ class Zym_View_Helper_ObjectQuicktime extends Zym_View_Helper_Object
      *
      */
     const ATTRIB_CLASSID  = 'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B';
-    
+
     /**
      * Object Codebase
      *
      */
     const ATTRIB_CODEBASE = 'http://www.apple.com/qtactivex/qtplugin.cab';
-    
+
     /**
      * Default attributes
      *
@@ -69,12 +69,10 @@ class Zym_View_Helper_ObjectQuicktime extends Zym_View_Helper_Object
     {
         // Attrs
         $attribs = array_merge($this->_attribs, $attribs);
-        
+
         // Params
-        $params = array_merge(array(
-            'src' => $data
-        ), $params);
-        
-        return $this->object(null, self::TYPE, $attribs, $params, $content);
+        $params = array_merge(array('src' => $data), $params);
+
+        return $this->object($data, self::TYPE, $attribs, $params, $content);
     }
 }

@@ -32,22 +32,22 @@ class Zym_View_Helper_ObjectFlash extends Zym_View_Helper_Object
 {
     /**
      * Default file type for a flash applet
-     * 
+     *
      */
     const TYPE = 'application/x-shockwave-flash';
-    
+
     /**
      * Object classid
      *
      */
     const ATTRIB_CLASSID  = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
-    
+
     /**
      * Object Codebase
      *
      */
     const ATTRIB_CODEBASE = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab';
-    
+
     /**
      * Default attributes
      *
@@ -68,12 +68,10 @@ class Zym_View_Helper_ObjectFlash extends Zym_View_Helper_Object
     {
         // Attrs
         $attribs = array_merge($this->_attribs, $attribs);
-        
-        // Params
-        $params = array_merge(array(
-            'movie' => $data
-        ), $params);
 
-        return $this->object(null, self::TYPE, $attribs, $params, $content);
+        // Params
+        $params = array_merge(array('movie' => $data), $params);
+
+        return $this->object($data, self::TYPE, $attribs, $params, $content);
     }
 }
