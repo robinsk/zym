@@ -115,7 +115,7 @@ class Zym_Sitemap_Site
     );
     
     /**
-     * contains sub sites of this site
+     * Contains sub sites of this site
      * 
      * @var Zym_Sitemap
      */
@@ -319,13 +319,25 @@ class Zym_Sitemap_Site
      * Removes sub site with the given id
      * 
      * @param string $id
-     * @return void
+     * @return Zym_Sitemap_Site
      */
     public function removeSubSite($id)
     {
         if (null !== $this->_subSites) {
             $this->_subSites->removeSite($id);
-        }
+        } 
+        return $this;
+    }
+    
+    /**
+     * Removes all sub sites
+     * 
+     * @return Zym_Sitemap_Site
+     */
+    public function removeSubSites()
+    {
+        $this->_subSites = null;
+        return $this;
     }
     
     /**
