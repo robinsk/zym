@@ -36,6 +36,13 @@ abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract
     const NEWLINE = "\n";
 
     /**
+     * Indentation string
+     * 
+     * @var string
+     */
+    protected $_indent = '';
+    
+    /**
      * The tag closing bracket
      *
      * @var string
@@ -101,5 +108,43 @@ abstract class Zym_View_Helper_Html_Abstract extends Zym_View_Helper_Abstract
         }
 
         return substr($xhtml, 1);
+    }
+
+    /**
+     * Retrieve whitespace representation of $indent
+     * 
+     * @param  int|string $indent 
+     * @return string
+     */
+    protected function _getWhitespace($indent)
+    {
+        if (is_int($indent)) {
+            $indent = str_repeat(' ', $indent);
+        }
+
+        return (string) $indent;
+    }
+
+    /**
+     * Set the indentation string for __toString() serialization,
+     * optionally, if a number is passed, it will be the number of spaces
+     *
+     * @param  string|int $indent
+     * @return Zym_View_Helper_Html_Abstract
+     */
+    public function setIndent($indent)
+    {
+        $this->_indent = $this->_getWhitespace($indent);
+        return $this;
+    }
+
+    /**
+     * Retrieve indentation
+     *
+     * @return string
+     */
+    public function getIndent()
+    {
+        return $this->_indent;
     }
 }
