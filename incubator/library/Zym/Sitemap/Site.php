@@ -46,7 +46,8 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
  * @property string $controller
  * @property string $action
  * @property string $route  route name to use when assembling URI
- * @property bool $resetParam  whether params should be reset when assembling URI
+ * @property bool $resetParams  whether params should be reset when making URI
+ * @property bool $translate
  *
  * @author     Robin Skoglund
  * @category   Zym
@@ -107,7 +108,10 @@ class Zym_Sitemap_Site
         
         // route options to use when assembling url in getHref()
         'route'       => 'default', // string|null
-        'resetParams' => true       // bool|null
+        'resetParams' => true,      // bool|null
+        
+        // whether site name should be translated
+        'translate'   => true
     );
     
     /**
@@ -250,7 +254,8 @@ class Zym_Sitemap_Site
         }
         
         if (null === self::$_urlHelper) {
-            self::$_urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
+            self::$_urlHelper =
+                Zend_Controller_Action_HelperBroker::getStaticHelper('url');
         }
         
         return self::$_urlHelper->url(array(
@@ -355,6 +360,8 @@ class Zym_Sitemap_Site
      *   - route       string|null
      *   - resetParams bool|null
      * 
+     *   - translate   bool
+     * 
      * If any other $name is given, the value will be set as custom data.
      * 
      * @param string $name
@@ -381,6 +388,7 @@ class Zym_Sitemap_Site
                 
             case 'main':
             case 'hidden':
+            case 'translate':
                 $this->_data[$name] = (bool) $value;
                 break;
                 
@@ -431,6 +439,8 @@ class Zym_Sitemap_Site
      *   - route       string|null
      *   - resetParams bool|null
      * 
+     *   - translate   bool
+     * 
      * If any other $name is given, it will be considered as custom data.
      * 
      * @param string $name
@@ -465,6 +475,8 @@ class Zym_Sitemap_Site
      * 
      *   - route       string|null
      *   - resetParams bool|null
+     * 
+     *   - translate   bool
      * 
      * If any other $name is given, it will be considered as custom data.
      * 
