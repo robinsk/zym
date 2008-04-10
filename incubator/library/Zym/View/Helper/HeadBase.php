@@ -58,13 +58,8 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
      */
     public function headBase($href = null, $target = null)
     {
-        if (is_string($href)) {
-            $this->_href = $href;
-        }
-        
-        if (is_string($target)) {
-            $this->_target = $target;
-        }
+        $this->_href   = $href;
+        $this->_target = $target;
         
         return $this;
     }
@@ -77,17 +72,17 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
     public function getHost()
     {
         // determine full url for base href
-        if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "Off") {
-            $host = "http://";
+        if (empty($_SERVER['HTTPS']) || strcasecmp($_SERVER['HTTPS'], 'off') == 0) {
+            $host = 'http://';
             $host .= $_SERVER['SERVER_NAME'];
             if ((int) $_SERVER['SERVER_PORT'] != 80) {
-                $host .= ":" . $_SERVER['SERVER_PORT']; 
+                $host .= ':' . $_SERVER['SERVER_PORT']; 
             }
         } else {
-            $host = "https://";
+            $host = 'https://';
             $host .= $_SERVER['SERVER_NAME'];
             if ((int) $_SERVER['SERVER_PORT'] != 443) {
-                $host .= ":" . $_SERVER['SERVER_PORT']; 
+                $host .= ':' . $_SERVER['SERVER_PORT']; 
             }
         }
         
@@ -102,7 +97,7 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
     public function getHref()
     {
         if (null === $this->_href) {
-            $front = Zend_Controller_Front::getInstance();
+            $front       = Zend_Controller_Front::getInstance();
             $this->_href = $this->getHost() . ltrim($front->getBaseUrl(), '/');
         }
         
@@ -131,17 +126,13 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
                 ? $this->_getWhitespace($indent)
                 : $this->getIndent();
         
-        $view = $this->getView();
+        // Attrs
+        $attribs = array(
+            'href' => $this->getHref(),
+            'target' => $this->getTarget()
+        );
         
-        $href = $view->escape($this->getHref());
-        
-        if (is_string($this->_target)) {
-            $target = ' target="' . $view->escape($target) . '"';
-        } else {
-            $target = '';
-        }
-        
-        return "$indent<base href=\"$href\"$target />\n";
+        return $indent . "<base {$this->_htmlAttribs($attribs)} {$this->getClosingBracket()}\n";
     }
     
     /**
