@@ -73,15 +73,15 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
     {
         // determine full url for base href
         if (empty($_SERVER['HTTPS']) || strcasecmp($_SERVER['HTTPS'], 'off') == 0) {
-            $host = 'http://';
-            $host .= $_SERVER['SERVER_NAME'];
-            if ((int) $_SERVER['SERVER_PORT'] != 80) {
+            $host = 'http://' . $_SERVER['SERVER_NAME'];
+
+            if ($_SERVER['SERVER_PORT'] != 80) {
                 $host .= ':' . $_SERVER['SERVER_PORT']; 
             }
         } else {
-            $host = 'https://';
-            $host .= $_SERVER['SERVER_NAME'];
-            if ((int) $_SERVER['SERVER_PORT'] != 443) {
+            $host = 'https://' . $_SERVER['SERVER_NAME'];
+
+            if ($_SERVER['SERVER_PORT'] != 443) {
                 $host .= ':' . $_SERVER['SERVER_PORT']; 
             }
         }
@@ -132,7 +132,7 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
             'target' => $this->getTarget()
         );
         
-        return $indent . "<base {$this->_htmlAttribs($attribs)} {$this->getClosingBracket()}\n";
+        return $indent . "<base {$this->_htmlAttribs($attribs)}{$this->getClosingBracket()}\n";
     }
     
     /**

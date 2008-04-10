@@ -47,7 +47,7 @@ class Zym_View_Helper_Object extends Zym_View_Helper_Html_Abstract
                                      'type' => $type), $attribs);
 
         // Params
-        $paramHtml = '';
+        $paramHtml      = '';
         $closingBracket = $this->getClosingBracket();
 
         foreach ($params as $param => $options) {
