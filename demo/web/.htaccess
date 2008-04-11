@@ -32,7 +32,7 @@ php_flag register_globals off
 php_flag magic_quotes_gpc off
 
 # Session auto starting
-php_flag session.autostart on
+php_flag session.autostart off
 
 # Short open tags
 php_flag short_open_tag on
