@@ -31,17 +31,16 @@ class Default_ErrorController extends Zym_Controller_Action_Error
     public function init()
     {
         
-        $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER, 'not-found');
-        $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION, 'not-found');
-        $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER, 'internal');
-        /*
+     //   $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER, 'not-found');
+     //   $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION, 'not-found');
+     //   $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER, 'internal');
+
         $this->setErrorHandlers(array(
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => 'not-found',
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => 'not-found',
             
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => 'internal'
         ));
-        */
     }
     
     /**

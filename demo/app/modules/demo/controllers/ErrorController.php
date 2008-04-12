@@ -23,14 +23,10 @@ require_once 'Zym/Controller/Action/Error.php';
  */
 class Demo_ErrorController extends Zym_Controller_Action_Error
 {
-    /**
-     * Error handler
-     *
-     */
-    public function errorAction()
+    public function init()
     {
-        // Don't handle error's, forward to default error handler
-        $this->_forward('error', 'error', 'default');
+        $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER, 'internal');
+        $this->setFallBack('error', 'error', 'demo');
     }
     
     /**
