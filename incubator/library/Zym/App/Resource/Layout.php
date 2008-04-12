@@ -43,7 +43,7 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
-            'layout_path' => 'app/layouts',
+            'layout_path' => 'layouts',
             'layout'      => 'default',
             'mvc_enabled' => null,
             'content_key' => null,
@@ -78,7 +78,7 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         $configArray = $this->_handleConfig($config);
-        $configArray['LayoutPath'] = $this->getApp()->getHome($configArray['LayoutPath']);
+        $configArray['LayoutPath'] = $this->getApp()->getPath(Zym_App::PATH_APP, $configArray['LayoutPath']);
         Zend_Layout::startMvc($configArray);
     }
     

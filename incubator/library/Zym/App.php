@@ -124,7 +124,6 @@ class Zym_App
         self::ENV_PRODUCTION  => array(),
         
         self::ENV_DEVELOPMENT => array(
-            'throw_exceptions' => true,
             'cache' => array(
                 'enabled' => false
             )
@@ -142,17 +141,18 @@ class Zym_App
             ),
             
             'path' => array(
+                self::PATH_APP    => 'app',
                 self::PATH_CONFIG => 'config',
                 self::PATH_DATA   => 'data',
                 self::PATH_TEMP   => 'temp',
             ),
             
             'default_resource' => array(
-                'disabled' => false,
-                'config' => '%s.xml',
+                'disabled'    => false,
+                'config'      => '%s.xml',
                 'environment' => null,
-                'namespace' => null,
-                'priority' => null
+                'namespace'   => null,
+                'priority'    => null
             ),
             
             'cache' => array(
@@ -161,7 +161,7 @@ class Zym_App
             ),
             
             'resource' => array(),        
-            'registry' => null
+            'registry' => 'Zym_App_Registry'
         )
     );
     
@@ -610,6 +610,9 @@ class Zym_App
         // Get config
         $config = $this->getConfig();
         
+        // Registry setup
+        $this->_setupRegistry($config);
+        
         // Cache setup
         $this->_setupCache($config);
         
@@ -947,6 +950,20 @@ class Zym_App
         }
         
         return get_class($this) . '__' . $this->getEnvironment() .'__' . $id;
+    }
+    
+    protected function _setupRegistry(Zend_Config $config)
+    {
+        $class = $config->get('registry');
+        
+        if ($class instanceof Zym_App_Registry) {
+            $registry = $class;
+        } else {
+            Zend_Loader::loadClass($class);
+            $registry = new $class();
+        }
+        
+        $this->setRegistry($registry);
     }
     
     /**

@@ -128,7 +128,7 @@ class Zym_View_Helper_HeadBase extends Zym_View_Helper_Html_Abstract
         
         // Attrs
         $attribs = array(
-            'href' => $this->getHref(),
+            'href'   => $this->getHref(),
             'target' => $this->getTarget()
         );
         

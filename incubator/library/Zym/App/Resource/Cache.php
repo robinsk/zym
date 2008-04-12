@@ -88,7 +88,7 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
             
             'backend' => array(
                 'file' => array(
-                    'cache_dir' => 'cache' // Relative to Zym_App::PATH_TEMP
+                    'cache_dir' => 'cache' // Relative to Zym_App::PATH_DATA
                 ),
                 
                 'sqlite' => array(
@@ -108,7 +108,7 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
         Zym_Cache::setConfig($config);
 
         // Set file cache dir
-        $this->_prependTempPath($config->backend);        
+        $this->_prependPath($config->backend);        
     }
     
     /**
@@ -116,7 +116,7 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
      *
      * @param Zend_Config $config
      */
-    protected function _prependTempPath(Zend_Config $config)
+    protected function _prependPath(Zend_Config $config)
     {
         // File
         $fileOptions = Zym_Cache::getBackendOptions('file');
