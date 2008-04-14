@@ -373,7 +373,6 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         $type          = '';
         
         $typeMap = array_reverse($this->getTypeMap(), true);
-        $typeMap = array_change_key_case($typeMap, CASE_LOWER);
         foreach ($typeMap as $eClass => $eType) {
         	if ($exception instanceof $eClass) {
         	    $type = $eType;
@@ -381,6 +380,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         	}
         }
         
+        // Make sure there is a type
         if (empty($type)) {
             $type = self::EXCEPTION_OTHER;
         }
