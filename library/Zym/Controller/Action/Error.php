@@ -162,7 +162,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
 
         // Prevent looping to the same place                
         if (strcasecmp($fallBack[self::MODULE], $currentModule) === 0 || $fallBack[self::MODULE] === null) {
-            $isValidFall = ($fallBack[self::CONTROLLER] != 'error' && $fallBack[self::ACTION] != 'error');
+            $isValidFall = !($fallBack[self::CONTROLLER] == 'error' && $fallBack[self::ACTION] == 'error');
         } else {
             $isValidFall = true;
         }

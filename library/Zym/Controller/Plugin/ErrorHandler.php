@@ -84,6 +84,23 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
      * @var array
      */
     protected $_moduleErrorHandlerMap = array();
+    
+    /**
+     * Exception type map
+     * 
+     * This map is processed in LIFO order
+     *
+     * @var array
+     */
+    protected $_typeMap = array(
+        'Exception' => self::EXCEPTION_OTHER, // Catch all other exceptions without types
+    
+        'Zend_Controller_Dispatcher_Exception' => self::EXCEPTION_NO_CONTROLLER,
+        'Zend_Controller_Action_Exception'     => self::EXCEPTION_NO_ACTION,
+    
+        'Zym_Controller_Dispatcher_Exception_Interface' => self::EXCEPTION_NO_CONTROLLER,
+        'Zym_Controller_Action_Exception_Interface'     => self::EXCEPTION_NO_ACTION,
+    );
 
     /**
      * Constructor
@@ -174,6 +191,54 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     public function getModuleErrorHandlerMap()
     {
         return $this->_moduleErrorHandlerMap;
+    }
+    
+    /**
+     * Add an exception type to handle
+     *
+     * Items are processed in LIFO order
+     * 
+     * 
+     * @param string $type
+     * @param array|string $exceptionClasses array of exception classes
+     * @return Zym_Controller_Plugin_ErrorHandler
+     */
+    public function addTypeMap($type, $exceptionClasses)
+    {
+        $type = strtolower($type);
+        
+        foreach ((array) $exceptionClasses as $class) {
+        	$this->_typeMap[$class] = $type;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Set type Map
+     * 
+     * Items are processed in LIFO order
+     * <pre>
+     * array('class' => 'type')
+     * </pre>
+     *
+     * @param array $map
+     * @return Zym_Controller_Plugin_ErrorHandler
+     */
+    public function setTypeMap(array $map)
+    {
+    	$this->_typeMap = $map;
+    	return $this;
+    }
+    
+    /**
+     * Get type map
+     *
+     * @return array
+     */
+    public function getTypeMap()
+    {
+        return $this->_typeMap;
     }
 
     /**
@@ -305,34 +370,19 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         
         // Get exception information
         $exception     = $exceptions[0];
-        $exceptionType = get_class($exception);
         $type          = '';
         
-        switch ($exceptionType) {
-            case 'Zend_Controller_Dispatcher_Exception':
-                $type = self::EXCEPTION_NO_CONTROLLER;
-                break;
-
-            case 'Zend_Controller_Action_Exception':
-                $type = self::EXCEPTION_NO_ACTION;
-                break;
-
-            default:
-                // Check if exception implements an action interface
-                switch (strtolower(get_class($exception))) {
-                    case 'zym_controller_dispatcher_exception_interface':
-                        $type = self::EXCEPTION_NO_CONTROLLER;
-                        break;
-                        
-                    case 'zym_controller_action_exception_interface':
-                        $type = self::EXCEPTION_NO_ACTION;
-                        break;
-                    
-                    default:
-                        $type = self::EXCEPTION_OTHER;
-                        break;
-                }
-                break;
+        $typeMap = array_reverse($this->getTypeMap(), true);
+        $typeMap = array_change_key_case($typeMap, CASE_LOWER);
+        foreach ($typeMap as $eClass => $eType) {
+        	if ($exception instanceof $eClass) {
+        	    $type = $eType;
+        	    break;
+        	}
+        }
+        
+        if (empty($type)) {
+            $type = self::EXCEPTION_OTHER;
         }
 
         $error = new Zym_Controller_Plugin_ErrorHandler_Data($type, $exception, clone $request);
