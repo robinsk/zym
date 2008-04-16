@@ -15,4 +15,10 @@
         <li>It got eaten by the dik-diks</li>
         <li>The server is mad at you</li>
     </ul>
+    
+    <? if ($this->error instanceof Zym_Controller_Plugin_ErrorHandler_Data) : ?>
+    <p>
+        Reason: <?= $this->error->getException()->getMessage(); ?>
+    </p>
+    <? endif; ?>
 </div>

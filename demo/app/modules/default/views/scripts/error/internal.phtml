@@ -16,4 +16,10 @@
             unable to serve your request at the current time.
         </p>
     </div>
+    
+    <? if ($this->error instanceof Zym_Controller_Plugin_ErrorHandler_Data) : ?>
+    <p>
+        Reason: <?= $this->error->getException()->getMessage(); ?>
+    </p>
+    <? endif; ?>
 </div>
