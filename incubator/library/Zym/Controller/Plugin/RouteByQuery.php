@@ -36,7 +36,7 @@ require_once 'Zend/Controller/Plugin/Abstract.php';
  * @subpackage Plugin
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Controller_Plugin_RouteByParams extends Zend_Controller_Plugin_Abstract
+class Zym_Controller_Plugin_RouteByQuery extends Zend_Controller_Plugin_Abstract
 {
     /**
      * Called before Zend_Controller_Front begins evaluating the
@@ -50,27 +50,28 @@ class Zym_Controller_Plugin_RouteByParams extends Zend_Controller_Plugin_Abstrac
         $frontController = Zend_Controller_Front::getInstance();
 
         // Request keys
-        $moduleKey = $request->getModuleKey();
+        $moduleKey     = $request->getModuleKey();
         $controllerKey = $request->getControllerKey();
-        $actionKey = $request->getActionKey();
+        $actionKey     = $request->getActionKey();
 
         // Defaults
-        $moduleName = $frontController->getDefaultModule();
+        $moduleName     = $frontController->getDefaultModule();
         $controllerName = $frontController->getDefaultControllerName();
-        $actionName = $frontController->getDefaultAction();
+        $actionName     = $frontController->getDefaultAction();
 
         // Set a url path
-        if ($request->getPathInfo() == '') {
-            $module = $request->getParam($moduleKey, $moduleName);
-            $controller = $request->getParam($controllerKey, $controllerName);
-            $action = $request->getParam($actionKey, $actionName);
+        $module     = $request->getQuery($moduleKey, $moduleName);
+        $controller = $request->getQuery($controllerKey, $controllerName);
+        $action     = $request->getQuery($actionKey, $actionName);
 
-            if($controller != '' ) {
-                $url = ($module == $moduleName) ? $module : '/' . $module ;
-                $url .= '/' . $controller;
-                $url .= '/' . $action;
-                $request->setPathInfo($url);
-            }
+        // Assemble
+        if($request->getPathInfo() == '/') {
+            $modulePart     = ($module == $moduleName) ? $module : '/' . $module ;
+            $controllerPart = ($controller == $controllerName && $action == $actionName) 
+                                ? '' : '/' .$controller;
+            $actionPart     = ($action == $actionName && $controller) ? '' : '/' . $action;
+
+            $request->setPathInfo($modulePart . $controllerPart . $actionPart);
         }
     }
 
