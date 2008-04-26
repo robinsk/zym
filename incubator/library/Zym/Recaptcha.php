@@ -33,17 +33,57 @@ require_once 'Zym/Recaptcha/Response.php';
  */
 class Zym_Recaptcha
 {
+    /**
+     * API server url
+     *
+     * @var string
+     */
     const SERVER_API = 'http://api.recaptcha.net';
+
+    /**
+     * Secure API server url
+     *
+     * @var string
+     */
     const SERVER_API_SECURE = 'https://api-secure.recaptcha.net';
+
+    /**
+     * Verification server
+     *
+     * @var string
+     */
     const SERVER_VERIFY = 'api-verify.recaptcha.net';
+
+    /**
+     * Carriage return linefeed
+     *
+     * @var string
+     */
     const CRLF = "\r\n";
 
-    protected $_privKey;
+    /**
+     * Private key
+     *
+     * @var string
+     */
+    protected $_privateKey;
+
+    /**
+     * Remote IP address
+     *
+     * @var string
+     */
     protected $_remoteIp;
 
-    public function __construct($privKey, $remoteIp)
+    /**
+     * Constructor
+     *
+     * @param string $privateKey
+     * @param string $remoteIp
+     */
+    public function __construct($privateKey, $remoteIp)
     {
-        if (empty($privKey)) {
+        if (empty($privateKey)) {
             throw new Zym_Recaptcha_Exception('No private key specified.');
         }
 
@@ -51,12 +91,13 @@ class Zym_Recaptcha
             throw new Zym_Recaptcha_Exception('No remote IP specified.');
         }
 
-        $this->_privKey = $privKey;
+        $this->_privateKey = $privateKey;
         $this->_remoteIp = $remoteIp;
     }
 
     /**
      * Encodes the given data into a query string format
+     *
      * @param $data - array of string elements to be encoded
      * @return string - encoded request
      */
@@ -127,36 +168,39 @@ class Zym_Recaptcha
       */
     public function checkAnswer($challenge, $response, $params = array())
     {
-            if (empty($challenge) || empty($response)) {
-                return new Zym_Recaptcha_Response(false, 'incorrect-captcha-sol');
-            }
+        if (empty($challenge) || empty($response)) {
+            return new Zym_Recaptcha_Response(false, 'incorrect-captcha-sol');
+        }
 
-            $defaultParams = array('privatekey' => $this->_privkey,
-                                   'remoteip'   => $this->_remoteip,
-                                   'challenge'  => $challenge,
-                                   'response'   => $response);
+        $defaultParams = array('privatekey' => $this->_privateKey,
+                               'remoteIp'   => $this->_remoteIp,
+                               'challenge'  => $challenge,
+                               'response'   => $response);
 
-            $serverResponse = $this->_httpPost(self::SERVER_VERIFY, '/verify',
-                                               array_merge($defaultParams, $params));
+        $serverResponse = $this->_httpPost(self::SERVER_VERIFY, '/verify',
+                                           array_merge($defaultParams, $params));
 
-            $answers = explode ("\n", $serverResponse[1]);
-            $response = new Zym_Recaptcha_Response();
+        $answers = explode("\n", $serverResponse[1]);
+        $valid = false;
+        $error = '';
 
-            if (trim($answers[0]) == 'true') {
-                $response->setIsValid();
-            } else {
-                $response->setError($answers[1]);
-            }
+        if (trim($answers[0]) == 'true') {
+            $valid = true;
+        } else {
+            $error = $answers[1];
+        }
 
-            return $response;
+        return new Zym_Recaptcha_Response($valid, $error);
     }
 
     /**
      * gets a URL where the user can sign up for reCAPTCHA. If your application
      * has a configuration page where you enter a key, you should provide a link
      * using this function.
+     *
      * @param string $domain The domain where the page is hosted
      * @param string $appname The name of your application
+     * @return string
      */
     public function getSignupUrl($domain = null, $appname = null)
     {
