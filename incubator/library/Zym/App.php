@@ -67,7 +67,6 @@ class Zym_App
      */
     const ENV_DEFAULT     = 'default';
     
-    
     /**
      * Config directory
      *
@@ -78,31 +77,31 @@ class Zym_App
      * Temp directory
      *
      */
-    const PATH_TEMP = 'temp';
+    const PATH_TEMP   = 'temp';
     
     /**
      * Web directory
      *
      */
-    const PATH_WEB = 'web';
+    const PATH_WEB    = 'web';
     
     /**
      * Application directory
      *
      */
-    const PATH_APP = 'app';
+    const PATH_APP    = 'app';
 
     /**
      * Data directory
      *
      */
-    const PATH_DATA = 'data';
+    const PATH_DATA   = 'data';
     
     /**
      * Tests directory
      *
      */
-    const PATH_TESTS = 'tests';
+    const PATH_TESTS  = 'tests';
 
     
     /**
@@ -296,19 +295,23 @@ class Zym_App
     {
         // Cache config obj
         if (!$this->_defaultConfigObject instanceof Zend_Config) {
+            // Config array
+            $config = array();
+            
             // Set default environment if environment doesn't exist
-            if ($environment === null || !array_key_exists($environment, $this->_defaultConfig)) {
+            if (!array_key_exists($environment, $this->_defaultConfig)) {
                 $environment = Zym_App::ENV_DEFAULT;
             }
             
+            // Get environment config
+            $config = isset($this->_defaultConfig[$environment]) 
+                        ? $this->_defaultConfig[$environment] : array();
+            
             // Merge environment with default environment
-            if (array_key_exists($environment, $this->_defaultConfig)) {
-                $config = $this->_defaultConfig[$environment];
-                if ($environment !== Zym_App::ENV_DEFAULT && array_key_exists(Zym_App::ENV_DEFAULT, $this->_defaultConfig)) {
-                    $config = $this->_mergeConfig($this->_defaultConfig[Zym_App::ENV_DEFAULT], $config);
-                }
-            } else {
-                $config = array();
+            $isNotDefaultEnv = ($environment !== Zym_App::ENV_DEFAULT);
+            $isValidEnv      = array_key_exists(Zym_App::ENV_DEFAULT, $this->_defaultConfig);
+            if ($isNotDefaultEnv && $isValidEnv) {
+                $config = $this->_arrayMergeRecursiveOverwrite($this->_defaultConfig[Zym_App::ENV_DEFAULT], $config);
             }
             
             $this->_defaultConfigObject = new Zend_Config($config);
@@ -383,7 +386,7 @@ class Zym_App
             throw new Zym_App_Exception('Config key "home" is not set');
         }
         
-        $home = self::_normalizePath($config->home);
+        $home = self::_normalizePath($config->get('home'));
         
         // Append home for relative paths
         if (!empty($append)) {
@@ -965,6 +968,11 @@ class Zym_App
         return get_class($this) . '__' . $this->getEnvironment() .'__' . $id;
     }
     
+    /**
+     * Setup registry
+     *
+     * @param Zend_Config $config
+     */
     protected function _setupRegistry(Zend_Config $config)
     {
         $class = $config->get('registry');
@@ -986,15 +994,15 @@ class Zym_App
      */
     protected function _setupCache(Zend_Config $config)
     {
-        if ($this->_cache instanceof Zend_Cache_Core) {
-            // Disable cache
-            if (!$config->get('cache')->get('enabled')) {
+        // Disable cache
+        if (!$config->get('cache')->get('enabled')) {
+            if ($this->_cache instanceof Zend_Cache_Core) {
                 $this->_cache->setOption('caching', false);
+               
+            } else {
+                $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
             }
             
-            return;
-        } else if (!$config->get('cache')->get('enabled')) {
-            $this->_cache = Zend_Cache::factory('Core', 'File', array('caching' => false));
             return;
         }
         
@@ -1004,7 +1012,8 @@ class Zym_App
              */
             require_once 'Zym/App/Exception.php';
             throw new Zym_App_Exception(
-                'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature.'
+                'Extension "Apc" is required to use "' . get_class($this). '"\'s cache feature. '
+                . 'Disable caching or set your own cache object.'
             );
         }
             

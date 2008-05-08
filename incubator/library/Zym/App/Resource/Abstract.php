@@ -167,18 +167,19 @@ abstract class Zym_App_Resource_Abstract
         // Cache config obj
         if (!$this->_defaultConfigObject instanceof Zend_Config) {
             // Set default environment if environment doesn't exist
-            if ($environment === null || !array_key_exists($environment, $this->_defaultConfig)) {
+            if (!array_key_exists($environment, $this->_defaultConfig)) {
                 $environment = Zym_App::ENV_DEFAULT;
             }
             
+            // Get environment config
+            $config = isset($this->_defaultConfig[$environment]) 
+                        ? $this->_defaultConfig[$environment] : array();
+                        
             // Merge environment with default environment
-            if (array_key_exists($environment, $this->_defaultConfig)) {
-                $config = $this->_defaultConfig[$environment];
-                if ($environment !== Zym_App::ENV_DEFAULT && array_key_exists(Zym_App::ENV_DEFAULT, $this->_defaultConfig)) {
-                    $config = $this->_mergeConfig($this->_defaultConfig[Zym_App::ENV_DEFAULT], $config);
-                }
-            } else {
-                $config = array();
+            $isNotDefaultEnv = ($environment !== Zym_App::ENV_DEFAULT);
+            $isValidEnv      = array_key_exists(Zym_App::ENV_DEFAULT, $this->_defaultConfig);
+            if ($isNotDefaultEnv && $isValidEnv) {
+                $config = $this->_arrayMergeRecursiveOverwrite($this->_defaultConfig[Zym_App::ENV_DEFAULT], $config);
             }
             
             $this->_defaultConfigObject = new Zend_Config($config);
