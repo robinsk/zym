@@ -77,6 +77,34 @@ class Zym_App_Resource_Cache extends Zym_App_Resource_Abstract
             )
         ),
         
+        Zym_App::ENV_TEST => array(
+            'frontend' => array(
+                'core' => array(
+                    'caching' => false
+                ),
+                
+                'output' => array(
+                    'caching' => false
+                ),
+                
+                'function' => array(
+                    'caching' => false
+                ),
+                
+                'class' => array(
+                    'caching' => false
+                ),
+                
+                'file' => array(
+                    'caching' => false
+                ),
+                
+                'page' => array(
+                    'caching' => false
+                )
+            )
+        ),
+        
         Zym_App::ENV_DEFAULT     => array(
             'default_backend' => 'file',
         
