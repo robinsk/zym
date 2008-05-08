@@ -81,16 +81,27 @@ class Zym_App
     const PATH_TEMP = 'temp';
     
     /**
-     * Web ddirectory
+     * Web directory
      *
      */
     const PATH_WEB = 'web';
     
-    
+    /**
+     * Application directory
+     *
+     */
     const PATH_APP = 'app';
-    const PATH_LIBRARY = 'library';
-    const PATH_LAYOUTS = 'layouts';
+
+    /**
+     * Data directory
+     *
+     */
     const PATH_DATA = 'data';
+    
+    /**
+     * Tests directory
+     *
+     */
     const PATH_TESTS = 'tests';
 
     
@@ -121,13 +132,13 @@ class Zym_App
      * @var array
      */
     protected $_defaultConfig = array(
-        self::ENV_PRODUCTION  => array(),
-        
-        self::ENV_DEVELOPMENT => array(
+        self::ENV_PRODUCTION  => array(
             'cache' => array(
-                'enabled' => false
+                'enabled' => true
             )
         ),
+        
+        self::ENV_DEVELOPMENT => array(),
         
         self::ENV_TEST        => array(),
         
@@ -156,7 +167,7 @@ class Zym_App
             ),
             
             'cache' => array(
-                'enabled' => true,
+                'enabled' => false,
                 'prefix'  => '%s__'
             ),
             
@@ -635,9 +646,11 @@ class Zym_App
     }
     
     /**
-     * Run Application
+     * Run application
      *
-     * @return void
+     * @param Zend_Config|string $config
+     * @param string             $environment
+     * @param string             $format Configuration format ("ini")
      */
     public static function run($config, $environment = null, $format = null)
     {
