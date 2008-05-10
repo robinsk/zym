@@ -17,22 +17,27 @@
 /**
  * @see Zym_App_Resource_Abstract
  */
-require_once('Zym/App/Resource/Abstract.php');
+require_once 'Zym/App/Resource/Abstract.php';
+
+/**
+ * @see Zend_Controller_Front
+ */
+require_once 'Zend/Controller/Front.php';
 
 /**
  * @see Zend_Controller_Action_HelperBroker
  */
-require_once('Zend/Controller/Action/HelperBroker.php');
+require_once 'Zend/Controller/Action/HelperBroker.php';
 
 /**
  * @see Zend_Controller_Action_Helper_ViewRenderer
  */
-require_once('Zend/Controller/Action/Helper/ViewRenderer.php');
+require_once 'Zend/Controller/Action/Helper/ViewRenderer.php';
 
 /**
  * @see Zend_View
  */
-require_once('Zend/View.php');
+require_once 'Zend/View.php';
 
 /**
  * Setup view
@@ -54,6 +59,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
             'view' => array(
+                'class'    => 'Zym_View',
                 'encoding' => null,
                 'escape'   => null,
         
@@ -82,15 +88,15 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 'suffix' => null,
             
                 'spec' => array(
-                    'basePath'               => null,
-                    'scriptPath'             => null,
-                    'scriptPathNoController' => null
+                    'base_path'               => null,
+                    'script_path'             => null,
+                    'script_path_no_controller' => null
                 ),
 
-                'neverController' => null,
-                'neverRender'     => null,
-                'noController'    => null,
-                'noRender'        => null
+                'never_controller' => null,
+                'never_render'     => null,
+                'no_controller'    => null,
+                'no_render'        => null
             )
         )
     );
@@ -101,31 +107,84 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
      */
     public function setup(Zend_Config $config)
     {
-        if ((!$view = $this->getCache('view')) || (!$viewRenderer = $this->getCache('viewRenderer'))) {
-            // Get view renderer
-            $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
-            
+        // Get view
+        $view = $this->getView($config->view);
+        
+        $isUseViewRenderer = !Zend_Controller_Front::getInstance()->getParam('noViewRenderer');
+        if ($isUseViewRenderer) {
+            $viewRenderer = $this->getViewRenderer($config->view_renderer);
+            $viewRenderer->setView($view);
+            Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+        }
+    }
+    
+    /**
+     * Get view
+     *
+     * @param Zend_Config $config
+     * @return Zend_View_Interface
+     */
+    public function getView(Zend_Config $config)
+    {
+        if (!$view = $this->getCache('view')) {
+            $isUseViewRenderer = !Zend_Controller_Front::getInstance()->getParam('noViewRenderer');
+            $viewRenderer = ($isUseViewRenderer) 
+                                ? Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer')
+                                : null;
+                                
             // Use view from view renderer if possible
-            if ($viewRenderer->view instanceof Zend_View_Abstract) {
+            if ($isUseViewRenderer && $viewRenderer->view instanceof Zend_View_Interface) {
                 $view = $viewRenderer->view;
             } else {
-                $view = new Zend_View();
+                $viewClass = $config->get('class');
+                Zend_Loader::loadClass($viewClass);
                 
-                // Pass view renderer the view
-                $viewRenderer->setView($view);
+                $view = new $viewClass();
+                
+                // Validate object
+                if (!$view instanceof Zend_View_Interface) {
+                    /**
+                     * @see Zym_App_Resource_View_Exception
+                     */
+                    require_once 'Zym/App/Resource/View/Exception.php';
+                    throw new Zym_App_Resource_View_Exception(sprintf(
+                        'View object must be an instance of Zend_View_Interface an object of %s', get_class($view)
+                    ));
+                }
             }
             
-            // Do setup
-            $this->_setupView($view, $config->view);
-            $this->_setupViewRenderer($viewRenderer, $config->view_renderer);
+            // Setup
+            $this->_setupView($view, $config);
             
             // Save
-            $this->saveCache($viewRenderer, 'viewRenderer');
             $this->saveCache($view, 'view');
         }
         
-        Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
-        $viewRenderer->setView($view);
+        return $view;
+    }
+    
+    /**
+     * Get view renderer objec
+     *
+     * @param Zend_Config $config
+     * @return Zend_Controller_Action_Helper_ViewRenderer
+     */
+    public function getViewRenderer(Zend_Config $config)
+    {
+        // Use vr?
+        $isUseViewRenderer = !Zend_Controller_Front::getInstance()->getParam('noViewRenderer');
+        if ($isUseViewRenderer && !$viewRenderer = $this->getCache('viewRenderer')) {
+            // Get view renderer
+            $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
+            
+            // Setup
+            $this->_setupViewRenderer($viewRenderer, $config);
+            
+            // Save
+            $this->saveCache($viewRenderer, 'viewRenderer');
+        }
+        
+        return $viewRenderer;
     }
     
     /**
@@ -203,14 +262,15 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     protected function _viewRendererSpec(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
     {
         // Add base, filter, helper and script paths
-        $specKeys = array('basePath', 'scriptPath', 'scriptPathNoController');
-        foreach($specKeys as $key) {
+        $specKeys = array('base_path'                 => 'setViewBasePathSpec', 
+                          'script_path'               => 'setScriptPathSpec',
+                          'script_path_no_controller' => 'setScriptPathNoController');
+        foreach($specKeys as $method) {
             // No setting set, continue
             if ($config->spec->{$key} === null) {
                 continue;
             }
             
-            $method = 'setView' . ucfirst($key) . 'Spec';
             call_user_func_array(array($viewRenderer, $method), array($config->spec->{$key}));
         }
     }
@@ -223,14 +283,16 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
      */
     protected function _viewRendererFlags(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
     {
-        $flagKeys = array('neverRender', 'neverController', 'noController', 'noRender');
-        foreach($flagKeys as $key) {
+        $flagKeys = array('never_render'     => 'setNeverRender',
+                          'never_controller' => 'setNeverController',
+                          'no_controller'    => 'setNoController',
+                          'no_render'        => 'setNoRender');
+        foreach($flagKeys as $key => $method) {
             // No setting set, continue
             if ($config->{$key} === null) {
                 continue;
             }
             
-            $method = 'set' . ucfirst($key);
             call_user_func_array(array($viewRenderer, $method), array((bool) $config->{$key}));
         }
     }

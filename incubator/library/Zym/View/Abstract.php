@@ -68,7 +68,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     {
         // Stream protocol
         if (array_key_exists('streamProtocol', $config)) {
-            $this->addFilter($config['streamProtocol']);
+            $this->setStreamProtocol($config['streamProtocol']);
         }
         
         // Stream wrapper
@@ -130,6 +130,8 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     
     /**
      * Set view stream wrapper class
+     * 
+     * Protocol must be alphanumeric
      *
      * @param string $protocol
      * @return Zym_View_Abstract
@@ -209,7 +211,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
         // Unregister existing wrapper
         if (in_array($streamProtocol, stream_get_wrappers())) {
             stream_wrapper_unregister($streamProtocol);
-            $previousWrapperExists = true;
+            $previousWrapperExists = true;          
         }
 
         // Load stream wrapper
@@ -221,9 +223,14 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
         // Render!
         $return = parent::render($name);
         
+        // Unregister wrapper
+        if (in_array($streamProtocol, stream_get_wrappers())) {
+            stream_wrapper_unregister($streamProtocol);
+        }
+
         // Register any old wrapper
         if ($previousWrapperExists) {
-            stream_wrapper_restore($streamProtocol);
+            @stream_wrapper_restore($streamProtocol);            
         }
         
         return $return;

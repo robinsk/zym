@@ -36,6 +36,6 @@ class Zym_View extends Zym_View_Abstract
      */
     protected function _run()
     {
-        include 'view://' . func_get_arg(0);
+        include $this->getStreamProtocol() . '://' . func_get_arg(0);
     }
 }
