@@ -50,9 +50,16 @@ class Zym_Paginate_Db extends Zym_Paginate_Abstract
         // @TODO: Check how well this works when you have a query with multiple joined tables
         $countSelect = clone $select;
 
-        $matches = null;
-        preg_match('/FROM `(.+)`/', (string) $select, $matches);
-        $countSelect->from($matches[1], new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
+        if ($countSelect instanceof Zend_Db_Table_Select) {
+            $matches = null;
+            preg_match('/FROM `(.+)`/', (string) $select, $matches);
+            $tableName = $matches[1];
+        } else {
+            $tableNames = array_keys($countSelect->getPart(Zend_Db_Select::FROM));
+            $tableName = $tableNames[0];
+        }
+
+        $countSelect->from($tableName, new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
 
         $result = $countSelect->query()->fetchAll();
 
