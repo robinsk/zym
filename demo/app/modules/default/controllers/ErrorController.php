@@ -24,17 +24,43 @@ require_once 'Zym/Controller/Action/Error.php';
 class Default_ErrorController extends Zym_Controller_Action_Error
 {
     /**
+     * Ajax actions
+     *
+     * @var array
+     */
+    public $ajaxable = array(
+        'not-found' => array('html', 'json'),
+        'internal' => array('html', 'json')
+    );
+    
+    /**
+     * Contexts
+     *
+     * @var array
+     */
+    public $contexts = array(
+        'not-found' => array('json'),
+        'internal' => array('json')
+    );
+    
+    /**
      * Init
      * 
      * @return void
      */
     public function init()
     {
+        // Init Contexts
+        $this->getHelper('ContextSwitch')->initContext();
         
-     //   $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER, 'not-found');
-     //   $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION, 'not-found');
-     //   $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER, 'internal');
+        // Init AjaxContexts
+        $this->getHelper('AjaxContext')->initContext();
+        
+        // $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER, 'not-found');
+        // $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION, 'not-found');
+        // $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER, 'internal');
 
+        // Error Handling map
         $this->setErrorHandlers(array(
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => 'not-found',
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => 'not-found',
@@ -56,6 +82,11 @@ class Default_ErrorController extends Zym_Controller_Action_Error
     {
         // Send 404 HTTP Error
         $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
+        
+        // View
+        $this->getView()->assign(array(
+            'error' => $this->getError()
+        ));
     }
     
     /**
@@ -69,5 +100,10 @@ class Default_ErrorController extends Zym_Controller_Action_Error
     {
         // Send 500 Error
         $this->getResponse()->setRawHeader('HTTP/1.1 500 Internal Server Error');
+        
+        // View
+        $this->getView()->assign(array(
+            'error' => $this->getError()
+        ));
     }
 }

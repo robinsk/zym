@@ -200,7 +200,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     protected function _addControllerAndModuleDirectories(Zend_Config $config)
     {
         $moduleAndControllerMap = array(
-            'module' => $config->get('module')->get('directory'),
+            'module'     => $config->get('module')    ->get('directory'),
             'controller' => $config->get('controller')->get('directory')
         );
 
