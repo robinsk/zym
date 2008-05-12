@@ -178,7 +178,15 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getPageCount()
     {
-        return (int) $this->_pageCount;
+        return $this->_pageCount;
+    }
+
+    /**
+     * Set the total amount of pages
+     */
+    protected function _setPageCount($count)
+    {
+        $this->_pageCount = (int) $count;
     }
 
     /**
@@ -188,7 +196,15 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getRowCount()
     {
-        return (int) $this->_rowCount;
+        return $this->_rowCount;
+    }
+
+    /**
+     * Set the amount of rows
+     */
+    protected function _setRowCount($count)
+    {
+        $this->_rowCount = (int) $count;
     }
 
     /**
@@ -198,7 +214,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getRowLimit()
     {
-        return (int) $this->_rowLimit;
+        return $this->_rowLimit;
     }
 
     /**
@@ -243,7 +259,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
      */
     public function getCurrentPageNumber()
     {
-        return (int) $this->_currentPage;
+        return $this->_currentPage;
     }
 
     /**
@@ -303,7 +319,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
             throw new Zym_Paginate_Exception_NoNextPage('No next page');
         }
 
-        return (int) $this->getCurrentPageNumber() + 1;
+        return $this->getCurrentPageNumber() + 1;
     }
 
     /**
@@ -342,7 +358,7 @@ abstract class Zym_Paginate_Abstract implements Iterator, Countable
             throw new Zym_Paginate_Exception_NoPreviousPage('No previous page');
         }
 
-        return (int) $this->getCurrentPageNumber() - 1;
+        return $this->getCurrentPageNumber() - 1;
     }
 
     /**

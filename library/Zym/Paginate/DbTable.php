@@ -59,7 +59,7 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
         $countSelect->from($table, new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
         $result = $table->fetchRow($countSelect);
 
-        $this->_rowCount = $result->{self::ROW_COUNT_COLUMN};
+        $this->_setRowCount($result->{self::ROW_COUNT_COLUMN});
     }
 
     /**
@@ -88,9 +88,9 @@ class Zym_Paginate_DbTable extends Zym_Paginate_Abstract
             $floor = floor($rowCount / $this->_rowLimit);
             $rest = $rowCount % $this->_rowLimit;
 
-            $this->_pageCount = $floor + ($rest > 0 ? 1 : 0);
+            $this->_setPageCount($floor + ($rest > 0 ? 1 : 0));
         }
 
-        return (int) $this->_pageCount;
+        return $this->_pageCount;
     }
 }

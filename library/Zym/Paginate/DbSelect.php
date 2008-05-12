@@ -63,7 +63,7 @@ class Zym_Paginate_Db extends Zym_Paginate_Abstract
 
         $result = $countSelect->query()->fetchAll();
 
-        $this->_rowCount = (int) $result[0][self::ROW_COUNT_COLUMN];
+        $this->_setRowCount($result[0][self::ROW_COUNT_COLUMN]);
     }
 
     /**
@@ -92,9 +92,9 @@ class Zym_Paginate_Db extends Zym_Paginate_Abstract
             $floor = floor($rowCount / $this->_rowLimit);
             $rest = $rowCount % $this->_rowLimit;
 
-            $this->_pageCount = $floor + ($rest > 0 ? 1 : 0);
+            $this->_setPageCount($floor + ($rest > 0 ? 1 : 0));
         }
 
-        return (int) $this->_pageCount;
+        return $this->_pageCount;
     }
 }
