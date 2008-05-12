@@ -198,7 +198,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         // Add base, filter, helper and script paths
         $keys = array('base', 'filter', 'helper', 'script');
         foreach($keys as $key) {
-            foreach($viewConfig->path->{$key} as $objKey => $obj) {
+            foreach($viewConfig->get('path')->get($key) as $objKey => $obj) {
                 // Handle script paths
                 if ($key == 'script') {
                     $view->addScriptPath(trim($obj));
@@ -207,8 +207,8 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 
                 // Handle base, filter and helper paths
                 if ($obj instanceof Zend_Config || is_array($obj)) {
-                    $path = $obj->path;
-                    $prefix = $obj->prefix;
+                    $path = $obj->get('path');
+                    $prefix = $obj->get('prefix');
                 } else {
                     // Allow setting namespaces using keys
                     if (empty($obj)) {
@@ -265,13 +265,14 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         $specKeys = array('base_path'                 => 'setViewBasePathSpec', 
                           'script_path'               => 'setScriptPathSpec',
                           'script_path_no_controller' => 'setScriptPathNoController');
-        foreach($specKeys as $method) {
+        foreach($specKeys as $key => $method) {
+            $setting = $config->get('spec')->get($key);
             // No setting set, continue
-            if ($config->spec->{$key} === null) {
+            if ($setting === null) {
                 continue;
             }
             
-            call_user_func_array(array($viewRenderer, $method), array($config->spec->{$key}));
+            call_user_func_array(array($viewRenderer, $method), array($setting));
         }
     }
     
@@ -288,12 +289,14 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                           'no_controller'    => 'setNoController',
                           'no_render'        => 'setNoRender');
         foreach($flagKeys as $key => $method) {
+            $setting = $config->get($key);
+            
             // No setting set, continue
-            if ($config->{$key} === null) {
+            if ($setting === null) {
                 continue;
             }
             
-            call_user_func_array(array($viewRenderer, $method), array((bool) $config->{$key}));
+            call_user_func_array(array($viewRenderer, $method), array((bool) $setting));
         }
     }
     
@@ -305,8 +308,8 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
      */
     protected function _viewRendererSuffix(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
     {
-        if ($config->suffix !== null) {
-            $viewRenderer->setViewSuffix($config->suffix);
+        if ($config->get('suffix') !== null) {
+            $viewRenderer->setViewSuffix($config->get('suffix'));
         }
     }
 }

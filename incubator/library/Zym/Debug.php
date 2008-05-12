@@ -246,7 +246,7 @@ class Zym_Debug extends Zend_Debug
      *
      * @param string $name
      * @param string $group
-     * @return Zym_Debug_Timer
+     * @return Zym_Timer
      */
     public static function getTimer($name = null, $group = null)
     {
