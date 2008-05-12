@@ -81,7 +81,7 @@ class Zym_View_Stream_Wrapper
     {
         // Get host part from path (scheme://host)
         $url         = parse_url($path);
-        $this->_path = $url['host'] . '/' . $url['path'];
+        $this->_path = $url['host'] . (($url['path']) ? '/' . $url['path'] : null);
         
         // Search include path for relative urls?
         $useIncludePath = $this->_checkFlag($options, STREAM_USE_PATH);
@@ -247,7 +247,7 @@ class Zym_View_Stream_Wrapper
     {
         // Get host part
         $url  = parse_url($path);
-        $host = $url['host'] . '/' . $url['path'];
+        $host = $url['host'] . (($url['path']) ? '/' . $url['path'] : null);
 
         // Trigger errors?
         $noErrors = $this->_checkFlag($flags, STREAM_URL_STAT_QUIET);

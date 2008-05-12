@@ -63,6 +63,8 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 'encoding' => null,
                 'escape'   => null,
         
+                'filter' => array(),
+        
                 'path' => array(
                     'base' => array(),
         
@@ -81,6 +83,12 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     ),
                     
                     'script' => array()
+                ),
+                
+                'stream' => array(
+                    'protocol' => null,
+                    'wrapper'  => null,
+                    'filter'   => array()
                 )
             ),
             
@@ -223,15 +231,28 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 call_user_func_array(array($view, $method), array(trim($path), $prefix));
             }
         }
+        
+        // Filters
+        $filters = ($viewConfig->get('filter') instanceof Zend_Config) 
+                    ? $viewConfig->get('filter')->toArray()
+                    : array($viewConfig->get('filter'));
+        foreach ($filters as $filter) {
+        	$view->addFilter($filter);
+        }
 
         // Set encoding
-        if ($viewConfig->encoding) {
-            $view->setEncoding($viewConfig->encoding);
+        if ($encoding = $viewConfig->get('encoding')) {
+            $view->setEncoding($encoding);
         }
         
         // Set escape
-        if ($viewConfig->escape) {
-            $view->setEscape($viewConfig->escape);
+        if ($escape = $viewConfig->get('escape')) {
+            $view->setEscape($escape);
+        }
+        
+        // Streams
+        if ($view instanceof Zym_View_Abstract) {
+            $this->_setupViewStreams($view, $viewConfig->get('stream'));
         }
     }
     
@@ -310,6 +331,33 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     {
         if ($config->get('suffix') !== null) {
             $viewRenderer->setViewSuffix($config->get('suffix'));
+        }
+    }
+    
+    /**
+     * Setup view streams
+     *
+     * @param Zym_View_Abstract $view
+     * @param Zend_Config $config
+     */
+    protected function _setupViewStreams(Zym_View_Abstract $view, Zend_Config $config)
+    {
+        // Protocol
+        if ($protocol = $config->get('protocol')) {
+            $view->setStreamProtocol($protocol);
+        }
+        
+        // Wrapper
+        if ($wrapperClass = $config->get('wrapper')) {
+            $view->setStreamWrapper($wrapperClass);
+        }
+        
+        // Filters
+        if ($filters = ($config->get('filter') instanceof Zend_Config)
+                            ? $config->get('filter')->toArray() : array($config->get('filter'))) {
+            foreach ($filters as $filter) {
+            	$view->addStreamFilter($filter);
+            }
         }
     }
 }
