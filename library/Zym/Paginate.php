@@ -20,9 +20,9 @@
 require_once 'Zym/Paginate/Array.php';
 
 /**
- * @see Zym_Paginate_Db
+ * @see Zym_Paginate_DbSelect
  */
-require_once 'Zym/Paginate/Db.php';
+require_once 'Zym/Paginate/DbSelect.php';
 
 /**
  * @see Zym_Paginate_Iterator
@@ -50,7 +50,7 @@ class Zym_Paginate
         $paginate = null;
 
         if ($data instanceof Zend_Db_Select) {
-            $paginate = new Zym_Paginate_Db($data);
+            $paginate = new Zym_Paginate_DbSelect($data);
         } else if ($data instanceof Iterator) {
             $paginate = new Zym_Paginate_Iterator($data);
         } else if (is_array($data)) {

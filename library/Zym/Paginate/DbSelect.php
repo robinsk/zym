@@ -26,7 +26,7 @@ require_once 'Zym/Paginate/Abstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Paginate_Db extends Zym_Paginate_Abstract
+class Zym_Paginate_DbSelect extends Zym_Paginate_Abstract
 {
     /**
      * The name for the rowcount column
@@ -47,19 +47,9 @@ class Zym_Paginate_Db extends Zym_Paginate_Abstract
     {
         $this->_select = $select;
 
-        // @TODO: Check how well this works when you have a query with multiple joined tables
         $countSelect = clone $select;
-
-        if ($countSelect instanceof Zend_Db_Table_Select) {
-            $matches = null;
-            preg_match('/FROM `(.+)`/', (string) $select, $matches);
-            $tableName = $matches[1];
-        } else {
-            $tableNames = array_keys($countSelect->getPart(Zend_Db_Select::FROM));
-            $tableName = $tableNames[0];
-        }
-
-        $countSelect->from($tableName, new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
+        $countSelect->reset()
+                    ->from($select, new Zend_Db_Expr('COUNT(*) AS ' . self::ROW_COUNT_COLUMN));
 
         $result = $countSelect->query()->fetchAll();
 
