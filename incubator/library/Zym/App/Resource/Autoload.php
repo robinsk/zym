@@ -72,12 +72,7 @@ class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
         }
         
         // Register autoload
-        foreach ($classes as $loader) {
-            // Should we load autoloaders?
-            if (!class_exists($loader)) {
-                Zend_Loader::loadClass($loader);
-            }
-
+        foreach (array_reverse($classes) as $loader) {
             Zend_Loader::registerAutoload($loader);
         }
     }
