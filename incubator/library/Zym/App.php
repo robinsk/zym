@@ -505,6 +505,46 @@ class Zym_App
     }
     
     /**
+     * Returns resource with the specified $name
+     *
+     * @param string $name  resource name
+     * @return Zym_App_Resource_Abstract|null  returns null if not found
+     * @throws Zym_App_Resource_Exception  if $name is invalid
+     */
+    public function getResource($name)
+    {
+        if (!is_string($name) || empty($name)) {
+            require_once 'Zym/App/Resource/Exception.php';
+            throw new Zym_App_Resource_Exception("Invalid resource name");
+        }
+        
+        // first, check if the name is explictly given to a resource
+        if (array_key_exists($name, $this->_resources)) {
+            return $this->_resources[$name];
+        }
+        
+        $name = strtolower($name);
+        
+        // loop resources
+        foreach ($this->_resources as $key => $resource) {
+            $className = strtolower(get_class($resource));
+            
+            // if $name contains an underscore, assume full class name is given
+            if (strpos($name, '_') !== false && $name == $className) {
+                return $resource;
+            }
+            
+            // extract resource name
+            $className = split('_', $className);
+            if ($className[count($className) - 1] == $name) {
+                return $resource;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
      * Clear resource scripts
      *
      * @return Zym_App
