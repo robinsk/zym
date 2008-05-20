@@ -35,9 +35,9 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
 require_once 'Zend/Controller/Action/Helper/ViewRenderer.php';
 
 /**
- * @see Zend_View
+ * @see Zend_View_Abstract
  */
-require_once 'Zend/View.php';
+require_once 'Zend/View/Abstract.php';
 
 /**
  * Setup view
@@ -64,6 +64,10 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 'escape'   => null,
         
                 'filter' => array(),
+                
+                'helper' => array(
+                    'doctype' => array('XHTML1_STRICT')
+                ),
         
                 'path' => array(
                     'base' => array(),
@@ -238,6 +242,15 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     : array($viewConfig->get('filter'));
         foreach ($filters as $filter) {
         	$view->addFilter($filter);
+        }
+        
+        // Helpers
+        $helpers = ($viewConfig->get('helper') instanceof Zend_Config)
+                    ? $viewConfig->get('helper')->toArray()
+                    : array();
+        foreach ($helpers as $helper => $args) {
+            $helperName = $this->_underscoreToCamelCase($helper);
+            call_user_func_array(array($view, $helperName), $args);
         }
 
         // Set encoding
