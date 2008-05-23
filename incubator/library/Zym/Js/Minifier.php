@@ -220,8 +220,11 @@ class Zym_Js_Minifier
             $destination = $file;
         }
         
+        $data = self::minifyFromFile($file);
+        
         $fp = fopen($destination, 'w');
-        fwrite($fp, self::minifyFromFile($file));
+        fwrite($fp, $data);
+        fclose($fp);
     }
     
     /**
