@@ -41,7 +41,7 @@ class Zym_View_Helper_FileSizeTest extends PHPUnit_Framework_TestCase
         $equals = array(
             "0 B" => 0,
             "1 B" => 1,
-            "1 KB" => 1024,
+            "1 kB" => 1024,
         	"1 MB" => 1024*1024,
             "1 GB" => 1024*1024*1024,
             "1 TB" => 1024*1024*1024*1024,
@@ -57,9 +57,32 @@ class Zym_View_Helper_FileSizeTest extends PHPUnit_Framework_TestCase
      */
     public function testFileSizePrecision()
     {
-        $this->assertEquals("976.563 KB", $this->_fs->fileSize(1000000, 3));
-        $this->assertEquals("976.5625 KB", $this->_fs->fileSize(1000000, 4));
-        $this->assertEquals("976.5625 KB", $this->_fs->fileSize(1000000, 10));
+        $this->assertEquals("976.563 kB", $this->_fs->fileSize(1000000, 3));
+        $this->assertEquals("976.5625 kB", $this->_fs->fileSize(1000000, 4));
+        $this->assertEquals("976.5625000000 kB", $this->_fs->fileSize(1000000, 10));
+    }
+
+    /**
+     * Test defined export type
+     */
+    public function testDefinedType()
+    {
+        $this->assertEquals('1048576 kB', $this->_fs->fileSize(1024*1024*1024, null, 'KILOBYTE'));
+        $this->assertEquals('1024 MB', $this->_fs->fileSize(1024*1024*1024, null, 'MEGABYTE'));
+        $this->assertEquals('1 GB', $this->_fs->fileSize(1024*1024*1024, null, 'GIGABYTE'));
+        
+    }
+
+    /**
+     * Test iec convert
+     */
+    public function testIec()
+    {
+        $this->assertEquals('1 B', $this->_fs->fileSize(1, null, null, true));
+        $this->assertEquals('1 kB.', $this->_fs->fileSize(1024, null, null, true));
+        $this->assertEquals('1 MB.', $this->_fs->fileSize(1024*1024, null, null, true));
+        $this->assertEquals('1 GB.', $this->_fs->fileSize(1024*1024*1024, null, null, true));
+        
     }
 }
 
