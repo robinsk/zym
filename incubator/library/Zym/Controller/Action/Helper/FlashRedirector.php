@@ -130,6 +130,35 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
     }
 
     /**
+     * Redirect
+     *
+     * @param array $options
+     * @return Zym_Controller_Action_Helper_FlashRedirector
+     */
+    public function redirect(array $options = array())
+    {
+        if ($this->hasRedirect()) {
+            $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
+            $redirector->setExit(false);
+            $redirector->gotoUrl($this->getRedirect(), $options);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Redirect and exit
+     *
+     * @param array $options
+     * @return void
+     */
+    public function redirectAndExit(array $options = array())
+    {
+        $options = array_merge($options, array('exit' => true));
+        $this->redirect($options);
+    }
+    
+    /**
      * Set a url to redirect
      *
      * @param string $url
@@ -171,6 +200,8 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
         if ($this->hasRedirect()) {
             return self::$_redirect[$this->getNamespace()];
         }
+        
+        return null;
     }
 
     /**
@@ -208,6 +239,8 @@ class Zym_Controller_Action_Helper_FlashRedirector extends Zend_Controller_Actio
         if ($this->hasRedirect()) {
             return self::$_session->{$this->getNamespace()};
         }
+        
+        return null;
     }
     
     /**
