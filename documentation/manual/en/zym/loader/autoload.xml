@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.loader.autoload"
+    version="5.0">
+    <title>Autoloading</title>
+
+    <para>
+        This component provides a solid interface and autoload implementations 
+        for commonly used libraries and directory structures through Zend_Loader,
+        which provides an api for registering spl class autoloaders through
+        <code>Zend_Loader::registerAutoload();</code>.
+    </para>
+
+    <note>
+        <para>
+            It is recommended that you use this method over <code>__autoload()</code>
+            as your code will be much clearer and cleaner because multiple 
+            autoloaders can be registered.
+        </para>
+    </note>
+
+    <section>
+        <title>Registering an autoloader</title>
+
+        <para>
+            Autoloaders are registered through <code>Zend_Loader::registerAutoload();</code>
+            or through SPL with <code>spl_autoload_register(array('Zym_Loader_Autoload_Doctrine', 'autoload'));</code>.
+        </para>
+
+        <para>
+            Multiple loaders are pushed onto the spl autoload stack in FIFO order,
+            so organizing the order you push loaders onto the stack may have a
+            large effect on performance depending on the setup.
+        </para>
+
+        <note>
+            <para>
+                See <link xlink:href="http://php.net/spl-autoload-register">PHP.net spl_autoload_register()</link>
+                for more information on SPL's autoloading.
+            </para>
+        </note>
+
+        <example xml:id="zym.loader.autoload.example.registering">
+            <title>Registering autoloaders</title>
+            <programlisting language="php"><xi:include href="autoload/example/registering.php" parse="text" /></programlisting>
+        </example>
+    </section>
+
+    <section>
+        <title>Writing your own autoloaders</title>
+
+        <para>
+            Creating autoloaders is a fairly trivial task, all that is needed 
+            is that an autoloader implement <code>Zym_Loader_Autoload_Interface</code>;
+            however, <code>Zend_Loader</code> does not require this itself.
+        </para>
+
+        <para>
+            While Zend_Loader only requires that a class have an <code>autoload($class)</code>
+            function that is compatible with <code>spl_autoload_register()</code>,
+            it was Zym's goal to standardize this with an interface.
+        </para>
+
+        <example xml:id="zym.loader.autoload.example.custom">
+            <title>A custom autoloader</title>
+            <programlisting role="php"><xi:include href="autoload/example/custom.php" parse="text" /></programlisting>
+        </example>
+    </section>
+</section>

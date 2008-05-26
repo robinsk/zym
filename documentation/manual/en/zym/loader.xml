@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.loader" version="5.0">
+    <title>Zym_Loader</title>
+    
+    <para>
+        Zym does not have its own loader, rather you are to use <classname>Zend_Loader</classname>
+        since it provides all the neccessary features needed.
+    </para>
+    
+    <note>
+        <title>Note on class loading</title>
+        
+        <para>
+            Unobvious to many newcomers is the fact that <classname>Zend_Loader</classname>
+            was not designed to load files as a replacement to <code>require_once()</code>
+            in applications with code such as <code>Zend_Loader::loadClass('Zend_Controller_Front');</code>.
+            This method provides <emphasis>no</emphasis> benefits from a plain 
+            <code>require_once('Zend/Controller/Front.php');</code> in these situations. 
+            In fact, using it unnecessarily can have a significant impact on performance.
+        </para>
+        
+        <para>
+            Basically, the point is to avoid using <classname>Zend_Loader</classname>
+            in situations where a require/include would work better unless you 
+            need its features. It was designed for you to benefit from these features,
+            not be hindered by them.
+        </para>
+    </note>
+    
+    <xi:include href="loader/autoload.xml" />
+</chapter>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.action" version="5.0">
+    <title>Action</title>
+
+    <para>
+        The <code>Zym_Controller_Action_Abstract</code> class is an extension
+        of Zend_Controller_Action. It adds get methods for the view object and 
+        view prefix. It also provides a goto method to perform redirects.
+    </para>
+    
+    <para>
+        The goto method provides a proxy to the redirector action helper. 
+        It has basically the same interface as the redirector's goto method.
+        The only difference is the added $exit boolean. This boolean decides if 
+        the script should exit immediately after the redirect is issued.
+    </para>
+</section>

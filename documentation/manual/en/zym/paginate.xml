@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.paginate" version="5.0">        
+    <title>Zym_Paginate</title>
+    
+    <para>
+        <code>Zym_Paginate</code> provides a generic way to paginate data. 
+        It provides support for three different collections out of the box.
+        It supports both numeric and associative PHP arrays, database data 
+        through <code>Zend_Db_Table</code> and <code>Iterator</code> instances.
+    </para>
+    
+    <xi:include href="paginate/array.xml" />
+    <xi:include href="paginate/dbtable.xml" />
+    <xi:include href="paginate/iterator.xml" />
+</chapter>

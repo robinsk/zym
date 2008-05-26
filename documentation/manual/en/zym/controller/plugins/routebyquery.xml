@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.plugins.routebyquery" version="5.0">
+    <title>RouteByQuery</title>
+
+    <para>
+        This plugin allows you to use routing using HTTP GET query params.
+        It maps <![CDATA[http://localhost/?module=test&controller=some&action=foo]]>
+        to http://localhost/test/some/foo.
+    </para>
+    
+    <example xml:id="zym.controller.plugins.routebyquery.using">
+        <title>Using RouteByQuery</title>
+        
+        <para>
+            RouteByQuery usage is fairly simple as there is nothing special about
+            it. Simply register it with the FrontController.
+        </para>
+        
+        <programlisting role="php"><xi:include href="routebyquery/example/using.php" parse="text" /></programlisting>
+    </example>
+</section>

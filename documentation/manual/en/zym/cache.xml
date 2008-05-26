@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.cache" version="5.0">
+    <title>Zym_Cache</title>
+    
+    <para>
+        One of the current problems with <classname>Zend_Cache</classname> is
+        that it does not support setting default options for backends and frontends.
+        Instantiating cache objects from the factory also prevents usage of
+        custom backends and frontends.
+        <classname>Zym_Cache</classname> attempts to allievate these problems by
+        providing an improved factory class which has the ability to store default
+        configuration options and generate cache objects without developer interaction
+        with config values.
+    </para>
+    
+    <para>
+        Setting up the factory is simple because it only has to be done once earlier
+        in the process, While configuring the component is recommended, it is not 
+        required; however, the lack of default configuration options will revert 
+        the factory to a <classname>Zend_Cache</classname> feature set.
+    </para>
+    
+    <example xml:id="zym.cache.example.config">
+        <title>Configuring Zym_Cache</title>
+        
+        <programlisting role="php"><xi:include href="cache/example/config.php" parse="text" /></programlisting>
+    </example>
+    <example xml:id="zym.cache.example.usage">
+        <title>Zym_Cache simple usage</title>
+
+        <programlisting role="php"><xi:include href="cache/example/usage.php" parse="text" /></programlisting>
+    </example>
+
+</chapter>

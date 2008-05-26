@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.plugins.sid" version="5.0">
+    <title>Sid</title>
+
+    <para>
+        <code>Zym_Controller_Plugin_Sid</code> is a plugin that allows a session
+        to be set from the url. Traditionally, the session identifier would be
+        specified through a query parameter; however, this plugin allows the sid 
+        to be formed like so: /index/index/sid/ASD231sd123.
+    </para>
+    
+    <note>
+        <para>
+            Specifying the session identifier in url's is a security risk.
+            Be extra careful of what might happen.
+        </para>
+    </note>
+</section>

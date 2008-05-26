@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<book xmlns="http://docbook.org/ns/docbook" 
+      xmlns:xlink="http://www.w3.org/1999/xlink" 
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xml:lang="en"
+      version="5.0">
+    <info>
+        <title>Programmer's Reference Guide</title>
+        <subtitle>Zym Framework</subtitle>
+        <edition>Programmer's Reference Guide for Zym Framework</edition>
+        <pubdate><?dbtimestamp format="Y-m-d" ?></pubdate>
+
+        <copyright>
+            <year><?dbtimestamp format="Y" ?></year>
+            <holder>
+                Zym (<link xlink:href="http://www.zym-project.com" />)
+            </holder>
+        </copyright>
+                
+        <!-- START: Front Cover -->
+        <cover>
+            <para role="tagline">The official documentation for Zym Framework</para>
+        </cover>
+        <!-- END: Front Cover -->
+        
+        <!-- START: Back Cover -->
+        <cover>
+            <para>Zym Framework demystified!</para>
+        </cover>
+        <!-- END: Back Cover -->
+    </info>
+    
+    <!-- START: Chapters -->
+    <xi:include href="zym/array.xml" />
+    <xi:include href="zym/cache.xml" />
+    <xi:include href="zym/controller.xml" />
+    <xi:include href="zym/dto.xml" />
+    <xi:include href="zym/filter.xml" />
+    <xi:include href="zym/js.xml" />
+    <xi:include href="zym/loader.xml" />
+    <xi:include href="zym/notification.xml" />
+    <xi:include href="zym/paginate.xml" />
+    <xi:include href="zym/session.xml" />
+    <xi:include href="zym/timer.xml" />
+    <xi:include href="zym/version.xml" />
+    <xi:include href="zym/view.xml" />
+    <!-- END: Chapters -->
+    
+    <!-- START: Appendix -->
+    <xi:include href="appendix/performance.xml" />
+    <xi:include href="appendix/copyright.xml" />
+    <!-- END:: Appendix -->
+</book>

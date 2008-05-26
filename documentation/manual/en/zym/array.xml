@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.array" version="5.0">        
+    <title>Zym_Array</title>
+    <para>
+        <code>Zym_Array</code> provides two interfaces to set data from an array 
+        and to get data as an array. These are useful to ensure that a certain
+        api will be available.
+    </para>
+    
+    <section xml:id="zym.array.from.interface">
+        <title>From array interface</title>
+        
+        <para>
+            <code>Zym_Array_From_Interface</code> provides the <code>setFromArray()</code> method.
+        </para>
+        
+        <example xml:id="zym.array.from.interface.example">
+            <title>Implementing setFromArray()</title>
+            
+            <programlisting role="php"><xi:include href="array/example/from.php" parse="text" /></programlisting>            
+        </example>
+    </section>
+    
+    <section xml:id="zym.array.to.interface">
+        <title>To array interface</title>
+        
+        <para>
+            <code>Zym_Array_To_Interface</code> provides the <code>toArray()</code> method.
+        </para>
+        
+        <example xml:id="zym.array.to.interface.example">
+            <title>Implementing toArray()</title>
+            
+            <programlisting role="php"><xi:include href="array/example/to.php" parse="text" /></programlisting>            
+        </example>
+    </section>
+</chapter>

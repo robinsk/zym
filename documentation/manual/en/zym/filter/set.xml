@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.filter.set" version="5.0">
+    <title>Standard filter classes</title>
+    
+    <section xml:id="zym.filter.set.null">
+        <title>Null</title>
+        
+        <para>This filter does not do anything.</para>
+    </section>
+    
+    <section xml:id="zym.filter.set.nl2br">
+        <title>Nl2Br</title>
+        
+        <para>Converts newlines to <![CDATA[<br />]]>'s</para>
+    </section>
+    
+    <section xml:id="zym.filter.set.sprintf">
+        <title>Sprintf</title>
+        
+        <para>Provides sprintf formatting of input.</para>
+    </section>
+</section>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.view.streams" version="5.0">
+    <title>Streams</title>
+
+    <para>
+        Zym_View supports the use of stream wrappers to modify the template before
+        it is to be processed by PHP. Zym handles streams through <classname>Zym_View_Stream_Wrapper</classname>
+        which modifies the template using view filters. Because it uses view filters,
+        you must remember that any view filter paths added will affect those loaded
+        for the stream wrapper.
+    </para>
+    
+    <section xml:id="zym.view.streams.protocol">
+        <title>Changing the protocol</title>
+        
+        <para>
+            In the event that stream protocols collide, <classname>Zym_View_Abstract</classname>
+            provides <function>setStreamProtocol(string)</function> to satisfy the need.
+            Protocol identifiers should be lower cased alphanumeric strings.
+        </para>
+    </section>
+    
+    <section xml:id="zym.view.streams.wrapper">
+        <title>Changing the wrapper</title>
+        
+        <para>
+            <classname>Zym_View_Abstract</classname> supports the use of custom
+            wrappers that are childs of <classname>Zym_View_Stream_Wrapper</classname>.
+            It provides <function>setStreamWrapper(string $classname)</function>
+            to set the appropriate wrapper.
+        </para>
+    </section>
+    
+    <section xml:id="zym.view.streams.addingFilters">
+        <title>Adding stream filters</title>
+        
+        <para>
+            Adding filters for the stream wrapper is the same as adding view filters.
+            Stream filters can be added through <function>addStreamFilter(string)</function>
+            or <function>setStreamFilter(array)</function>. Streams filters are processed
+            in FIFO order.
+        </para>
+    </section>
+    
+    <section xml:id="zym.view.streams.filters">
+        <title>Stream filters</title>
+        
+        <para>Filters included in Zym that were designed to work with the stream wrapper.</para>
+        
+        <section xml:id="zym.view.streams.filters.shortTags">
+            <title>ShortTags</title>
+            
+            <para>
+                PHP short tags (<![CDATA[<?= ?> or <? ?>]]>) can be very useful and aesthetially pleasing to use
+                in view templates; however, due to the lack of support in some 
+                installations, its use can cause problems. With the use of this 
+                filter, you can use short tags in your view scripts without problems.
+            </para>
+            
+            <para>
+                This filter parses <![CDATA[<?= and <?]]> in the script and replaces
+                them with <![CDATA[<?php or <?php echo]]> in order to ensure that 
+                PHP will parse it. If it detects that short tags is enabled, it will
+                not run.
+            </para>
+        </section>
+        
+        <section xml:id="zym.view.streams.filters.aspTags">
+            <title>AspTags</title>
+            
+            <para>
+                This filter works in exactly the same fashion that the ShortTags
+                filter does. Enabling AspTags support will allow you to use
+                <![CDATA[<% and <%=]]> in your view scripts.
+            </para>
+        </section>
+    </section>
+</section>

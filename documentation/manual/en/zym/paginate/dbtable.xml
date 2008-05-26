@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.paginate.dbtable"
+    version="5.0">
+    
+    <title>Zym_Paginate_DbTable</title>
+    
+    <para>
+        The paginator is likely to return a wrong row count when trying to 
+        paginate (complex) joined queries. This is an issue that might not get addressed in the future.
+        Consider creating a View for those complex queries and select the desired data from there.
+    </para>
+    
+    <example xml:id="zym.paginate.dbtable.example">
+        <title>Using Zym_Paginate_DbTable</title>
+        
+        <programlisting role="php"><xi:include href="dbtable/example/dbtable.php" parse="text" /></programlisting>
+    </example>
+</section>

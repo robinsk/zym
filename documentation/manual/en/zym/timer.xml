@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.timer" version="5.0">
+    <title>Zym_Timer</title>
+    
+    <para>
+        Composed of <classname>Zym_Timer</classname> and <classname>Zym_Timer_Manager</classname>,
+        This component was created for the purpose of timing runtime execution
+        of PHP scripts. Mainly used by the <classname>Zym_Debug</classname>
+        component to provide useful statistics for developers, the component allows
+        standalone usage for cases where timing points in execution is not related
+        to debugging.
+    </para>
+    
+    <para>
+        Timers can keep track of multiple start/stop's which can be grouped to simulate
+        nesting and accumulation.
+    </para>
+    
+    <section xml:id="zym.timer.single">
+        <title>Timing single runs</title>
+        
+        <para>
+            When you only need to measure the execution time between two points without
+            the need to manage multiple timers, <classname>Zym_Timer</classname>
+            can be used by itself.
+        </para>
+        
+        <example xml:id="zym.timer.example.timing">
+            <title>Code execution timing</title>
+            
+            <programlisting><xi:include href="timer/example/timing.php" parse="text" /></programlisting>
+        </example>
+        
+        <para>
+            Retrieving the runtime from the timer object can be done several ways
+            depending on your requirements. If you require the runtime of complete
+            start and stops, the time can be retrieved from <code>getRun()</code>, 
+            but if you require the runtime with the current time elapsed if the
+            timer was not stopped, then use <code>getElapsed()</code>.
+        </para>
+        
+        <example xml:id="zym.timer.example.result">
+            <title>Retrieving execution times</title>
+            
+            <programlisting><xi:include href="timer/example/result.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.timer.manager">
+        <title>Manager</title>
+        
+        <para></para>
+    </section>
+   <!-- <xi:include href="timer/timermanager.xml" /> -->
+</chapter>

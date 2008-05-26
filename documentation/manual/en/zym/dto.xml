@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.dto" version="5.0">
+    <title>Zym_Dto</title>
+    
+    <para>
+        <classname>Zym_Dto</classname> is a very simple class to store model data in a generic way. 
+        It can be serialized like a normal array for data transport.
+    </para>
+    
+    <para>
+        The class implements <classname>Zym_ArrayData_Interface</classname>, 
+        <classname>ArrayAccess</classname>, <classname>Iterator</classname> and
+        the <classname>Serializable</classname> interfaces.
+        The <classname>ArrayAccess</classname> and <classname>Iterator</classname> implementations 
+        allow you to access and iterate over the object as if it is a normal array.
+    </para>
+    
+    <para>
+        Another way to access the DTO object data is through the <code>getValue()</code>, 
+        <code>setValue</code>, <code>hasValue()</code> and <code>removeValue()</code> methods.
+    </para>
+    
+    <para>
+        The <code>toArray()</code> and <code>setFromArray()</code> methods that are required by the 
+        <classname>Zym_ArrayData_Interface</classname>do exactly what you would expect them to do.
+        
+        In case you could not figure it out, <code>toArray()</code> returns the data 
+        of the DTO in a plain PHP array, while <code>setFromArray()</code> loads the data from 
+        a plain array into the DTO.
+    </para>
+    
+    <para>
+        There are two ways to serialize the DTO. The first is by explicitly calling 
+        the <code>serialize()</code> method on the object.
+        The second is to use PHP's <code>serialize()</code> function. Both methods 
+        will return a plain serialized array with the DTO's contents.
+    </para>
+</chapter>

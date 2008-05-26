@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.plugins" version="5.0">
+    <title>Plugins</title>
+
+    <xi:include href="plugins/layoutswitcher.xml" />
+    <xi:include href="plugins/routebyquery.xml" />
+    <xi:include href="plugins/sid.xml" />
+</section>

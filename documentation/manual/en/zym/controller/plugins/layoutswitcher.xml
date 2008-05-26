@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.plugins.layoutswitcher" version="5.0">
+    <title>Layout Switcher</title>
+    
+    <para>
+        The <code>Zym_Controller_Plugin_LayoutSwitcher</code> package is a collection 
+        of two plugins that allow you to dynamically select a layout for Zend_Layout 
+        during the routing process.
+        The first plugin, called <code>Zym_Controller_Plugin_LayoutSwitcher_Module</code>, 
+        selects the layout based on the requested module.
+        The second plugin, called <code>Zym_Controller_Plugin_LayoutSwitcher_Router</code>, 
+        selects the layout based on the requested route.
+        Both of these plugins fire at <code>preDispatch()</code>, so they work as expected
+        when using the <code>_forward()</code> during the routing process to forward
+        to a different module or route.
+    </para>
+    
+    <para>
+        Rules can be added to the plugins with the <code>addLayout()</code> method. 
+        This method takes two arguments: the layout name and the rule name.
+        The rule name is either the name of the route or the name of the module (depending 
+        on which plugin you are configuring).
+        If no matching rule is found during the routing process, it will default to 
+        Zend_Layout's layout configuration.
+    </para>
+    
+    <example xml:id="zym.controller.plugins.layoutswitcher.example.simple">
+        <title>Using layout switchers</title>
+        <programlisting role="php"><xi:include href="layoutswitcher/example/simple.php" parse="text" /></programlisting>
+    </example>
+</section>

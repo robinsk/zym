@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.actionhelpers.multipageform" version="5.0">
+    <title>Multi-Page Form</title>
+    
+    <para>
+        The MultiPageForm action helper provides a generic way to enable multi-page 
+        forms with Zend_Form. It collects the form data from each page and makes it 
+        available as a whole at the end of the ride.
+    </para>
+    
+    <para>
+        The helper is setup in the controller's <code>init()</code> method. 
+        You will need to create a Zend_Form instance that contains one subform for each page.
+        The <code>setForm()</code> method sets the Zend_Form instance for the helper. 
+        Next, you need to bind the subforms to controller actions. This is done by 
+        providing the <code>setActions()</code> method an array with action names
+        that correspond with the subform names.
+        E.g.: the action helper will look for a subform called <code>survey</code>
+        when controller's <code>surveyAction()</code> is requested.
+    </para>
+    
+    <example xml:id="zym.controller.actionhelpers.multipageform.example.form"> 
+        <title>MultiPageForm Form Example</title>
+        <programlisting role="php"><xi:include href="multipageform/example/form.php" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.controller.actionhelpers.multipageform.controller">
+        <title>MultiPageForm Controller Example</title>
+        <programlisting role ="php"><xi:include href="multipageform/example/controller.php" parse="text" /></programlisting>
+    </example>
+</section>

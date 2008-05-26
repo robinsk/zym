@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.router.routes.httphost" version="5.0">
+    <title>HttpHost</title>
+
+    <para>
+        Router using $_SERVER['HTTP_HOST']...
+        Otherwise known as routing subdomains.
+    </para>
+    
+    <para>
+        This router can be used for routing (sub)domains and url paths as it
+        combines domain routing with standard routing.
+        While very flexible, it does have limitations; it cannot generate full urls 
+        or match urls that do not have the (sub)domain in the HTTP_HOST.
+    </para>
+    
+    <example xml:id="zym.controller.router.routes.httphost.user">
+        <title>Routing [user].foo.com</title>
+        
+        <para>
+            This route will route urls such as <code>http://spotsec.foo.com</code>
+            or <code>http://zym.foo.com/my-action</code> to a specified action.
+            Syntax is similar to the standard route where :foo represents a variable
+            except in the $host param where * represents a wildcard domain.
+        </para>
+        
+        <para>
+            The first param ':user.*.*' will match spotsec.foo.com populating
+            the 'user' request variable with 'spotsec'. The second param ':action/*'
+            is the standard routing param that matches the url path '/my-action/var1/val1'.
+        </para>
+        
+        <programlisting role="php"><xi:include href="httphost/example/user.php" parse="text" /></programlisting>
+    </example>
+    
+</section>

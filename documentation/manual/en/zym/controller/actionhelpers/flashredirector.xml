@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.actionhelpers.flashredirector" version="5.0">
+    <title>FlashRedirector</title>
+
+    <para>
+        This helper allows an application to store url to be retrieved on the next
+        request to redirect a user. Common applications for flash redirection
+        is on authentication systems. If a user visits a url that requires them
+        to be logged in, but they are not, they would be redirected to the login
+        page. This helper would store the url in order to redirect the user to the
+        page they requested after login.
+    </para>
+    
+    <example xml:id="zym.controller.actionhelpers.flashredirector.setting">
+        <title>Setting a flash redirect</title>
+        
+        <para>
+            In this example, we have a plugin that checks if a user is logged in
+            and has access to the requested action. If the user fails the
+            ACL check, we save the current URL and redirect the user to a login page.
+        </para>
+        
+        <programlisting role="php"><xi:include href="flashredirector/example/setting.php" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.controller.actionhelpers.flashredirector.login">
+        <title>Redirecting after login</title>
+        
+        <para>
+            On the login page, we can use the stored url to redirect the user
+            to their requested page after login. If the user mis-typed their
+            password, we must extend the redirect with <code>extendRedirect()</code>
+            to keep it for the next request. By default, urls are only kept for one
+            request. If you need them for more than one, you can do <code>setExpirationHops(4 /*requests*/)</code>
+            to change the number of requests to keep the url.
+        </para>
+        
+        <para>
+            After a success, you can either use the builtin redirect functions 
+            <code>redirect(array('code' => 303))</code> or <code>redirectAndExit()</code>;
+            If you would rather process the redirect yourself, you can use <code>getRedirect()</code>
+            to retrieve the url.
+        </para>
+        
+        <para>
+            You do not have to check if a redirect exists with <code>hasRedirect()</code>
+            although it is recommended.
+        </para>
+        
+        <programlisting role="php"><xi:include href="flashredirector/example/LoginController.php" parse="text" /></programlisting>
+    </example>
+</section>
