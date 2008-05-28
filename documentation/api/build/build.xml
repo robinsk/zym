@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+    
+ Zym Framework
+
+ LICENSE
+
+ This source file is subject to the new BSD license that is bundled
+ with this package in the file LICENSE.txt.
+ 
+ @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ @license http://www.zym-project.com/license New BSD License
+ 
+ Requirements:
+
+ - PHP 5.1.4
+ - Phing 2.2.0
+ - PHPDocumentor 1.3.1
+ - PHPUnit 3.2
+ - VersionControl_SVN 0.3
+ 
+ Usage:
+
+   phing [ <options> ] [ <targets> ]
+
+ Options:
+
+   -D<property>={value}
+     Override a property in build.properties
+-->
+<project name="Zym Framework API Docs" description="Zym Framework API Docs Build" default="dist" basedir=".">
+    <property file="./build.properties" />
+    
+    <target name="dist" depends="clean">
+        <echo msg="Creating PHPDoc..." />
+        
+        <phpdoc title="${phpDoc.title}" target="${phpDoc.target}" output="${phpDoc.output}"
+            defaultpackagename="${phpDoc.defaultPackageName}" defaultcategoryname="${phpDoc.defaultCategoryName}"
+            quiet="true">
+            <fileset dir="${phpDoc.dir.core}">
+                <include name="*.php" />
+                <include name="**/*.php" />
+            </fileset>
+            <fileset dir="${phpDoc.dir.incubator}">
+                <include name="*.php" />
+                <include name="**/*.php" />
+            </fileset>
+            <projdocfileset dir="${project.basedir}/../">
+               <include name="README" />
+               <include name="INSTALL" />
+               <include name="CHANGELOG" />
+            </projdocfileset>
+        </phpdoc>
+    </target>
+    
+    <target name="clean" description="Clean out existing files">
+        <echo msg="Cleaning old documentation..." />
+        
+        <delete includeemptydirs="true">
+            <fileset dir="${phpDoc.target}">
+                <include name="*" />
+                <include name="**" />
+            </fileset> 
+        </delete>
+    </target>
+</project>

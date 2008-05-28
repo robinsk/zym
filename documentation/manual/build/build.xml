@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+    
+ Zym Framework
+
+ LICENSE
+
+ This source file is subject to the new BSD license that is bundled
+ with this package in the file LICENSE.txt.
+ 
+ @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ @license http://www.zym-project.com/license New BSD License
+ 
+ Requirements:
+
+ - PHP 5.1.4
+ - Phing 2.2.0
+ - PHPDocumentor 1.3.1
+ - PHPUnit 3.2
+ - VersionControl_SVN 0.3
+ 
+ Usage:
+
+   phing [ <options> ] [ <targets> ]
+
+ Options:
+
+   -D<property>={value}
+     Override a property in build.properties
+-->
+<project name="Zym Framework Reference Guide" description="Zym Framework Reference Guide Build" default="dist" basedir=".">
+    <property file="./build.properties" />
+    
+    <target name="dist" depends="clean">
+
+    </target>
+    
+    <target name="html">
+        <copy todir="${path.build.bin}/html">
+            <filterchain>
+                <xincludefilter basedir="${zf.manual.src.dir}"/>
+                <xsltfilter style="html/html.xsl">
+                    <param name="base.dir" expression="${zf.manual.dest.dir}/"/>
+                </xsltfilter>
+            </filterchain>
+            
+            <fileset dir="${zf.manual.src.dir}">
+                <include name="manual.xml" />
+            </fileset>
+        </copy>
+        
+        <echo msg="Copying html assets..." />
+        <copy file="${path.build}" todir="${path.build.bin}/html" />
+    </target>
+    
+    <target name="clean" description="Clean out existing files">
+        <echo msg="Cleaning old documentation..." />
+        
+        <delete includeemptydirs="true">
+            <fileset dir="${phpDoc.target}">
+                <include name="*" />
+                <include name="**" />
+            </fileset> 
+        </delete>
+    </target>
+</project>
