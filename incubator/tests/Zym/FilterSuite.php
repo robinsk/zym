@@ -9,7 +9,7 @@
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
- * @package    Zym_Cache
+ * @package    Zym_Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -24,7 +24,7 @@ require_once 'PHPUnit/Framework/TestSuite.php';
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
- * @package    Zym_Cache
+ * @package    Zym_Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
