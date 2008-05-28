@@ -74,6 +74,8 @@ class Zym_Filter_SentenceLength implements Zend_Filter_Interface
      */
     public function filter($value)
     {
+        $value = (string) $value;
+
         if ($this->_replaceWhitespace) {
             // first, trim string
             $value = trim($value);
@@ -91,8 +93,8 @@ class Zym_Filter_SentenceLength implements Zend_Filter_Interface
                 $value = $arr[0];
                 $count = count($arr);
                 if ($count > 1) {
-                    for ($i = 1; $i < $count; $i++) {
-                        if ((strlen($value) + strlen($arr[$i])) > $this->_maxLength) {
+                    for ($i = 1; $i < $count && !$done; $i++) {
+                        if ((strlen($value) + strlen($arr[$i]) + 1) > $this->_maxLength) {
                             break;
                         } else {
                             $value .= " {$arr[$i]}";
@@ -116,6 +118,8 @@ class Zym_Filter_SentenceLength implements Zend_Filter_Interface
      */
     public static function sfilter($value, $maxLength = null, $replaceWhitespace = null)
     {
+        $value = (string) $value;
+
         if (!is_int($maxLength) || $maxLength < 1) {
             $maxLength = 128;
         }
@@ -138,7 +142,7 @@ class Zym_Filter_SentenceLength implements Zend_Filter_Interface
                 $count = count($arr);
                 if ($count > 1) {
                     for ($i = 1; $i < $count; $i++) {
-                        if ((strlen($value) + strlen($arr[$i])) > $maxLength) {
+                        if ((strlen($value) + strlen($arr[$i]) + 1) > $maxLength) {
                             break;
                         } else {
                             $value .= " {$arr[$i]}";
