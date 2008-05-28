@@ -40,7 +40,7 @@ class Zym_CacheTest extends PHPUnit_Framework_TestCase
 		parent::setUp();
 	}
 
-	protected function testGetDefaultBackendException()
+	public function testGetDefaultBackendException()
 	{
 	    $this->setExpectedException('Zym_Cache_Exception');
 	    Zym_Cache::getDefaultBackend();
