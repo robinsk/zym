@@ -39,11 +39,20 @@ class Zym_CacheSuite extends PHPUnit_Framework_TestSuite
         $this->setName($this->_createName());
         
         $name     = substr($this->getName(), 0, -5);
-        $tests    = array(dirname(__FILE__) . "/{$name}Test.php");
-        $iterator = new RecursiveDirectoryIterator(dirname(__FILE__) . '/' . $name);
-        foreach(new RecursiveIteratorIterator($iterator) as $file) {
-            if ($file->isFile() && substr($file, -8) == 'Test.php') {
-                $tests[] = (string) $file;
+        $tests    = array();
+        
+        $componentFile = dirname(__FILE__) . "/{$name}Test.php";
+        if (file_exists($componentFile)) {
+            $tests[] = $componentFile;
+        }
+        
+        $componentDir = dirname(__FILE__) . '/' . $name;
+        if (file_exists($componentDir)) {
+            $iterator = new RecursiveDirectoryIterator($componentDir);
+            foreach(new RecursiveIteratorIterator($iterator) as $file) {
+                if ($file->isFile() && substr($file, -8) == 'Test.php') {
+                    $tests[] = (string) $file;
+                }
             }
         }
         

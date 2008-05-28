@@ -13,12 +13,10 @@
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
-
 /**
  * @see Zend_Filter_Interface
  */
 require_once 'Zend/Filter/Interface.php';
-
 
 /**
  * Filters a sentence string

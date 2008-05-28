@@ -16,6 +16,16 @@
  */
 
 /**
+ * @see Zend_Locale_Math
+ */
+require_once 'Zend/Locale/Math.php';
+
+/**
+ * @see Zend_Measure_Binary
+ */
+require_once 'Zend/Measure/Binary.php';
+
+/**
  * @author     Martin Hujer
  * @category   Zym
  * @package    Zym_View
@@ -32,13 +42,14 @@ class Zym_View_Helper_FileSize
      */
     protected $_units;
 
+    /**
+     * Construct
+     *
+     */
     public function __construct()
     {
-        require_once 'Zend/Measure/Binary.php';
-
         $m = new Zend_Measure_Binary(0);
         $this->_units = $units = $m->getConversionList();
-
     }
 
     /**
@@ -51,30 +62,28 @@ class Zym_View_Helper_FileSize
      */
     public function fileSize($fileSize, $precision = 0, $type = null, $iec = false)
     {
-
         $m = new Zend_Measure_Binary($fileSize);
-
 
         if ($type !== null) {
             $m->setType($type);
-        } elseif ($iec === false) {
+        } else if ($iec === false) {
             if ($fileSize >= $this->_getUnitSize('TERABYTE')) {
                 $m->setType(Zend_Measure_Binary::TERABYTE);
-            } elseif ($fileSize >= $this->_getUnitSize('GIGABYTE')) {
+            } else if ($fileSize >= $this->_getUnitSize('GIGABYTE')) {
                 $m->setType(Zend_Measure_Binary::GIGABYTE);
-            } elseif ($fileSize >= $this->_getUnitSize('MEGABYTE')) {
+            } else if ($fileSize >= $this->_getUnitSize('MEGABYTE')) {
                 $m->setType(Zend_Measure_Binary::MEGABYTE);
-            } elseif ($fileSize >= $this->_getUnitSize('KILOBYTE')) {
+            } else if ($fileSize >= $this->_getUnitSize('KILOBYTE')) {
                 $m->setType(Zend_Measure_Binary::KILOBYTE);
             }
-        } elseif ($iec === true) {
+        } else if ($iec === true) {
             if ($fileSize >= $this->_getUnitSize('TERABYTE_SI')) {
                 $m->setType(Zend_Measure_Binary::TERABYTE_SI);
-            } elseif ($fileSize >= $this->_getUnitSize('GIGABYTE_SI')) {
+            } else if ($fileSize >= $this->_getUnitSize('GIGABYTE_SI')) {
                 $m->setType(Zend_Measure_Binary::GIGABYTE_SI);
-            } elseif ($fileSize >= $this->_getUnitSize('MEGABYTE_SI')) {
+            } else if ($fileSize >= $this->_getUnitSize('MEGABYTE_SI')) {
                 $m->setType(Zend_Measure_Binary::MEGABYTE_SI);
-            } elseif ($fileSize >= $this->_getUnitSize('KILOBYTE_SI')) {
+            } else if ($fileSize >= $this->_getUnitSize('KILOBYTE_SI')) {
                 $m->setType(Zend_Measure_Binary::KILOBYTE_SI);
             }
         }
@@ -119,7 +128,7 @@ class Zym_View_Helper_FileSize
         if (array_key_exists($unit, $this->_units)) {
             return $this->_units[$unit][1];
         }
+        
         return '';
     }
-
 }

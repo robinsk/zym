@@ -78,6 +78,17 @@ class Zym_View_Helper_Cycle implements Iterator
     {
         return $this->_values;
     }
+    
+    /**
+     * Get the next value
+     *
+     * @return
+     */
+    public function getValue()
+    {
+        $this->next();
+        return $this->current();
+    }
 
     /**
      * Current
@@ -139,17 +150,6 @@ class Zym_View_Helper_Cycle implements Iterator
     }
 
     /**
-     * Get the next value
-     *
-     * @return
-     */
-    public function getValue()
-    {
-        $this->next();
-        return $this->current();
-    }
-
-    /**
      * Alternate between values
      *
      * @return string
@@ -157,5 +157,15 @@ class Zym_View_Helper_Cycle implements Iterator
     public function __toString()
     {
         return (string) $this->getValue();
+    }
+    
+    /**
+     * ToString
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return $this->__toString();
     }
 }

@@ -13,11 +13,10 @@
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
-
 /**
  * @see Zym_Filter_SentenceLength
  */
-require_once 'Kaf/Filter/SentenceLength.php';
+require_once 'Zym/Filter/SentenceLength.php';
 
 /**
  * Filters a string for using in a URL

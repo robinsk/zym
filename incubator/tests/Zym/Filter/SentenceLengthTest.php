@@ -128,4 +128,3 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
         $this->fail('An exception has not been raised');
     }
 }
-
