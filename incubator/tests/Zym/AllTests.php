@@ -14,7 +14,9 @@
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
-set_include_path(dirname(__FILE__) . '/../../library' . PATH_SEPARATOR . get_include_path());
+set_include_path(dirname(__FILE__) . '/../../library' . PATH_SEPARATOR .
+                 dirname(__FILE__) . '/../../../library' . PATH_SEPARATOR .
+                 get_include_path());
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zym_AllTests::main');
