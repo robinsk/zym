@@ -30,7 +30,7 @@ class Default_ErrorController extends Zym_Controller_Action_Error
      */
     public $ajaxable = array(
         'not-found' => array('html', 'json'),
-        'internal' => array('html', 'json')
+        'internal'  => array('html', 'json')
     );
     
     /**
@@ -40,7 +40,7 @@ class Default_ErrorController extends Zym_Controller_Action_Error
      */
     public $contexts = array(
         'not-found' => array('json'),
-        'internal' => array('json')
+        'internal'  => array('json')
     );
     
     /**
@@ -65,9 +65,33 @@ class Default_ErrorController extends Zym_Controller_Action_Error
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => 'not-found',
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => 'not-found',
             
-            Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => 'internal'
+            Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => array(
+                self::ACTION     => 'internal',
+                self::CONTROLLER => 'foo',
+                self::MODULE     => 'module'
+            )
         ));
     }
+    
+    /**
+     * Unauthorized access
+     * 
+     * HTTP 401
+     *
+     * @return void
+     */
+    public function unauthorizedAction()
+    {}
+    
+    /**
+     * Forbidden access
+     * 
+     * HTTP 403
+     *
+     * @return void
+     */
+    public function forbiddenAction()
+    {}
     
     /**
      * Not-Found

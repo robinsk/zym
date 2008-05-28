@@ -1,5 +1,5 @@
 <?= $this->xmlDeclaration() . "\n"; ?>
-<?= $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT) . "\n"; ?>
+<?= $this->doctype() . "\n"; ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <!-- Start: Meta Tags -->
@@ -107,15 +107,7 @@
                 <div id="nav">
                     <div class="wrapper">
                         <h2 class="accessibility">Navigation</h2>
-                        <ul class="clearfix">
-                            <li class="pad">&nbsp;</li>
-                            <li>
-                                <strong>
-                                    <a href="<?= $this->url(array(), 'default', true); ?>">Home</a>
-                                </strong>
-                            </li>
-                            <li class="last"><a href="<?= $this->url(array('module' => 'demo'), 'default', true); ?>">Demos</a></li>
-                         </ul>
+                        <?= $this->action('index', 'nav', 'layout'); ?>
                     </div>
                 </div>
                 <!-- End: Navigation -->
