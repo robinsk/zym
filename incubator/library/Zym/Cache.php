@@ -181,6 +181,8 @@ abstract class Zym_Cache extends Zend_Cache
      * @param string $backend backend name Leave as null for default backend
      * @param array $frontendOptions associative array of options for the corresponding frontend constructor
      * @param array $backendOptions associative array of options for the corresponding backend constructor
+     * 
+     * @return Zend_Cache_Core
      */
     public static function factory($frontend, $backend = null, array $frontendOptions = null, array $backendOptions = null)
     {
