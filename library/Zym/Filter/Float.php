@@ -32,7 +32,7 @@ require_once 'Zend/Locale/Format.php';
  * @package Zym_Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Filter_Float implements Zym_Filter_Interface
+class Zym_Filter_Float implements Zend_Filter_Interface
 {
     /**
      * Zend Locale Format options
