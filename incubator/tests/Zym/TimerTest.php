@@ -41,12 +41,20 @@ class Zym_TimerTest extends PHPUnit_Framework_TestCase
     
 	/**
 	 * Prepares the environment before running a test.
+	 * 
 	 */
 	protected function setUp()
-	{
-		parent::setUp();
-		
+	{		
 		$this->_timer = new Zym_Timer();
+	}
+	
+	/**
+	 * Tear down the environment after running a test
+	 *
+	 */
+	protected function tearDown()
+	{
+	    unset($this->_timer);
 	}
 	
 	public function testStart()
@@ -150,7 +158,7 @@ class Zym_TimerTest extends PHPUnit_Framework_TestCase
            $timer->stop();
         }
         
-        $this->assertEquals(5, count($timer->getRunAsArray()));
+        $this->assertEquals(6, count($timer->getRunAsArray()));
     }
     
     public function testReset()
