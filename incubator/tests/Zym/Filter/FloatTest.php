@@ -7,28 +7,28 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category Zym
+ * @category Zym_Tests
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
- * @see PHPUnite_Framework_TestCase
+ * @see PHPUnit_Framework_TestCase
  */
-require_once('PHPUnit/Framework/TestCase.php');
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * @see Zym_Filter_Float
  */
-require_once('Zym/Filter/Float.php');
+require_once 'Zym/Filter/Float.php';
 
 /**
- * Fake filter that does not do anything
+ * Float test
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com//License New BSD License
- * @category Zym
+ * @category Zym_Tests
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
@@ -47,7 +47,6 @@ class Zym_Filter_FloatTest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 	    $this->_filter = new Zym_Filter_Float();
-		parent::setUp();	
 	}
 
 	/**
@@ -56,7 +55,6 @@ class Zym_Filter_FloatTest extends PHPUnit_Framework_TestCase
 	protected function tearDown()
 	{
 		$this->_filter = null;	
-		parent::tearDown();
 	}
 	
 	/**
@@ -78,7 +76,10 @@ class Zym_Filter_FloatTest extends PHPUnit_Framework_TestCase
 	{
 	    $locale = localeconv();
 	    $string = "1{$locale['thousands_sep']}300";
-	    $this->assertSame(1300, $this->_filter->filter($string));
+	    $this->assertSame((float) 1300, $this->_filter->filter($string));
+	    
+        $string = "1{$locale['thousands_sep']}300.54";
+        $this->assertSame((float) 1300.54, $this->_filter->filter($string));
 	}
 	
 	/**

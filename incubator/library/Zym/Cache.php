@@ -108,7 +108,7 @@ abstract class Zym_Cache extends Zend_Cache
              */
             require_once 'Zym/Cache/Exception.php';
             throw new Zym_Cache_Exception(
-                'Cannot retrieve default backend  because it has not been set.'
+                'Cannot retrieve default backend because it has not been set.'
             );
         }
         
