@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<!--
+    
+ Zym Framework
+
+ LICENSE
+
+ This source file is subject to the new BSD license that is bundled
+ with this package in the file LICENSE.txt.
+ 
+ @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ @license http://www.zym-project.com/license New BSD License
+ 
+ Requirements:
+
+ - PHP 5.1.4
+ - Phing 2.2.0
+ - PHPDocumentor 1.3.1
+ - PHPUnit 3.2
+ - VersionControl_SVN 0.3
+ 
+ Usage:
+
+   phing [ <options> ] [ <targets> ]
+
+ Options:
+
+   -D<property>={value}
+     Override a property in build.properties
+-->
+<project name="Zym Framework" description="Zym Framework build script" default="dist" basedir="../">
+    <property file="${application.startdir}/build.properties" />
+    
+    <target name="pear" depends="source.export" description="Create a pear package">
+        <echo msg="Creating pear package..." />
+
+        <pearpkg2 name="${pear.name}" dir="${path.build.bin.export}">
+            <option name="outputdirectory" value="${build.pear}" />
+        </pearpkg2>
+        
+        <echo msg="Archiving pear package..." />
+        
+        <tar destfile="${build.pear.tarball}" basedir="${build.pear}" compression="gzip" />
+    </target>
+    
+    <target name="archive" depends="source.export, source.api, source.docs" description="Create distribution archives">
+        <echo msg="Creating archives..." />
+        
+        <tar destfile="${build.tarball}" basedir="${path.build.bin.export}" compression="gzip" />
+        <zip destfile="${build.zipball}" basedir="${path.build.bin.export}" />
+    </target>
+    
+    <target name="source.export" depends="clean.source.export" description="Export sources">
+        <if>
+            <isset property="${test.core.failed}" />
+            <then>
+                <propertyprompt propertyName="test.core.continue" defaultValue="yes" 
+                    promptText="Unit tests for Core failed, do you want to continue? (yes/no)" />
+                <if>
+                    <equals arg1="${test.core.continue}" arg2="no" />
+                    <then>
+                        <fail message="Tests Failed" />
+                    </then>
+                </if>
+            </then>
+        </if>
+        
+        <if>
+            <isset property="${test.incubator.failed}" />
+            <then>
+                <propertyprompt propertyName="test.incubator.continue" defaultValue="yes" 
+                    promptText="Unit tests for Incubator failed, do you want to continue? (yes/no)" />
+                <if>
+                    <equals arg1="${test.core.continue}" arg2="no" />
+                    <then>
+                        <fail message="Tests Failed" />
+                    </then>
+                </if>
+            </then>
+        </if>
+        
+        <echo msg="Exporting sources..." />
+        
+        <svnexport svnpath="svn" repositoryurl="${project.svn.url}" todir="${path.build.bin.export}" />
+        
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${path.build.bin.export}/build">
+                <include name="*" />
+                <include name="**" />
+            </fileset>
+        </delete>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${path.build.bin.export}/documentation/api">
+                <include name="*" />
+                <include name="**" />
+            </fileset>
+        </delete>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${path.build.bin.export}/documentation/manual">
+                <include name="*" />
+                <include name="**" />
+            </fileset>
+        </delete>
+    </target>
+    
+    <target name="source.api" depends="source.export, api">
+        <copy file="documentation/api/build" todir="${path.build.export}/documentation/api" />
+    </target>
+    
+    <target name="source.docs" depends="source.export, docs">
+        <copy file="documentation/manual/build/bin" todir="${path.build.export}/documentation/manual" />
+    </target>
+
+    <target name="api" description="Create API documentation">
+        <phing phingfile="documentation/api/build/build.xml" inheritall="false" />
+    </target>
+    
+    <target name="docs" description="Create reference manual">
+        <phing phingfile="documentation/manual/build/build.xml" inheritall="false" />
+    </target>
+
+    <target name="test" depends="test.core, test.incubator" description="Run tests" />
+    
+    <target name="test.core" description="Run tests for core">
+        <echo msg="Running tests for core..." />
+        <phpunit2 failureproperty="test.core.failed">
+            <formatter type="plain" usefile="false"/>
+            <batchtest>
+                <fileset dir="tests">
+                    <include name="**/*Suite.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit2>
+    </target>
+    
+    <target name="test.incubator" description="Run tests for incubator">
+        <echo msg="Running tests for incubator..." />
+        <phpunit2 failureproperty="test.incubator.failed">
+            <formatter type="plain" usefile="false"/>
+            <batchtest>
+                <fileset dir="incubator/tests">
+                    <include name="**/*Suite.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit2>
+    </target>    
+    
+    <target name="clean" depends="clean.api, clean.archive, clean.source.export" 
+        description="Clean out build directories" />
+
+    <target name="clean.api" description="Clean out API docs">
+        <phing phingfile="documentation/api/build/build.xml" target="clean" inheritall="false" />
+    </target>
+    
+    <target name="clean.docs" description="Clean out reference manual">
+        <phing phingfile="documentation/manual/build/build.xml" target="clean" inheritall="false" />
+    </target>
+    
+    <target name="clean.archive" description="Clean out distribution archives">
+        <echo msg="Cleaning archives..." />
+        
+        <delete file="${build.tarball}" failonerror="false" />
+        <delete file="${build.zipball}" failonerror="false" />
+    </target>
+    
+    <target name="clean.source.export" description="Clean out exported sources">
+        <echo msg="Cleaning svn export..." />
+        
+        <delete dir="${path.build.bin.export}" failonerror="false" />
+      <!--  <mkdir dir="${path.build.bin.export}" />-->
+    </target>
+</project>
