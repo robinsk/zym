@@ -41,8 +41,7 @@ class Zym_View_Helper_BaseUrl
     public function baseUrl($file = null)
     {
         // Get baseUrl
-        $request = Zend_Controller_Front::getInstance()->getRequest();
-        $baseUrl = $request->getBaseUrl();
+        $baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
         
         // Remove trailing slashes
         $file = ($file !== null) ? ltrim($file, '/\\') : null;
