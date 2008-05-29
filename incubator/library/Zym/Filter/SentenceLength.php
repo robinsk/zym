@@ -85,62 +85,13 @@ class Zym_Filter_SentenceLength implements Zend_Filter_Interface
         if (strlen($value) > $this->_maxLength) {
             $arr = @split(' ', $value);
             
-            if ($arr === false) {
-                $value = substr($value, 0, $this->_maxLength);
-            } else {
-                $value = $arr[0];
-                $count = count($arr);
-                if ($count > 1) {
-                    for ($i = 1; $i < $count && !$done; $i++) {
-                        if ((strlen($value) + strlen($arr[$i]) + 1) > $this->_maxLength) {
-                            break;
-                        } else {
-                            $value .= " {$arr[$i]}";
-                        }
-                    }
-                }
-            }
-        }
-        
-        return $value;
-    }
-    
-    /**
-     * Does the same as filter()
-     *
-     * @param string $value string to filter
-     * @param int $maxLength  [optional] defaults to 128
-     * @param bool $replaceWhitespace  [optional] replace repeated whitespace,
-     *                                 default is true
-     * @return string
-     */
-    public static function sfilter($value, $maxLength = null, $replaceWhitespace = null)
-    {
-        $value = (string) $value;
-
-        if (!is_int($maxLength) || $maxLength < 1) {
-            $maxLength = 128;
-        }
-        
-        if ($replaceWhitespace !== false) {
-            // first, trim string
-            $value = trim($value);
-            
-            // replace repeated whitespace with a single space
-            $value = @preg_replace('/\s+/', ' ', $value);
-        }
-        
-        if (strlen($value) > $maxLength) {
-            $arr = @split(' ', $value);
-            
-            if ($arr === false) {
-                $value = substr($value, 0, $maxLength);
-            } else {
+            if ($arr !== false) {
                 $value = $arr[0];
                 $count = count($arr);
                 if ($count > 1) {
                     for ($i = 1; $i < $count; $i++) {
-                        if ((strlen($value) + strlen($arr[$i]) + 1) > $maxLength) {
+                        if ((strlen($value) + strlen($arr[$i]) + 1)
+                            > $this->_maxLength) {
                             break;
                         } else {
                             $value .= " {$arr[$i]}";
@@ -148,6 +99,8 @@ class Zym_Filter_SentenceLength implements Zend_Filter_Interface
                     }
                 }
             }
+            
+            $value = substr($value, 0, $this->_maxLength);
         }
         
         return $value;

@@ -19,12 +19,12 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * @see Zym_Filter_SentenceLength
+ * @see Zym_Filter_UrlString
  */
-require_once 'Zym/Filter/SentenceLength.php';
+require_once 'Zym/Filter/UrlString.php';
 
 /**
- * Test case for the SentenceLength filter.
+ * Test case for the UrlString filter.
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
@@ -32,19 +32,19 @@ require_once 'Zym/Filter/SentenceLength.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
+class Zym_Filter_UrlStringTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Filter 1 - default values
      *
-     * @var Zym_Filter_SentenceLength
+     * @var Zym_Filter_UrlString
      */
     protected $_filter1;
     
     /**
-     * Filter 2 - length 32 and no whitespace deletion
+     * Filter 2 - encode slashes and use _ as word separator
      *
-     * @var Zym_Filter_SentenceLength
+     * @var Zym_Filter_UrlString
      */
     protected $_filter2;
     
@@ -53,8 +53,8 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-        $this->_filter1 = new Zym_Filter_SentenceLength();
-        $this->_filter2 = new Zym_Filter_SentenceLength(32, false);
+        $this->_filter1 = new Zym_Filter_UrlString();
+        $this->_filter2 = new Zym_Filter_UrlString(null, true, null, '_');
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
     public function testShortString()
     {
         $string = 'This is a short string';
-        $this->assertSame($string, $this->_filter1->filter($string));
+        $this->assertSame('This-is-a-short-string', $this->_filter1->filter($string));
     }
 	
 	/**
@@ -86,53 +86,41 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
                 . 'Nunc nunc est, eleifend eu, dapibus eget, pretium a, urna. '
                 . 'Cras ullamcorper venenatis mauris. Donec eu nisi.';
                 
-        $expect = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. '
-                . 'Nunc nunc est, eleifend eu, dapibus eget, pretium a, urna. '
+        $expect = 'Lorem-ipsum-dolor-sit-amet,-consectetuer-adipiscing-elit.-'
+                . 'Nunc-nunc-est,-eleifend-eu,-dapibus-eget,-pretium-a,-urna.-'
                 . 'Cras';
         
-        $this->assertSame($expect, $this->_filter1->filter($string));
+        $this->assertSame(urlencode($expect), $this->_filter1->filter($string));
 	}
-
-    /**
-     * Tests removing repeated whitespace using default filter values
-     *
-     */
-    public function testSameLengthAsSpecifiedLength()
-    {
-        $string = 'This string shouldn\'t be shorter';
-        $this->assertSame($string, $this->_filter2->filter($string));
-    }
-
-    /**
-     * Tests a too long single word
-     *
-     */
-    public function testTooLongSingleWord()
-    {
-        $string = 'Thisstringshouldbeexactlythirtytwocharacters';
-        $this->assertSame(substr($string, 0, 32), $this->_filter2->filter($string));
-    }
-
-    /**
-     * Tests removing repeated whitespace using default filter values
-     *
-     */
-    public function testRepeatedWhitespaceReplacementDefault()
-    {
-        $string = ' Remove all  repeated   whitespace';
-        $expected = 'Remove all repeated whitespace';
-        $this->assertSame($expected, $this->_filter1->filter($string));
-    }
-
-    /**
-     * Tests removing repeated whitespace with $replaceWhitespace set to false
-     *
-     */
-    public function testRepeatedWhitespaceReplacementNoReplace()
-    {
-        $string = ' Remove all  repeated   ws';
-        $this->assertSame($string, $this->_filter2->filter($string));
-    }
+	
+	/**
+	 * Tests the $encodeSlashes flag
+	 *
+	 */
+	public function testSlashEncoding()
+	{
+        $string = 'should/this/be/encoded';
+        
+        $this->assertSame($string, $this->_filter1->filter($string));
+        $this->assertSame(urlencode($string), $this->_filter2->filter($string));
+	}
+	
+	/**
+	 * Tests custom word separator
+	 *
+	 */
+	public function testWordSeparator()
+	{
+	    $string1 = 'this should contain underscores';
+	    $expect1 = str_replace(' ', '_', $string1);
+	    
+	    $string2 = 'this should contain Leo Tolstoys first name';
+	    $expect2 = urlencode(str_replace(' ', 'Лев', $string2));
+	    
+        $this->assertSame($expect1, $this->_filter2->filter($string1));
+        $this->_filter2->setWordSeparator('Лев');
+        $this->assertSame($expect2, $this->_filter2->filter($string2));
+	}
 
     /**
      * Tests using null as input

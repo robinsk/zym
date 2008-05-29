@@ -50,7 +50,7 @@ class Zym_Filter_UrlString extends Zym_Filter_SentenceLength
      * @param bool $encodeSlashes  [optional] whether slashes should be
      *                             urlencoded, default is false
      * @param bool $replaceWhitespace [optional] whether repeated whitespace
-     *                                should be removed, default is false
+     *                                should be removed, default is true
      * @param string $wordSeparator  [optional] separator to use between words
      * @return void
      */
@@ -96,32 +96,5 @@ class Zym_Filter_UrlString extends Zym_Filter_SentenceLength
         $value = str_replace(' ', $this->_wordSeparator, $value);
         $value = urlencode($value);
         return $this->_encodeSlashes ? $value : str_replace('%2F', '/', $value);
-    }
-    
-    /**
-     * Does the same as filter()
-     *
-     * @param string $value
-     * @param int $maxLength  [optional] defaults to 128
-     * @param bool $encodeSlashes  [optional] whether slashes should be
-     *                             urlencoded, default is false
-     * @param bool $replaceWhitespace [optional] whether repeated whitespace
-     *                                should be removed, default is true
-     * @return string
-     */
-    public static function sfilter($value,
-                                   $maxLength = null,
-                                   $encodeSlashes = null,
-                                   $replaceWhitespace = null)
-    {
-        $value = parent::sfilter($value, $maxLength, $replaceWhitespace);
-        $value = str_replace(' ', '_', $value);
-        $value = urlencode($value);
-        
-        if ($encodeSlashes === true) {
-            return $value;
-        } else {
-            return str_replace('%2F', '/', $value);
-        }
     }
 }
