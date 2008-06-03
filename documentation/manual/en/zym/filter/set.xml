@@ -15,9 +15,46 @@
         <para>Converts newlines to <![CDATA[<br />]]>'s</para>
     </section>
     
+    <section xml:id="zym.filter.set.sentencelength">
+        <title>SentenceLength</title>
+        
+        <para>
+            Shortening a sentence (<code>string $value</code>) without
+            chopping the string in the middle of words, and removes
+            excessive whitespace.
+        </para>
+        
+        <para>
+            On construction, the value for <code>$maxLength</code> may be
+            set to specify max length of the filtered value. The default
+            value is 128. If the param <code>$replaceWihtespace</code> is
+            set <code>false</code>, the filter will not remove excessive
+            whitespace.
+        </para>
+    </section>
+    
     <section xml:id="zym.filter.set.sprintf">
         <title>Sprintf</title>
         
         <para>Provides sprintf formatting of input.</para>
+    </section>
+    
+    <section xml:id="zym.filter.set.urlstring">
+        <title>UrlString</title>
+        
+        <para>
+            This filter extends the <code>SentenceLength</code> filter, and
+            is used for filtering strings that are used in URLs. Example: The
+            string "My fabolous blog article" would become
+            "My-fabolous-blog-article" using default params. This filter has
+            the constructor params <code>$maxLength</code> and
+            <code>$replaceWhitespace</code> from
+            <code>Zym_Filter_SentenceLength</code>, and adds params
+            <code>$encodeSlashes</code> and <code>$wordSeparator</code>. The
+            first will tell the filter to encode slashes using regular
+            <code>urlencode()</code> (it is disabled by default since it
+            causes problems with mod_rewrite), and the second param is used
+            for specifying a separator to use instead of "-".
+        </para>
     </section>
 </section>
