@@ -82,19 +82,6 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      * @var string
      */
     protected $_pathSpec = ':moduleDir/forms/:action.php';
-    
-    /**
-     * Spec form class prefix
-     * 
-     * Valid specs:
-     *  - :moduleDir
-     *  - :module
-     *  - :controller
-     *  - :action
-     * 
-     * @var string
-     */
-    protected $_classSpec = ':module_Form_:action';
             
     /**
      * Construct
@@ -136,31 +123,6 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
     public function getPathSpec()
     {
         return $this->_pathSpec;
-    }
-    
-    /**
-     * Set class spec
-     * 
-     * {@see $this->_classSpec} for spec format
-     * 
-     * @param string $spec
-     * @return Zym_Controller_Action_Helper_Form
-     */
-    public function setClassSpec($spec)
-    {
-        $this->_classSpec = (string) $spec;
-        
-        return $this;
-    }
-    
-    /**
-     * Get class spec
-     *
-     * @return string
-     */
-    public function getClassSpec()
-    {
-        return $this->_classSpec;
     }
     
     /**
@@ -213,19 +175,39 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      */
     public function load($name = null, array $specVars = array())
     {
-        if ($name !== null) {
-            $specVars['action'] = $name;
+        // Get a form if none specified
+        if ($name === null) { 
+            $request    = $this->getRequest();
+            $dispatcher = $this->getFrontController()->getDispatcher();
+            $controller = substr($dispatcher->formatControllerName($request->getControllerName()), 0, -10);
+            $action     = substr($dispatcher->formatActionName($request->getActionName()), 0, -6);
+            
+            $name =  $controller . ucfirst($action);
         }
         
-        // Load file
-        $this->_setInflectorTarget($this->getPathSpec());
-        $path = $this->_translateSpec($specVars);
+        $actionSpecVars           = array();
+        $specVars['action']       = $name;
+        $actionSpecVars['action'] = $name;
         
         // Create class name
-        $this->_setInflectorTarget($this->getClassSpec());
-        $className = $this->_translateSpec($specVars);
+        $this->_setInflectorTarget(':action');
+        $action    = $this->_translateSpec($actionSpecVars);
+        $className = $this->_generateDefaultPrefix() . '_' . str_replace('/', '_', $action);
         
-        Zend_Loader::loadClass($className, $path);
+        // Create file path
+        if (!class_exists($className, false)) {
+            $this->_setInflectorTarget($this->getPathSpec());
+            $path = $this->_translateSpec($specVars);
+            include_once $path;
+        }
+        
+        if (!class_exists($className, false)) {
+            /**
+             * @see Zym_Controller_Action_Helper_Form_Exception_FormNotFound
+             */
+            require_once 'Zym/Controller/Action/Helper/Form/Exception/FormNotFound.php';
+            throw new Zym_Controller_Action_Helper_Form_Exception_FormNotFound($className, $path);
+        }
         
         return $className;
     }
@@ -244,6 +226,11 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
             require_once 'Zend/Filter/Inflector.php';
             
             /**
+             * @see Zend_Filter_Word_UnderscoreToSeparator
+             */
+            require_once 'Zend/Filter/Word/UnderscoreToSeparator.php';
+            
+            /**
              * @see Zend_Filter_Word_SeparatorToCamelCase
              */
             require_once 'Zend/Filter/Word/SeparatorToCamelCase.php';
@@ -258,11 +245,13 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
                                  ),
                              
                                  ':controller' => array(
+                                    new Zend_Filter_Word_UnderscoreToSeparator('/'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('.'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('-')
                                  ),
                                  
                                  ':action'     => array(
+                                    new Zend_Filter_Word_UnderscoreToSeparator('/'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('.'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('-')
                                 ),

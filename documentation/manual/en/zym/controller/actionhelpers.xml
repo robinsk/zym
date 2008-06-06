@@ -11,5 +11,6 @@
     </para>
     
     <xi:include href="actionhelpers/flashredirector.xml" />
-    <xi:include href="actionhelpers/multipageform.xml"></xi:include>
+    <xi:include href="actionhelpers/form.xml" />
+    <xi:include href="actionhelpers/multipageform.xml" />
 </section>

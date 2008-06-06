@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.actionhelpers.form" version="5.0">
+    <title>Form</title>
+
+    <para>
+        Writing applications using Zend_Form can cause you to end up with a handful
+        of custom form classes without a clean place to put them. The <classname>Zym_Controller_Action_Helper_Form</classname>
+        action helper will allow  you to load or create form classes from a specified 
+        convention.
+    </para>
+    
+    <para>
+        The default convention of the form helper is ":moduleDir/forms/:action.php".
+        Translated, this means the form will be loaded from the current module
+        inside "forms" folder. If you are currently inside "Foo" module and "Bar"
+        controller, with the requested form being "Example", then it will load
+        "pathToModule/forms/Example.php".
+    </para>
+    
+    <example xml:id="zym.controller.actionhelpers.form.example.simple">
+        <title>Simple creation of forms</title>
+        
+        <para>
+            A form can be simply loaded from the action like so...
+        </para>
+        
+        <programlisting role="php"><xi:include href="form/example/simple.php" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.controller.actionhelpers.form.example.shorthand">
+        <title>Simple shorthand creation of forms</title>
+        
+        <para>
+            A short hand version of creating form objects is just <function>create()</function>
+            without params. It will load a form with the name [CurrentController][CurrentAction].
+            In other words, IndexController::fooAction() would result in IndexFoo.php form.
+        </para>
+        
+        <programlisting role="php"><xi:include href="form/example/shorthand.php" parse="text" /></programlisting>
+    </example>
+    
+    <para>
+        Aside from creation of form objects, the form action helper also supports 
+        loading of form classes from those folders using the <function>load($name)</function>
+        function.
+    </para>
+    
+    <section xml:id="zym.controller.actionhelpers.form.changingpaths">
+        <title>Changing form loading path conventions</title>
+        
+        <para>
+            While default conventions will work for the majority of us, there are
+            still situations where you might want to break convention to use a
+            certain directory structure. The form action helper is flexible
+            enough to bend to your desire. To change path conventions, we need to
+            change the path spec via the <function>setPathSpec()</function> function.
+            The default path spec is ":moduleDir/forms/:action.php", below is a list
+            of available options.
+        </para>
+        
+        <simplelist>
+            <member>:moduleDir</member>
+            <member>:module</member>
+            <member>:controller</member>
+            <member>:action</member>
+        </simplelist>
+    </section>
+</section>
