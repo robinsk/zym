@@ -74,14 +74,28 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      * Spec for forms path
      * 
      * Valid specs:
+     *  - :moduleDir
      *  - :module
      *  - :controller
      *  - :action
      *
      * @var string
      */
-    protected $_pathSpec = ':moduleDir/forms';
+    protected $_pathSpec = ':moduleDir/forms/:action.php';
     
+    /**
+     * Spec form class prefix
+     * 
+     * Valid specs:
+     *  - :moduleDir
+     *  - :module
+     *  - :controller
+     *  - :action
+     * 
+     * @var string
+     */
+    protected $_classSpec = ':module_Form_:action';
+            
     /**
      * Construct
      *
@@ -124,14 +138,57 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         return $this->_pathSpec;
     }
     
-    public function create($name, $options = null)
+    /**
+     * Set class spec
+     * 
+     * {@see $this->_classSpec} for spec format
+     * 
+     * @param string $spec
+     * @return Zym_Controller_Action_Helper_Form
+     */
+    public function setClassSpec($spec)
     {
+        $this->_classSpec = (string) $spec;
         
+        return $this;
     }
     
-    public function createBySpec($name, array $specVars = null, $options = null)
+    /**
+     * Get class spec
+     *
+     * @return string
+     */
+    public function getClassSpec()
     {
+        return $this->_classSpec;
+    }
+    
+    /**
+     * Get a form object
+     * 
+     * @param string            $name Form name
+     * @param array|Zend_Config $options Form options
+     */
+    public function create($name = null, $options = null)
+    {
+        return $this->createBySpec($name, array(), $options);
+    }
+    
+    /**
+     * Get a form object by spec
+     * 
+     * @param string            $name     Form name
+     * @param array             $specVars
+     * @param array|Zend_Config $options  Form options
+     * 
+     * @return Zend_Form
+     */
+    public function createBySpec($name = null, array $specVars = array(), $options = null)
+    {
+        $class = $this->load($name, $specVars);
+        $form  = new $class($options);
         
+        return $form;
     }
     
     /**
@@ -152,11 +209,25 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      * @param string $name
      * @param array  $specVars
      * 
-     * @return string
+     * @return void
      */
-    public function load($name, array $specVars = null)
+    public function load($name = null, array $specVars = array())
     {
-        return $this->_translateSpec($vars);
+        if ($name !== null) {
+            $specVars['action'] = $name;
+        }
+        
+        // Load file
+        $this->_setInflectorTarget($this->getPathSpec());
+        $path = $this->_translateSpec($specVars);
+        
+        // Create class name
+        $this->_setInflectorTarget($this->getClassSpec());
+        $className = $this->_translateSpec($specVars);
+        
+        Zend_Loader::loadClass($className, $path);
+        
+        return $className;
     }
     
     /**
@@ -173,30 +244,27 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
             require_once 'Zend/Filter/Inflector.php';
             
             /**
-             * @see Zend_Filter_PregReplace
+             * @see Zend_Filter_Word_SeparatorToCamelCase
              */
-            require_once 'Zend/Filter/PregReplace.php';
-            
-            /**
-             * @see Zend_Filter_Word_UnderscoreToSeparator
-             */
-            require_once 'Zend/Filter/Word/UnderscoreToSeparator.php';
+            require_once 'Zend/Filter/Word/SeparatorToCamelCase.php';
             
             $this->_inflector = new Zend_Filter_Inflector();
             // moduleDir must be specified before the less specific 'module'
             $this->_inflector->setStaticRuleReference('moduleDir', $this->_moduleDir) 
                              ->addRules(array(
-                                 ':module'     => array('Word_CamelCaseToDash', 'StringToLower'),
+                                 ':module'     => array(
+                                    new Zend_Filter_Word_SeparatorToCamelCase('.'),
+                                    new Zend_Filter_Word_SeparatorToCamelCase('-')
+                                 ),
+                             
                                  ':controller' => array(
-                                     'Word_CamelCaseToDash', 
-                                     new Zend_Filter_Word_UnderscoreToSeparator('/'), 
-                                     'StringToLower'
+                                    new Zend_Filter_Word_SeparatorToCamelCase('.'),
+                                    new Zend_Filter_Word_SeparatorToCamelCase('-')
                                  ),
                                  
                                  ':action'     => array(
-                                    'Word_CamelCaseToDash', 
-                                    new Zend_Filter_PregReplace('#[^a-z0-9' . preg_quote('/', '#') . ']+#i', '-'), 
-                                    'StringToLower'
+                                    new Zend_Filter_Word_SeparatorToCamelCase('.'),
+                                    new Zend_Filter_Word_SeparatorToCamelCase('-')
                                 ),
                              ))
                              ->setTargetReference($this->_inflectorTarget);
@@ -315,8 +383,9 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         $dispatcher = $this->getFrontController()->getDispatcher();
         $module     = $dispatcher->formatModuleName($request->getModuleName());
         $controller = substr($dispatcher->formatControllerName($request->getControllerName()), 0, -10);
-        $action     = $dispatcher->formatActionName($request->getActionName());
-
+        $action     = substr($dispatcher->formatActionName($request->getActionName()), 0, -6);
+        $name       = $action;
+        
         $params     = compact('module', 'controller', 'action');
         foreach ($vars as $key => $value) {
             switch ($key) {
