@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app" version="5.0">        
+    <title>Zym_App</title>
+    
+    <para>
+        The <classname>Zym_App</classname> component in short is a generic
+        configurable bootstrapping API. It was created from the 
+        <classname>Zend_Application</classname> proposal by Bill Karwin 
+        to solve the problem of bootstrapping applications. Most applications 
+        have similar bootstraps; however, developing a component that is flexible
+        yet simple enough to use is like preaching a religion. <classname>Zym_App</classname>
+        follows a <link  xlink:href="http://en.wikipedia.org/wiki/Convention_over_Configuration">convention over configuration</link>
+        design pardigm. If you follow Zym's conventions, everything will work 
+        out of the box and other developers working on the same project
+        can jump in knowing almost everything they need reducing development time.
+        Although having a convention is good, sometimes developers need to break them,
+        for this reason, flexibility was an important aspect in the design of this
+        component. Almost every aspect of Zym's convention can be changed through
+        configuration (directory structure, config structure etc..).
+    </para>
+    
+    <xi:include href="app/resources.xml" parse="text" />
+</chapter>

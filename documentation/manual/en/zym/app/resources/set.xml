@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set" version="5.0">
+    <title>Resources included in Zym</title>
+
+    <para>
+        Zym includes basic resources required to bootstrap a project.
+    </para>
+    
+</section>

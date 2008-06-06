@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources" version="5.0">
+    <title>Resources</title>
+
+    <para>
+        Resources are the classes that bootstrap each component that an application
+        may need. They are the building blocks of bootstraping as they specialize
+        in configuring and setting up only a specific items. Each resource
+        may or may not have configuration options.
+    </para>
+    
+    <xi:include href="resources/set.xml" />
+</section>
