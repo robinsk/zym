@@ -111,29 +111,32 @@ abstract class Zym_App_Resource_Abstract
         if ($config) {
             $this->setConfig($config, $environment);
         }
+        
+        // Extension api
+        $this->init();
     }
+    
+    /**
+     * Init
+     *
+     * @return void
+     */
+    public function init()
+    {}
 
     /**
      * Dispatch the setup process
      *
      */
     public function dispatch()
-    {
-        $this->validateConfig($this->getConfig());
+    {        
+        $config = $this->getConfig();
         
-        $this->preSetup($this->getConfig());
-        $this->setup($this->getConfig());
-        $this->postSetup($this->getConfig());
+        $this->preSetup($config);
+        $this->setup($config);
+        $this->postSetup($config);
     }
     
-    /**
-     * Validate config
-     *
-     * @param Zend_Config $config
-     */
-    public function validateConfig(Zend_Config $config)
-    {}
-
     /**
      * Runs before setup() in order to do pre-setup routines
      *

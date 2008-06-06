@@ -68,7 +68,7 @@ class Zym_App_Resource_Json extends Zym_App_Resource_Abstract
      */
     public function preSetup(Zend_Config $config)
     {
-        $class = $config->class;
+        $class = $config->get('class');
         Zend_Loader::loadClass($class);
         
         
@@ -107,11 +107,11 @@ class Zym_App_Resource_Json extends Zym_App_Resource_Abstract
      */
     protected function _setUseBuiltinEncoderDecoder(Zend_Config $config)
     {
-        if ($config->use_builtin_encoder_decoder === null) {
+        if ($config->get('use_builtin_encoder_decoder') === null) {
             return;
         }
         
-        $useBuiltinEncoderDecoder = (bool) $config->use_builtin_encoder_decoder;
+        $useBuiltinEncoderDecoder = (bool) $config->get('use_builtin_encoder_decoder');
         
         // Use EVIL, $this->_jsonClass should be safe since we loaded
         // it with Zend_Loader earlier
@@ -125,11 +125,11 @@ class Zym_App_Resource_Json extends Zym_App_Resource_Abstract
      */
     protected function _setMaxRecursionDepthAllowed(Zend_Config $config)
     {
-        if ($config->max_recursion_depth_allowed === null) {
+        if ($config->get('max_recursion_depth_allowed') === null) {
             return;
         }
         
-        $maxRecursionDepthAllowed = (int) $config->max_recursion_depth_allowed;
+        $maxRecursionDepthAllowed = (int) $config->get('max_recursion_depth_allowed');
         
         // Use EVIL, $this->_jsonClass should be safe since we loaded
         // it with Zend_Loader earlier

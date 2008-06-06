@@ -38,6 +38,8 @@ class Zym_App_Resource_Autoload extends Zym_App_Resource_Abstract
 {   
     /**
      * Priority
+     * 
+     * Try to load this before any other ones
      *
      * @var integer
      */

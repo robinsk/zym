@@ -59,13 +59,13 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        Zym_App::ENV_DEVELOPMENT => array(
-            'cache' => false
+        Zym_App::ENV_PRODUCTION => array(
+            'cache' => true
         ),
     
         Zym_App::ENV_DEFAULT => array(
-            'class' => 'Zend_Locale',
-            'cache' => true,
+            'class'   => 'Zend_Locale',
+            'cache'   => false,
             'default' => null
         )
     );

@@ -44,7 +44,7 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
             'auto_start' => true,
-            'config' => array(
+            'config'     => array(
                 'save_path' => 'session',
                 'name'      => 'SID'
             )
@@ -79,7 +79,8 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      */
     protected function _prependSavePath(Zend_Config $config)
     {
-        $savePath = $config->get('save_path');
+        $app         = $this->getApp();
+        $savePath    = $config->get('save_path');
         $configArray = array(
             'save_path' => $this->getApp()
                                 ->getPath(Zym_App::PATH_DATA, $savePath)

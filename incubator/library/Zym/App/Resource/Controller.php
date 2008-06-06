@@ -63,7 +63,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             'throw_exceptions' => false,
         
             'module' => array(
-                'directory'       => array(
+                'directory'  => array(
                     'modules' // relative to PATH_APP
                 ),
                 
@@ -251,7 +251,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     /**
      * Set invokeArgs
      *
-     * @param unknown_type $params
+     * @param Zend_Config $params
      */
     protected function _setParams($params)
     {
@@ -268,9 +268,9 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     protected function _setCustomClasses(Zend_Config $config)
     {
         $customClassMap = array(
-            'router' => $config->router, 
-            'request' => $config->request, 
-            'response' => $config->response,
+            'router'     => $config->router, 
+            'request'    => $config->request, 
+            'response'   => $config->response,
             'dispatcher' => $config->dispatcher
         );
         

@@ -114,6 +114,8 @@ class Zym_Controller_Action_Helper_Session extends Zend_Controller_Action_Helper
     /**
      * Set a namespace
      *
+     * @todo Remove hack when Zend_Session_Namespace::getNamespace() exists
+     * 
      * @param Zend_Session_Namespace $namespace
      * @return Zym_Controller_Action_Helper_Session
      */
@@ -121,7 +123,6 @@ class Zym_Controller_Action_Helper_Session extends Zend_Controller_Action_Helper
     {
         if (!method_exists($namespace, 'getNamespace')) {
             // Hack!!!
-            // TODO: Remove when getNamespace() exists
             $namespaceArray = (array) $namespace;
             $name           = $namespaceArray['\0*\0_namespace'];
         } else {
@@ -174,6 +175,8 @@ class Zym_Controller_Action_Helper_Session extends Zend_Controller_Action_Helper
      * Get the session namespace specific for the current module
      *
      * @param boolean $singleInstance
+     * @param string  $module
+     * 
      * @return Zend_Session_Namespace
      */
     public function getModuleNamespace($singleInstance = null, $module = null)
@@ -187,6 +190,9 @@ class Zym_Controller_Action_Helper_Session extends Zend_Controller_Action_Helper
      * Get the session namespce specific for the controller
      *
      * @param boolean $singleInstance
+     * @param string  $controller
+     * @param string  $module
+     * 
      * @return Zend_Session_Namespace
      */
     public function getControllerNamespace($singleInstance = null, $controller = null, $module = null)
@@ -200,6 +206,10 @@ class Zym_Controller_Action_Helper_Session extends Zend_Controller_Action_Helper
      * Get the session namespace for an action
      *
      * @param boolean $singleInstance
+     * @param string  $action
+     * @param string  $controller
+     * @param string  $module
+     * 
      * @return Zend_Session_Namespace
      */
     public function getActionNamespace($singleInstance = null, $action = null, $controller = null, $module = null)
@@ -260,5 +270,19 @@ class Zym_Controller_Action_Helper_Session extends Zend_Controller_Action_Helper
         }
         
         return $this->getControllerNamespaceName($controller, $module) . '_' . $action;
+    }
+    
+    /**
+     * Get the session namespce specific for the controller
+     *
+     * @param boolean $singleInstance
+     * @param string  $controller
+     * @param string  $module
+     * 
+     * @return Zend_Session_Namespace
+     */
+    public function direct($singleInstance = null, $controller = null, $module = null)
+    {
+        return $this->getControllerNamespace($singleInstance, $controller, $module);
     }
 }

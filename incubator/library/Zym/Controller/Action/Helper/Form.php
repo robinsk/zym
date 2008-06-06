@@ -25,6 +25,11 @@ require_once 'Zend/Controller/Action/Helper/Abstract.php';
 require_once 'Zend/Loader.php';
 
 /**
+ * @see Zend_Loader_PluginLoader_Interface
+ */
+require_once 'Zend/Loader/PluginLoader/Interface.php';
+
+/**
  * Form Helper
  * 
  * @author Geoffrey Tran
@@ -75,7 +80,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      *
      * @var string
      */
-    protected $_pathSpec = ':module/forms';
+    protected $_pathSpec = ':moduleDir/forms';
     
     /**
      * Construct
@@ -194,7 +199,6 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
                                     'StringToLower'
                                 ),
                              ))
-                             ->setStaticRuleReference('suffix', $this->_viewSuffix)
                              ->setTargetReference($this->_inflectorTarget);
         }
 
@@ -216,8 +220,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         $this->_inflector = $inflector;
         
         if ($reference) {
-            $this->_inflector->setStaticRuleReference('suffix', $this->_viewSuffix)
-                             ->setStaticRuleReference('moduleDir', $this->_moduleDir)
+            $this->_inflector->setStaticRuleReference('moduleDir', $this->_moduleDir)
                              ->setTargetReference($this->_inflectorTarget);
         }
         
@@ -301,7 +304,6 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      * - :module - current module name
      * - :controller - current controller name
      * - :action - current action name
-     * - :suffix - view script file suffix
      *
      * @param  array $vars
      * @return string
@@ -318,22 +320,18 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         $params     = compact('module', 'controller', 'action');
         foreach ($vars as $key => $value) {
             switch ($key) {
-                case 'module':
+                case 'module'    :
                 case 'controller':
-                case 'action':
-                case 'moduleDir':
-                case 'suffix':
+                case 'action'    :
+                case 'moduleDir' :
                     $params[$key] = (string) $value;
                     break;
+                    
                 default:
                     break;
             }
         }
 
-        if (isset($params['suffix'])) {
-            $origSuffix = $this->getViewSuffix();
-            $this->setViewSuffix($params['suffix']);
-        }
         if (isset($moduleDir)) {
             $origModuleDir = $this->_getModuleDir();
             $this->_setModuleDir($params['moduleDir']);
@@ -341,9 +339,6 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
 
         $filtered = $inflector->filter($params);
 
-        if (isset($params['suffix'])) {
-            $this->setViewSuffix($origSuffix);
-        }
         if (isset($moduleDir)) {
             $this->_setModuleDir($origModuleDir);
         }
