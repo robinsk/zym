@@ -20,6 +20,11 @@
 require_once 'Zym/App/Resource/Abstract.php';
 
 /**
+ * @see Zend_Controller_Action_HelperBroker
+ */
+require_once 'Zend/Controller/Action/HelperBroker.php';
+
+/**
  * @see Zend_Controller_Front
  */
 require_once 'Zend/Controller/Front.php';
@@ -81,6 +86,15 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
                     'plugin_index' => 105
                 )
             ),
+            
+            'helper_broker' =>array(
+                'paths' => array(
+                    array(
+                        'path'   => 'Zym/Controller/Action/Helper',
+                        'prefix' => 'Zym_Controller_Action_Helper'
+                    )
+                )
+            ),
         
             'default' => array(
                 'action'          => null,
@@ -122,28 +136,31 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
         $frontController = $this->getFrontController();
         
         // Throw dispatch exceptions
-        $this->_setThrowExceptions($config->throw_exceptions);
+        $this->_setThrowExceptions($config->get('throw_exceptions'));
         
         // Set baseUrl
-        $this->_setBaseUrl($config->base_url);
+        $this->_setBaseUrl($config->get('base_url'));
         
         // Add controller and module directories    
         $this->_addControllerAndModuleDirectories($config);
         
         // Set module custom controller name
-        $this->_setModuleControllerDirectoryName($config->module->controller_name);
+        $this->_setModuleControllerDirectoryName($config->get('module')->get('controller_name'));
         
         // Handle defaults (module, controller and action names)
-        $this->_setDefaultController($config->default);
+        $this->_setDefaultController($config->get('default'));
         
         // Set controller params
-        $this->_setParams($config->params);
+        $this->_setParams($config->get('params'));
         
         // Handle router, request, response
         $this->_setCustomClasses($config);
         
         // Handle controller plugins
-        $this->_loadPlugins($config->plugin);
+        $this->_loadPlugins($config->get('plugin'));
+        
+        // Set helperBroker paths
+        $this->_setHelperBrokerPaths($config->get('helper_broker')->get('paths'));
     }
     
     /**
@@ -335,5 +352,29 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             
             $fc->registerPlugin($plugin, $index);
         }
+    }
+    
+    /**
+     * Set helper broker paths
+     *
+     * @param Zend_Config $paths
+     */
+    protected function _setHelperBrokerPaths(Zend_Config $paths)
+    {
+        foreach ($paths as $pathConfig) {
+            $path   = isset($pathConfig['paths'])  ? $pathConfig['paths']  : null;
+            $prefix = isset($pathConfig['prefix']) ? $pathConfig['prefix'] : null;
+            
+            if ($path === null) {
+                continue; 
+            }
+            
+            if ($prefix === null) {
+                Zend_Controller_Action_HelperBroker::addPath($path);
+            } else {
+                Zend_Controller_Action_HelperBroker::addPath($path, $prefix);
+            }
+        }
+        
     }
 }
