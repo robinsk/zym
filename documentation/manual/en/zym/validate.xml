@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.validate" version="5.0">
+    <title>Zym_Validate</title>
+    
+    <section xml:id="zym.validate.introduction">
+        <title>Introduction</title>
+        
+        <para>
+            Validators in Zym work exactly like in Zend Framework, so we will
+            give detailed information on what they are and how to use them.
+            Read more about validators in the 
+            <ulink url="http://framework.zend.com/manual/en/zend.validate.html">Zend Framework manual section on validators</ulink>.
+        </para>
+    </section>
+    
+    <xi:include href="validate/set.xml" />
+    <xi:include href="validate/sitemap.xml" />
+</chapter>

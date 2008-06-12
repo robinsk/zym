@@ -13,7 +13,7 @@
         <copyright>
             <year><?dbtimestamp format="Y" ?></year>
             <holder>
-                Zym (<link xlink:href="http://www.zym-project.com" />)
+                Zym (<link xlink:href="http://www.zym-project.com/" />)
             </holder>
         </copyright>
                 
@@ -43,6 +43,7 @@
     <xi:include href="zym/paginate.xml" />
     <xi:include href="zym/session.xml" />
     <xi:include href="zym/timer.xml" />
+    <xi:include href="zym/validate.xml" />
     <xi:include href="zym/version.xml" />
     <xi:include href="zym/view.xml" />
     <!-- END: Chapters -->

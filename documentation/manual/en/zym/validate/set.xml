@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.validate.set" version="5.0">
+    <title>Standard Validation Classes</title>
+    
+    <section xml:id="zym.validate.set.float">
+        <title>Float</title>
+        
+        <para>A locale-aware float validator.</para>
+    </section>
+    
+    <section xml:id="zym.validate.set.stringequals">
+        <title>StringEquals</title>
+        
+        <para>Validates whether all strings in an array are equal.</para>
+    </section>
+</section>
