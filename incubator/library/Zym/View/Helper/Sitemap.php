@@ -16,14 +16,14 @@
  */
 
 /**
- * @see Zym_View_Helper_Html_Abstract
+ * @see Zym_View_Helper_Html_Navigation
  */
-require_once 'Zym/View/Helper/Html/Abstract.php';
+require_once 'Zym/View/Helper/Html/Navigation.php';
 
 /**
- * Zym_View_Helper_Sitemap
+ * Helper for printing sitemaps
  * 
- * View helper for rendering Zym_Sitemap sitemaps.
+ * @link http://www.sitemaps.org/protocol.php
  *
  * @category   Zym
  * @package    Zym_View
@@ -31,270 +31,439 @@ require_once 'Zym/View/Helper/Html/Abstract.php';
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
- */
-class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Abstract
+ */ 
+class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
 {
     /**
-     * @var Zym_Sitemap
-     */
-    protected $_sitemap;
-    
-    /**
-     * CSS class to use for list element when rendering as main sitemap
+     * Namespace for the <urlset> tag
      *
      * @var string
      */
-    protected $_cssMain = 'dropdown';
+    const SITEMAP_NS = 'http://www.sitemaps.org/schemas/sitemap/0.9';
     
     /**
-     * CSS class to use for list element when not rendering as a main sitemap
+     * Schema URL
      *
      * @var string
      */
-    protected $_css = '';
-
+    const SITEMAP_XSD = 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd';
+    
     /**
-     * Retrieves sitemap helper
+     * Sets maximum depth sitemap should be traversed
      *
-     * @return Zym_View_Helper_Sitemap
+     * @var int
      */
-    public function sitemap()
-    {
-        return $this;
-    }
+    protected $_maxDepth = null;
     
     /**
-     * Sets sitemap
-     * 
-     * @param Zym_Sitemap $sitemap
-     * @return Zym_View_Helper_Sitemap
+     * Whether XML output should be formatted
+     *
+     * @var bool
      */
-    public function setSitemap(Zym_Sitemap $sitemap)
-    {
-        $this->_sitemap = $sitemap;
-        return $this;
-    }
+    protected $_formatOutput = false;
     
     /**
-     * Returns sitemap
-     * 
-     * @return Zym_Sitemap|null
+     * Whether the XML declaration should be included in XML output
+     *
+     * @var bool
      */
-    public function getSitemap()
+    protected $_useXmlDeclaration = true;
+    
+    /**
+     * Whether sitemap should be schema validated when generated
+     *
+     * @var bool
+     */
+    protected $_useSchemaValidation = false;
+    
+    /**
+     * Whether sitemap should be validated using Zym_Validate_Sitemap_*
+     *
+     * @var bool
+     */
+    protected $_useSitemapValidators = true;
+    
+    /**
+     * Server url
+     *
+     * @var string
+     */
+    protected $_serverUrl;
+    
+    /**
+     * Retrieves helper and optionally sets container to operate on
+     * 
+     * The options array is an optional associative array of options to set.
+     * Each key in the array corresponds to the according set*() method, and
+     * each word is separated by underscores, e.g. the option 'format_output'
+     * corresponds to setFormatOutput().
+     * 
+     * @param  Zym_Navigation_Container $container  [optional] container to
+     *                                              operate on
+     * @param  array                    $options    [optional] associative
+     *                                              array of options to set
+     * @return Zym_View_Helper_Sitemap
+     */
+    public function sitemap(Zym_Navigation_Container $container = null,
+                            array $options = array())
     {
-        if (null === $this->_sitemap) {
-            return $this->_getDefaultSitemap();
+        if (null !== $container) {
+            $this->setNavigation($container);
         }
         
-        return $this->_sitemap;
-    }
-    
-    /**
-     * Returns default sitemap
-     * 
-     * @return Zym_Sitemap|null
-     */
-    protected function _getDefaultSitemap()
-    {
-        if (Zend_Registry::isRegistered('Zym_Sitemap')) {
-            $sitemap = Zend_Registry::get('Zym_Sitemap');
-            if ($sitemap instanceof Zym_Sitemap) {
-                return $sitemap;
+        // set options
+        foreach ($options as $option => $value) {
+            if (is_string($key) && !empty($key)) {
+                $method = 'set' . str_replace(' ', '',
+                                    ucfirst(str_replace('_', ' ', $key)));
+                if (method_exists($this, $method)) {
+                    $this->$method($value);
+                }   
             }
+            
         }
         
-        return null;
+        return $this;
     }
     
     /**
-     * Returns active site
-     * 
-     * @return Zym_Sitemap_Site|null
+     * Sets maximum depth sitemap should be traversed
+     *
+     * @param  int $maxDepth  [optional] maximum level (depth) to traverse,
+     *                        defaults to null, which will set no maximum
+     * @return void
      */
-    public function getActiveSite()
+    public function setMaxDepth($maxDepth = null)
     {
-        $sitemap = $this->getSitemap();
-        return null === $sitemap ? null : $sitemap->getActiveSite();
+        if (null === $maxDepth) {
+            $this->_maxDepth = $maxDepth;
+        } else {
+            $this->_maxDepth = (int)$maxDepth;
+        }
     }
     
     /**
-     * Returns active main site, if any
-     * 
-     * @return Zym_Sitemap_Site|null
+     * Returns maximum depth sitemap should be traversed
+     *
+     * @return int
      */
-    public function getActiveMainSite()
+    public function getMaxDepth()
     {
-        $sitemap = $this->getSitemap();
-        return null === $sitemap ? null : $sitemap->getActiveMainSite();
+        return $this->_maxDepth;
     }
     
     /**
-     * Renders navigation list for a sitemap
+     * Sets whether XML output should be formatted
+     *
+     * @param bool $formatOutput  format XML output
+     */
+    public function setFormatOutput($formatOutput)
+    {
+        $this->_formatOutput = (bool)$formatOutput;
+    }
+    
+    /**
+     * Returns true if XML output should be formatted 
+     *
+     * @return bool
+     */
+    public function getFormatOutput()
+    {
+        return $this->_formatOutput;
+    }
+    
+    /**
+     * Sets whether the XML declaration should be used in output
+     *
+     * @param bool $useXmlDecl  whether XML delcaration should be used
+     */
+    public function setUseXmlDeclaration($useXmlDecl)
+    {
+        $this->_useXmlDeclaration = (bool)$useXmlDecl;
+    }
+    
+    /**
+     * Returns true if the XML declaration should be used in output 
+     *
+     * @return bool
+     */
+    public function getUseXmlDeclaration()
+    {
+        return $this->_useXmlDeclaration;
+    }
+    
+    /**
+     * Sets whether sitemap should be validated using Zym_Validate_Sitemap_*
+     *
+     * @param bool $useSitemapValidators  whether to use sitemap validators
+     */
+    public function setUseSitemapValidators($useSitemapValidators)
+    {
+        $this->_useSitemapValidators = (bool)$useSitemapValidators;
+    }
+    
+    /**
+     * Returns true if sitemap should be validated using Zym_Validate_Sitemap_*
+     *
+     * @return bool
+     */
+    public function getUseSitemapValidators()
+    {
+        return $this->_useSitemapValidators;
+    }
+    
+    /**
+     * Sets whether sitemap should be schema validated when generated
+     *
+     * @param bool $schemaValidation  whether sitemap should be schema validated
+     */
+    public function setUseSchemaValidation($schemaValidation)
+    {
+        $this->_useSchemaValidation = (bool)$schemaValidation;
+    }
+    
+    /**
+     * Returns true if sitemap should be schema validated when generated
+     *
+     * @return bool
+     */
+    public function getUseSchemaValidation()
+    {
+        return $this->_useSchemaValidation;
+    }
+    
+    /**
+     * Sets server url (scheme and host-related stuff without request URI)
      * 
-     * @param  Zym_Sitemap $sitemap   sitemap to render
-     * @param  string|int  $indent    [optional] initial indentation
-     * @param  bool        $main      [optional] whether sitemap should be
-     *                                considered as main map, defaults to false
+     * E.g. http://www.example.com
+     *
+     * @param  string $serverUrl  server URL to set (only scheme and host)
+     * @throws Zend_Uri_Exception  if invalid server url
+     */
+    public function setServerUrl($serverUrl)
+    {
+        $uri = explode(':', $serverUrl, 2);
+        $scheme = strtolower($uri[0]);
+        
+        switch ($scheme) {
+            case 'http':
+            case 'https':
+                break;
+            default:
+                require_once 'Zend/Uri/Exception.php';
+                throw new Zend_Uri_Exception("Invalid scheme: '$scheme'");
+        }
+
+        // TODO: rewrite to use Zend_Uri_Http directly when possible
+        require_once 'Zend/Uri.php';
+        $uri = Zend_Uri::factory($serverUrl);
+        $uri->setFragment('');
+        $uri->setPath('');
+        $uri->setQuery('');
+        
+        if ($uri->valid()) {
+            $this->_serverUrl = $uri->getUri();
+        } else {
+            require_once 'Zend/Uri/Exception.php';
+            throw new Zend_Uri_Exception("Ivalid URI: '$serverUrl'");
+        }
+    }
+    
+    /**
+     * Returns server URL
+     *
      * @return string
      */
-    public function renderSitemap(Zym_Sitemap $sitemap,
-                                  $indent = null,
-                                  $main = false)
+    protected function _getServerUrl()
     {
-        if (count($sitemap) < 1) {
-            return '';
+        if (!isset($this->_serverUrl)) {
+            require_once 'Zym/View/Helper/ServerUrl.php';
+            $this->_serverUrl = new Zym_View_Helper_ServerUrl();
+            $this->_serverUrl = $this->_serverUrl->serverUrl(false);
         }
         
-        // determine indentation
-        $indent = (null !== $indent)
-                ? $this->_getWhitespace($indent)
-                : $this->getIndent();
+        return $this->_serverUrl;
+    }
+    
+    /**
+     * Escapes string for XML usage
+     *
+     * @param string $string
+     */
+    protected function _xmlEscape($string)
+    {
+        return htmlspecialchars(str_replace("'", '&apos;', $string),
+                                ENT_COMPAT, 'UTF-8', false);
+    }
+    
+    /**
+     * Returns an absolute URL for the given page
+     *
+     * @param  Zym_Navigation_Page $page  page to get URL from
+     * @return string
+     */
+    protected function _getUrl(Zym_Navigation_Page $page)
+    {
+        $href = $page->getHref();
         
-        // view is required for escaping/translating
-        $view = $this->getView();
-
-        // force main to be a boolean
-        $main = $main === true;
+        if ($href{0} == '/') {
+            $url = $this->_getServerUrl() . $href;
+        } elseif (@preg_match('/^https?:\\/\//m', $href)) {
+            $url = $href;
+        } else {
+            $url =  $this->_getServerUrl() . $this->getView()->url();
+            $url = dirname($url) . '/' . $href;
+            //exit("got url '$url'");
+        }
         
-        // determine css class for list element 
-        $ulCss = $main ? $this->_cssMain : $this->_css;
+        return $this->_xmlEscape($url);
+    }
+    
+    /**
+     * Returns a DOMDocument containing the Sitemap XML for the given container
+     *
+     * @param  Zym_Navigation_Container $container  [optional] container to get
+     *                                              breadcrumbs from, defaults
+     *                                              to what is registered in the
+     *                                              helper
+     * @return DOMDocument
+     * @throws DomainException  if schema validation is on and the sitemap
+     *                          is invalid according to the sitemap schema, or
+     *                          of sitemap validators are used and the loc
+     *                          element fails validation
+     */
+    public function getDomSitemap(Zym_Navigation_Container $container = null)
+    {
+        if (null === $container) {
+            $container = $this->getNavigation();
+        }
         
-        // init html string with list element
-        $html = "$indent<ul class=\"$ulCss\">\n";
+        // create iterator
+        $iterator = new RecursiveIteratorIterator($container,
+            RecursiveIteratorIterator::SELF_FIRST);
+        if (is_int($this->_maxDepth)) {
+            $iterator->setMaxDepth($this->_maxDepth);
+        }
         
-        // loop sitemap
-        foreach ($sitemap as $id => $site) {
-            if ($main && (!$site->main || $site->hidden)) {
-                // when rendering as main, sites that are not main sites
-                // should not be rendered, and neither should hidden ones
+        // check if we should validate using our own validators
+        if ($this->getUseSitemapValidators()) {
+            require_once 'Zym/Validate/Sitemap/Changefreq.php';
+            require_once 'Zym/Validate/Sitemap/Lastmod.php';
+            require_once 'Zym/Validate/Sitemap/Loc.php';
+            require_once 'Zym/Validate/Sitemap/Priority.php';
+            
+            // create validators
+            $locValidator = new Zym_Validate_Sitemap_Loc();
+            $lastmodValidator = new Zym_Validate_Sitemap_Lastmod();
+            $changefreqValidator = new Zym_Validate_Sitemap_Changefreq();
+            $priorityValidator = new Zym_Validate_Sitemap_Priority();    
+        }
+        
+        // create document
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        $dom->formatOutput = $this->_formatOutput;
+        
+        // ...and urlset (root) element
+        $urlSet = $dom->createElementNS(self::SITEMAP_NS, 'urlset');
+        $dom->appendChild($urlSet);
+        
+        // iterate navigation
+        foreach ($iterator as $page) {
+            if (!$page->isVisible(true)) {
+                // skip invisible pages
                 continue;
             }
             
-            // translate site name
-            if ($site->translate) {
-                $name = $view->translate($site->name);
+            // create url node for this page
+            $urlNode = $dom->createElementNS(self::SITEMAP_NS, 'url');
+            
+            // get absolute url from page
+            $url = $this->_getUrl($page);
+            $urlSet->appendChild($urlNode);
+            
+            if ($this->getUseSitemapValidators() &&
+                !$locValidator->isValid($url)) {
+                $msg = "Invalid sitemap URL: '$url'";
+                throw new DomainException($msg);
             }
             
-            $name = $view->escape($name);
+            // put url in 'loc' element
+            $urlNode->appendChild($dom->createElementNS(self::SITEMAP_NS,
+                                                        'loc', $url));
             
-            // see if site has a custom title
-            if (isset($site->title)) {
-                $title = $site->translate
-                       ? $view->translate($site->title)
-                       : $site->title;
-                $title = $view->escape($title);
-            } else {
-                $title = $name;
+            // add 'lastmod' element if a valid lastmod is set in page
+            if (isset($page->lastmod)) {
+                $lastmod = date('c', strtotime((string)$page->lastmod));
+                if (!$this->getUseSitemapValidators() ||
+                    $lastmodValidator->isValid($lastmod)) {
+                    $urlNode->appendChild(
+                        $dom->createElementNS(self::SITEMAP_NS, 'lastmod',
+                                              $lastmod)
+                    );
+                }
             }
             
-            if ($main) {
-                $name = "<strong>$name</strong>";
+            // add 'changefreq' element if a valid changefreq is set in page
+            if (isset($page->changefreq)) {
+                $changefreq = $page->changefreq;
+                if (!$this->getUseSitemapValidators() ||
+                    $changefreqValidator->isValid($changefreq)) {
+                    $urlNode->appendChild(
+                        $dom->createElementNS(self::SITEMAP_NS, 'changefreq',
+                                              $changefreq)
+                    );
+                }
             }
             
-            // determine css class for list item
-            $liCss = $site->isActive($main) ? 'active' : 'default';
-            
-            // make list item element for the site
-            $html .= "$indent    <li class=\"$liCss\">\n";
-            $html .= "$indent        <a href=\"{$site->getHref()}\"";
-            $html .= " title=\"$title\">$name</a>\n";
-            
-            // render sub sites, if any
-            if ($site->hasSubSites()) {
-                $html .= $this->renderSitemap($site->getSubSites(),
-                    $indent . '        ', false);
+            // add 'priority' element if a valid priority is set in page
+            if (isset($page->priority)) {
+                $priority = $page->priority;
+                if (!$this->getUseSitemapValidators() ||
+                    $priorityValidator->isValid($priority)) {
+                    $urlNode->appendChild(
+                        $dom->createElementNS(self::SITEMAP_NS, 'priority',
+                                              $priority)
+                    );
+                }
             }
-            
-            // end list item element for the site
-            $html .= "$indent    </li>\n";
         }
         
-        // end html string
-        $html .= "$indent</ul>\n";
+        // validate using schema if specified
+        if ($this->getUseSchemaValidation()) {
+            if (!@$dom->schemaValidate(self::SITEMAP_XSD)) {
+                $msg = 'Sitemap is invalid according to ' . self::SITEMAP_XSD;
+                throw new DomainException($msg);
+            }
+        }
         
-        return $html;
+        return $dom;
     }
     
     /**
-     * Renders navigation list for the active site in the sitemap
-     * 
-     * @param string|int  $indent       [optional] defaults to no indenting
-     * @param bool        $strict       [optional] if set true, sitemap
-     *                                  will not be rendered if there is no
-     *                                  active site, or there is no subsites
-     * @param bool        $includeSelf  [optional] whether to include the
-     *                                  active site, or only render subsites
-     * @param Zym_Sitemap $sitemap      [optional] specify a sitemap to render
+     * Renders a sitemap for a navigation container
+     *
+     * @param  Zym_Navigation_Container $container  [optional] container to get
+     *                                              breadcrumbs from, defaults
+     *                                              to what is registered in the
+     *                                              helper
      * @return string
      */
-    public function renderActiveSitemap($indent = null,
-                                        $strict = false,
-                                        $includeSelf = true,
-                                        Zym_Sitemap $sitemap = null)
+    public function renderSitemap(Zym_Navigation_Container $container = null)
     {
-        if (null === $sitemap && !$sitemap = $this->getSitemap()) {
-            // no sitemap
-            return '';
-        }
-        
-        if (!$site = $sitemap->getActiveMainSite()) {
-            // no active site in sitemap
-            return '';
-        }
-        
-        if ($site->hasSubSites()) {
-            // render sub sites
-            $subs = $site->getSubSites();
-            if ($includeSelf) {
-                // a little hack to include self
-                $clone = clone $site;
-                $clone->removeSubSites();
-                $clone->order = -1337;
-                $id = $clone->id;
-                if ($subs->isset($id)) {
-                    // id already exists in subs, lets hope this works
-                    $clone->id = crc32($id);
-                }
-                $subs->addSite($clone);
-            }
-            
-            return $this->renderSitemap($subs, $indent, false);
-        } elseif ($strict) {
-            // site has no subsites, and strict is given, return nothing
-            return '';
-        } elseif ($includeSelf) {
-            // site has no subsites, but include self
-            $selfmap = new Zym_Sitemap();
-            $selfmap->addSite($site);
-            return $this->renderSitemap($selfmap, $indent, false);
-        }
-        
-        return '';
+        $dom = $this->getDomSitemap($container);
+        return $this->_useXmlDeclaration ?
+               $dom->saveXML() :
+               $dom->saveXML($dom->documentElement);
     }
-
+    
     /**
-     * Renders sitemap registered in helper
+     * Renders the registered container as an XML Sitemap
      * 
-     * @param string|int $indent  [optional] defaults to no initial indenting
+     * @param  string|int $indent  [optional] this is ignored
      * @return string
      */
     public function toString($indent = null)
     {
-        $sitemap = $this->getSitemap();
-        if (null === $sitemap || count($sitemap) < 1) {
-            return '';
-        }
-        
-        return $this->renderSitemap($sitemap, $indent, true);
-    }
-    
-    /**
-     * Magic: Returns string representation of helper
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString();
+        return $this->renderSitemap(null);
     }
 }
