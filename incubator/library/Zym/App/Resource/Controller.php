@@ -362,8 +362,8 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     protected function _setHelperBrokerPaths(Zend_Config $paths)
     {
         foreach ($paths as $pathConfig) {
-            $path   = isset($pathConfig['paths'])  ? $pathConfig['paths']  : null;
-            $prefix = isset($pathConfig['prefix']) ? $pathConfig['prefix'] : null;
+            $path   = isset($pathConfig->paths)  ? $pathConfig->get('paths')  : null;
+            $prefix = isset($pathConfig->prefix) ? $pathConfig->get('prefix') : null;
             
             if ($path === null) {
                 continue; 

@@ -90,7 +90,7 @@ class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
         $controller = $request->getQuery($controllerKey, $controllerName);
         $action     = $request->getQuery($actionKey, $actionName);
         
-        $this->_values = $this->getQuery();
+        $this->_values = $request->getQuery();
         $params        = array();
         
         if ($module) {
@@ -118,7 +118,7 @@ class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
      * 
      * @return string Route path with user submitted parameters
      */
-    public function assemble($data = array(), $reset = false, $encode = false)
+    public function assemble(array $data = array(), $reset = false, $encode = false)
     {
         $frontController = Zend_Controller_Front::getInstance();
         
@@ -131,7 +131,7 @@ class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
             $data = array_merge($this->_values, $data);
         }
         
-        $query = '';
+        $query = 'sdf';
         if (!empty($data)) {
             $query .= '?';
             foreach ($data as $key => $val) {
