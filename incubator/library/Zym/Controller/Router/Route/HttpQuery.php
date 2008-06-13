@@ -131,16 +131,18 @@ class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
             $data = array_merge($this->_values, $data);
         }
         
-        $query = 'sdf';
+        $query = '';
         if (!empty($data)) {
-            $query .= '?';
+            $queryParams = array();
             foreach ($data as $key => $val) {
                 if ($encode) {
-                   $query .= urlencode($key) . '=' . urlencode($val);
+                   $queryParams[] = urlencode($key) . '=' . urlencode($val);
                 } else {
-            	   $query .= $key . '=' . $val;
+            	   $queryParams[] = $key . '=' . $val;
                 }
             }
+            
+            $query .= '?' . implode('&', $queryParams);
         }
         
         return $query;
