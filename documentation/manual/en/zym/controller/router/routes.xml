@@ -4,4 +4,5 @@
     <title>Routes</title>
 
     <xi:include href="routes/httphost.xml" />
+    <xi:include href="routes/httpquery.xml" />
 </section>

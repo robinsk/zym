@@ -20,11 +20,12 @@
 require_once 'Zend/Controller/Router/Route.php';
 
 /**
- * Router used for http query parameters when /module/controller/action cant
- * be done due to lack of mod_rewrite
+ * Router used for http query parameters when /module/controller/action can't
+ * be done due to lack of rewriting on servers.
  *
  * This route is useful when the only option you have is index.php?module=foo&controller=bar
- * Can be used to override the 'default' route to enable this feature
+ * Must be used to override the 'default' route to enable this feature as
+ * it will any other routing will be useless
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
