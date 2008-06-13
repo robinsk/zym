@@ -5,7 +5,7 @@
         
     <para>
         The following validators adhere to the
-        <ulink url="http://www.sitemaps.org/protocol.php">Sitemap XML protocol</ulink>.
+        <link xlink:href="http://www.sitemaps.org/protocol.php">Sitemap XML protocol</link>.
     </para>
 
     <section xml:id="zym.validate.set.sitemap.changefreq">
@@ -63,7 +63,7 @@ $validator->isValid('yesterday'); // false]]>
             Validates whether a string is valid for using as a 'loc'
             element in a Sitemap XML document. This uses Zend_Form::check()
             internally. See more at
-            <ulink url="http://framework.zend.com/manual/en/zend.uri.html#zend.uri.validation">URI Validation in the ZF manual</ulink>.
+            <link xlink:href="http://framework.zend.com/manual/en/zend.uri.html#zend.uri.validation">URI Validation in the ZF manual</link>.
         </para>
     </section>
 

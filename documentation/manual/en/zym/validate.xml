@@ -10,7 +10,7 @@
             Validators in Zym work exactly like in Zend Framework, so we will
             give detailed information on what they are and how to use them.
             Read more about validators in the 
-            <ulink url="http://framework.zend.com/manual/en/zend.validate.html">Zend Framework manual section on validators</ulink>.
+            <link xlink:href="http://framework.zend.com/manual/en/zend.validate.html">Zend Framework manual section on validators</link>.
         </para>
     </section>
     
