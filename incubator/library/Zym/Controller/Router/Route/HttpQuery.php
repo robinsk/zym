@@ -118,7 +118,7 @@ class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
      * 
      * @return string Route path with user submitted parameters
      */
-    public function assemble(array $data = array(), $reset = false, $encode = false)
+    public function assemble($data = array(), $reset = false, $encode = false)
     {
         $frontController = Zend_Controller_Front::getInstance();
         
