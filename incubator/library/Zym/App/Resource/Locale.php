@@ -85,7 +85,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
     public function preSetup(Zend_Config $config)
     {
         // Load locale class
-        $this->_loadLocaleClass($config->class);
+        $this->_loadLocaleClass($config->get('class'));
     }
     
     /**
@@ -120,7 +120,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
      */
     protected function _setCache(Zend_Config $config)
     {
-        if (!$config->cache) {
+        if (!$config->get('cache')) {
             return;
         }
 
@@ -135,7 +135,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
      */
     protected function _setDefault(Zend_Config $config)
     {
-        $locale = $config->default;
+        $locale = $config->get('default');
         if (!empty($locale)) {
             call_user_func(array($this->_class, 'setDefault'), $locale);
         }

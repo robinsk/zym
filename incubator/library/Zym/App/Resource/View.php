@@ -124,7 +124,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         
         $isUseViewRenderer = !Zend_Controller_Front::getInstance()->getParam('noViewRenderer');
         if ($isUseViewRenderer) {
-            $viewRenderer = $this->getViewRenderer($config->view_renderer);
+            $viewRenderer = $this->getViewRenderer($config->get('view_renderer'));
             $viewRenderer->setView($view);
             Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
         }

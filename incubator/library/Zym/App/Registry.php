@@ -159,9 +159,9 @@ class Zym_App_Registry
         }
 
         $normalizedIndex = $this->_normalizeIndex($index);
-        $normalizedAliad = $this->_normalizeIndex($alias);
+        $normalizedAlias = $this->_normalizeIndex($alias);
 
-        $this->_alias[$normalizedIndex][$normalizedAliad] = $normalizedAliad;
+        $this->_alias[$normalizedIndex][$normalizedAlias] = $normalizedAlias;
         return $this;
     }
 

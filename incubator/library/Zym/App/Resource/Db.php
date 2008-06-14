@@ -101,25 +101,25 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         // Determine if config is for a single-db or a multi-db site
-        $dbConfigs = (isset($config->dbname)) ? array($config) : $config->connection;
+        $dbConfigs = (isset($config->dbname)) ? array($config) : $config->get('connection');
         foreach ($dbConfigs as $dbConfig) {
             // Merge default config
-            $dbConfig = $this->_mergeConfig($config->default_config, $dbConfig);
+            $dbConfig = $this->_mergeConfig($config->get('default_config'), $dbConfig);
 
             // TODO: Cleanup config
             // Sigh, bad code in Zend_Db_Adapter_Abstract... we cannot have an empty string for profile class
             
             // Create db adapter
-            $db = Zend_Db::factory($dbConfig->adapter, $dbConfig->toArray());
+            $db = Zend_Db::factory($dbConfig->get('adapter'), $dbConfig->toArray());
             
             // Setup profiler
-            $this->_setupProfiler($dbConfig->profiler, $db);
+            $this->_setupProfiler($dbConfig->get('profiler'), $db);
             
             // Setup tables
             $this->_setupTables($dbConfig, $db);
 
             // Make sure db keys don't already exist, else add numbers to them such as db-2, db-3
-            $dbKey = $this->_makeDbKey($dbConfig->registry->key);
+            $dbKey = $this->_makeDbKey($dbConfig->get('registry')->get('key'));
             
             // Store db obj
             $this->setAdapter($db, $dbKey);
@@ -128,8 +128,8 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
             $this->getRegistry()->set($dbKey, $db);
             
             // Determine if we should save the db adapter in the registry
-            $dbRegistryDisabled = (isset($dbConfig->registry->disabled) && $dbConfig->registry->disabled === '') 
-                                    || $dbConfig->registry->disabled == true;
+            $dbRegistryDisabled = (isset($dbConfig->get('registry')->get('disabled')) && $dbConfig->get('registry')->get('disabled') === '') 
+                                    || $dbConfig->get('registry')->get('disabled') == true;
             if (!$dbRegistryDisabled) {
                 // Save in registry
                 Zend_Registry::set($dbKey, $db);
@@ -148,7 +148,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
     {
         $matches = $this->_adapterIdMatches($id);
         if (count($matches) && !empty($matches[1]) && !empty($matches[2])) {
-            $id = $matches[1];
+            $id  = $matches[1];
             $num = $matches[2];
             $this->_dbAdapter[$id][$num] = $db;
         } else {
@@ -167,9 +167,9 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
     {
         $matches = $this->_adapterIdMatches($id);
         if (count($matches) && !empty($matches[1]) && !empty($matches[2])) {
-            $id = $matches[1];
+            $id  = $matches[1];
             $num = $matches[2];
-            $db = $this->_dbAdapter[$id][$num];
+            $db  = $this->_dbAdapter[$id][$num];
         } else {
             $db = reset($this->_dbAdapter[$matches[0]]);
         }
@@ -233,14 +233,14 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
         $profiler = $db->getProfiler();
         
         // Handle profiler elapsed secs filter
-        if ($profilerConfig->filter->elapsed_secs) {
-            $profiler->setFilterElapsedSecs($profilerConfig->filter->elapsed_secs);
+        if ($profilerConfig->get('filter')->get('elapsed_secs')) {
+            $profiler->setFilterElapsedSecs($profilerConfig->get('filter')->get('elapsed_secs'));
         }
         
         // Handle profiler query type filter
-        if ($profilerConfig->filter->query_type) {
+        if ($profilerConfig->get('filter')->get('query_type')) {
             // TODO: Remove eval() hack used for logical OR of values 
-            $profiler->setFilterQueryType(eval("return {$profilerConfig->filter->query_type};"));
+            $profiler->setFilterQueryType(eval("return {$profilerConfig->get('filter')->get('query_type')};"));
         }
     }
     
@@ -253,9 +253,9 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
     protected function _setupTables(Zend_Config $dbConfig, Zend_Db_Adapter_Abstract $db)
     {
         // Set default adapter for tables
-        $tableDefaultAdapters = (is_string($dbConfig->set_default_adapter))
-                                ? $dbConfig->set_default_adapter
-                                : $dbConfig->set_default_adapter->toArray();
+        $tableDefaultAdapters = (is_string($dbConfig->get('set_default_adapter')))
+                                ? $dbConfig->get('set_default_adapter')
+                                : $dbConfig->get('set_default_adapter')->toArray();
                                 
         foreach ((array) $tableDefaultAdapters as $class) {
             call_user_func_array(array($class, 'setDefaultAdapter'), array($db));

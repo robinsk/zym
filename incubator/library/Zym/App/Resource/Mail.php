@@ -63,13 +63,13 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         // Don't do anything if we already have our default obj
-        if ($config->default_transport instanceof Zend_Mail_Transport_Abstract) {
-            Zend_Mail::setDefaultTransport($config->default_transport);
+        if ($config->get('default_transport') instanceof Zend_Mail_Transport_Abstract) {
+            Zend_Mail::setDefaultTransport($config->get('default_transport'));
             return;
         }
         
         // Do we skip?
-        if (!$config->default_transport) {
+        if (!$config->get('default_transport')) {
             return;
         }
         
@@ -89,13 +89,13 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
     protected function _loadTransport(Zend_Config $config)
     {
         // Make lowercase
-        $defaultTransport = strtolower($config->default_transport);
-        $transportMap     = array_change_key_case($config->transport_map->toArray(), CASE_LOWER);
+        $defaultTransport = strtolower($config->get('default_transport'));
+        $transportMap     = array_change_key_case($config->get('transport_map')->toArray(), CASE_LOWER);
         
         // Load transport
         $transportConfig = null;
-        if ($config->transport->$defaultTransport instanceof Zend_Config) {
-            $transportConfig = $config->transport->$defaultTransport;
+        if ($config->get('transport')->$defaultTransport instanceof Zend_Config) {
+            $transportConfig = $config->get('transport')->$defaultTransport;
         }
         
         $transportClass = $this->_parseTransportMap($defaultTransport, $transportMap);

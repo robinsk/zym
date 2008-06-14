@@ -121,7 +121,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     public function preSetup(Zend_Config $config)
     {
         // Load front controller
-        $controller = call_user_func_array(array($config->class, 'getInstance'), array());
+        $controller = call_user_func_array(array($config->get('class'), 'getInstance'), array());
         $this->setFrontController($controller);
     }
     
@@ -228,7 +228,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             foreach ($dirArray as $key => $dir) {
                 // addControllerDirectory(), addModuleDirectory()
                 $addDirectoryFunc = 'add' . ucfirst($name) . 'Directory';
-                $dir = $this->getApp()->getPath(Zym_App::PATH_APP, $dir);
+                $dir              = $this->getApp()->getPath(Zym_App::PATH_APP, $dir);
                 
                 call_user_func_array(array($this->getFrontController(), $addDirectoryFunc), array($dir, $key));
             }
@@ -285,10 +285,10 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     protected function _setCustomClasses(Zend_Config $config)
     {
         $customClassMap = array(
-            'router'     => $config->router, 
-            'request'    => $config->request, 
-            'response'   => $config->response,
-            'dispatcher' => $config->dispatcher
+            'router'     => $config->get('router'), 
+            'request'    => $config->get('request'), 
+            'response'   => $config->get('response'),
+            'dispatcher' => $config->get('dispatcher')
         );
         
         foreach ($customClassMap as $key => $value) {
@@ -324,7 +324,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             // Handle index
             $index = null;
             if ($name instanceof Zend_Config && isset($name->plugin_index)) {
-                $index = (int) $name->plugin_index;
+                $index = (int) $name->get('plugin_index');
             }
             
             // Load class

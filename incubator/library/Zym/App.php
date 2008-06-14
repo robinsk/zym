@@ -9,7 +9,7 @@
  *
  * @category Zym
  * @package Zym_App
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
 
@@ -40,7 +40,7 @@ require_once 'Zend/Loader.php';
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_App
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_App
 {
@@ -261,7 +261,7 @@ class Zym_App
     public function setConfig($config, $format = null)
     {
         $environment = $this->getEnvironment();
-        $configObj = $this->_loadConfig($config, $environment, $format);
+        $configObj   = $this->_loadConfig($config, $environment, $format);
         
         // Merge default config with user config
         $defaultConfig = $this->getDefaultConfig($environment);
@@ -330,7 +330,7 @@ class Zym_App
     public function getPath($key, $append = null)
     {
         // Return root instead
-        $relativeRoot = substr((string) $append, 0, 1);
+        $relativeRoot = substr($append, 0, 1);
         if (in_array($relativeRoot, array('/', '\\'))) { // We don't support windows specific format
             return $append;                              // Use '/' as it works on all platforms
         }
@@ -338,7 +338,7 @@ class Zym_App
         $config = $this->getConfig();
         
         if (isset($config->path->{$key})) {
-            $path = $this->getHome(self::_normalizePath($config->path->{$key}));
+            $path = $this->getHome(self::_normalizePath($config->get('path')->get($key)));
         } else {
             /**
              * @see Zym_App_Exception
@@ -449,7 +449,7 @@ class Zym_App
      * @param string $prefix
      * @return Zym_App
      */
-    public function addResourcePath($id, $path, $prefix = 'Zym_App_Resource')
+    public function addResourcePath($path, $prefix = 'Zym_App_Resource', $id = null)
     {
         // Make sure it ends in a DIRECTORY_SEPARATOR
         if (substr($path, -1, 1) != '/\\') {
@@ -462,7 +462,12 @@ class Zym_App
         $info['dir']    = $path;
         $info['prefix'] = $prefix;
 
-        $this->_scriptPaths[strtolower($id)] = $info;
+        if ($id !== null) {
+            $this->_scriptPaths[strtolower($id)] = $info;
+        } else {
+            $this->_scriptPaths[] = $info;
+        }
+        
         return $this;
     }
 
@@ -472,10 +477,11 @@ class Zym_App
      * @param string $prefix
      * @return Zym_App
      */
-    public function addResourcePrefix($id, $prefix)
+    public function addResourcePrefix($prefix, $id)
     {
         $path = str_replace('_', DIRECTORY_SEPARATOR, $prefix);
-        $this->addResourcePath($id, $path, $prefix);
+        $this->addResourcePath($path, $prefix, $id);
+        
         return $this;
     }
     
@@ -495,10 +501,10 @@ class Zym_App
                 $name = strrchr($fullClassName, '_');
                 $name = ltrim($name, '_');
             } else {
-                return $fullClassName;
+                $name = $fullClassName;
             }
         }
-        
+
         $this->_resources[$name] = $resource;
         
         return $this;
@@ -558,7 +564,7 @@ class Zym_App
     /**
      * Clear and set init scripts
      *
-     * @param array $scripts
+     * @param array $scripts Array of Zym_App_Resource_Abstract
      * @return Zym_App
      */
     public function setResources(array $scripts)
@@ -569,10 +575,11 @@ class Zym_App
                  * @see Zym_App_Exception
                  */
                 require_once('Zym/Application/Exception.php');
-                throw new Zym_App_Exception(
-                    'The array of resource scripts provided has an invalid entry.'
-                    . 'It should consist only of Zym_App_Resource_Abstract instances'
-                );
+                throw new Zym_App_Exception(sprintf(
+                    'The array of resource scripts provided has an invalid entry "%s".'
+                    . 'It should consist only of Zym_App_Resource_Abstract instances',
+                    get_class($script)
+                ));
             }
         }
         
@@ -614,7 +621,7 @@ class Zym_App
      * Get the internal Application registry
      *
      * @param string $index Shortcut to $this->getRegistry()->get($index)
-     * @param mixed $class Assert the class type of the get
+     * @param mixed  $class Assert the class type of the get
      * @return Zym_App_Registry
      */
     public function getRegistry($index = null, $class = null)
@@ -772,7 +779,7 @@ class Zym_App
             $script = new $loadedScript($this, $resConfig, $environment);
             
             // Set custom priority
-            if (!empty($resource->priority)) {
+            if (!empty($resource->get('priority'))) {
                 $script->setPriority($resource->get('priority'));
             }
             
@@ -853,16 +860,16 @@ class Zym_App
     protected function _parseNamespaces(Zend_Config $config)
     {
         // Load namespaces
-        foreach ($config->namespace as $id => $namespace) {
+        foreach ($config->get('namespace') as $id => $namespace) {
             if ($namespace instanceof Zend_Config) {
-                $this->addResourcePath($id, $namespace->path, $namespace->prefix);
+                $this->addResourcePath($namespace->get('path'), $namespace->get('prefix'), $id);
             } else {
                 // Allow setting namespaces using keys
                 if (empty($namespace)) {
                     $namespace = $id;
                 }
                 
-                $this->addResourcePrefix($id, $namespace);
+                $this->addResourcePrefix($namespace, $id);
             }
         }
     }
