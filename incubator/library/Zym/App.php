@@ -779,7 +779,7 @@ class Zym_App
             $script = new $loadedScript($this, $resConfig, $environment);
             
             // Set custom priority
-            if (!empty($resource->get('priority'))) {
+            if (!empty($resource->priority)) {
                 $script->setPriority($resource->get('priority'));
             }
             
