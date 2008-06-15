@@ -41,9 +41,6 @@ class Zym_Couch
      */
     public static function factory($config, $isDefault = true)
     {
-        $defaults = array('host'   => 'localhost',
-                          'port'   => 5984);
-
         if ($config instanceof Zend_Config) {
             $config = $config->toArray();
         }
@@ -57,10 +54,13 @@ class Zym_Couch
             throw new Zym_Couch_Exception('Config must be an array or instance of Zend_Config.');
         }
 
+        $defaults = array('host'   => 'localhost',
+                          'port'   => 5984);
+
         $config = array_merge($defaults, $config);
 
-        foreach ($config as $key => $value) {
-        	if (empty($value)) {
+        foreach ($defaults as $key => $value) {
+        	if (empty($config[$key])) {
         	    throw new Zym_Couch_Exception('Config entry "' . $key . '" can\'t be empty.');
         	}
         }
