@@ -20,7 +20,7 @@
 require_once 'Zend/Json.php';
 
 /**
- * @TODO Make it iterable
+ * @TODO Make it iterable?
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_CouchDb
