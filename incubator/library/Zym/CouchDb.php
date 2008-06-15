@@ -29,6 +29,16 @@ require_once 'Zym/CouchDb/Request.php';
 class Zym_CouchDb
 {
     /**
+     * Request type constants
+     *
+     * @var string
+     */
+    const GET    = 'GET';
+    const POST   = 'POST';
+    const PUT    = 'PUT';
+    const DELETE = 'DELETE';
+
+    /**
      * Database name
      *
      * @var string
@@ -94,7 +104,7 @@ class Zym_CouchDb
      * @param string|array $data
      * @return Zym_CouchDb_Response
      */
-    public function send($url, $method = 'GET', $data = null)
+    public function send($url, $method = self::GET, $data = null)
     {
         if (strpos($url, '/') !== 0) {
             $url = '/' . $url;
@@ -113,7 +123,7 @@ class Zym_CouchDb
      * @param string|array @data
      * @return Zym_CouchDb_Response
      */
-    protected function _sendRequest($url, $method = 'GET', $data = null)
+    protected function _sendRequest($url, $method = self::GET, $data = null)
     {
         $request = new Zym_CouchDb_Request($this->_host, $this->_port, $url, $method, $data);
 
@@ -129,7 +139,7 @@ class Zym_CouchDb
      */
     public function post($url, $data = null)
     {
-        return $this->send($url, 'POST', $data);
+        return $this->send($url, self::POST, $data);
     }
 
     /**
@@ -141,7 +151,7 @@ class Zym_CouchDb
      */
     public function put($url, $data = null)
     {
-        return $this->send($url, 'PUT', $data);
+        return $this->send($url, self::PUT, $data);
     }
 
     /**
@@ -153,7 +163,7 @@ class Zym_CouchDb
      */
     public function get($url)
     {
-        return $this->send($url, 'GET');
+        return $this->send($url, self::GET);
     }
 
     /**
@@ -165,7 +175,7 @@ class Zym_CouchDb
      */
     public function delete($url)
     {
-        return $this->send($url, 'DELETE');
+        return $this->send($url, self::DELETE);
     }
 
     /**

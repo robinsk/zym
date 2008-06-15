@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zym_CouchDb
+ */
+require_once 'Zym/CouchDb.php';
+
+/**
  * @see Zym_CouchDb_Response
  */
 require_once 'Zym/CouchDb/Response.php';
@@ -52,7 +57,7 @@ class Zym_CouchDb_Request
      *
      * @var string
      */
-    protected $_method = 'GET';
+    protected $_method = Zym_CouchDb::GET;
 
     /**
      * Request URL
@@ -84,11 +89,16 @@ class Zym_CouchDb_Request
      * @param string $method
      * @param string|array $data
      */
-    public function __construct($host, $port = 5984, $url, $method = 'GET', $data = null)
+    public function __construct($host, $port = 5984, $url, $method = Zym_CouchDb::GET, $data = null)
     {
         $this->_method = strtoupper($method);
 
-        if (!in_array($this->_method, array('DELETE' , 'GET' , 'POST' , 'PUT'))) {
+        $validMethods = array(Zym_CouchDb::GET,
+                              Zym_CouchDb::POST,
+                              Zym_CouchDb::PUT,
+                              Zym_CouchDb::DELETE);
+
+        if (!in_array($this->_method, $validMethods)) {
             /**
              * @see Zym_CouchDb_Exception
              */
