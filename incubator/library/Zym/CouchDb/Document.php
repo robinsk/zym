@@ -61,6 +61,42 @@ class Zym_CouchDb_Document
     }
 
     /**
+     * Get a value
+     *
+     * @throws Zym_CouchDb_Exception
+     * @param string $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        if (!array_key_exists($key, $this->_content)) {
+            /**
+             * @see Zym_CouchDb_Exception
+             */
+            require_once 'Zym/CouchDb/Exception.php';
+
+            throw new Zym_CouchDb_Exception('Key "' . $key . '" not found in document.');
+        }
+
+        return $this->_content[$key];
+    }
+
+    /**
+     * Set a value
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function __set($key, $value)
+    {
+        $content = $this->_content;
+
+        $content[$key] = $value;
+
+        $this->_content = $content;
+    }
+
+    /**
      * Get the document id
      *
      * @return string
