@@ -65,7 +65,7 @@ class Zym_CouchDb_Request
      *
      * @var string
      */
-    protected $_method = Zym_CouchDb::GET;
+    protected $_method = self::GET;
 
     /**
      * Request URL
@@ -95,7 +95,7 @@ class Zym_CouchDb_Request
      * @param string $method
      * @param string|array $data
      */
-    public function __construct($url, $method = Zym_CouchDb::GET, $data = null)
+    public function __construct($url, $method = self::GET, $data = null)
     {
         $this->_method = strtoupper($method);
 

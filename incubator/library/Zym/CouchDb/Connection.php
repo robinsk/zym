@@ -33,9 +33,26 @@ require_once 'Zym/CouchDb/Response.php';
  */
 class Zym_CouchDb_Connection
 {
+    /**
+     * Host name
+     *
+     * @var string
+     */
     protected $_host;
+
+    /**
+     * Port number
+     *
+     * @var int port
+     */
     protected $_port;
 
+    /**
+     * Constructor
+     *
+     * @param string $host
+     * @param int port
+     */
     public function __construct($host, $port)
     {
         $this->_host = $host;
@@ -106,6 +123,13 @@ class Zym_CouchDb_Connection
         return $this->send(new Zym_CouchDb_Request($message));
     }
 
+    /**
+     * Create a database
+     *
+     * @param string $name
+     * @throws Zym_CouchDb_Exception
+     * @return Zym_CouchDb_Response
+     */
     public function createDb($name)
     {
         $name = '/' . $this->_stripSlashes($name) . '/';
@@ -122,6 +146,13 @@ class Zym_CouchDb_Connection
         return $response;
     }
 
+    /**
+     * Delete a database
+     *
+     * @param string $name
+     * @throws Zym_CouchDb_Exception
+     * @return Zym_CouchDb_Response
+     */
     public function deleteDb($name)
     {
         $name = '/' . $this->_stripSlashes($name) . '/';
@@ -138,6 +169,12 @@ class Zym_CouchDb_Connection
         return $response;
     }
 
+    /**
+     * Strip forward slashes from the provided string
+     *
+     * @param string $string
+     * @return string
+     */
     protected function _stripSlashes($string)
     {
         return str_replace('/', '', $string);

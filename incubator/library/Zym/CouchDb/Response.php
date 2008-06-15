@@ -100,9 +100,7 @@ class Zym_CouchDb_Response
     {
         $response = array();
 
-        $headers = explode("\r\n", $this->_rawResponse);
-
-        $response['status'] = array_shift($headers);
+        $response['status'] = $this->_status;
 
         foreach ($this->_headers as $header => $value) {
         	$response[$header] = $value;
@@ -113,11 +111,21 @@ class Zym_CouchDb_Response
         return $response;
     }
 
+    /**
+     * Get status code
+     *
+     * @return int
+     */
     public function getStatus()
     {
         return $this->_status;
     }
 
+    /**
+     * Get the response headers
+     *
+     * @return array
+     */
     public function getHeaders()
     {
         return $this->_headers;
