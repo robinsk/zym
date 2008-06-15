@@ -66,7 +66,14 @@ class Zym_CouchDb_Request
      *
      * @var string
      */
-    protected $_data = null;
+    protected $_data;
+
+    /**
+     * Response message
+     *
+     * @var Zym_CouchDb_Response
+     */
+    protected $_response;
 
     /**
      * Constructor
@@ -151,9 +158,10 @@ class Zym_CouchDb_Request
             $response .= fgets($socket);
         }
 
-        $this->response = new Zym_CouchDb_Response($response);
+        $this->_response = new Zym_CouchDb_Response($response);
 
         fclose($socket);
+
         $socket = null;
 
         return $this->getResponse();
