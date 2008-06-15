@@ -193,6 +193,19 @@ class Zym_Couch_Db
     }
 
     /**
+     * Send a DELETE request
+     *
+     * @param string $url
+     * @return Zym_Couch_Response
+     */
+    public function delete($url)
+    {
+        $request = $this->getRequest($url, Zym_Couch_Request::DELETE);
+
+        return $this->_connection->send($request);
+    }
+
+    /**
      * Get all documents for the current database
      *
      * @return Zym_Couch_Response

@@ -22,7 +22,7 @@ require_once 'Zym/Couch/Connection.php';
 /**
  * @see Zym_Couch_Db
  */
-require_once 'Zym/Couch/Database.php';
+require_once 'Zym/Couch/Db.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -61,6 +61,11 @@ class Zym_Couch
 
         foreach ($defaults as $key => $value) {
         	if (empty($config[$key])) {
+        	    /**
+                 * @see Zym_Couch_Exception
+                 */
+                require_once 'Zym/Couch/Exception.php';
+
         	    throw new Zym_Couch_Exception('Config entry "' . $key . '" can\'t be empty.');
         	}
         }

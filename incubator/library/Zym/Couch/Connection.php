@@ -138,6 +138,9 @@ class Zym_Couch_Connection
         $response = $this->send($request);
 
         if ($response->getStatus() == 409) {
+            /**
+             * @see Zym_Couch_Exception
+             */
             require_once 'Zym/Couch/Exception.php';
 
             throw new Zym_Couch_Exception('Database already exists.');
@@ -161,6 +164,9 @@ class Zym_Couch_Connection
         $response = $this->send($request);
 
         if ($response->getStatus() == 404) {
+            /**
+             * @see Zym_Couch_Exception
+             */
             require_once 'Zym/Couch/Exception.php';
 
             throw new Zym_Couch_Exception('Database doesn\'t exists.');
