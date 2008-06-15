@@ -36,6 +36,13 @@ class Zym_CouchDb_Response
     protected $_rawResponse;
 
     /**
+     * Response status
+     *
+     * @var int
+     */
+    protected $_status;
+
+    /**
      * Response headers
      *
      * @var string
@@ -58,7 +65,20 @@ class Zym_CouchDb_Response
     {
         $this->_rawResponse = $rawResponse;
 
-        list($this->_headers, $this->_body) = explode("\r\n\r\n", $rawResponse);
+        list($rawHeaders, $this->_body) = explode("\r\n\r\n", $rawResponse);
+
+        $rawHeaders = explode("\r\n", $rawHeaders);
+
+        $this->_status = (int) substr(array_shift($rawHeaders), 8, 3);
+
+        $headers = array();
+
+        foreach ($rawHeaders as $header) {
+            list($key, $value) = explode(': ', $header);
+            $headers[$key] = $value;
+        }
+
+        $this->_headers = $headers;
     }
 
     /**
@@ -76,25 +96,28 @@ class Zym_CouchDb_Response
      *
      * @return array
      */
-    public function getReponse()
+    public function toArray()
     {
         $response = array();
 
         $headers = explode("\r\n", $this->_rawResponse);
 
-        foreach ($headers as $header) {
-            list($key, $value) = explode(': ', $header);
-            $response[$key] = $value;
+        $response['status'] = array_shift($headers);
+
+        foreach ($this->_headers as $header => $value) {
+        	$response[$header] = $value;
         }
+
+        $response['body'] = $this->_body;
 
         return $response;
     }
 
-    /**
-     * Get the response headers
-     *
-     * @return string
-     */
+    public function getStatus()
+    {
+        return $this->_status;
+    }
+
     public function getHeaders()
     {
         return $this->_headers;

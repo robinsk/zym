@@ -30,6 +30,11 @@ require_once 'Zym/CouchDb/Response.php';
 require_once 'Zend/Json.php';
 
 /**
+ * @see Zend_Date
+ */
+require_once 'Zend/Date.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_CouchDb
@@ -39,18 +44,21 @@ require_once 'Zend/Json.php';
 class Zym_CouchDb_Request
 {
     /**
+     * Request type constants
+     *
+     * @var string
+     */
+    const GET    = 'GET';
+    const POST   = 'POST';
+    const PUT    = 'PUT';
+    const DELETE = 'DELETE';
+
+    /**
      * Carriage return linefeed constant
      *
      * @var string
      */
     const CRLF = "\r\n";
-
-    /**
-     * Hostname
-     *
-     * @var string
-     */
-    protected $_host;
 
     /**
      * HTTP method
@@ -83,20 +91,15 @@ class Zym_CouchDb_Request
     /**
      * Constructor
      *
-     * @param string $host
-     * @param int $port
      * @param string $url
      * @param string $method
      * @param string|array $data
      */
-    public function __construct($host, $port = 5984, $url, $method = Zym_CouchDb::GET, $data = null)
+    public function __construct($url, $method = Zym_CouchDb::GET, $data = null)
     {
         $this->_method = strtoupper($method);
 
-        $validMethods = array(Zym_CouchDb::GET,
-                              Zym_CouchDb::POST,
-                              Zym_CouchDb::PUT,
-                              Zym_CouchDb::DELETE);
+        $validMethods = array(self::GET, self::POST, self::PUT, self::DELETE);
 
         if (!in_array($this->_method, $validMethods)) {
             /**
@@ -111,8 +114,6 @@ class Zym_CouchDb_Request
             $data = Zend_Json::encode($data);
         }
 
-        $this->_host = $host;
-        $this->_port = $port;
         $this->_url = $url;
         $this->_data = $data;
     }
@@ -125,56 +126,19 @@ class Zym_CouchDb_Request
     public function getRawRequest()
     {
         $request = $this->_method . ' ' . $this->_url . ' HTTP/1.0' . self::CRLF;
-        $request .= 'Host: ' . $this->_host . self::CRLF;
 
-        if ($this->data) {
+        $date = new Zend_Date();
+        $request .= 'Date: ' . $date->toString(Zend_Date::RFC_2822);
+
+        if ($this->_data) {
             $request .= 'Content-Length: ' . strlen($this->_data) . self::CRLF;
-            $request .= 'Content-Type: text/javascript' . self::CRLF . self::CRLF;
+            $request .= 'Content-Type: application/json' . self::CRLF . self::CRLF;
             $request .= $this->_data . self::CRLF;
         } else {
             $request .= self::CRLF;
         }
 
         return $request;
-    }
-
-    /**
-     * Send the request and return the response
-     *
-     * @return Zym_CouchDb_Response
-     */
-    public function send()
-    {
-        $errorString = '';
-        $errorNumber = '';
-        $response    = '';
-
-        $socket = fsockopen($this->_host, $this->_port, $errorNumber, $errorString);
-
-        if (!$socket) {
-            /**
-             * @see Zym_CouchDb_Exception
-             */
-            require_once 'Zym/CouchDb/Exception.php';
-
-            throw new Zym_CouchDb_Exception('Failed to open connection to ' . $this->_host . ':' .
-                                            $this->_port . ' (Error number ' . $errorNumber . ': ' .
-                                            $errorString . ')');
-        }
-
-        fwrite($socket, $this->getRawRequest());
-
-        while (!feof($socket)) {
-            $response .= fgets($socket);
-        }
-
-        $this->_response = new Zym_CouchDb_Response($response);
-
-        fclose($socket);
-
-        $socket = null;
-
-        return $this->getResponse();
     }
 
     /**
