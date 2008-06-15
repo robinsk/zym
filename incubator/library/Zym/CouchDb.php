@@ -56,8 +56,9 @@ class Zym_CouchDb
      */
     public function __construct($config)
     {
-        $defaults = array('host' => 'localhost',
-                          'port' => 5984);
+        $defaults = array('dbname' => '',
+                          'host'   => 'localhost',
+                          'port'   => 5984);
 
         if ($config instanceof Zend_Config) {
             $config = $config->toArray();
@@ -73,6 +74,12 @@ class Zym_CouchDb
         }
 
         $config = array_merge($defaults, $config);
+
+        foreach ($config as $key => $value) {
+        	if (empty($value)) {
+        	    throw new Zym_CouchDb_Exception('Config entry "' . $key . '" can\'t be empty.');
+        	}
+        }
 
         $this->_dbname = $config['dbname'];
         $this->_host   = $config['host'];
