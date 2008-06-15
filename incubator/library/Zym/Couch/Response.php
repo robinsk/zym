@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -22,11 +22,11 @@ require_once 'Zend/Json.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CouchDb_Response
+class Zym_Couch_Response
 {
     /**
      * The raw response message

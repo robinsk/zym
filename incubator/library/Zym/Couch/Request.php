@@ -9,20 +9,15 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
- * @see Zym_CouchDb
+ * @see Zym_Couch_Response
  */
-require_once 'Zym/CouchDb.php';
-
-/**
- * @see Zym_CouchDb_Response
- */
-require_once 'Zym/CouchDb/Response.php';
+require_once 'Zym/Couch/Response.php';
 
 /**
  * @see Zend_Json
@@ -37,11 +32,11 @@ require_once 'Zend/Date.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CouchDb_Request
+class Zym_Couch_Request
 {
     /**
      * Request type constants
@@ -84,7 +79,7 @@ class Zym_CouchDb_Request
     /**
      * Response message
      *
-     * @var Zym_CouchDb_Response
+     * @var Zym_Couch_Response
      */
     protected $_response;
 
@@ -103,11 +98,11 @@ class Zym_CouchDb_Request
 
         if (!in_array($this->_method, $validMethods)) {
             /**
-             * @see Zym_CouchDb_Exception
+             * @see Zym_Couch_Exception
              */
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('Invalid HTTP method: ' . $this->_method);
+            throw new Zym_Couch_Exception('Invalid HTTP method: ' . $this->_method);
         }
 
         if (is_array($data)) {
@@ -144,7 +139,7 @@ class Zym_CouchDb_Request
     /**
      * Get the reponse object
      *
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function getResponse()
     {

@@ -9,36 +9,36 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
- * @see Zym_CouchDb_Request
+ * @see Zym_Couch_Request
  */
-require_once 'Zym/CouchDb/Request.php';
+require_once 'Zym/Couch/Request.php';
 
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CouchDb_Database
+class Zym_Couch_Db
 {
     /**
      * Default connection
      *
-     * @var Zym_CouchDb_Connection
+     * @var Zym_Couch_Connection
      */
     protected static $_defaultConnection;
 
     /**
      * Current connection
      *
-     * @var Zym_CouchDb_Connection
+     * @var Zym_Couch_Connection
      */
     protected $_connection;
 
@@ -64,9 +64,9 @@ class Zym_CouchDb_Database
     /**
      * Set a default DB connection
      *
-     * @param Zym_CouchDb_Connection $connection
+     * @param Zym_Couch_Connection $connection
      */
-    public static function setDefaultConnection(Zym_CouchDb_Connection $connection)
+    public static function setDefaultConnection(Zym_Couch_Connection $connection)
     {
         self::$_defaultConnection = $connection;
     }
@@ -74,10 +74,10 @@ class Zym_CouchDb_Database
     /**
      * Set the connection for this object
      *
-     * @param Zym_CouchDb_Connection $connection
-     * @return Zym_CouchDb_Database
+     * @param Zym_Couch_Connection $connection
+     * @return Zym_Couch_Db
      */
-    public function setConnection(Zym_CouchDb_Connection $connection)
+    public function setConnection(Zym_Couch_Connection $connection)
     {
         $this->_connection = $connection;
 
@@ -87,19 +87,19 @@ class Zym_CouchDb_Database
     /**
      * Get the connection object
      *
-     * @throws Zym_CouchDb_Exception
-     * @return Zym_CouchDb_Connection
+     * @throws Zym_Couch_Exception
+     * @return Zym_Couch_Connection
      */
     public function getConnection()
     {
         if (!$this->_connection) {
             if (self::$_defaultConnection) {
                 /**
-                 * @see Zym_CouchDb_Exception
+                 * @see Zym_Couch_Exception
                  */
-                require_once 'Zym/CouchDb/Exception.php';
+                require_once 'Zym/Couch/Exception.php';
 
-                throw new Zym_CouchDb_Exception('No connection available.');
+                throw new Zym_Couch_Exception('No connection available.');
             }
 
             $this->_connection = self::$_defaultConnection;
@@ -111,18 +111,18 @@ class Zym_CouchDb_Database
     /**
      * Get the database name
      *
-     * @throws Zym_CouchDb_Exception
+     * @throws Zym_Couch_Exception
      * @return string
      */
     public function getDbName()
     {
         if (!$this->_dbname) {
             /**
-             * @see Zym_CouchDb_Exception
+             * @see Zym_Couch_Exception
              */
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('No database name set.');
+            throw new Zym_Couch_Exception('No database name set.');
         }
 
         return $this->_dbname;
@@ -134,9 +134,9 @@ class Zym_CouchDb_Database
      * @param string $url
      * @param string $method
      * @param string|array $data
-     * @return Zym_CouchDb_Request
+     * @return Zym_Couch_Request
      */
-    public function getRequest($url, $method = Zym_CouchDb_Request::GET, $data = null)
+    public function getRequest($url, $method = Zym_Couch_Request::GET, $data = null)
     {
         $dbPrefix = '/' . $this->_dbname;
 
@@ -148,7 +148,7 @@ class Zym_CouchDb_Database
             }
         }
 
-        return new Zym_CouchDb_Request($url, $method, $data);
+        return new Zym_Couch_Request($url, $method, $data);
     }
 
     /**
@@ -156,11 +156,11 @@ class Zym_CouchDb_Database
      *
      * @param string $url
      * @param string|array $data
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function post($url, $data = null)
     {
-        $request = $this->getRequest($url, Zym_CouchDb_Request::POST, $data);
+        $request = $this->getRequest($url, Zym_Couch_Request::POST, $data);
 
         return $this->_connection->send($request);
     }
@@ -170,11 +170,11 @@ class Zym_CouchDb_Database
      *
      * @param string $url
      * @param string|array $data
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function put($url, $data = null)
     {
-        $request = $this->getRequest($url, Zym_CouchDb_Request::PUT, $data);
+        $request = $this->getRequest($url, Zym_Couch_Request::PUT, $data);
 
         return $this->_connection->send($request);
     }
@@ -183,11 +183,11 @@ class Zym_CouchDb_Database
      * Send a GET request
      *
      * @param string $url
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function get($url)
     {
-        $request = $this->getRequest($url, Zym_CouchDb_Request::GET);
+        $request = $this->getRequest($url, Zym_Couch_Request::GET);
 
         return $this->_connection->send($request);
     }
@@ -195,7 +195,7 @@ class Zym_CouchDb_Database
     /**
      * Get all documents for the current database
      *
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function getAllDocs()
     {
@@ -208,7 +208,7 @@ class Zym_CouchDb_Database
      * Get item by id
      *
      * @param int|string $id
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function getItem($id)
     {

@@ -9,35 +9,35 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
- * @see Zym_CouchDb_Connection
+ * @see Zym_Couch_Connection
  */
-require_once 'Zym/CouchDb/Connection.php';
+require_once 'Zym/Couch/Connection.php';
 
 /**
- * @see Zym_CouchDb_Database
+ * @see Zym_Couch_Db
  */
-require_once 'Zym/CouchDb/Database.php';
+require_once 'Zym/Couch/Database.php';
 
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CouchDb
+class Zym_Couch
 {
     /**
      * Factory
      *
      * @param array|Zend_Config $config
-     * @return Zym_CouchDb_Connection
+     * @return Zym_Couch_Connection
      */
     public static function factory($config, $isDefault = true)
     {
@@ -50,25 +50,25 @@ class Zym_CouchDb
 
         if (!is_array($config)) {
             /**
-             * @see Zym_CouchDb_Exception
+             * @see Zym_Couch_Exception
              */
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('Config must be an array or instance of Zend_Config.');
+            throw new Zym_Couch_Exception('Config must be an array or instance of Zend_Config.');
         }
 
         $config = array_merge($defaults, $config);
 
         foreach ($config as $key => $value) {
         	if (empty($value)) {
-        	    throw new Zym_CouchDb_Exception('Config entry "' . $key . '" can\'t be empty.');
+        	    throw new Zym_Couch_Exception('Config entry "' . $key . '" can\'t be empty.');
         	}
         }
 
-        $connection = new Zym_CouchDb_Connection($config['host'], $config['port']);
+        $connection = new Zym_Couch_Connection($config['host'], $config['port']);
 
         if ($isDefault) {
-            Zym_CouchDb_Database::setDefaultConnection($connection);
+            Zym_Couch_Db::setDefaultConnection($connection);
         }
 
         return $connection;

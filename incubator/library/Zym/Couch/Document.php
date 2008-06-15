@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -23,11 +23,11 @@ require_once 'Zend/Json.php';
  * @TODO Make it iterable?
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CouchDb_Document
+class Zym_Couch_Document
 {
     /**
      * Document content
@@ -63,7 +63,7 @@ class Zym_CouchDb_Document
     /**
      * Get a value
      *
-     * @throws Zym_CouchDb_Exception
+     * @throws Zym_Couch_Exception
      * @param string $key
      * @return mixed
      */
@@ -71,11 +71,11 @@ class Zym_CouchDb_Document
     {
         if (!array_key_exists($key, $this->_content)) {
             /**
-             * @see Zym_CouchDb_Exception
+             * @see Zym_Couch_Exception
              */
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('Key "' . $key . '" not found in document.');
+            throw new Zym_Couch_Exception('Key "' . $key . '" not found in document.');
         }
 
         return $this->_content[$key];

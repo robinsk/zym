@@ -9,29 +9,29 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
- * @see Zym_CouchDb_Request
+ * @see Zym_Couch_Request
  */
-require_once 'Zym/CouchDb/Request.php';
+require_once 'Zym/Couch/Request.php';
 
 /**
- * @see Zym_CouchDb_Response
+ * @see Zym_Couch_Response
  */
-require_once 'Zym/CouchDb/Response.php';
+require_once 'Zym/Couch/Response.php';
 
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_CouchDb
+ * @package    Zym_Couch
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CouchDb_Connection
+class Zym_Couch_Connection
 {
     /**
      * Host name
@@ -62,10 +62,10 @@ class Zym_CouchDb_Connection
     /**
      * Send the request and return the response
      *
-     * @param Zym_CouchDb_Request
-     * @return Zym_CouchDb_Response
+     * @param Zym_Couch_Request
+     * @return Zym_Couch_Response
      */
-    public function send(Zym_CouchDb_Request $request)
+    public function send(Zym_Couch_Request $request)
     {
         $errorString = '';
         $errorNumber = '';
@@ -75,11 +75,11 @@ class Zym_CouchDb_Connection
 
         if (!$socket) {
             /**
-             * @see Zym_CouchDb_Exception
+             * @see Zym_Couch_Exception
              */
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('Failed to open connection to ' . $this->_host . ':' .
+            throw new Zym_Couch_Exception('Failed to open connection to ' . $this->_host . ':' .
                                             $this->_port . ' (Error number ' . $errorNumber . ': ' .
                                             $errorString . ')');
         }
@@ -94,23 +94,23 @@ class Zym_CouchDb_Connection
 
         $socket = null;
 
-        return new Zym_CouchDb_Response($response);
+        return new Zym_Couch_Response($response);
     }
 
     /**
      * List all databases
      *
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function listAll()
     {
-        return $this->send(new Zym_CouchDb_Request('/_all_dbs'));
+        return $this->send(new Zym_Couch_Request('/_all_dbs'));
     }
 
     /**
      * Get CouchDb info
      *
-     * @return Zym_CouchDb_Response
+     * @return Zym_Couch_Response
      */
     public function info($database = '')
     {
@@ -120,27 +120,27 @@ class Zym_CouchDb_Connection
             $message .= $this->_stripSlashes($database) . '/';
         }
 
-        return $this->send(new Zym_CouchDb_Request($message));
+        return $this->send(new Zym_Couch_Request($message));
     }
 
     /**
      * Create a database
      *
      * @param string $name
-     * @throws Zym_CouchDb_Exception
-     * @return Zym_CouchDb_Response
+     * @throws Zym_Couch_Exception
+     * @return Zym_Couch_Response
      */
     public function createDb($name)
     {
         $name = '/' . $this->_stripSlashes($name) . '/';
-        $request = new Zym_CouchDb_Request($name, Zym_CouchDb_Request::PUT);
+        $request = new Zym_Couch_Request($name, Zym_Couch_Request::PUT);
 
         $response = $this->send($request);
 
         if ($response->getStatus() == 409) {
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('Database already exists.');
+            throw new Zym_Couch_Exception('Database already exists.');
         }
 
         return $response;
@@ -150,20 +150,20 @@ class Zym_CouchDb_Connection
      * Delete a database
      *
      * @param string $name
-     * @throws Zym_CouchDb_Exception
-     * @return Zym_CouchDb_Response
+     * @throws Zym_Couch_Exception
+     * @return Zym_Couch_Response
      */
     public function deleteDb($name)
     {
         $name = '/' . $this->_stripSlashes($name) . '/';
-        $request = new Zym_CouchDb_Request($name, Zym_CouchDb_Request::DELETE);
+        $request = new Zym_Couch_Request($name, Zym_Couch_Request::DELETE);
 
         $response = $this->send($request);
 
         if ($response->getStatus() == 404) {
-            require_once 'Zym/CouchDb/Exception.php';
+            require_once 'Zym/Couch/Exception.php';
 
-            throw new Zym_CouchDb_Exception('Database doesn\'t exists.');
+            throw new Zym_Couch_Exception('Database doesn\'t exists.');
         }
 
         return $response;
