@@ -230,7 +230,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
                 $addDirectoryFunc = 'add' . ucfirst($name) . 'Directory';
                 $dir              = $this->getApp()->getPath(Zym_App::PATH_APP, $dir);
                 
-                call_user_func_array(array($this->getFrontController(), $addDirectoryFunc), array($dir, $key));
+                $this->getFrontController()->$addDirectoryFunc($dir, $key);
             }
         }
     }
@@ -260,7 +260,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
             if (!empty($value)) {
                 // Convert to camelCase (setDefaultController, setDefaultModule...)
                 $setDefaultFunc = 'setDefault' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-                call_user_func_array(array($frontController, $setDefaultFunc), array($value));
+                $frontController->$setDefaultFunc($value);
             }
         }
     }
@@ -300,7 +300,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
                 }
                 
                 $func = 'set' . ucfirst($key);
-                call_user_func_array(array($this->getFrontController(), $func), array($value));
+                $this->getFrontController()->$func($value);
             }
         }
     }

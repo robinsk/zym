@@ -105,8 +105,8 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
         $host = trim($host, $this->_urlDelimiter);
 
         if (!empty($host)) {
-            // Separate foo.com into array('foo', 'com')
-            $domains = explode(self::DOMAIN_SEPARATOR, $host);
+            // Separate foo.com into array('com', 'foo')
+            $domains = array_reverse(explode(self::DOMAIN_SEPARATOR, $host));
 
             // Parse out url variables
             foreach ($domains as $pos => $part) {
@@ -122,7 +122,7 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
                     $this->_hostParts[$pos] = array('regex' => $part);
 
                     // Increment if not a *.*
-                    if ($part != self::DOMAIN_WILDCARD) {
+                    if ($part !== self::DOMAIN_WILDCARD) {
                         $this->_hostStaticCount++;
                     }
                 }
@@ -165,7 +165,7 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
 
             // Assign host and remove any :42 port indicators
             $requestHost = preg_replace('/' . self::PORT_SEPARATOR . '\d+/', '', $requestHost);
-            $this->_host = $domains = explode(self::DOMAIN_SEPARATOR, $requestHost);
+            $this->_host = array_reverse(explode(self::DOMAIN_SEPARATOR, $requestHost));
 
         }
         
@@ -231,7 +231,7 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
             }
         }
 
-        $return = $this->_values + $this->_params + $this->_defaults;
+        $return = $this->_values + $this->_defaults;
 
         // Check if all static mappings have been met
         if ($this->_hostStaticCount != $hostStaticCount) {
@@ -250,7 +250,7 @@ class Zym_Controller_Router_Route_HttpHost extends Zend_Controller_Router_Route
         // Set route match cache
         self::$_matchCache[$matchKey] = true;
         
-        return parent::match($path);
+        return array_merge($return, parent::match($path));
     }
     
     /**
