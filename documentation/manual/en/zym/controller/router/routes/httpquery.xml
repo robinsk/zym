@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.router.routes.httpquery" version="5.0">
+    <title>HttpQuery</title>
+
+    <para>
+        Allows routing using standard HTTP get queries
+        Otherwise known as the "old" way of using params (index.php?module=controller)
+    </para>
+    
+    <para>
+        This router is meant to override the default route (will kill other routes)
+        to allow routing to work with HTTP params. It also handles generation
+        of urls via ZF's url helpers.
+    </para>
+</section>
