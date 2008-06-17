@@ -10,18 +10,29 @@
  * @category Zym
  * @package Zym_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
  * Cache view helper
+ * 
+ * This helper will prefix the cache id with the current file
+ * 
+ * <code>
+ * <? if ($module = $this->cache('module')) : ?>
+ *     <?= $module; ?>
+ * <? else : ?>
+ *     <?= $module = $this->action('module', 'foo'); ?>
+ *     <? $this->cache()->save($module); ?>
+ * <? endif; ?>
+ * </code>
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @package Zym_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_View_Helper_Cache extends Zym_View_Helper_Abstract
 {
