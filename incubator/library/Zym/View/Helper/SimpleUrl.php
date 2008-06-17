@@ -24,9 +24,9 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
  * @license http://www.zym-project.com/license New BSD License
  * @package Zym_View
  * @subpackage Helper
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Helper_UrlSimple
+class Zym_View_Helper_SimpleUrl
 {
     /**
      * Url action helper
@@ -46,7 +46,7 @@ class Zym_View_Helper_UrlSimple
      * @param  array $params
      * @return string
      */
-    public function urlSimple($action, $controller = null, $module = null, array $params = null)
+    public function simpleUrl($action, $controller = null, $module = null, array $params = null)
     {
         if (!$this->_actionHelper instanceof Zend_Controller_Action_Helper_Url) {
             $this->_actionHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
