@@ -1,0 +1,340 @@
+<? $this->headTitle('Navigation Demo') ?>
+<?php $this->headStyle()->captureStart() ?>
+#pageprops {
+    caption-side: bottom;
+    border-collapse: collapse;
+}
+
+#pageprops caption {
+    font-style: italic;
+    font-weight: normal;
+}
+
+#pageprops thead {
+    border-bottom: 1px solid #ccc;
+}
+
+#pageprops td,
+#pageprops th {
+    padding: 0.2em 0.4em;
+    vertical-align: top;
+}
+
+#pageprops tfoot td {
+    padding-top: 1em;
+    font-size: 80%;
+    font-style: italic;
+    text-align: center;
+}
+
+#pageprops col.name {
+    font-family: monospace;
+}
+
+#pageprops col.desc,
+#pageprops col.mvc {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.Zym_Navigation a,
+.example-output a {
+    background-color: transparent;
+}
+
+.example-output,
+.Zym_Navigation {
+    background-color: #f5f5f5;
+    border: 1px dashed #ccc;
+    overflow: auto;
+    padding: 0.5em;
+}
+
+.Zym_Navigation ul {
+    margin: 0pt;
+}
+<?php $this->headStyle()->captureEnd() ?>
+<div>
+    <h1>Navigation Demo</h1>
+    <p>
+        <code>Zym_Navigation</code> is a component for managing a hierarchical
+        structure of (logical representations of) web pages. It can be used for
+        creating menus, breadcrumbs and sitemaps, and may be iterated and
+        traversed in your very own way.
+    </p>
+    <p>
+        In this page:
+        <ul>
+            <li><a href="#creating">Creating a navigation structure</a></li>
+            <li><a href="#menu">Zym_View_Helper_Menu</a></li>
+            <li><a href="#breadcrumbs">Zym_View_Helper_Breadcrumbs</a></li>
+            <li><a href="#sitemap">Zym_View_Helper_Sitemap</a></li>
+        </ul>
+    </p>
+
+
+    <h2><a name="creating"></a>Creating a navigation structure</h2>
+    <p>
+        When creating a navigation structure, there are a two types of
+        pages supported, and a number of options available. The two
+        types are:
+        <ol>
+            <li>Zym_Navigation_Page_Mvc</li>
+            <li>Zym_Navigation_Page_Uri</li>
+        </ol>
+    </p>
+    <p>
+        The first is meant for "internal" pages, and is defined using
+        MVC parameters like module, controller, action, params, and route
+        name. The second type can also be used for internal pages, but
+        is generally considered to be off-site, e.g. if you want to
+        link to another domain, or have some other logic to it.
+    </p>
+    <p>
+        Below are the available options for the two page types.
+    </p>
+    <table id="pageprops" cellpadding="0" cellspacing="0">
+        <caption>Table 1: Page options</caption>
+        <colgroup span="4">
+            <col class="name"></col>
+            <col class="desc"></col>
+            <col class="mvc"></col>
+            <col class="uri"></col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Description</th>
+                <th>MVC</th>
+                <th>URI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>label</td>
+                <td>
+                    A label for the page. This will be used in
+                    the view helpers described below.
+                </td>
+                <td>R</td>
+                <td>R</td>
+            </tr>
+            <tr>
+                <td>uri</td>
+                <td>Specifies the page's URI.</td>
+                <td>&ndash;</td>
+                <td>R</td>
+            </tr>
+            <tr>
+                <td>action</td>
+                <td>Specifies the page's action.</td>
+                <td>R</td>
+                <td>&ndash;</td>
+            </tr>
+            <tr>
+                <td>controller</td>
+                <td>Specifies the page's controller.</td>
+                <td>R</td>
+                <td>&ndash;</td>
+            </tr>
+            <tr>
+                <td>module</td>
+                <td>
+                    Specifies the page's module.
+                    Defaults to <code>default</code>.
+                </td>
+                <td>O</td>
+                <td>&ndash;</td>
+            </tr>
+            <tr>
+                <td>route</td>
+                <td>
+                    Specifies a route name to use when assembling URLs.
+                    Defaults to <code>default</code>.
+                </td>
+                <td>O</td>
+                <td>&ndash;</td>
+            </tr>
+            <tr>
+                <td>params</td>
+                <td>
+                    An associative array of params to use when
+                    assembling the URL. Defaults to none.
+                </td>
+                <td>O</td>
+                <td>&ndash;</td>
+            </tr>
+            <tr>
+                <td>reset_params</td>
+                <td>
+                    Whether the current request's params should be
+                    reset when assembling the URL. Defaults to
+                    <code>true</code>.
+                </td>
+                <td>O</td>
+                <td>&ndash;</td>
+            </tr>
+            <tr>
+                <td>title</td>
+                <td>
+                    A more descriptive title that can be used to
+                    provide some description for a page. If set,
+                    this property will be used in
+                    <code>Zym_View_Helper_Menu</code>.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+            <tr>
+                <td>active</td>
+                <td>
+                    Whether the page should be considered active
+                    for the current request. If active is false or
+                    not given, MVC pages will check its properties
+                    against the request object upon calling
+                    <code>$page-&gt;isActive()</code>.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+            <tr>
+                <td>visible</td>
+                <td>
+                    Whether the page should be considered visible
+                    for the current request. Invisible pages are
+                    skipped by the view helpers below.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>
+                    An id tag/attribute that may be used for the page,
+                    typically in an anchor element.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+            <tr>
+                <td>class</td>
+                <td>
+                    A CSS class that may be used for the page,
+                    typically in an anchor element.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+            <tr>
+                <td>target</td>
+                <td>
+                    Specifies a target that may be used for the page,
+                    typically in an anchor element.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+            <tr>
+                <td>position</td>
+                <td>
+                    Works like <code>order</code> for elements in Zend_Form.
+                    If specified, the page will be iterated in a specific
+                    order, meaning you can force a page to be iterated first
+                    by setting position to something like -100.
+                </td>
+                <td>O</td>
+                <td>O</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    R = required, O = optional, &ndash; = not available
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <p>
+        Any other (unrecognized) properties will be stored in the page
+        as custom properties. Such properties can be retrieved and set
+        using the magic overloads, e.g. <code>$page-&gt;foo = 'bar';</code>.
+        Examples of custom properties that are used can be found in the
+        view helper Zym_View_Helper_Sitemap, namely <code>lastmod</code>,
+        <code>changefreq</code>, and <code>priority</code>.
+    </p>
+    <p>
+        So, with that in mind, let's create an example site structure:
+    </p>
+    <p class="example-output">
+<?= $this->navSetup; ?> 
+    </p>
+    <p>
+        The navigation instance is now in the registry, and is found
+        automatically by the view helpers below because of the key
+        <code>Zym_Navigation</code>. The navigation structure may also
+        be created using <code>Zym_App_Resource_Navigation</code>, in
+        which case it will be set up from a config, and put it in the
+        registry.
+    </p>
+
+
+    <h2><a name="menu"></a>Zym_View_Helper_Menu</h2>
+    <p>
+        A menu can be printed using the view helper Zym_View_Helper_Menu. To
+        print the menu using 4 initial spaces of indentation, simply do 
+        <code>&lt;?= $this-&gt;menu()-&gt;toString(4); ?&gt;</code>, or just
+        <code>&lt;?= $this-&gt;menu(); ?&gt;</code> without indentation.
+        The output will be:
+    <?= "\n" . $this->menu()->toString(4); ?>
+    </p>
+    <p>
+        This look and feel can easily be configured with CSS.
+    </p>
+
+
+    <h2><a name="breadcrumbs"></a>Zym_View_Helper_Breadcrumbs</h2>
+    <p>
+        Breadcrumbs are used to indicate where you are in the sitemap.
+        To print breadcrumbs, all you have to do is:
+        <code>&lt;?= $this-&gt;breadcrumbs(); ?&gt;</code>. This will
+        print breadcrumbs from the deepest active page and upwards
+        to the root, which in the structure above will be:<br />
+    </p>
+    <p class="example-output">
+    <?= $this->breadcrumbs(); ?>
+    </p>
+<?php
+$this->breadcrumbs()->setLinkLast(true);
+$this->breadcrumbs()->setSeparator(' <span class="separator"> &#9654; </span> ');
+?>
+    <p>
+        Customize it by specifying some options, and print it again:
+<code>
+&lt;?php<br/>
+$this-&gt;breadcrumbs()-&gt;setLinkLast(true);<br/>
+$this-&gt;breadcrumbs()-&gt;setSeparator(&apos;&lt;span class=&quot;separator&quot;&gt; &amp;#9654; &lt;/span&gt;&apos;);<br/>
+echo $this-&gt;breadcrumbs();<br/>
+?&gt;</code>
+    </p>
+    <p class="example-output">
+        <?= $this->breadcrumbs(); ?>
+    </p>
+
+
+    <h2><a name="sitemap"></a>Zym_View_Helper_Sitemap</h2>
+    <p>
+        This view helper prints a navigation structure as an XML sitemap,
+        as defined here: <a href="http://www.sitemaps.org/protocol.php">
+        http://www.sitemaps.org/protocol.php</a>. To print the XML, all you
+        do is <code>&lt;?= $this-&gt;sitemap(); ?&gt;</code>. The sitemap
+        can be validated using Zym's sitemap validators and/or using
+        schema validation. Several options are available, such as turning
+        off XML declaration, setting maximum depth to print sitemap for,
+        and whether output should be pretty-formatted.
+    </p>
+    <?php
+    $this->sitemap()->setFormatOutput(true);
+    ?>
+    <div class="example-output"><pre><?= htmlentities($this->sitemap()); ?></pre></div>
+
+</div>
