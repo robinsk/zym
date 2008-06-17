@@ -49,11 +49,14 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         Zym_App::ENV_DEFAULT => array(
             'cache'   => false,
             'adapter' => 'tmx',
-            'data'    => array(),
+            'data'    => 'locale', // Relative to data directory
             'locale'  => null,
             'options' => array(),
         
-            'registry' => 'Zend_Translate'
+            'registry' => array(
+                'enabled' => true,
+                'key'     => 'Zend_Translate'
+            )
         )
     );
 
@@ -69,5 +72,41 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
             $cache = Zym_Cache::factory('Core');
             Zend_Translate::setCache($cache);
         }
+        
+        $adapter = $config->get('adapter');
+        $data    = $this->_parseDataPath($config->get('data'));
+        $locale  = ($locale = $config->get('locale')) ? $locale : null;
+        $options = $config->get('options')->toArray();
+        
+        $translate = new Zend_Translate($adapter, $data, $locale, $options);
+        
+        if ((bool) $config->get('registry')->get('enabled')) {
+            /**
+             * @see Zend_Registry
+             */
+            require_once 'Zend/Registry.php';
+            
+            Zend_Registry::set($config->get('registry')->get('key'), $translate);
+        }
+    }
+    
+    /**
+     * Parse data path and make it relative to data dir
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    protected function _parseDataPath($data)
+    {
+        if (is_string($data)) {
+            // Change path relative to data dir
+            return $this->getApp()->getPath(Zym_App::PATH_DATA, $data);
+        }
+        
+        if ($data instanceof Zend_Config) {
+            return $data->toArray();
+        }
+        
+        return $data;
     }
 }
