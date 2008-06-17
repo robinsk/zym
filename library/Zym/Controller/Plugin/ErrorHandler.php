@@ -100,6 +100,9 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
     
         'Zym_Controller_Dispatcher_Exception_Interface' => self::EXCEPTION_NO_CONTROLLER,
         'Zym_Controller_Action_Exception_Interface'     => self::EXCEPTION_NO_ACTION,
+    
+        'Zend_Controller_Action_Helper'        => self::EXCEPTION_OTHER,
+        'Zym_Controller_Action_Helper'         => self::EXCEPTION_OTHER
     );
 
     /**
