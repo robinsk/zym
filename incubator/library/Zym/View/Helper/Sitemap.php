@@ -472,10 +472,6 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
      */
     public function __toString()
     {
-        try {
         return $this->toString();
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
     }
 }
