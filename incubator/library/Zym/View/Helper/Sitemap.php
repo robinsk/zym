@@ -313,7 +313,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
             $url = dirname($url) . '/' . $href;
             //exit("got url '$url'");
         }
-        
+
         return $this->_xmlEscape($url);
     }
     
@@ -351,10 +351,10 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
             require_once 'Zym/Validate/Sitemap/Priority.php';
             
             // create validators
-            $locValidator = new Zym_Validate_Sitemap_Loc();
-            $lastmodValidator = new Zym_Validate_Sitemap_Lastmod();
+            $locValidator        = new Zym_Validate_Sitemap_Loc();
+            $lastmodValidator    = new Zym_Validate_Sitemap_Lastmod();
             $changefreqValidator = new Zym_Validate_Sitemap_Changefreq();
-            $priorityValidator = new Zym_Validate_Sitemap_Priority();    
+            $priorityValidator   = new Zym_Validate_Sitemap_Priority();    
         }
         
         // create document
@@ -378,7 +378,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
             // get absolute url from page
             $url = $this->_getUrl($page);
             $urlSet->appendChild($urlNode);
-            
+          
             if ($this->getUseSitemapValidators() &&
                 !$locValidator->isValid($url)) {
                 $msg = "Invalid sitemap URL: '$url'";
