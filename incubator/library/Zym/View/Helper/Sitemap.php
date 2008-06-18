@@ -179,7 +179,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
      */
     public function setUseXmlDeclaration($useXmlDecl)
     {
-        $this->_useXmlDeclaration = (bool)$useXmlDecl;
+        $this->_useXmlDeclaration = (bool) $useXmlDecl;
     }
     
     /**
@@ -277,8 +277,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
     protected function _getServerUrl()
     {
         if (!isset($this->_serverUrl)) {
-            require_once 'Zym/View/Helper/AbsoluteUrl.php';
-            $this->_serverUrl = new Zym_View_Helper_AbsoluteUrl();
+            $this->_serverUrl = $this->getView()->getHelper('AbsoluteUrl');
             $this->_serverUrl = $this->_serverUrl->absoluteUrl(array(), 'default', true);
         }
         
@@ -465,5 +464,19 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
     public function toString($indent = null)
     {
         return $this->renderSitemap(null);
+    }
+    
+    /**
+     * Tostring
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        try {
+        return $this->toString();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
