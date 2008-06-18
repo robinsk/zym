@@ -277,8 +277,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
     protected function _getServerUrl()
     {
         if (!isset($this->_serverUrl)) {
-            $this->_serverUrl = $this->getView()->getHelper('AbsoluteUrl');
-            $this->_serverUrl = $this->_serverUrl->absoluteUrl(array(), 'default', true);
+            $this->_serverUrl = $this->getView()->serverUrl();
         }
         
         return $this->_serverUrl;
