@@ -2,14 +2,15 @@
 $config = new Zend_Config(array(
     'default_backend' => 'Apc',
     
-    'frontends' => array(
+    'frontends'       => array(
         'core' => array(
-            'automatic_serialization' => true
+            'automatic_serialization' => true,
+            'cache_id_prefix'         => 'MyAppPrefix_'
         )
     ),
     
-    'backends' => array(
-        'apc' => array(
+    'backends'       => array(
+        'apc'  => array(
             // Apc has no configuration options
             // so this array is not required;
             // however, we specify it for example
