@@ -265,7 +265,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
             $this->_serverUrl = $uri->getUri();
         } else {
             require_once 'Zend/Uri/Exception.php';
-            throw new Zend_Uri_Exception("Ivalid URI: '$serverUrl'");
+            throw new Zend_Uri_Exception("Invalid URI: '$serverUrl'");
         }
     }
     
@@ -277,9 +277,9 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
     protected function _getServerUrl()
     {
         if (!isset($this->_serverUrl)) {
-            require_once 'Zym/View/Helper/ServerUrl.php';
-            $this->_serverUrl = new Zym_View_Helper_ServerUrl();
-            $this->_serverUrl = $this->_serverUrl->serverUrl(false);
+            require_once 'Zym/View/Helper/AbsoluteUrl.php';
+            $this->_serverUrl = new Zym_View_Helper_AbsoluteUrl();
+            $this->_serverUrl = $this->_serverUrl->absoluteUrl(array(), 'default', true);
         }
         
         return $this->_serverUrl;

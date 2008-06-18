@@ -90,6 +90,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 ),
                 
                 'stream' => array(
+                    'flag'     => null,
                     'protocol' => null,
                     'wrapper'  => null,
                     'filter'   => array()
@@ -356,7 +357,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     protected function _setupViewStreams(Zym_View_Abstract $view, Zend_Config $config)
     {
         // Enable/Disable
-        if ($flag = $config->get('flag')) {
+        if ($flag = $config->get('flag') && $flag !== null) {
             $view->setStreamFlag((bool) $flag);
         }
         

@@ -41,8 +41,6 @@ class Default_IndexController extends Zym_Controller_Action_Abstract
                echo 'require_once \'' . str_ireplace('_', '/', $class) . '.php\';'.'<br />';
             }
         }
-        */
-        
-        print_r($this->getRequest()->getServer());
+        */        
     }
 }
