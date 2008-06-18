@@ -29,5 +29,20 @@ class Default_IndexController extends Zym_Controller_Action_Abstract
      * @return void
      */
     public function indexAction()
-    {}
+    {
+        /*
+        $classes = array_merge(get_declared_classes(), get_declared_interfaces());
+
+        $zendZym = array();
+        foreach ($classes as $class) {;
+            if (strtolower(substr($class, 0, 4)) == 'zend' || strtolower(substr($class, 0, 3)) == 'zym') {
+               $zendZym[] = str_ireplace('_', '/', $class) . '.php';
+               
+               echo 'require_once \'' . str_ireplace('_', '/', $class) . '.php\';'.'<br />';
+            }
+        }
+        */
+        
+        print_r($this->getRequest()->getServer());
+    }
 }

@@ -16,9 +16,10 @@
     
     <para>
         Setting up the factory is simple because it only has to be done once earlier
-        in the process, While configuring the component is recommended, it is not 
-        required; however, the lack of default configuration options will revert 
-        the factory to a <classname>Zend_Cache</classname> feature set.
+        in the application. While configuring the component is recommended, it is not 
+        required. If a default backend is not set, it will use 
+        <classname>Zend_Cache_Backend_File</classname> as the backend with default
+        options. In this case, cache files will be stored to the '/tmp'.
     </para>
     
     <example xml:id="zym.cache.example.config">
