@@ -229,7 +229,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     public function render($name)
     {
         // Revert to no stream
-        if ($this->getStreamFlag()) {
+        if (!$this->getStreamFlag()) {
             return parent::render($name);
         }
         
