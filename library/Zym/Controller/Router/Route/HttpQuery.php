@@ -9,8 +9,8 @@
  *
  * @category Zym
  * @package Zym_Controller
- * @subpackage Router
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @subpackage Router_Route
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
 
@@ -31,8 +31,8 @@ require_once 'Zend/Controller/Router/Route.php';
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_Controller
- * @subpackage Router
- * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @subpackage Router_Route
+ * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
 {   
