@@ -36,6 +36,10 @@ class Zym_View extends Zym_View_Abstract
      */
     protected function _run()
     {
-        include $this->getStreamProtocol() . '://' . func_get_arg(0);
+        if ($this->getStreamFlag()) {
+            include $this->getStreamProtocol() . '://' . func_get_arg(0);
+        } else {
+            include func_get_arg(0);
+        }
     }
 }

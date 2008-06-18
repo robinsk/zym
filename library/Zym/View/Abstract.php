@@ -46,6 +46,13 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     private $_streamFilter = array();
     
     /**
+     * Flag to indicate whether to use streams
+     *
+     * @var boolean
+     */
+    private $_streamFlag   = true;
+    
+    /**
      * Stream protocol to use
      *
      * @var string
@@ -129,6 +136,33 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     }
     
     /**
+     * Set stream flag
+     * 
+     * Whether to disable or enable use of stream wrappers
+     *
+     * @param string $flag
+     * @return Zym_View_Abstract
+     */
+    public function setStreamFlag($flag)
+    {   
+        $this->_streamFlag = (bool) $flag;
+        
+        return $this;
+    }
+    
+    /**
+     * Get stream flag
+     * 
+     * Whether streams are enabled or not
+     *
+     * @return string
+     */
+    public function getStreamFlag()
+    {
+        return $this->_streamFlag;
+    }
+    
+    /**
      * Set view stream wrapper class
      * 
      * Protocol must be alphanumeric
@@ -165,8 +199,6 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     
     /**
      * Set view stream wrapper class
-     *
-     * Set to null to disable streams
      * 
      * @param string $class
      * @return Zym_View_Abstract
@@ -196,14 +228,14 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      */
     public function render($name)
     {
+        // Revert to no stream
+        if ($this->getStreamFlag()) {
+            return parent::render($name);
+        }
+        
         // Get stream class
         $stream         = $this->getStreamWrapper();
         $streamProtocol = $this->getStreamProtocol();
-        
-        // Revert to no stream
-        if ($stream === null) {
-            return parent::render($name);
-        }
         
         // Do extra work if something already registered our protocol
         $previousWrapperExists = false;
