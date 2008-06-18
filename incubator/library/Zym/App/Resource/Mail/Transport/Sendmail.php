@@ -42,7 +42,7 @@ class Zym_App_Resource_Mail_Transport_Sendmail implements Zym_App_Resource_Mail_
      */
     public static function getTransport(Zend_Config $config = null) 
     {
-        $parameters =  isset($config->parameters) ? $config->parameters : null;        
+        $parameters =  isset($config->parameters) ? $config->get('parameters') : null;        
         return new Zend_Mail_Transport_Sendmail($parameters);
     }
 }
