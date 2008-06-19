@@ -76,8 +76,8 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         $adapter = $config->get('adapter');
         $data    = $this->_parseDataPath($config->get('data'));
         $locale  = ($locale = $config->get('locale')) ? $locale : null;
-        $options = $config->get('options')->toArray();
-        
+        $options = $this->_parseOptions($config->get('options')->toArray());
+
         $translate = new Zend_Translate($adapter, $data, $locale, $options);
         
         if ((bool) $config->get('registry')->get('enabled')) {
@@ -108,5 +108,19 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         }
         
         return $data;
+    }
+    
+    /**
+     * Parse options
+     *
+     * @param array $options
+     */
+    protected function _parseOptions(array $options)
+    {
+        if (isset($options['scan'])) {
+            $options['scan'] = (int) $options['scan'];
+        }
+        
+        return $options;
     }
 }

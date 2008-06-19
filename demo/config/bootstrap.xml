@@ -40,7 +40,15 @@ set from <default> for the production environment.
             <autoload />
             <php />
             <cache />
-            <locale/>
+            <locale />
+            <translate>
+                <config>
+                    <adapter>gettext</adapter>
+                    <options>
+                        <scan>1</scan>
+                    </options>
+                </config>
+            </translate>
             <session />
             <view />
             <layout />

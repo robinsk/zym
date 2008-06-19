@@ -1,0 +1,36 @@
+<?
+$this->headTitle('Translation Demo')?>
+<div>
+    <h1>Translation Demo</h1>
+    
+    <p>Translations and locales are an important aspect of applications that
+    will be used by an international crowd. Zym makes this easier by
+    integrating the setup of locales and translations into Zym_App. This
+    allows you to use the translation features of ZF without having to
+    manually set them up.</p>
+    
+    <p>Below are demos of strings being translated:</p>
+    <table>
+    	<tr>
+    		<th colspan="2">Hello World!</th>
+    	</tr>
+    	<tr>
+    	    <td>en</td><td><?= $this->translate('Hello World!', 'en'); ?></td>
+	    </tr>
+	    <tr>
+    	    <td>de</td><td><?= $this->translate('Hello World!', 'de'); ?></td>
+        </tr>
+    </table>
+    
+    <table>
+        <tr>
+            <th colspan="2">notDigits error from the Digits validate class</th>
+        </tr>
+        <tr>
+            <td>en</td><td><?= $this->translate('notSame', 'en'); ?></td>
+        </tr>
+        <tr>
+            <td>de</td><td><?= $this->translate('notSame', 'de'); ?></td>
+        </tr>
+    </table>
+</div>

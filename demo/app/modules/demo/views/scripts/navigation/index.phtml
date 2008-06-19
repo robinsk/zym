@@ -1,5 +1,5 @@
 <? $this->headTitle('Navigation Demo') ?>
-<?php $this->headStyle()->captureStart() ?>
+<? $this->headStyle()->captureStart(); ?>
 #pageprops {
     caption-side: bottom;
     border-collapse: collapse;
@@ -53,7 +53,7 @@
 .Zym_Navigation ul {
     margin: 0pt;
 }
-<?php $this->headStyle()->captureEnd() ?>
+<? $this->headStyle()->captureEnd(); ?>
 <div>
     <h1>Navigation Demo</h1>
     <p>
@@ -62,6 +62,7 @@
         creating menus, breadcrumbs and sitemaps, and may be iterated and
         traversed in your very own way.
     </p>
+    
     <p>
         In this page:
         <ul>
@@ -71,7 +72,6 @@
             <li><a href="#sitemap">Zym_View_Helper_Sitemap</a></li>
         </ul>
     </p>
-
 
     <h2><a name="creating"></a>Creating a navigation structure</h2>
     <p>
@@ -332,9 +332,7 @@ echo $this-&gt;breadcrumbs();<br/>
         off XML declaration, setting maximum depth to print sitemap for,
         and whether output should be pretty-formatted.
     </p>
-    <?php
-    $this->sitemap()->setFormatOutput(true);
-    ?>
+    <? $this->sitemap()->setFormatOutput(true); ?>
     <div class="example-output"><pre><?= htmlentities($this->sitemap()); ?></pre></div>
 
 </div>

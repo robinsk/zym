@@ -32,5 +32,5 @@ require_once 'Zym/App.php';
  */
 require_once 'Zend/Controller/Front.php';
 
-Zym_App::run(PATH_PROJECT . 'config/bootstrap.xml', Zym_App::ENV_PRODUCTION);
+Zym_App::run(PATH_PROJECT . 'config/bootstrap.xml', Zym_App::ENV_DEVELOPMENT);
 Zend_Controller_Front::getInstance()->dispatch();
