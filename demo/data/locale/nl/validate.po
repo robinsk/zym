@@ -1,0 +1,124 @@
+"Project-Id-Version: Zend Framework\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Geoffrey Tran <spotsec.com>\n"
+"Language-Team: Zym <mailto:zym-framework@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+
+msgid "notAlnum"
+msgstr "Verdi kan bare bestå av alfanumeriske tegn"
+
+msgid "stringEmpty"
+msgstr "Kan ikke ha en tom streng"
+
+msgid "notAlpha"
+msgstr "Verdien kan bare bestå av alfabetiske tegn"
+
+msgid "notBetween"
+msgstr "Verdi må være mellom \"%min%\" og \"%max%\", inklusivt"
+
+msgid "notBetweenStrict"
+msgstr "Verdi må være mellom \"%min%\" og \"%max%\", eksklusivt"
+
+msgid "ccnumLength"
+msgstr "\"%value%\" må være mellom 13 og 19 tegn"
+
+msgid "ccnumChecksum"
+msgstr "Luhn algorithm (mod-10 checksum) feilet på \"%value%\""
+
+msgid "dateNotYYYY-MM-DD"
+msgstr "\"%value%\" er ikke på formatet ÅÅÅÅ-MM-DD"
+
+msgid "dateInvalid"
+msgstr "\"%value%\" ser ikke ut til å være en gyldig dato"
+
+msgid "dateFalseFormat"
+msgstr "\"%value%\" passer ikke det gitte datoformatet"
+
+msgid "notDigits"
+msgstr "\"%value%\" inneholder ikke-numeriske tegn"
+
+msgid "emailAddressInvalid"
+msgstr "\"%value%\" er ikke en gyldig epost-adresse på formatet lokal-del@vertsnavn"
+
+msgid "emailAddressInvalidHostname"
+msgstr "\"%hostname%\" er ikke et gyldig vertsnavn for epost-adressen \"%value%\""
+
+msgid "emailAddressInvalidMxRecord"
+msgstr "\"%hostname%\" ser ikke ut til å ha et gyldig MX-record for epost-adressen \"%value%\""
+
+msgid "emailAddressDotAtom"
+msgstr "\"%localPart%\" matcher ikke formatet \"dot-atom\""
+
+msgid "emailAddressQuotedString"
+msgstr "\"%localPart%\" matcher ikke formatet \"quoted-string\""
+
+msgid "emailAddressInvalidLocalPart"
+msgstr "\"%localPart%\" er en ugyldig lokal-del for epost-adressen \"%value%\""
+
+msgid "notFloat"
+msgstr "\"%value%\" ser ikke ut til å være et flyttall"
+
+msgid "notGreaterThan"
+msgstr "Verdi må være minst \"%min%\""
+
+msgid "notHex"
+msgstr "\"%value%\" inneholder ikke-hexadesimale tegn"
+
+msgid "hostnameIpAddressNotAllowed"
+msgstr "\"%value%\" ser ut til å være en IP-adresse, men IP-adresser er ikke tillatt"
+
+msgid "hostnameUnknownTld"
+msgstr "\"%value%\" ser ut til å være et DNS-vertsnavn, men TLD matcher ikke listen med kjente TLD"
+
+msgid "hostnameDashCharacter"
+msgstr "\"%value%\" ser ut til å være et DNS-vertsnavn, men inneholder en strek (-) på en gyldig posisjon"
+
+msgid "hostnameInvalidHostnameSchema"
+msgstr "\"%value%\" ser ut til å være et DNS-vertsnavn, men matcher ikke skjema for TLD \"%tld%\""
+
+msgid "hostnameUndecipherableTld"
+msgstr "\"%value%\" ser ut til å være et DNS-vertsnavn, men kan ikke hente ut TLD"
+
+msgid "hostnameInvalidHostname"
+msgstr "\"%value%\" ser ikke ut til å være et gyldig DNS-vertsnavn"
+
+msgid "hostnameInvalidLocalName"
+msgstr "\"%value%\" ser ikke ut til å være et gyldig vertsnavn for lokalnettverk"
+
+msgid "hostnameLocalNameNotAllowed"
+msgstr "\"%value%\" ser ut til å være et lokalt vertsnavn, men lokale vertsnavn er ikke tillatt"
+
+msgid "notSame"
+msgstr "Verdier må være like"
+
+msgid "missingToken"
+msgstr "Det er ikke gitt noen tegn å matche mot"
+
+msgid "notInArray"
+msgstr "\"%value%\" ble ikke funnet i samlingen"
+
+msgid "notInt"
+msgstr "\"%value%\" ser ikke ut til å være et heltall"
+
+msgid "notIpAddress"
+msgstr "\"%value%\" ser ikke ut til å være en gyldig IP-adresse"
+
+msgid "notLessThan"
+msgstr "\"%value%\" må være mindre enn \"%max%\""
+
+msgid "isEmpty"
+msgstr "Kan ikke ha tom verdi"
+
+msgid "regexNotMatched"
+msgstr "\"%value%\" matcher ikke mønsteret \"%pattern%\""
+
+msgid "stringLengthTooShort"
+msgstr "\"%value%\" må være minst %min% tegn"
+
+msgid "stringLengthTooLong"
+msgstr "\"%value%\" kan ikke være mer enn %max% tegn"
+
