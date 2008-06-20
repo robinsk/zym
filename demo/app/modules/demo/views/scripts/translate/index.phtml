@@ -17,20 +17,28 @@ $this->headTitle('Translation Demo')?>
     	<tr>
     	    <td>en</td><td><?= $this->translate('Hello World!', 'en'); ?></td>
 	    </tr>
+        <tr>
+            <td>nb_NO</td><td><?= $this->translate('Hello World!', 'nb_NO'); ?></td>
+        </tr>
 	    <tr>
-    	    <td>de</td><td><?= $this->translate('Hello World!', 'de'); ?></td>
+    	    <td>nl</td><td><?= $this->translate('Hello World!', 'nl'); ?></td>
         </tr>
     </table>
     
     <table>
         <tr>
-            <th colspan="2">notDigits error from the Digits validate class</th>
+            <th colspan="2">Not same error from validator</th>
         </tr>
         <tr>
             <td>en</td><td><?= $this->translate('notSame', 'en'); ?></td>
         </tr>
         <tr>
-            <td>de</td><td><?= $this->translate('notSame', 'de'); ?></td>
+            <td>nb_NO</td><td><?= $this->translate('notSame', 'nb_NO'); ?></td>
+        </tr>
+        <tr>
+            <td>nl</td><td><?= $this->translate('notSame', 'nl'); ?></td>
         </tr>
     </table>
+    
+    <? var_dump($this->translate()->getTranslator()->getList()); ?>
 </div>
