@@ -1,0 +1,126 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Zend Framework\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Geoffrey Tran <spotsec.com>\n"
+"Language-Team: Zym <mailto:zym-framework@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Dutch\n"
+
+msgid "notAlnum"
+msgstr "\"%value%\" bevat niet-alphabetische of niet-numerieke karakters"
+
+msgid "stringEmpty"
+msgstr "\"%value%\" is leeg een lege string"
+
+msgid "notAlpha"
+msgstr "\"%value%\" heeft niet-alphabetische karakters"
+
+msgid "notBetween"
+msgstr "\"%value%\" is geen getal van \"%min%\" tot en met \"%max%\""
+
+msgid "notBetweenStrict"
+msgstr "\"%value%\" is geen getal tussen de \"%min%\" en \"%max%\""
+
+msgid "ccnumLength"
+msgstr "\"%value%\" moet tussen de 13 en 19 karakters bevatten"
+
+msgid "ccnumChecksum"
+msgstr "Luhn algoritme (mod-10 checksum) niet succesvol op \"%value%\""
+
+msgid "dateNotYYYY-MM-DD"
+msgstr "\"%value%\" is niet in het YYYY-MM-DD formaat"
+
+msgid "dateInvalid"
+msgstr "\"%value%\" is geen geldige datum"
+
+msgid "dateFalseFormat"
+msgstr "\"%value%\" voldoet niet aan het gegeven datum formaat"
+
+msgid "notDigits"
+msgstr "\"%value%\" bevat niet-numerieke karakters"
+
+msgid "emailAddressInvalid"
+msgstr "\"%value%\" is geen geldig email adres met het formaat local-part@hostname"
+
+msgid "emailAddressInvalidHostname"
+msgstr "\"%hostname%\" is een ongeldige hostname voor het email adres \"%value%\""
+
+msgid "emailAddressInvalidMxRecord"
+msgstr "\"%hostname%\" lijkt geen geldig MX record te hebben voor het email adres \"%value%\""
+
+msgid "emailAddressDotAtom"
+msgstr "\"%localPart%\" kan niet gematched worden tegen het dot-atom formaat"
+
+msgid "emailAddressQuotedString"
+msgstr "\"%localPart%\" kan niet gematched worden tegen het quoted-string formaat"
+
+msgid "emailAddressInvalidLocalPart"
+msgstr "\"%localPart%\" is een ongeldig local gedeelte voor het email address \"%value%\""
+
+msgid "notFloat"
+msgstr "\"%value%\" is geen kommagetal"
+
+msgid "notGreaterThan"
+msgstr "\"%value%\" is niet groter dan \"%min%\""
+
+msgid "notHex"
+msgstr "\"%value%\" bevat niet-hexadecimale karakters"
+
+msgid "hostnameIpAddressNotAllowed"
+msgstr "\"%value%\" lijkt een IP adres te zijn, maar IP adressen zijn niet toegestaan"
+
+msgid "hostnameUnknownTld"
+msgstr "\"%value%\" lijkt een DNS hostname te zijn, maar kan het TLD niet verifieren"
+
+msgid "hostnameDashCharacter"
+msgstr "\"%value%\" lijkt een DNS hostname te zijn, maar bevat een streep (-) op een ongeldige positie"
+
+msgid "hostnameInvalidHostnameSchema"
+msgstr "\"%value%\" lijkt een DNS hostname te zijn, maar kan de hostname niet valideren met het TLD schema \"%tld%\""
+
+msgid "hostnameUndecipherableTld"
+msgstr "\"%value%\" lijkt een DNS hostname te zijn, maar de TLD gedeelte kan niet gelezen worden"
+
+msgid "hostnameInvalidHostname"
+msgstr "\"%value%\" komt niet overeen met de verwachte structuur voor een DNS hostname"
+
+msgid "hostnameInvalidLocalName"
+msgstr "\"%value%\" lijkt geen geldige lokale netwerk naam te zijn"
+
+msgid "hostnameLocalNameNotAllowed"
+msgstr "\"%value%\" lijkt een lokale netwerk naam te zijn, maar deze zijn niet toegestaan"
+
+msgid "notSame"
+msgstr "Waardes zijn niet gelijk"
+
+msgid "missingToken"
+msgstr "Er is geen teken opgegeven waarmee een vergelijken gemaakt kan worden"
+
+msgid "notInArray"
+msgstr "\"%value%\" was niet in de lijst gevonden"
+
+msgid "notInt"
+msgstr "\"%value%\" lijkt geen geheel getal te zijn"
+
+msgid "notIpAddress"
+msgstr "\"%value%\" lijkt geen geldig IP adres te zijn"
+
+msgid "notLessThan"
+msgstr "\"%value%\" is niet minder dan \"%max%\""
+
+msgid "isEmpty"
+msgstr "Er is geen waarde gegeven, terwijl dit wel verplicht is"
+
+msgid "regexNotMatched"
+msgstr "\"%value%\" komt niet overeen met het patroon \"%pattern%\""
+
+msgid "stringLengthTooShort"
+msgstr "\"%value%\" is minder dan %min% karakters lang"
+
+msgid "stringLengthTooLong"
+msgstr "\"%value%\" is langer dan %max% karakters lang"
+
