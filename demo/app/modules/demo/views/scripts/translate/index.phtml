@@ -18,7 +18,7 @@ $this->headTitle('Translation Demo')?>
     	    <td>en</td><td><?= $this->translate('Hello World!', 'en'); ?></td>
 	    </tr>
         <tr>
-            <td>nb_NO</td><td><?= $this->translate('Hello World!', 'nb_NO'); ?></td>
+            <td>nb</td><td><?= $this->translate('Hello World!', 'nb'); ?></td>
         </tr>
 	    <tr>
     	    <td>nl</td><td><?= $this->translate('Hello World!', 'nl'); ?></td>
@@ -33,12 +33,13 @@ $this->headTitle('Translation Demo')?>
             <td>en</td><td><?= $this->translate('notSame', 'en'); ?></td>
         </tr>
         <tr>
-            <td>nb_NO</td><td><?= $this->translate('notSame', 'nb_NO'); ?></td>
+            <td>nb</td><td><?= $this->translate('notSame', 'nb'); ?></td>
         </tr>
         <tr>
             <td>nl</td><td><?= $this->translate('notSame', 'nl'); ?></td>
         </tr>
     </table>
     
-    <? var_dump($this->translate()->getTranslator()->getList()); ?>
+    <p>Available languages:</p>
+    <?= $this->htmlList($this->translate()->getTranslator()->getList()); ?>
 </div>
