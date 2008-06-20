@@ -11,5 +11,5 @@ msgstr ""
 "X-Poedit-Language: English\n"
 
 msgid "Hello World!"
-msgstr "Hei Verden!"
+msgstr "Hallo, verden!"
 
