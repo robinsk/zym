@@ -9,16 +9,105 @@
         <classname>Zend_Application</classname> proposal by Bill Karwin 
         to solve the problem of bootstrapping applications. Most applications 
         have similar bootstraps; however, developing a component that is flexible
-        yet simple enough to use is like preaching a religion. <classname>Zym_App</classname>
+        yet simple enough to use is like preaching a religion to a monkey. <classname>Zym_App</classname>
         follows a <link  xlink:href="http://en.wikipedia.org/wiki/Convention_over_Configuration">convention over configuration</link>
         design pardigm. If you follow Zym's conventions, everything will work 
         out of the box and other developers working on the same project
-        can jump in knowing almost everything they need reducing development time.
-        Although having a convention is good, sometimes developers need to break them,
-        for this reason, flexibility was an important aspect in the design of this
-        component. Almost every aspect of Zym's convention can be changed through
+        can jump in knowing almost everything they need reducing development time
+        wasted on learning the flow of a project. Although having a convention 
+        is good, sometimes developers need to break them, for this reason, flexibility
+        was an important aspect in the design of this component. 
+        Almost every aspect of Zym's convention can be changed through
         configuration (directory structure, config structure etc..).
     </para>
     
-    <xi:include href="app/resources.xml" parse="text" />
+    <para>
+        This component benefits developers by reducing the setup time of projects
+        and provides a logical convention allows other developers to join development
+        without having to learn the differences in design of an application.
+    </para>
+    
+    <para>
+        The way <classname>Zym_App</classname> works is that it dispatches
+        what we call "resources". Instead of building one "God" class that is 
+        does bootstrapping, we modularlised it into resources. This is not a proper
+        name for them, but the name was kept from the proposal it was derived from.
+        The component itself implements the singleton pattern and works very similar
+        to the frontController.
+    </para>
+    
+    <section xml:id="zym.app.environments">
+        <title>Environments</title>
+        
+        <para>
+            Through out the lifecycle of an application, it will go through
+            several phases (Most common are development, production and testing).
+            Environments allow you to configure an application specific for each phase
+            specific phase.
+        </para>
+        
+        <para>
+            <classname>Zym_App</classname> has several constants for the supported
+            environments that all its resources are catered to. Although we cater
+            specifically to these environments, it does not restrict you from
+            creating your own environment. An example of a custom environment
+            would be a "cli" environment used for cli tools.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>Zym_App::ENV_DEFAULT - Contains the default config of every other environment (mostly internal use)</para></listitem>
+            <listitem><para>Zym_App::ENV_DEVELOPMENT - Development environment, most resources enable debugging features</para></listitem>
+            <listitem><para>Zym_App::ENV_PRODUCTION - Production environment, most resources enable caching and disable error reporting</para></listitem>
+            <listitem><para>Zym_App::ENV_TEST - Testing environment, useful for running tests</para></listitem>
+        </itemizedlist>
+        
+        <example xml:id="zym.app.environments.example.setting">
+            <title>Setting an environment</title>
+            
+            <para>
+                Setting an environment can be done using <function>setEnvironment()</function>
+                as long as it is done before <function>dispatch()</function>
+                or <function>run()</function>.
+            </para>
+            
+            <programlisting role="php"><![CDATA[Zym_App::getInstance()->setEnvironment(Zym_App::ENV_DEVELOPMENT);]]></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.app.running">
+        <title>Running Zym_App</title>
+        
+        <para>
+            Basic usage of <classname>Zym_App</classname> is as simple as a
+            single function call; however, you can still do manual setup and dispatching.
+            All this component needs to run is the configuration and the environment to run.
+        </para>
+        
+        <example>
+            <title>Simple dispatching of Zym_App</title>
+            
+            <para>
+                The static <function>run()</function> function is in a way similar
+                to <methodname>Zend_Controller_Front::run()</methodname> because
+                it allows basic configuration of the component and dispatching.
+            </para>
+            
+            <programlisting role="php"><![CDATA[Zym_App::run('../bootstrap.xml', Zym_App::ENV_DEVELOPMENT);]]></programlisting>
+        </example>
+        
+        <example>
+            <title>Advanced dispatching of Zym_App</title>
+            
+            <para>
+                Because this component should be very flexible, it has a vast 
+                amount of configuration options and ways to modify its behavior.
+                Advanced dispatching will be needed if you intend to modify
+                other attributes not allowed in <function>run()</function>.
+            </para>
+            
+            <programlisting role="php"><xi:include href="app/example/advancedRun.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <xi:include href="app/resources.xml" />
 </chapter>

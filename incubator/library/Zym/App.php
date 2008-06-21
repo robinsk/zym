@@ -1042,7 +1042,7 @@ class Zym_App
     protected function _setupCache(Zend_Config $config)
     {
         // Disable cache
-        if (!$config->get('cache')->get('enabled')) {
+        if (!$config->get('cache')->get('enabled') || !extension_loaded('apc')) {
             if ($this->_cache instanceof Zend_Cache_Core) {
                 $this->_cache->setOption('caching', false);
                

@@ -50,7 +50,16 @@
     <section xml:id="zym.timer.manager">
         <title>Manager</title>
         
-        <para></para>
+        <para>
+            The timer manager allows you to manage a collection of timer instances
+            that can be grouped.
+        </para>
+        
+        <example xml:id="zym.timer.manager.example.manager">
+            <title>Timer manager simple usage</title>
+            
+            <programlisting><xi:include href="timer/manager/example/manager.php" parse="text" /></programlisting>
+        </example>
     </section>
-   <!-- <xi:include href="timer/timermanager.xml" /> -->
+    <!--<xi:include href="timer/timermanager.xml" />-->
 </chapter>

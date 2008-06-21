@@ -1,13 +1,30 @@
-<?
-$this->headTitle('Translation Demo')?>
+<? $this->headTitle('Translation Demo')?>
 <div>
     <h1>Translation Demo</h1>
     
-    <p>Translations and locales are an important aspect of applications that
-    will be used by an international crowd. Zym makes this easier by
-    integrating the setup of locales and translations into Zym_App. This
-    allows you to use the translation features of ZF without having to
-    manually set them up.</p>
+    <p>
+        Translations and locales are an important aspect of applications that
+        will be used by an international crowd. Zym makes this easier by
+        integrating the setup of locales and translations into Zym_App. This
+        allows you to use the translation features of ZF without having to
+        manually set them up.
+    </p>
+
+    <p>
+        By default, Zym_App's translation resource
+        is setup to handle tmx files which can be placed in any structure within
+        "data/locale/" without any configuration except for loading the resource.
+        If you decided to use another adapter such as "gettext",
+        you can change the resource's option to have Zend_Translate scan the 
+        directories looking for a locale in the path eg. "data/locale/en/validate.mo".
+    </p>
+    
+    <p>
+        Once the translation resource is setup, it should make the Zend_Translate
+        object available to all components via a registry key or setting the default
+        translate object into specified components. All you simply do is use the
+        translate features without having to worry about the setup.
+    </p>
     
     <p>Below are demos of strings being translated:</p>
     <table>

@@ -38,8 +38,8 @@ class Layout_NavController extends Zym_Controller_Action_Abstract
         // View
         $this->getView()->assign(array(
             'urls' => array(
-                'Home'   => $urlHelper->url(array(), 'default', true),
-                'HowTo'  => $urlHelper->url(array('module' => 'demo'), 'default', true),
+                'Home'        => $urlHelper->url(array(), 'default', true),
+                'Playground'  => $urlHelper->url(array('module' => 'demo'), 'default', true),
             )
         ));
     }

@@ -4,4 +4,5 @@
     <title>Zym_Session</title>
     
     <xi:include href="session/savehandler.xml" />
+    <xi:include href="session/validators.xml" />
 </chapter>

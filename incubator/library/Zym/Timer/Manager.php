@@ -72,7 +72,7 @@ class Zym_Timer_Manager implements Countable
     /**
      * Add a timer instance
      * 
-     * Throws a Zym_Timer_Manager_Exception_TimerExists if one already exists
+     * @throws Zym_Timer_Manager_Exception_TimerExists if one already exists
      *
      * @param string          $name
      * @param Zym_Timer_Timer $timer
@@ -86,6 +86,7 @@ class Zym_Timer_Manager implements Countable
             /**
              * @see Zym_Timer_Manager_Exception_TimerExists
              */
+            require_once 'Zym/Timer/Manager/Exception/TimerExists.php';
             throw new Zym_Timer_Manager_Exception_TimerExists($name, $group);
         }
         
@@ -132,6 +133,44 @@ class Zym_Timer_Manager implements Countable
     {
         return $this->_timers;
     }
+    
+    /**
+     * Get runtime of all registered timers
+     *
+     * @return integer
+     */
+    public function getRun()
+    {
+        $runTime = 0;
+        foreach ($this->getTimers() as $timer) {
+        	$runTime += $timer->getRun();
+        }
+        
+        return $runTime;
+    }
+    
+    /**
+     * Get runtime of a group of timers
+     *
+     * @param string $group
+     * @return integer
+     */
+    public function getGroupRun($group = null)
+    {
+        $runTime = 0;
+        $timers  = $this->getTimers();
+        
+        if (!isset($timers[$group])) {
+            return $runTime;
+        }
+        
+        foreach ($timers as $timer) {
+            $runTime += $timer->getRun();
+        }
+        
+        return $runTime;
+    }
+    
     
     /**
      * Clear all timer instances

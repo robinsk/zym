@@ -8,6 +8,7 @@
         <!-- End: Meta Tags -->
         
         <!-- Title -->
+        <? $this->headTitle('Zym Framework')->setSeparator(' | ') ?>
         <?= $this->headTitle() . "\n"; ?>
         
         <!-- Start: Link Tags -->
@@ -28,7 +29,7 @@
         <!-- End: Styles -->
         
         <!-- Start: Scripts -->
-        <script type="text/javascript" src="<?= $this->baseUrl('scripts/dojo/dojo/dojo.js'); ?>"></script>
+        <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.1.1/dojo/dojo.xd.js"></script>
         <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js'); ?>"></script>
         <script type="text/javascript">
         //<![CDATA[
@@ -133,6 +134,8 @@
 
         <div id="extra1">&nbsp;</div>
         <div id="extra2">&nbsp;</div>
+        
+        <?= $this->inlineScript(); ?>
     </body>
 </html>
 <!-- This design was created by jugend from http://www.pluitsolutions.com -->

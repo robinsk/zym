@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.session.validators"
+    version="5.0">
+    <title>Validators</title>
+    
+    <para>
+        <classname>Zend_Session</classname> allows the use of session validators.
+        Session validators allow you to ensure that a session is still valid
+        from the conditions of each validator.
+    </para>
+    
+    <itemizedlist>
+        <listitem><para>Cookie - This validator ensures that a cookie exists</para></listitem>
+        <listitem><para>RemoteAddr - Requires that the ip address used to start the session is the same</para></listitem>
+    </itemizedlist>
+</section>
