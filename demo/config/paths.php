@@ -23,8 +23,8 @@
 $paths = array(
     '.',
     PATH_PROJECT . 'app/library/',
-    PATH_PROJECT . 'library/',
     PATH_PROJECT . 'library/incubator',
+    PATH_PROJECT . 'library/',
     PATH_PROJECT . 'library/laboratory',
     get_include_path()
 );

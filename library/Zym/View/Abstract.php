@@ -232,7 +232,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
         if (!$this->getStreamFlag()) {
             return parent::render($name);
         }
-        
+
         // Get stream class
         $stream         = $this->getStreamWrapper();
         $streamProtocol = $this->getStreamProtocol();
@@ -276,22 +276,20 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      */
     public function getPluginLoader($type)
     {
-        $type = strtolower($type);
+        $type   = strtolower($type);
         $loader = parent::getPluginLoader($type);
-        
+
         // Add Zym Prefix
         $pType  = ucfirst($type);
         $prefix = 'Zym_View_' . $pType;
         $path   = 'Zym/View/' . $pType;
-        if (!count((array) $loader->getPaths($prefix))) {
+
+        if (!$loader->getPaths($prefix)) {
             switch ($type) {
                 case 'filter':
-                    $this->addFilterPath($path, $prefix);
-                    break;
                 case 'helper':
-                    $this->addHelperPath($path, $prefix);
-                    break;
                 default:
+                    $loader->addPrefixPath($prefix, $path);
                     break;
             }
         }
