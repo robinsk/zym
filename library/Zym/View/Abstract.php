@@ -269,6 +269,37 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     }
     
     /**
+     * Retrieve plugin loader for a specific plugin type
+     * 
+     * @param  string $type 
+     * @return Zend_Loader_PluginLoader
+     */
+    public function getPluginLoader($type)
+    {
+        $type = strtolower($type);
+        $loader = parent::getPluginLoader($type);
+        
+        // Add Zym Prefix
+        $pType  = ucfirst($type);
+        $prefix = 'Zym_View_' . $pType;
+        $path   = 'Zym/View/' . $pType;
+        if (!count((array) $loader->getPaths($prefix))) {
+            switch ($type) {
+                case 'filter':
+                    $this->addFilterPath($path, $prefix);
+                    break;
+                case 'helper':
+                    $this->addHelperPath($path, $prefix);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        return $loader;
+    }
+    
+    /**
      * Load and setup stream wrapper
      *
      * @param string $stream

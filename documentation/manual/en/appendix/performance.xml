@@ -61,16 +61,15 @@
         </para>
         
         <programlisting role="php"><![CDATA[
-        $classes = array_merge(get_declared_classes(), get_declared_interfaces());
-
-        $zendZym = array();
-        foreach ($classes as $class) {;
-            if (strtolower(substr($class, 0, 4)) == 'zend' || strtolower(substr($class, 0, 3)) == 'zym') {
-               $zendZym[] = str_ireplace('_', '/', $class) . '.php';
-               
-               echo 'require_once \'' . str_ireplace('_', '/', $class) . '.php\';'.'<br />';
-            }
-        }
+$classes = array_merge(get_declared_classes(), get_declared_interfaces());
+foreach ($classes as $class) {;
+    if (strtolower(substr($class, 0, 4)) == 'zend' 
+        || strtolower(substr($class, 0, 3)) == 'zym') {
+       $file = str_ireplace('_', '/', $class) . '.php';
+       
+       echo 'require_once \'' . $file . '.php\';' . '<br />';
+    }
+}
 ]]></programlisting>
     </section>
 </appendix>
