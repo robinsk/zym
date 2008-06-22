@@ -290,8 +290,15 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
      */
     protected function _xmlEscape($string)
     {
-        return htmlspecialchars(str_replace("'", '&apos;', $string),
-                                ENT_COMPAT, 'UTF-8', false);
+        // Do not encode existing HTML entities
+        // From PHP 5.2.3 this functionality is built-in, otherwise use a regex
+        if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
+            return htmlspecialchars($string, ENT_QUOTES, 'UTF-8', false);
+        } else {
+            $string = preg_replace('/&(?!(?:#\d++|[a-z]++);)/ui', '&amp;', $string);
+            $string = str_replace(array('<', '>', '\'', '"'), array('&lt;', '&gt;', '&#39;', '&quot;'), $string);
+            return $string;
+        }
     }
     
     /**
