@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.configuration" version="5.0">
+    <title>Configuration</title>
+    
+    <para>
+        A wide variety of configuration formats can be supported through
+        the use of Zend_Config classes. <classname>Zym_App</classname>
+        loads configs of different formats by detecting their extension
+        and using it to form a class like <classname>Zend_Config_Xml</classname> for
+        "bootstrap.xml". You may also specify your own classname to be appended instead
+        of guessing from the file extension.
+    </para>
+    
+    <example xml:id="zym.app.configuration.example.configFileSkeleton">
+        <title>Config file skeleton</title>
+        
+        <para>Config skeleton showing all default environments</para>
+        
+        <programlisting role="xml"><xi:include href="configuration/example/skeleton.xml" parse="text" /></programlisting>
+    </example>
+    
+    <important>
+        <para>
+            The general format of every config file must contain a <classname>Zend_Config</classname>
+            "default" section and a section for every other environment you plan to use.
+            This is a limitation of <classname>Zend_Config</classname> at the moment because
+            we cannot distinguish between its exceptions.
+        </para>
+    </important>
+    
+    <important>
+        <title>Empty config values</title>
+        <para>
+            Do not leave config keys with empty values because it will override the default
+            value. If the current element has childs in the default, it will remove
+            all those default childs causing an error.
+        </para>
+        
+        <example xml:id="zym.app.configuration.example.emptyConfig">
+            <title>An example of an empty config value</title>
+            
+            <para>
+                Having something like below will remove all childs, so if you
+                do not need to set something, don't leave it empty.
+            </para>
+            
+            <programlisting role="xml">
+<![CDATA[
+<path></path>
+]]>
+            </programlisting>
+        </example>
+    </important>
+    
+    <example xml:id="zym.app.configuration.example.simpleBootstrap">
+        <title>Simple bootstrap config (bootstrap.xml)</title>
+        
+        <para>
+            This is a simple bootstrap configuration file loading only several resources.
+            The minimum amount really required to bootstrap the ZF mvc is just
+            the controller resource.
+        </para>
+        
+        <programlisting role="xml"><xi:include href="configuration/example/bootstrap.xml" parse="text" /></programlisting>
+    </example>
+    
+    <xi:include href="configuration/options.xml" />
+</section>

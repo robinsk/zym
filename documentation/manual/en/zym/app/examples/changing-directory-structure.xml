@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.examples.changingDirectoryStructure" version="5.0">
+    <title>Changing directory structure</title>
+ 
+    <para>
+        Changing the directory structure is as simple as a config value. Paths
+        are relative to the "home" config key which is "../" by default to refer
+        to the project home from the index.php.
+    </para>
+    
+    <example xml:id="zym.app.examples.changingDirectoryStructure.example.rename">
+        <title>Renaming directories</title>
+        
+        <itemizedlist>
+            <listitem><para>usr/ - Application directory (app/)</para></listitem>
+            <listitem><para>etc/ - Config directory (config/)</para></listitem>
+            <listitem><para>var/ - Data directory (data/)</para></listitem>
+            <listitem><para>/tmp/ - Temp directory (temp/)</para></listitem>
+        </itemizedlist>
+        
+        <programlisting role="xml"><xi:include href="example/rename.xml" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.app.examples.changingDirectoryStructure.example.insideDocRoot">
+        <title>Self-contained in document root directory structure</title>
+        
+        <para>
+            Moving from an external directory structure into one that is self-contained 
+            within the document root takes a little more work. We must change the
+            paths in our include path to reflect the new paths and any paths
+            in the bootstrap. Below is the changes required in the bootstrap config.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>styles/ - Styles (web/styles)</para></listitem>            
+            <listitem><para>scripts/ - Scripts (web/scripts)</para></listitem>            
+            <listitem><para>images/ - Images (web/images)</para></listitem>
+            <listitem><para>myapp/ - Project Home (../)</para></listitem>
+            <listitem><para>index.php</para></listitem>
+        </itemizedlist>
+        
+        <programlisting role="xml"><xi:include href="example/doc-root.xml" parse="text" /></programlisting>
+    </example>
+</section>

@@ -19,7 +19,7 @@
         </para>
     </note>
 
-    <section>
+    <section xml:id="zym.loader.autoload.register">
         <title>Registering an autoloader</title>
 
         <para>
@@ -46,7 +46,7 @@
         </example>
     </section>
 
-    <section>
+    <section xml:id="zym.loader.autoload.writingyourown">
         <title>Writing your own autoloaders</title>
 
         <para>

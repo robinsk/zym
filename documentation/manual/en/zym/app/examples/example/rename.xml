@@ -1,0 +1,6 @@
+<path>
+    <app>usr</app>
+    <config>etc</config>
+    <data>var</data>
+    <temp>/tmp</temp>
+</path>

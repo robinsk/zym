@@ -11,7 +11,7 @@
         have similar bootstraps; however, developing a component that is flexible
         yet simple enough to use is like preaching a religion to a monkey. <classname>Zym_App</classname>
         follows a <link  xlink:href="http://en.wikipedia.org/wiki/Convention_over_Configuration">convention over configuration</link>
-        design pardigm. If you follow Zym's conventions, everything will work 
+        design paradigm. If you follow Zym's conventions, everything will work 
         out of the box and other developers working on the same project
         can jump in knowing almost everything they need reducing development time
         wasted on learning the flow of a project. Although having a convention 
@@ -29,18 +29,18 @@
     
     <para>
         The way <classname>Zym_App</classname> works is that it dispatches
-        what we call "resources". Instead of building one "God" class that is 
-        does bootstrapping, we modularlised it into resources. This is not a proper
+        what we call "resources". Instead of building one "God" class that 
+        does bootstrapping, we modularised it into resources. This is not a proper
         name for them, but the name was kept from the proposal it was derived from.
         The component itself implements the singleton pattern and works very similar
-        to the frontController.
+        to the front controller.
     </para>
     
     <section xml:id="zym.app.environments">
         <title>Environments</title>
         
         <para>
-            Through out the lifecycle of an application, it will go through
+            Through out the life cycle of an application, it will go through
             several phases (Most common are development, production and testing).
             Environments allow you to configure an application specific for each phase
             specific phase.
@@ -83,7 +83,7 @@
             All this component needs to run is the configuration and the environment to run.
         </para>
         
-        <example>
+        <example xml:id="zym.app.running.example.simpleDispatching">
             <title>Simple dispatching of Zym_App</title>
             
             <para>
@@ -95,7 +95,7 @@
             <programlisting role="php"><![CDATA[Zym_App::run('../bootstrap.xml', Zym_App::ENV_DEVELOPMENT);]]></programlisting>
         </example>
         
-        <example>
+        <example xml:id="zym.app.running.example.advancedDispatching">
             <title>Advanced dispatching of Zym_App</title>
             
             <para>
@@ -107,7 +107,20 @@
             
             <programlisting role="php"><xi:include href="app/example/advancedRun.php" parse="text" /></programlisting>
         </example>
+        
+        <note>
+            <title>Importance of order</title>
+            
+            <para>
+                Because config setup will use the environment to determine
+                what to load, it is important that you set the environment
+                <emphasis>before</emphasis> you set the configuration else you may get unexpected
+                results.
+            </para>
+        </note>
     </section>
     
+    <xi:include href="app/configuration.xml" />
     <xi:include href="app/resources.xml" />
+    <xi:include href="app/examples/changing-directory-structure.xml" />
 </chapter>

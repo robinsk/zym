@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appendix xmlns="http://docbook.org/ns/docbook" 
+          xmlns:xlink="http://www.w3.org/1999/xlink" 
+          xmlns:xi="http://www.w3.org/2001/XInclude" 
+          xml:lang="en"
+          xml:id="appendix.scalable"
+          version="5.0">
+    <title>Building scalable applications</title>
+    
+    <para>
+        This section is kind of a no-brainer, but just in case it is your first time
+        thinking about scaling, it may be helpful. Building apps that can scale 
+        with minimal effort is important for those applications that become a hit.
+        With Zend Framework, the pluggable and loose-coupled design allows you to replace
+        adapters and change functionality easily. Design with scalability in mind and
+        you shouldn't have much of a hard time scaling. It is also important to remember
+        that not everyone is going to have 100 million hits a month and optimizing when your
+        not even "live" is almost pointless. It is the architecture that scales, not a language
+        or framework.
+    </para>
+    
+    <section xml:id="appendix.scalable.terms">
+        <title>Terms</title>
+        
+        <para>
+            Vertical scaling, generally referred to as moving to more powerful hardware.
+            Although it is relatively easy to implement with almost no change in your application,
+            it is usually very costly as the price of performance hardware skyrockets
+            compared to the performance achieved. This usually benefits database
+            servers more than webservers. With vertical scaling you are also
+            centralising your setup, so there is a higher chance of downtime
+            due to a hardware failure.
+        </para>
+        
+        <para>
+            Horizontal scaling is simply adding more servers, but more complicated in 
+            comparison because applications must be designed to work on multiple servers.
+            The cost of scaling this way is much cheaper and the risk of a hardware 
+            failure taking you offline is reduced. Adding more servers also means that
+            it takes more work to manage them.
+        </para>
+       
+        <para>
+            Diagonal scaling is somewhere in between both of them. It is important
+            to scale both upwards and outwards. 
+            <link xlink:href="http://highscalability.com/strategy-diagonal-scaling-dont-forget-scale-out-and">Scale up wards and outwards</link>
+        </para>
+    </section>
+</appendix>

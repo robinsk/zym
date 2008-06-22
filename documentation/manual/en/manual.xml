@@ -50,6 +50,7 @@
     
     <!-- START: Appendix -->
     <xi:include href="appendix/performance.xml" />
+    <xi:include href="appendix/scalable.xml" />
     <xi:include href="appendix/copyright.xml" />
     <!-- END:: Appendix -->
 </book>

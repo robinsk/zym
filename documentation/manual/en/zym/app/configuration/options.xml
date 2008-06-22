@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.configuration.options" version="5.0">
+    <title>Bootstrap configuration options</title>
+    
+    <table xml:id="zym.app.configuration.options.values">
+        <title>Options</title>
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>name</entry>
+                    <entry>Zym</entry>
+                    <entry>A unique application name/id</entry>
+                </row>
+                <row>
+                    <entry>home</entry>
+                    <entry>../</entry>
+                    <entry>The base project directory</entry>
+                </row>
+                <row>
+                    <entry>namespace</entry>
+                    <entry>array('Zym' =&gt; 'Zym_App_Resource')</entry>
+                    <entry>
+                        Namespaces to use for loading resources. 
+                        They should be in the form of key/value as the
+                        key will be used later for overriding the namespace
+                        of a resource to load. It should be in LIFO order.
+                    </entry>
+                </row>
+                
+                <row>
+                    <entry>path</entry>
+                    <entry>array()</entry>
+                    <entry>
+                        Path declarations for <classname>Zym_App</classname>
+                        Can significantly effect directory structure of an app
+                        from changing these values.
+                        
+                        All paths are relative to "home" unless "/" root 
+                        is specified.
+                        
+                        Other config keys and paths can be specified here that are
+                        not listed. They can be accessed using 
+                        <methodname>Zym_App::getInstance()->getPath('pathKey');</methodname>
+                    </entry>
+                </row>
+                <row>
+                    <entry>path.app</entry>
+                    <entry>app</entry>
+                    <entry>
+                        Path of "app" directory containing application
+                        related files (modules, layouts).
+                    </entry>
+                </row>
+                <row>
+                    <entry>path.config</entry>
+                    <entry>config</entry>
+                    <entry>
+                        Path of "config" directory containing configs.
+                    </entry>
+                </row>
+                <row>
+                    <entry>path.data</entry>
+                    <entry>data</entry>
+                    <entry>
+                        Path of "data" directory contain application data.
+                    </entry>
+                </row>
+                <row>
+                    <entry>path.temp</entry>
+                    <entry>temp</entry>
+                    <entry>
+                        Path of "temp" directory for temporary files.
+                    </entry>
+                </row>
+                
+                <row>
+                    <entry>cache</entry>
+                    <entry>array()</entry>
+                    <entry>
+                        Caching configuration
+                    </entry>
+                </row>
+                <row>
+                    <entry>cache.enabled</entry>
+                    <entry>false|production=true</entry>
+                    <entry>
+                        (boolean)
+                        Whether <classname>Zym_App</classname> should use
+                        caching.
+                        True in production environment.
+                    </entry>
+                </row>
+                <row>
+                    <entry>cache.prefix</entry>
+                    <entry>%s__</entry>
+                    <entry>
+                        Prefix used for cache id's. "%s" contains the
+                        value of the "name" config. This prefix string must conform
+                        to <classname>Zend_Config</classname>'s specifications.
+                    </entry>
+                </row>
+                
+                <row>
+                    <entry>default_resource</entry>
+                    <entry>array()</entry>
+                    <entry>
+                        Default configuration for dispatching of resources.
+                        Refer to the "resource" item config for more details.
+                        Changing an item here will change the default for
+                        each "resource" item config.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_resource.disabled</entry>
+                    <entry>false</entry>
+                    <entry>(boolean) Determines whether the resource is dispatched</entry>
+                </row>
+                <row>
+                    <entry>default_resource.config</entry>
+                    <entry>%s.xml</entry>
+                    <entry>
+                        (string|array)
+                        Where to load configuration from. This path is relative
+                        to path.config unless path is from root ("/foo/bar").
+                        
+                        Loads from "config/foo.xml" by default.
+                        
+                        "%s" is the resource name.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_resource.environment</entry>
+                    <entry></entry>
+                    <entry>
+                        Allows you to override the environment used to configure and dispatch
+                        resources.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_resource.namespace</entry>
+                    <entry></entry>
+                    <entry>
+                        Allows you to override the namespace used in dispatching resources.
+                        Refer to "namespace" key.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_resource.priority</entry>
+                    <entry></entry>
+                    <entry>
+                        Override resources' dispatching priority
+                    </entry>
+                </row>
+                
+                <row>
+                    <entry>resource</entry>
+                    <entry>array()</entry>
+                    <entry>
+                        Resources to dispatch. The key is the resource.
+                        (eg. resource.controller) Refer to default_resource for each item's
+                        configuration options and defaults.
+                    </entry>
+                </row>
+                <row>
+                    <entry>resource.{resource}.disabled</entry>
+                    <entry>refer to default_resource.disabled</entry>
+                    <entry>
+                        Disables the resource from dispatching. Useful for
+                        quick debugging.
+                    </entry>
+                </row>
+                <row>
+                    <entry>resource.{resource}.config</entry>
+                    <entry>refer to default_resource.config</entry>
+                    <entry>
+                        (string|array)
+                        Where to load configuration from. This path is relative
+                        to path.config unless path is from root ("/foo/bar").
+                        
+                        Loads from "config/foo.xml" by default.
+                        
+                        "%s" is the resource name.
+                        
+                        If an array is provided instead, it will be used for a resource's
+                        configuration. This allows you to have a single config file
+                        for the whole application.
+                    </entry>
+                </row>
+                <row>
+                    <entry>resource.{resource}.environment</entry>
+                    <entry>refer to default_resource.environment</entry>
+                    <entry>
+                        Allows you to override the environment used to configure and dispatch
+                        the current resource.
+                    </entry>
+                </row>
+                <row>
+                    <entry>resource.{resource}.namespace</entry>
+                    <entry>refer to default_resource.namespace</entry>
+                    <entry>
+                        Allows you to override the namespace used in dispatching the resource.
+                        Refer to "namespace" key.
+                    </entry>
+                </row>
+                <row>
+                    <entry>resource.{resource}.priority</entry>
+                    <entry>refer to default_resource.priority</entry>
+                    <entry>
+                        (int)
+                        Higher priority is 10, lower is 50 and default is 25
+                        Override resource dispatching priority
+                    </entry>
+                </row>
+                
+                <row>
+                    <entry>registry</entry>
+                    <entry>Zym_App_Registry</entry>
+                    <entry>
+                        The internal registry class to use.
+                        It should be a child of Zym_App_Registry.
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

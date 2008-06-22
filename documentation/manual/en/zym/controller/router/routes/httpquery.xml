@@ -13,4 +13,10 @@
         to allow routing to work with HTTP params. It also handles generation
         of urls via ZF's url helpers.
     </para>
+    
+    <example xml:id="zym.controller.router.routes.httpquery.example">
+        <title>Using the HttpQuery Route</title>
+        
+        <programlisting role="php"><xi:include href="httpquery/example/using.php" parse="text" /></programlisting>
+    </example>
 </section>

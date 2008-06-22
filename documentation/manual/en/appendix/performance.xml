@@ -11,86 +11,66 @@
         This document describes some methods to increase performance in your Zend Framework based applications.
     </para>
     
+    <para>
+        Performance is an important aspect of almost every application. In efficient
+        SQL queries and costly algorithms can be a show stopper. When designing an app
+        you should keep performance in mind, but not let it overtake you. Pre-optimization
+        is the root of all evil! The first step you need to do is get something live.
+        There is more than one aspect to optimize, external influences such as the network
+        can have a significant effect. Webserver configuration makes a big difference.
+    </para>
+    
+    <para>
+        Watch those SQL queries as using an ORM can mask inefficient queries. The profiler is your friend.
+        Profile often throughout development to spot any problems that could occur.
+        Caching is always easier to implement during development. Use caching wisely, 
+        don't go overboard caching every little thing. Focus on the database or your
+        datasources.
+    </para>
+    
+    <para>
+        Use an opcode cache! If you aren't using an opcode cache, you probably don't
+        care much about performance. Opcode caches and optimizes compiled php code
+        so the same code does not have to be compiled by php every request before execution.
+        There are a variety of opcode caches out there, but
+        the best supported is <link xlink:href="http://php.net/apc">APC Opcode Cache</link>.
+        APC tuning is also a tricky process, but you'll love the benefits.
+    </para>
+    
     <section xml:id="appendix.performance.prerequire">
         <title>Pre-requiring often used files</title>
         <para>
-            Some often used files, like the ViewRenderer, are included inside a class method. On hosts where opcode caches like APC aren't enabled this increases performances.
+            Some often used files, like the ViewRenderer, are included inside a class method. 
+            On hosts where opcode caches like APC aren't enabled this increases performances.
             However, on hosts where opcode caches are enabled this actually decreses performance.
+            APC works in two stages of PHP, the first is when files are pre-required and are not
+            inside conditional statements. At this stage, PHP itself has not parsed or executed the 
+            current file. APC has the change to perform optimzation of the code and link the required
+            file with the current one. The next stage is when php code is executed, while APC cannot
+            preload resources, it can still cache compile files. So if your using autoloading, you
+            still get most of the benefits. As time passes, this may not be as relevant.
         </para>
         
         <para>
-            One way of speeding things up when using an opcode cache is by including often used files in you bootstrap. Below is a list of often used classes.
-            This list is not absolute and not all of these classes are used by everybody. So, if for example you don't use a database, don't include Zend_Db classes.
+            One way of speeding things up when using an opcode cache is by including often used 
+            files in you bootstrap. The script below will output all files that are currently
+            used. Run this inside a generic controller in your application to get an idea
+            of the files that your application requires every request. You can then use that
+            list in your bootstrap to pre-require files that may never have APC's optimization
+            due to conditional loading or autoloading.
         </para>
         
         <programlisting role="php"><![CDATA[
-Zend_Cache
-Zend_Config_Xml
-Zend_Controller_Action
-Zend_Controller_Action_HelperBroker
-Zend_Controller_Action_Helper_ViewRenderer
-Zend_Controller_Dispatcher_Standard
-Zend_Controller_Front
-Zend_Controller_Plugin_ErrorHandler
-Zend_Controller_Request_Http
-Zend_Controller_Response_Http
-Zend_Controller_Router_Rewrite
-Zend_Db_Table_Row_Abstract
-Zend_Db_Table_Rowset_Abstract
-Zend_Db_Table_Select
-Zend_Exception
-Zend_Filter_Inflector
-Zend_Layout_Controller_Action_Helper_Layout
-Zend_Layout_Controller_Plugin_Layout
-Zend_Loader
-Zend_Registry
-Zend_View
-Zend_View_Helper_Doctype
-Zend_View_Helper_HeadMeta
-Zend_View_Helper_HeadScript
-Zend_View_Helper_HeadStyle
-Zend_View_Helper_HeadTitle
-Zend_View_Helper_Layout
-Zend_View_Helper_Placeholder_Container
-Zend_View_Helper_Placeholder_Registry
+        $classes = array_merge(get_declared_classes(), get_declared_interfaces());
 
-Zym_App_Resource_*
-Zym_Controller_Response_Http
-Zym_Controller_Action_Abstract
-]]></programlisting>
-        
-        <programlisting role="php"><![CDATA[
-// Copy/paste this to pre-require these files for 
-// increased performance with opcode caches.
-require_once 'Zend/Cache.php';
-require_once 'Zend/Config/Xml.php';
-require_once 'Zend/Controller/Action.php';
-require_once 'Zend/Controller/Action/Helper/ViewRenderer.php';
-require_once 'Zend/Controller/Dispatcher/Standard.php';
-require_once 'Zend/Controller/Front.php';
-require_once 'Zend/Controller/Plugin/ErrorHandler.php';
-require_once 'Zend/Controller/Request/Http.php';
-require_once 'Zend/Controller/Response/Http.php';
-require_once 'Zend/Controller/Router/Rewrite.php';
-require_once 'Zend/Db/Table/Row/Abstract.php';
-require_once 'Zend/Db/Table/Rowset/Abstract.php';
-require_once 'Zend/Db/Table/Select.php';
-require_once 'Zend/Exception.php';
-require_once 'Zend/Filter/Inflector.php';
-require_once 'Zend/Layout/Controller/Action/Helper/Layout.php';
-require_once 'Zend/Layout/Controller/Plugin/Layout.php';
-require_once 'Zend/Registry.php';
-require_once 'Zend/View.php';
-require_once 'Zend/View/Helper/Doctype.php';
-require_once 'Zend/View/Helper/HeadMeta.php';
-require_once 'Zend/View/Helper/HeadScript.php';
-require_once 'Zend/View/Helper/HeadStyle.php';
-require_once 'Zend/View/Helper/HeadTitle.php';
-require_once 'Zend/View/Helper/Layout.php';
-require_once 'Zend/View/Helper/Placeholder/Container.php';
-require_once 'Zend/View/Helper/Placeholder/Registry.php';
-require_once 'Zym/Controller/Response/Http.php';
-require_once 'Zym/Controller/Action/Abstract.php';
+        $zendZym = array();
+        foreach ($classes as $class) {;
+            if (strtolower(substr($class, 0, 4)) == 'zend' || strtolower(substr($class, 0, 3)) == 'zym') {
+               $zendZym[] = str_ireplace('_', '/', $class) . '.php';
+               
+               echo 'require_once \'' . str_ireplace('_', '/', $class) . '.php\';'.'<br />';
+            }
+        }
 ]]></programlisting>
     </section>
 </appendix>
