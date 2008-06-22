@@ -35,20 +35,12 @@ class Zym_Navigation extends Zym_Navigation_Container
     /**
      * Creates a new navigation container
      *
-     * @param array|Zend_Config $options  [optional]
+     * @param array|Zend_Config $pages  [optional] pages to add
      */
     public function __construct($pages = null)
     {
-        if (is_array($pages)) {
-            $this->addPages($pages);
-        } elseif ($pages instanceof Zend_Config) {
+        if (is_array($pages) || $pages instanceof Zend_Config) {
             $this->addPages($pages);
         }
-    }
-    
-    // TODO: remove?
-    public function __toString()
-    {
-        return 'Zym_Navigation';
     }
 }
