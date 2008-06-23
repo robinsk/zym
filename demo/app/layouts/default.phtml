@@ -1,12 +1,5 @@
 <?= $this->xmlDeclaration() . "\n"; ?>
 <?= $this->doctype() . "\n"; ?>
-<? $this->headStyle()->captureStart(); ?>
-div.breadcrumbs {
-    font-size: 80%;
-    padding-bottom: 0.5em;
-}
-<? $this->headStyle()->captureEnd(); ?>
-<? $this->menu()->setUlClass('clearfix'); ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <!-- Start: Meta Tags -->
@@ -82,6 +75,7 @@ div.breadcrumbs {
                     <div class="breadcrumbs">
                         <?= $this->breadcrumbs(); ?>
                     </div>
+
                     <div id="flash-container">
                         <? if (count($this->flashMessenger())) : ?>
                         <div id="flash">
@@ -99,6 +93,8 @@ div.breadcrumbs {
                 <div id="nav">
                     <div class="wrapper">
                         <h2 class="accessibility">Navigation</h2>
+                        
+                        <? $this->menu()->setUlClass('clearfix'); ?>
                         <?= "\n" . $this->menu()->toString(24); ?>
                     </div>
                 </div>

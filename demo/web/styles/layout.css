@@ -57,8 +57,18 @@ div#flash {
     color: #7B4B09;
     border: 1px solid #F0DCA1;
     background-color: #FFFBC9;
-    padding-top: 15px;
+    margin: 0px;
+    padding-top: 5px;
     padding-left: 25px;
+}
+
+div#flash ul {
+    margin: 0px 0px 9px 0px;
+}
+
+div.breadcrumbs {
+    font-size: 90%;
+    padding-bottom: 0.5em;
 }
 /* END MAIN */
 
