@@ -453,11 +453,27 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Returns bool value indicating whether page is active or not
      *
+     * @param  bool $childDependent  [optional] whether page should be
+     *                               considered active if any child pages
+     *                               are active, defaults to false
      * @return bool
      */
-    public function isActive()
+    public function isActive($childDependent = false)
     {
-        return $this->_active;
+        if ((bool) $childDependent) {
+            if ($this->_active) {
+                return true;
+            } else {
+                foreach ($this->_pages as $page) {
+                    if ($page->isActive(true)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        } else {
+            return $this->_active;
+        }
     }
     
     /**

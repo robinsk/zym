@@ -133,9 +133,12 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * 
      * If not set active, this method will compare the page the request object.
      *
+     * @param  bool $childDependent  [optional] whether page should be
+     *                               considered active if any child pages
+     *                               are active, defaults to false
      * @return bool
      */
-    public function isActive()
+    public function isActive($childDependent = false)
     {
         if (!$this->_active) {  
             $reqParams = Zend_Controller_Front::getInstance()
@@ -150,11 +153,12 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             // TODO: verify this
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
                 count($myParams)) {
-                $this->_active = true;
+                return $this->_active = true;
             }
         }
         
-        return $this->_active;
+        return parent::isActive($childDependent);
+        //return $this->_active;
     }
     
     /**
