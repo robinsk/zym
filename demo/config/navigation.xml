@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Navigation Resource Configuration
+    This resource is used to setup the Zym_Navigation
+
+================================================================================
+Tags below <resource> are configuration for each environment set in Zym_App.
+
+Each section below extends the <default> config section if it has the 
+"extends" attribute. Adding a tag in <production> would override the value
+set from <default> for the production environment.
+-->
+<resource>
+    <!--
+    Production environment overrides
+    -->
+    <production extends="default"></production>
+    
+    <!--
+    Test environment overrides
+    -->
+    <test extends="default"></test>
+    
+    <!--
+    Development environment overrides
+    -->
+    <development extends="default"></development>
+    
+    <!--
+    Default environment config
+    
+    This environment is the default for all environments that extend it.
+    
+    A key specified here will override both the defaults and environment config
+    set inside the resource.
+    -->
+    <default>
+        <pages>
+            <home>
+                <label>Home</label>
+                <action>index</action>
+                <controller>index</controller>
+            </home>
+            <demoHome>
+                <label>Playground</label>
+                <action>index</action>
+                <controller>index</controller>
+                <module>demo</module>
+                <pages>
+                    <contextSwitch>
+                        <label>ContextSwitch</label>
+                        <action>index</action>
+                        <controller>context-switch</controller>
+                        <module>demo</module>
+                    </contextSwitch>
+                    <error>
+                        <label>Error</label>
+                        <action>index</action>
+                        <controller>error</controller>
+                        <module>demo</module>
+                    </error>
+                    <flashMessenger>
+                        <label>Flash Messenger</label>
+                        <action>index</action>
+                        <controller>flash-messenger</controller>
+                        <module>demo</module>
+                    </flashMessenger>
+                    <navigation>
+                        <label>Navigation</label>
+                        <action>index</action>
+                        <controller>navigation</controller>
+                        <module>demo</module>
+                    </navigation>
+                    <notification>
+                        <label>Notification</label>
+                        <action>index</action>
+                        <controller>notification</controller>
+                        <module>demo</module>
+                    </notification>
+                    <pagination>
+                        <label>Pagination</label>
+                        <action>index</action>
+                        <controller>paginate</controller>
+                        <module>demo</module>
+                    </pagination>
+                    <translation>
+                        <label>Translation</label>
+                        <action>index</action>
+                        <controller>translate</controller>
+                        <module>demo</module>
+                    </translation>
+                </pages>
+            </demoHome>
+        </pages>
+    </default>
+</resource>

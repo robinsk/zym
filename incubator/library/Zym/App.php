@@ -757,7 +757,7 @@ class Zym_App
             $namespace   = $resource->get('namespace')   ? $resource->get('namespace')   : null;
             
             // Load resource config
-            if (!$resConfig = $this->getCache('resource_config_' . $name)) {
+            if (!$resConfig = $this->getCache('resourceConfig_' . $name)) {
                 if (!$resource->get('config') instanceof Zend_Config) {
                     // Load a resource config from file specified
                     $resConfigFile = $this->getPath(self::PATH_CONFIG, $resource->get('config'));
@@ -839,7 +839,7 @@ class Zym_App
             
             if (class_exists($class, false)) { 
                 return $class;
-            } else if (Zend_Loader::isReadable($dir . $file)) {
+            } else {
                 include_once($dir . $file);
                 
                 if (class_exists($class, false)) {
