@@ -108,7 +108,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_Html_Navigation
             }
             
             // create li element for page
-            $liCss = $page->isActive() ? ' class="active"' : '';
+            $liCss = $page->isActive(true) ? ' class="active"' : '';
             $html .= "$indent    <li$liCss>\n";
             
             // create anchor element

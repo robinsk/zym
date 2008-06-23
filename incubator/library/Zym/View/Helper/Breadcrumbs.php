@@ -129,7 +129,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_Html_Navigation
      *
      * @return unknown
      */
-    public function isLinkLast()
+    public function getLinkLast()
     {
         return $this->_linkLast;
     }
