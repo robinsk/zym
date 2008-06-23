@@ -33,52 +33,20 @@ class Zym_ViewSuite extends PHPUnit_Framework_TestSuite
     /**
      * Construct
      *
+     * @return void
      */
     public function __construct()
     {
-        $this->setName($this->_createName());
-        
-        $name     = substr($this->getName(), 0, -5);
-        $tests    = array();
-        
-        $componentFile = dirname(__FILE__) . "/{$name}Test.php";
-        if (file_exists($componentFile)) {
-            $tests[] = $componentFile;
-        }
-        
-        $componentDir = dirname(__FILE__) . '/' . $name;
-        if (file_exists($componentDir)) {
-            $iterator = new RecursiveDirectoryIterator($componentDir);
-            foreach(new RecursiveIteratorIterator($iterator) as $file) {
-                if ($file->isFile() && substr($file, -8) == 'Test.php') {
-                    $tests[] = (string) $file;
-                }
-            }
-        }
-        
-        $this->addTestFiles($tests);
+        parent::__construct(__FILE__);   
     }
     
     /**
      * Get suite
      *
-     * @return PHPUnit_Framework_TestSuite
+     * @return Zym_PhpUnit_Framework_TestSuite
      */
     public static function suite()
     {
         return new self();
-    }
-    
-    /**
-     * Create name
-     *
-     * @return string
-     */
-    protected function _createName()
-    {
-        $parts = explode('_', get_class($this));
-        $name  = $parts[count($parts) - 1];
-        
-        return $name;
     }
 }

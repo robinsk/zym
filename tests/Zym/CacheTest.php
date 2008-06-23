@@ -37,13 +37,21 @@ require_once 'Zend/Config.php';
  */
 class Zym_CacheTest extends PHPUnit_Framework_TestCase
 {        
-
+    /**
+     * Make sure getDefaultBackend() throws exception 
+     *
+     */
 	public function testGetDefaultBackendShouldThrowExceptionWhenConfigNotSet()
 	{
 	    $this->setExpectedException('Zym_Cache_Exception');
+	    Zym_Cache::setDefaultBackend(null);
 	    Zym_Cache::getDefaultBackend();
 	}
 	
+	/**
+	 * Make sure set config works
+	 *
+	 */
 	public function testSetConfigShouldWork()
 	{
 	    $config = new Zend_Config(array(
@@ -72,6 +80,10 @@ class Zym_CacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Zym_Cache::getFrontendOptions('Core'), array('caching' => false));
 	}
 	
+	/**
+	 * Make sure factory returns core
+	 *
+	 */
 	public function testFactoryReturnsCore()
 	{
 	    $core = Zym_Cache::factory('Core', 'file', array('caching' => false));

@@ -22,7 +22,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * @see Zym_Paginate_Array
  */
-require_once 'library/Zym/Paginate/Array.php';
+require_once 'Zym/Paginate/Array.php';
 
 /**
  * Test suite for Zym_Notification_Message

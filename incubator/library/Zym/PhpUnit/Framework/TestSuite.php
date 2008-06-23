@@ -36,19 +36,20 @@ class Zym_PhpUnit_Framework_TestSuite extends PHPUnit_Framework_TestSuite
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($currentFile)
     {
         $this->setName($this->_createName());
         
-        $name     = substr($this->getName(), 0, -5);
-        $tests    = array();
+        $name  = substr($this->getName(), 0, -5);
+        $path  = dirname($currentFile);
+        $tests = array();
         
-        $componentFile = dirname(__FILE__) . "/{$name}Test.php";
+        $componentFile = $path . "/{$name}Test.php";
         if (file_exists($componentFile)) {
             $tests[] = $componentFile;
         }
-        
-        $componentDir = dirname(__FILE__) . '/' . $name;
+
+        $componentDir = $path . '/' . $name;
         if (file_exists($componentDir)) {
             $iterator = new RecursiveDirectoryIterator($componentDir);
             foreach(new RecursiveIteratorIterator($iterator) as $file) {
@@ -68,7 +69,7 @@ class Zym_PhpUnit_Framework_TestSuite extends PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        return new self();
+        return new self(__FILE__);
     }
     
     /**
@@ -80,7 +81,7 @@ class Zym_PhpUnit_Framework_TestSuite extends PHPUnit_Framework_TestSuite
     {
         $parts = explode('_', get_class($this));
         $name  = $parts[count($parts) - 1];
-        
+                
         return $name;
     }
 }

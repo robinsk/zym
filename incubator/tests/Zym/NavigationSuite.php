@@ -29,4 +29,24 @@ require_once 'Zym/PhpUnit/Framework/TestSuite.php';
  * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_NavigationSuite extends Zym_PhpUnit_Framework_TestSuite 
-{}
+{
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct(__FILE__);   
+    }
+    
+    /**
+     * Get suite
+     *
+     * @return Zym_PhpUnit_Framework_TestSuite
+     */
+    public static function suite()
+    {
+        return new self();
+    }
+}

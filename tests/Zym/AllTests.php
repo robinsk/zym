@@ -14,7 +14,8 @@
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
-set_include_path(dirname(__FILE__) . '/../../library' . PATH_SEPARATOR
+set_include_path(dirname(__FILE__)  . '/../' . PATH_SEPARATOR
+                . dirname(__FILE__) . '/../../library' . PATH_SEPARATOR
                 . dirname(__FILE__) . '/../../incubator/library' . PATH_SEPARATOR . get_include_path());
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
@@ -63,9 +64,8 @@ class Zym_AllTests
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('Zym Framework - Incubator');
-        $suite->addTestFiles(glob(dirname(__FILE__) . '/' . '*Suite.php'));
-
+        $suite = new PHPUnit_Framework_TestSuite('Zym Framework - Core');
+        $suite->addTestFiles(glob(dirname(__FILE__) . '/*Suite.php'));
         return $suite;
     }
 }
