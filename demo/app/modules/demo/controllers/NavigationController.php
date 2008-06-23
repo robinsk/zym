@@ -46,20 +46,10 @@ class Demo_NavigationController extends Zym_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        /*
-        // add a route to show that zym_navigation
-        // can be aware of routes and params
-        $front = Zend_Controller_Front::getInstance();
-        $router = $front->getRouter();
-        $router->addRoute(
-            'myroute',
-            new Zend_Controller_Router_Route('page2/:format', array(
-                'controller' => 'page2', 'action' => 'index')
-            )
-        );
-        */
-        
         $this->view->navSetup = highlight_file('App/Demo/Navigation.setup.php', true);
+        $this->view->navSetup = str_replace('Zym_Navigation_Demo',
+                                            'Zym_Navigation',
+                                            $this->view->navSetup);
     }
     
     /**

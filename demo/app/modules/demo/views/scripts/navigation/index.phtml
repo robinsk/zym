@@ -54,6 +54,13 @@
     margin: 0pt;
 }
 <? $this->headStyle()->captureEnd(); ?>
+<?
+// save state
+$oldNav = clone Zend_Registry::get('Zym_Navigation');
+Zend_Registry::set('Zym_Navigation', Zend_Registry::get('Zym_Navigation_Demo'));
+$prevLinkLast = $this->breadcrumbs()->getLinkLast();
+$prevSeparator = $this->breadcrumbs()->getSeparator();
+?>
 <div>
     <h1>Navigation Demo</h1>
     <p>
@@ -304,6 +311,7 @@
     <?= $this->breadcrumbs(); ?>
     </p>
 <?php
+// set some options
 $this->breadcrumbs()->setLinkLast(true);
 $this->breadcrumbs()->setSeparator(' <span class="separator"> &#9654; </span> ');
 ?>
@@ -336,3 +344,12 @@ echo $this-&gt;breadcrumbs();<br/>
     <div class="example-output"><pre><?= htmlentities($this->sitemap()); ?></pre></div>
 
 </div>
+<?
+// restore state
+Zend_Registry::set('Zym_Navigation', $oldNav);
+$this->menu()->setNavigation($oldNav);
+$this->breadcrumbs()->setLinkLast($prevLinkLast);
+$this->breadcrumbs()->setSeparator($prevSeparator);
+$this->breadcrumbs()->setNavigation($oldNav);
+$this->sitemap()->setNavigation($oldNav);
+?>

@@ -40,6 +40,9 @@
     div#nav li.last {
         border-right: none;
     }
+    div#nav li ul {
+    	display: none;
+    }
     div#nav a,
     div#nav a:link,
     div#nav a:active,
@@ -60,7 +63,7 @@
         text-decoration: none;
    			background-color: #ebf5fc;
     }
-    div#nav strong {
+    div#nav li.active a {
         display: inline-block;
         /* hide from ie/mac \*/
         display: block;

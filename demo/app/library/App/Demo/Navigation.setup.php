@@ -121,11 +121,11 @@ $config = array(
     )
 );
 
-// create navigation from array
+// Create navigation from array
 $navigation = new Zym_Navigation($config);
 
-// put navigation in registry so it's found by view helpers
-Zend_Registry::set('Zym_Navigation', $navigation);
+// put navigation in registry so it's found by helpers
+Zend_Registry::set('Zym_Navigation_Demo', $navigation);
 
 // add a route to show that zym_navigation
 // can be aware of routes and params
