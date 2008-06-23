@@ -22,7 +22,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * @see Zym_Paginate_Array
  */
-require_once 'trunk/library/Zym/Paginate/Array.php';
+require_once 'library/Zym/Paginate/Array.php';
 
 /**
  * Test suite for Zym_Notification_Message
@@ -46,10 +46,11 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
      * @var Zym_Paginate_Array
      */
     private $Zym_Paginate_Array;
+    
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -64,10 +65,11 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
         $this->Zym_Paginate_Array = new Zym_Paginate_Array($this->mockData);
         $this->Zym_Paginate_Array->setRowLimit(2);
     }
+    
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
         $this->Zym_Paginate_Array = null;
         parent::tearDown();
@@ -141,6 +143,7 @@ class Zym_Paginate_NumericArrayTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $this->Zym_Paginate_Array->getAllPages());
     }
+    
     /**
      * Tests Zym_Paginate_Array->getPage()
      */

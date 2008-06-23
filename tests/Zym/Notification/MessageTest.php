@@ -22,7 +22,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * @see Zym_Notification_Message
  */
-require_once 'trunk/library/Zym/Notification/Message.php';
+require_once 'Zym/Notification/Message.php';
 
 /**
  * Test suite for Zym_Notification_Message
@@ -40,69 +40,70 @@ class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    private $mockData = array('foo' => 'bar');
+    private $_mockData = array('foo' => 'bar');
 
     /**
      * Test name
      *
      * @var string
      */
-    private $mockName = 'name';
+    private $_mockName = 'name';
 
     /**
      * Test sender
      *
      * @var string
      */
-    private $mockSender = 'sender';
+    private $_mockSender = 'sender';
 
     /**
      * Message instance
      *
      * @var Zym_Notification_Message
      */
-    private $Zym_Notification_Message;
+    private $_message;
 
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
-        parent::setUp();
-
-        $this->Zym_Notification_Message = new Zym_Notification_Message($this->mockName, $this->mockSender, $this->mockData);
+        $this->_message = new Zym_Notification_Message(
+                                 $this->_mockName, $this->_mockSender, $this->_mockData);
     }
+    
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
-        $this->Zym_Notification_Message = null;
-        parent::tearDown();
+        $this->_message = null;
     }
 
     /**
      * Tests Zym_Notification_Message->getData()
      */
-    public function testGetData ()
+    public function testGetData()
     {
-        $data = $this->Zym_Notification_Message->getData(/* parameters */);
-        $this->assertEquals($this->mockData, $data);
+        $data = $this->_message->getData();
+        $this->assertEquals($this->_mockData, $data);
     }
+    
     /**
      * Tests Zym_Notification_Message->getName()
      */
-    public function testGetName ()
+    public function testGetName()
     {
-        $name = $this->Zym_Notification_Message->getName(/* parameters */);
-        $this->assertEquals($this->mockName, $name);
+        $name = $this->_message->getName();
+        $this->assertEquals($this->_mockName, $name);
     }
+    
     /**
      * Tests Zym_Notification_Message->getSender()
      */
-    public function testGetSender ()
+    public function testGetSender()
     {
-        $sender = $this->Zym_Notification_Message->getSender(/* parameters */);
-        $this->assertEquals($this->mockSender, $sender);
+        $sender = $this->_message->getSender();
+        $this->assertEquals($this->_mockSender, $sender);
     }
 }

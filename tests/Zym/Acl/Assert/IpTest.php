@@ -17,7 +17,7 @@
 /**
  * @see Zym_Acl_Assert_Ip
  */
-require_once 'trunk/library/Zym/Acl/Assert/Ip.php';
+require_once 'Zym/Acl/Assert/Ip.php';
 
 /**
  * @see PHPUnit_Framework_TestCase
@@ -40,19 +40,19 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Acl_Assert_Ip
      */
-    private $Zym_Acl_Assert_Ip;
+    private $_assertIp;
 
     /**
      * Acl instance
      *
      * @var Zend_Acl
      */
-    private $Zend_Acl;
+    private $_acl;
 
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -60,16 +60,17 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
                            '5.6.*',
                            '7.8.9.(1-9)');
 
-        $this->Zym_Acl_Assert_Ip = new Zym_Acl_Assert_Ip($whitelist);
-        $this->Zend_Acl = new Zend_Acl();
+        $this->_assertIp = new Zym_Acl_Assert_Ip($whitelist);
+        $this->_acl      = new Zend_Acl();
     }
 
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
-        $this->Zym_Acl_Assert_Ip = null;
+        $this->_acl      = null;
+        $this->_assertIp = null;
         parent::tearDown();
     }
 
@@ -78,12 +79,14 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
      */
     public function testAssertInList()
     {
+        $ip = $this->_assertIp;
+        
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertTrue($allowed);
 
         $_SERVER['REMOTE_ADDR'] = '4.3.2.1';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertFalse($allowed);
     }
 
@@ -92,12 +95,14 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
      */
     public function testAssertWildcard()
     {
+        $ip = $this->_assertIp;
+        
         $_SERVER['REMOTE_ADDR'] = '5.6.7.8';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertTrue($allowed);
 
         $_SERVER['REMOTE_ADDR'] = '5.7.8.9';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertFalse($allowed);
     }
 
@@ -106,24 +111,26 @@ class Zym_Acl_Assert_IpTest extends PHPUnit_Framework_TestCase
      */
     public function testAssertRange()
     {
+        $ip = $this->_assertIp;
+                
         $_SERVER['REMOTE_ADDR'] = '7.8.9.0';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertFalse($allowed);
 
         $_SERVER['REMOTE_ADDR'] = '7.8.9.1';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertTrue($allowed);
 
         $_SERVER['REMOTE_ADDR'] = '7.8.9.5';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertTrue($allowed);
 
         $_SERVER['REMOTE_ADDR'] = '7.8.9.9';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertTrue($allowed);
 
         $_SERVER['REMOTE_ADDR'] = '7.8.9.10';
-        $allowed = $this->Zym_Acl_Assert_Ip->assert($this->Zend_Acl);
+        $allowed = $ip->assert($this->Zend_Acl);
         $this->assertFalse($allowed);
     }
 }

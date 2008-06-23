@@ -9,76 +9,24 @@
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
- * @package    Zym_Cache
+ * @package    Zym_Navigation
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
- * @see PHPUnit_Framework_TestSuite
+ * @see Zym_PhpUnit_Framework_TestSuite
  */
-require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'Zym/PhpUnit/Framework/TestSuite.php';
 
 /**
  * TestSuite for Zym_Navigation
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
- * @package    Zym_Cache
+ * @package    Zym_Navigation
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_NavigationSuite extends PHPUnit_Framework_TestSuite
-{    
-    /**
-     * Construct
-     *
-     */
-    public function __construct()
-    {
-        $this->setName($this->_createName());
-        
-        $name     = substr($this->getName(), 0, -5);
-        $tests    = array();
-        
-        $componentFile = dirname(__FILE__) . "/{$name}Test.php";
-        if (file_exists($componentFile)) {
-            $tests[] = $componentFile;
-        }
-        
-        $componentDir = dirname(__FILE__) . '/' . $name;
-        if (file_exists($componentDir)) {
-            $iterator = new RecursiveDirectoryIterator($componentDir);
-            foreach(new RecursiveIteratorIterator($iterator) as $file) {
-                if ($file->isFile() && substr($file, -8) == 'Test.php') {
-                    $tests[] = (string) $file;
-                }
-            }
-        }
-        
-        $this->addTestFiles($tests);
-    }
-    
-    /**
-     * Get suite
-     *
-     * @return PHPUnit_Framework_TestSuite
-     */
-    public static function suite()
-    {
-        return new self();
-    }
-    
-    /**
-     * Create name
-     *
-     * @return string
-     */
-    protected function _createName()
-    {
-        $parts = explode('_', get_class($this));
-        $name  = $parts[count($parts) - 1];
-        
-        return $name;
-    }
-}
+class Zym_NavigationSuite extends Zym_PhpUnit_Framework_TestSuite 
+{}

@@ -74,7 +74,10 @@ class Zym_CacheTest extends PHPUnit_Framework_TestCase
 	
 	public function testFactoryReturnsCore()
 	{
-	    $core = Zym_Cache::factory('Core', 'file', array('caching' => true));
+	    $core = Zym_Cache::factory('Core', 'file', array('caching' => false));
 	    $this->assertEquals('Zend_Cache_Core', get_class($core));
+	    
+        $core = Zym_Cache::factory();
+        $this->assertEquals('Zend_Cache_Core', get_class($core));
 	}
 }

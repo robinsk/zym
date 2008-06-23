@@ -22,12 +22,12 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * @see Zym_Notification_Notification
  */
-require_once 'trunk/library/Zym/Notification.php';
+require_once 'Zym/Notification.php';
 
 /**
  * @see Zym_Notification_Interface
  */
-require_once 'trunk/library/Zym/Notification/Interface.php';
+require_once 'Zym/Notification/Interface.php';
 
 /**
  * Test for Zym_Notification
@@ -45,138 +45,148 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Notification
      */
-    private $Zym_Notification;
+    private $_notification;
 
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
-
-        $this->Zym_Notification = Zym_Notification::get();
+        $this->_notification = Zym_Notification::get();
     }
+    
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
-        $this->Zym_Notification = null;
+        $this->_notification = null;
         parent::tearDown();
     }
 
     /**
      * Tests Zym_Notification->attach()
      */
-    public function testAttach ()
+    public function testAttach()
     {
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertFalse($hasObserver);
-        $this->Zym_Notification->attach($this, 'test');
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        
+        $this->_notification->attach($this, 'test');
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertTrue($hasObserver);
-        $this->Zym_Notification->attach($this);
-        $this->assertTrue($this->Zym_Notification->hasObserver($this, '*'));
-        $this->Zym_Notification->detach($this);
-        $this->Zym_Notification->reset();
+        
+        $this->_notification->attach($this);
+        $this->assertTrue($this->_notification->hasObserver($this, '*'));
+        
+        $this->_notification->detach($this);
+        $this->_notification->reset();
     }
     /**
      * Tests Zym_Notification->detach()
      */
-    public function testDetach ()
+    public function testDetach()
     {
-        $this->Zym_Notification->attach($this, 'test');
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $this->_notification->attach($this, 'test');
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertTrue($hasObserver);
-        $this->Zym_Notification->detach($this);
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $this->_notification->detach($this);
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertFalse($hasObserver);
 
-        $this->Zym_Notification->attach($this, 'test');
-        $this->Zym_Notification->detach($this, 'test');
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $this->_notification->attach($this, 'test');
+        $this->_notification->detach($this, 'test');
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertFalse($hasObserver);
     }
     /**
      * Tests Zym_Notification::get()
      */
-    public function testGet ()
+    public function testGet()
     {
         $notification = Zym_Notification::get();
         $this->assertType('Zym_Notification', $notification);
     }
+    
     /**
      * Tests Zym_Notification->getWildcard()
      */
-    public function testGetWildcard ()
+    public function testGetWildcard()
     {
-        $wildcard = $this->Zym_Notification->getWildcard();
+        $wildcard = $this->_notification->getWildcard();
         $this->assertEquals('*', $wildcard);
     }
+    
     /**
      * Tests Zym_Notification::has()
      */
-    public function testHas ()
+    public function testHas()
     {
         Zym_Notification::get('foo');
         $this->assertTrue(Zym_Notification::has('foo'));
         Zym_Notification::remove('foo');
         $this->assertFalse(Zym_Notification::has('foo'));
     }
+    
     /**
      * Tests Zym_Notification->hasObserver()
      */
-    public function testHasObserver ()
+    public function testHasObserver()
     {
-        $this->Zym_Notification->attach($this, 'foo');
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'foo');
+        $this->_notification->attach($this, 'foo');
+        $hasObserver = $this->_notification->hasObserver($this, 'foo');
         $this->assertTrue($hasObserver);
-        $this->Zym_Notification->reset();
+        
+        $this->_notification->reset();
     }
+    
     /**
      * Tests Zym_Notification->isRegistered()
      */
-    public function testIsRegistered ()
+    public function testIsRegistered()
     {
-        $this->Zym_Notification->attach($this, 'foo');
-        $isRegistered = $this->Zym_Notification->isRegistered('foo');
+        $this->_notification->attach($this, 'foo');
+        $isRegistered = $this->_notification->isRegistered('foo');
         $this->assertTrue($isRegistered);
-        $this->Zym_Notification->reset();
+        
+        $this->_notification->reset();
     }
+    
     /**
      * Tests Zym_Notification->post()
      */
     public function testPost()
     {
         $interfaceTest = new TestNotificationInterface();
-        $this->Zym_Notification->attach($interfaceTest, 'foo');
-        $this->Zym_Notification->attach($interfaceTest);
-        $this->Zym_Notification->post('foo', 'bar', array('baz'));
+        $this->_notification->attach($interfaceTest, 'foo');
+        $this->_notification->attach($interfaceTest);
+        $this->_notification->post('foo', 'bar', array('baz'));
 
         $notifications = $interfaceTest->getNotifications();
         $this->assertEquals(1, count($notifications));
 
         $interfaceTest2 = new TestNotificationInterface();
-        $this->Zym_Notification->attach($interfaceTest2, 'fo*');
-        $this->Zym_Notification->attach($interfaceTest2);
-        $this->Zym_Notification->post('foo', 'bar', array('baz'));
+        $this->_notification->attach($interfaceTest2, 'fo*');
+        $this->_notification->attach($interfaceTest2);
+        $this->_notification->post('foo', 'bar', array('baz'));
 
         $notifications = $interfaceTest2->getNotifications();
         $this->assertEquals(1, count($notifications));
 
         $customMethodTest = new TestNotification();
-        $this->Zym_Notification->attach($customMethodTest, 'foo', 'msgMe');
-        $this->Zym_Notification->post('foo', 'bar', array('baz'));
+        $this->_notification->attach($customMethodTest, 'foo', 'msgMe');
+        $this->_notification->post('foo', 'bar', array('baz'));
 
         $notifications = $customMethodTest->getNotifications();
         $this->assertEquals(1, count($notifications));
 
         $customMethodTest2 = new TestNotification();
-        $this->Zym_Notification->attach($customMethodTest2, 'foo', 'doesNotExist');
+        $this->_notification->attach($customMethodTest2, 'foo', 'doesNotExist');
 
         try {
-            $this->Zym_Notification->post('foo', 'bar', array('baz'));
-            $this->fail('Didnt throw exception');
+            $this->_notification->post('foo', 'bar', array('baz'));
+            $this->fail('Didn\'t throw exception');
         } catch (Zym_Notification_Exception_MethodNotImplemented $e) {
             $this->assertType('Zym_Notification_Exception_MethodNotImplemented', $e);
         }
@@ -185,13 +195,15 @@ class Zym_NotificationTest extends PHPUnit_Framework_TestCase
     /**
      * Tests Zym_Notification->reset()
      */
-    public function testReset ()
+    public function testReset()
     {
-        $this->Zym_Notification->attach($this, 'test');
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        $this->_notification->attach($this, 'test');
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertTrue($hasObserver);
-        $this->Zym_Notification->reset();
-        $hasObserver = $this->Zym_Notification->hasObserver($this, 'test');
+        
+        $this->_notification->reset();
+        
+        $hasObserver = $this->_notification->hasObserver($this, 'test');
         $this->assertFalse($hasObserver);
     }
 }

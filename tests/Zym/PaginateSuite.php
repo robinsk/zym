@@ -7,9 +7,9 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @author     Robin Skoglund
+ * @author     Geoffrey Tran
  * @category   Zym_Tests
- * @package    Zym_Validate
+ * @package    Zym_Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -22,11 +22,11 @@ require_once 'Zym/PhpUnit/Framework/TestSuite.php';
 /**
  * TestSuite
  *
- * @author     Robin Skoglund
+ * @author     Geoffrey Tran
  * @category   Zym_Tests
- * @package    Zym_Validate
+ * @package    Zym_Paginate
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_ValidateSuite extends Zym_PhpUnit_Framework_TestSuite 
+class Zym_PaginateSuite extends Zym_PhpUnit_Framework_TestSuite 
 {}

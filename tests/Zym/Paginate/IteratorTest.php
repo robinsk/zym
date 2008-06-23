@@ -20,9 +20,9 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * @see Zym_Paginate_Array
+ * @see Zym_Paginate_Iterator
  */
-require_once 'trunk/library/Zym/Paginate/Array.php';
+require_once 'Zym/Paginate/Iterator.php';
 
 /**
  * Test suite for Zym_Notification_Message
@@ -33,24 +33,16 @@ require_once 'trunk/library/Zym/Paginate/Array.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Paginate_AssocArrayTest extends PHPUnit_Framework_TestCase
+class Zym_Paginate_IteratorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Mock data
-     *
-     * @var array
+     * @var Zym_Paginate_Iterator
      */
-    protected $mockData = array();
-
-    /**
-     * @var Zym_Paginate_Array
-     */
-    private $Zym_Paginate_Array;
-
+    private $Zym_Paginate_Iterator;
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -60,24 +52,36 @@ class Zym_Paginate_AssocArrayTest extends PHPUnit_Framework_TestCase
             $mockData['k' . $tmp] = 'v' . $tmp;
         }
 
-        $this->Zym_Paginate_Array = new Zym_Paginate_Array($mockData);
-        $this->Zym_Paginate_Array->setRowLimit(2);
-    }
+        $arrayObject = new ArrayObject($mockData);
 
-    /**
-     * Test getPageCount() method
-     */
-    public function testPageCount()
-    {
-        $this->assertEquals(5, $this->Zym_Paginate_Array->getPageCount());
+        $this->Zym_Paginate_Iterator = new Zym_Paginate_Iterator($arrayObject->getIterator());
+        $this->Zym_Paginate_Iterator->setRowLimit(2);
     }
-
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
-        $this->Zym_Paginate_Array = null;
+        $this->Zym_Paginate_Iterator = null;
         parent::tearDown();
     }
+
+    /**
+     * Test the getPage method
+     */
+    public function testGetPage()
+    {
+        $page = $this->Zym_Paginate_Iterator->getPage(2);
+        $this->assertType('LimitIterator', $page);
+
+        $expected = array('kitem3' => 'vitem3', 'kitem4' => 'vitem4');
+        $content = array();
+
+        foreach ($page as $key => $value) {
+        	$content[$key] = $value;
+        }
+
+        $this->assertEquals($expected, $content);
+    }
 }
+

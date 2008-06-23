@@ -18,7 +18,7 @@
 /**
  * @see Zym_Db_Table_Abstract
  */
-require_once 'trunk/library/Zym/Db/Table/Abstract.php';
+require_once 'Zym/Db/Table/Abstract.php';
 
 /**
  * @see PHPUnit_Framework_TestCase
@@ -48,7 +48,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -64,7 +64,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
         $this->Zym_Db_Table_Abstract = null;
         parent::tearDown();
@@ -73,7 +73,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * Tests Zym_Db_Table_Abstract->addReference()
      */
-    public function testAddReference ()
+    public function testAddReference()
     {
         $this->Zym_Db_Table_Abstract->addReference('Reporter', 'reported_by', 'Accounts', 'account_name')
                                     ->addReference('Engineer', 'assigned_to', 'Accounts', 'account_name')
@@ -89,7 +89,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * Tests Zym_Db_Table_Abstract->isIdentity()
      */
-    public function testIsIdentity ()
+    public function testIsIdentity()
     {
         $this->assertTrue($this->Zym_Db_Table_Abstract->isIdentity('id'));
         $this->assertFalse($this->Zym_Db_Table_Abstract->isIdentity('key'));
