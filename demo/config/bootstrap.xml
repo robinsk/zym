@@ -41,14 +41,7 @@ set from <default> for the production environment.
             <php />
             <cache />
             <locale />
-            <translate>
-                <config>
-                    <adapter>gettext</adapter>
-                    <options>
-                        <scan>1</scan>
-                    </options>
-                </config>
-            </translate>
+            <translate />
             <session />
             <view />
             <layout />

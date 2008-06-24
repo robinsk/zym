@@ -50,7 +50,7 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
             'cache'   => false,
             'adapter' => 'tmx',
             'data'    => 'locale', // Relative to data directory
-            'locale'  => null,
+            'locale'  => 'auto',
             'options' => array(),
         
             'registry' => array(
@@ -75,10 +75,14 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         
         $adapter = $config->get('adapter');
         $data    = $this->_parseDataPath($config->get('data'));
-        $locale  = ($locale = $config->get('locale')) ? $locale : null;
+        $locale  = $config->get('locale');
         $options = $this->_parseOptions($config->get('options')->toArray());
 
-        $translate = new Zend_Translate($adapter, $data, $locale, $options);
+        $translate = new Zend_Translate($adapter, $data, null, $options);
+        
+        // Weird Zend_Translate issues
+        // We cannot set a locale in the constructor
+        $translate->getAdapter()->setLocale($locale);
         
         if ((bool) $config->get('registry')->get('enabled')) {
             /**
