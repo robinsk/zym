@@ -29,6 +29,6 @@ require_once 'Zym/Log/Exception.php';
  * @subpackage Writer
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Log_Exception extends Zym_Exception
+class Zym_Log_Writer_Exception extends Zym_Exception
 {
 }

@@ -128,7 +128,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
             $this->getRegistry()->set($dbKey, $db);
             
             // Determine if we should save the db adapter in the registry
-            $dbRegistryDisabled = (isset($dbConfig->get('registry')->get('disabled')) && $dbConfig->get('registry')->get('disabled') === '') 
+            $dbRegistryDisabled = (isset($dbConfig->get('registry')->disabled) && $dbConfig->get('registry')->get('disabled') === '') 
                                     || $dbConfig->get('registry')->get('disabled') == true;
             if (!$dbRegistryDisabled) {
                 // Save in registry

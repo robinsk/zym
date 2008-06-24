@@ -42,7 +42,7 @@ class Zym_App_Resource_Mail_Transport_Smtp implements Zym_App_Resource_Mail_Tran
      */
     public static function getTransport(Zend_Config $config = null) 
     {
-        $host = isset($config->host) ? $config->get('host')' : null;
+        $host = isset($config->host) ? $config->get('host') : null;
         $otherConfig = ($config instanceof Zend_Config) ? $config->toArray() : null;      
         return new Zend_Mail_Transport_Smtp($host, $otherConfig);
     }

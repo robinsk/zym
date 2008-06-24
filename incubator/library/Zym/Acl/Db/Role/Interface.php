@@ -26,13 +26,6 @@
 interface Zym_Acl_Db_Role_Interface extends Zend_Acl_Role_Interface
 {
     /**
-     * Returns the string identifier of the Role
-     *
-     * @return string
-     */
-    public function getRoleId();
-
-    /**
      * Get this roles parents
      *
      * @return array
