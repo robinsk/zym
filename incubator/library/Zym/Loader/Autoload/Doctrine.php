@@ -25,7 +25,7 @@ require_once 'Doctrine.php';
 require_once 'Zym/Loader/Autoload/Interface.php';
 
 /**
- * Zym/ Autoload for Doctrine (http://phpdoctrine.org)
+ * Zym Autoload for Doctrine (http://phpdoctrine.org)
  *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License

@@ -37,35 +37,35 @@ require_once 'Zym/View/Stream/Wrapper.php';
  * @package Zym_View
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-abstract class Zym_View_Abstract extends Zend_View_Abstract 
+abstract class Zym_View_Abstract extends Zend_View_Abstract
 {
     /**
      * Stack of Zend_View_Filter names to apply as stream filters.
      * @var array
      */
     private $_streamFilter = array();
-    
+
     /**
      * Flag to indicate whether to use streams
      *
      * @var boolean
      */
     private $_streamFlag   = true;
-    
+
     /**
      * Stream protocol to use
      *
      * @var string
      */
     private $_streamProtocol = 'view';
-    
+
     /**
      * PHP stream wrapper for views
      *
      * @var string
      */
     private $_streamWrapper = 'Zym_View_Stream_Wrapper';
-    
+
     /**
      * Constructor.
      *
@@ -73,25 +73,30 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      */
     public function __construct(array $config = array())
     {
+        // Disable streams
+        if (array_key_exists('streamFlag', $config)) {
+            $this->setStreamFlag($config['streamFlag']);
+        }
+
         // Stream protocol
         if (array_key_exists('streamProtocol', $config)) {
             $this->setStreamProtocol($config['streamProtocol']);
         }
-        
+
         // Stream wrapper
         if (array_key_exists('streamWrapper', $config)) {
             $this->setStreamWrapper($config['streamWrapper']);
         }
-        
+
         // User-defined stream filters
         if (array_key_exists('streamFilter', $config)) {
             $this->addFilter($config['streamFilter']);
         }
-        
+
         // Call parent
         parent::__construct($config);
     }
-    
+
     /**
      * Return array of all currently active filters
      *
@@ -103,7 +108,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     {
         return $this->_streamFilter;
     }
-    
+
     /**
      * Add one or more stream filters to the stack in FIFO order.
      *
@@ -131,28 +136,28 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     {
         $this->_steamFilter = array();
         $this->addStreamFilter($name);
-        
+
         return $this;
     }
-    
+
     /**
      * Set stream flag
-     * 
+     *
      * Whether to disable or enable use of stream wrappers
      *
      * @param string $flag
      * @return Zym_View_Abstract
      */
     public function setStreamFlag($flag)
-    {   
+    {
         $this->_streamFlag = (bool) $flag;
-        
+
         return $this;
     }
-    
+
     /**
      * Get stream flag
-     * 
+     *
      * Whether streams are enabled or not
      *
      * @return string
@@ -161,10 +166,10 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     {
         return $this->_streamFlag;
     }
-    
+
     /**
      * Set view stream wrapper class
-     * 
+     *
      * Protocol must be alphanumeric
      *
      * @param string $protocol
@@ -181,12 +186,12 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
                 'Stream protocol "' . $protocol . '" cannot be empty'
             );
         }
-        
+
         $this->_streamProtocol= (string) $protocol;
-        
+
         return $this;
     }
-    
+
     /**
      * Get stream protocol
      *
@@ -196,20 +201,20 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     {
         return $this->_streamProtocol;
     }
-    
+
     /**
      * Set view stream wrapper class
-     * 
+     *
      * @param string $class
      * @return Zym_View_Abstract
      */
     public function setStreamWrapper($class)
     {
         $this->_streamWrapper = (string) $class;
-        
+
         return $this;
     }
-    
+
     /**
      * Get stream wrapper class
      *
@@ -219,7 +224,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     {
         return $this->_streamWrapper;
     }
-    
+
     /**
      * Processes a view script and returns the output.
      *
@@ -236,14 +241,14 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
         // Get stream class
         $stream         = $this->getStreamWrapper();
         $streamProtocol = $this->getStreamProtocol();
-        
+
         // Do extra work if something already registered our protocol
         $previousWrapperExists = false;
-        
+
         // Unregister existing wrapper
         if (in_array($streamProtocol, stream_get_wrappers())) {
             stream_wrapper_unregister($streamProtocol);
-            $previousWrapperExists = true;          
+            $previousWrapperExists = true;
         }
 
         // Load stream wrapper
@@ -251,10 +256,10 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
 
         // Register wrapper
         stream_wrapper_register($streamProtocol, $stream);
-        
+
         // Render!
         $return = parent::render($name);
-        
+
         // Unregister wrapper
         if (in_array($streamProtocol, stream_get_wrappers())) {
             stream_wrapper_unregister($streamProtocol);
@@ -262,16 +267,16 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
 
         // Register any old wrapper
         if ($previousWrapperExists) {
-            @stream_wrapper_restore($streamProtocol);            
+            @stream_wrapper_restore($streamProtocol);
         }
-        
+
         return $return;
     }
-    
+
     /**
      * Retrieve plugin loader for a specific plugin type
-     * 
-     * @param  string $type 
+     *
+     * @param  string $type
      * @return Zend_Loader_PluginLoader
      */
     public function getPluginLoader($type)
@@ -293,10 +298,10 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
                     break;
             }
         }
-        
+
         return $loader;
     }
-    
+
     /**
      * Load and setup stream wrapper
      *
@@ -315,8 +320,8 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
                 'The stream wrapper provided is not a subclass of "Zym_View_Stream_Wrapper"'
             );
         }
-        
+
         // Setup Wrapper
-        call_user_func(array($stream, 'setView'), $this);   
+        call_user_func(array($stream, 'setView'), $this);
     }
 }

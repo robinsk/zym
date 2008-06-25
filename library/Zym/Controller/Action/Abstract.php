@@ -59,17 +59,18 @@ abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
         parent::__construct($request, $response, $invokeArgs);
-    
+
         if (isset($this->contexts)) {
             // Init Contexts
             $this->getHelper('ContextSwitch')->initContext();
         }
-        
+
         if (isset($this->ajaxable)) {
             // Init AjaxContexts
             $this->getHelper('AjaxContext')->initContext();
         }
     }
+
     /**
      * Get the view object
      *
@@ -81,6 +82,18 @@ abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
     }
 
     /**
+     * Set view object
+     *
+     * @param Zend_View_Interface $view
+     * @return Zym_Controller_Action_Abstract
+     */
+    public function setView(Zend_View_Interface $view)
+    {
+        $this->view = $view;
+        return $this;
+    }
+
+    /**
      * Get the view script suffix
      *
      * @return string
@@ -88,6 +101,18 @@ abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
     public function getViewSuffix()
     {
         return $this->viewSuffix;
+    }
+
+    /**
+     * Set the view script suffix
+     *
+     * @param string $suffix
+     * @return Zym_Controller_Action_Abstract
+     */
+    public function setViewSuffix($suffix)
+    {
+        $this->viewSuffix = $suffix;
+        return $this;
     }
 
     /**

@@ -6,11 +6,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <?= $this->headMeta() . "\n"; ?>
         <!-- End: Meta Tags -->
-        
+
         <!-- Title -->
         <? $this->headTitle('Zym Framework')->setSeparator(' | ') ?>
         <?= $this->headTitle() . "\n"; ?>
-        
+
         <!-- Start: Link Tags -->
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/tools.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/typo.css');  ?>" />
@@ -18,16 +18,16 @@
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout-navtop-1col.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout.css'); ?>" />
         <?= $this->headLink() . "\n"; ?>
-        
+
         <!--[if lte IE 6]>
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('zym/styles/ie/png-fix.css'); ?>" />
         <![endif]-->
         <!-- End: Link Tags -->
-        
+
         <!-- Start: Styles -->
         <?= $this->headStyle() . "\n"; ?>
         <!-- End: Styles -->
-        
+
         <!-- Start: Scripts -->
         <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.1.1/dojo/dojo.xd.js"></script>
         <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js'); ?>"></script>
@@ -37,11 +37,11 @@
             app.layout.init();
         //]]>
         </script>
-        
+
         <?= $this->headScript() . "\n"; ?>
         <!-- End: Scripts -->
     </head>
-    
+
     <body>
         <div id="page">
             <!-- Start: Header -->
@@ -52,7 +52,7 @@
                     <p>Add <em>flavor</em> to your ZF</p>
                 </div>
                 <!-- End: Branding -->
-                
+
                 <!-- Start: Search -->
                 <!--
                 <div id="search">
@@ -68,7 +68,7 @@
                 <!-- End: Search -->
             </div>
             <!-- End: Header -->
-            
+
             <!-- Start: Content -->
             <div id="content" class="clearfix">
                 <div id="main">
@@ -84,16 +84,16 @@
                         </div>
                         <? endif; ?>
                     </div>
-                    
+
                     <?/* Output content */?>
                     <?= $this->layout()->content . "\n"; ?>
                 </div>
-                
+
                 <!-- Start: Navigation -->
                 <div id="nav">
                     <div class="wrapper">
                         <h2 class="accessibility">Navigation</h2>
-                        
+
                         <? $this->menu()->setUlClass('clearfix'); ?>
                         <?= "\n" . $this->menu()->toString(24); ?>
                     </div>
@@ -101,17 +101,17 @@
                 <!-- End: Navigation -->
             </div>
             <!-- End: Content -->
-            
+
             <!-- Start: Footer -->
             <div id="footer" class="clearfix">
                 <div id="divider">
                     <div />
                 </div>
-                
+
                 <span class="left">
                     <a href="<?= $this->url(array(), 'default', true); ?>">Home</a>
                 </span>
-                
+
                 <span class="right">
                     Copyright <?= date('Y'); ?> &copy; <a href="http://www.zym-project.com">Zym</a>
                 </span>
@@ -121,7 +121,7 @@
 
         <div id="extra1">&nbsp;</div>
         <div id="extra2">&nbsp;</div>
-        
+
         <?= $this->inlineScript(); ?>
     </body>
 </html>

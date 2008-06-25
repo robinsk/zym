@@ -15,7 +15,7 @@
  * Project Path
  *
  */
-define('PATH_PROJECT', realpath(dirname(dirname(__FILE__))) . '/');
+define('PATH_PROJECT', dirname(dirname(__FILE__)) . '/');
 
 /**
  * Include paths

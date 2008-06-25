@@ -41,7 +41,7 @@ class Zym_Validate_StringEquals extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageTemplates = array(
-        self::NOT_EQUAL => "Not all strings are equal",
+        self::NOT_EQUAL => 'Not all strings are equal',
     );
 
     /**

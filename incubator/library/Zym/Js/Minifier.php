@@ -20,7 +20,7 @@ require_once 'Zym/Js/Minifier/Iterator.php';
 
 /**
  * Javascript Minifier
- * 
+ *
  * A better version of http://code.google.com/p/jsmin-php/
  * Although at the moment, it is slower...
  *
@@ -37,48 +37,48 @@ class Zym_Js_Minifier
      *
      */
     const ORD_LF    = 10;
-    
+
     /**
      * Ord value of space
      *
      */
     const ORD_SPACE = 32;
-    
+
     /**
      * Current char
      *
      * @var string
      */
     protected $_a;
-    
+
     /**
      * Next char
      *
      * @var string
      */
     protected $_b;
-    
+
     /**
      * Iterator
      *
      * @var Zym_Js_Minifier_Iterator
      */
     protected $_iterator;
-    
+
     /**
      * Processed output
      *
      * @var string
      */
     protected $_output;
-    
+
     /**
      * Construct
      *
      */
     public function __construct()
     {}
-    
+
     /**
      * Minify Javascript
      *
@@ -89,16 +89,16 @@ class Zym_Js_Minifier
     {
         // Clean object
         $this->_cleanUp();
-        
+
         // Convert line endings
         $javascript = str_replace("\r\n", "\n", $javascript);
-        
+
         // Create iterator
         $this->_iterator = new Zym_Js_Minifier_Iterator($javascript);
-		
+
 		$this->_a = "\n";
 		$this->_action(3);
-		
+
 		while ($this->_a !== null) {
 			switch ($this->_a) {
 				case ' ':
@@ -108,7 +108,7 @@ class Zym_Js_Minifier
 						$this->_action(2);
 					}
 				    break;
-				
+
 				case "\n":
 					switch ($this->_b) {
 						case '{':
@@ -118,11 +118,11 @@ class Zym_Js_Minifier
 						case '-':
 							$this->_action(1);
 						    break;
-						
+
 						case ' ':
 							$this->_action(3);
 						    break;
-						
+
 						default:
 							if ($this->_isAlphaNumeric($this->_b)) {
 								$this->_action(1);
@@ -132,7 +132,7 @@ class Zym_Js_Minifier
 						    break;
 					}
 				    break;
-				
+
 				default:
 					switch ($this->_b) {
 						case ' ':
@@ -140,10 +140,10 @@ class Zym_Js_Minifier
 								$this->_action(1);
 								break;
 							}
-							
+
 							$this->_action(3);
 						break;
-						
+
 						case "\n":
 							switch ($this->_a) {
 								case '}':
@@ -155,7 +155,7 @@ class Zym_Js_Minifier
 								case '\'':
 									$this->_action(1);
 								    break;
-								
+
 								default:
 									if ($this->_isAlphaNumeric($this->_a)) {
 										$this->_action(1);
@@ -164,7 +164,7 @@ class Zym_Js_Minifier
 									}
 							}
 						    break;
-						
+
 						default :
 							$this->_action(1);
 						    break;
@@ -172,10 +172,10 @@ class Zym_Js_Minifier
 					break;
 			}
 		}
-		
+
 		return $this->_output;
     }
-    
+
     /**
      * Minify Javascript
      *
@@ -185,10 +185,10 @@ class Zym_Js_Minifier
     public static function minify($string)
     {
         $self = new self();
-        
+
         return $self->process($string);
     }
-    
+
     /**
      * Minify javascript reading from a file
      *
@@ -204,10 +204,10 @@ class Zym_Js_Minifier
             require_once 'Zym/Js/Minifier/Exception/FileNotFound.php';
             throw new Zym_Js_Minifier_Exception_FileNotFound($file);
         }
-        
+
         return self::minify(file_get_contents($file));
     }
-    
+
     /**
      * Minify a javscript file
      *
@@ -219,14 +219,14 @@ class Zym_Js_Minifier
         if ($destination === null) {
             $destination = $file;
         }
-        
+
         $data = self::minifyFromFile($file);
-        
+
         $fp = fopen($destination, 'w');
         fwrite($fp, $data);
         fclose($fp);
     }
-    
+
     /**
      * Cleanup
      *
@@ -238,7 +238,7 @@ class Zym_Js_Minifier
         $this->_b      = null;
         $this->_output = null;
     }
-    
+
     /**
      * Check whether character is alphanumeric
      *
@@ -249,7 +249,7 @@ class Zym_Js_Minifier
     {
         return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
     }
-    
+
     /**
      * Processing actions
      *
@@ -260,19 +260,19 @@ class Zym_Js_Minifier
 		switch ($action) {
 			case 1:
 				$this->_output .= $this->_a;
-			
+
 			case 2:
 				$this->_a = $this->_b;
-				
+
 				if ($this->_a === "'" || $this->_a === '"') {
 					while (true) {
 						$this->_output .= $this->_a;
 						$this->_a       = $this->_iterator->next(true);
-						
+
 						if ($this->_a === $this->_b) {
 							break;
 						}
-						
+
 						if (ord($this->_a) <= self::ORD_LF) {
                             /**
                              * @see Zym_Js_Minifier_Exception_UnterminatedStringLiteral
@@ -282,24 +282,24 @@ class Zym_Js_Minifier
 						      'Unterminated string literal "%s" at char %d', $this->_a, $this->_iterator->key()
 						    ));
 						}
-						
+
 						if ($this->_a === '\\') {
 							$this->_output .= $this->_a;
 							$this->_a       = $this->_iterator->next(true);
 						}
 					}
 				}
-			
+
 			case 3:
 				$this->_b = $this->_iterator->next();
-				
+
 				$chars = array('(', ',', '=', ':', '[', '!', '&', '|', '?');
 				if ($this->_b === '/' && in_array($this->_a, $chars)) {
 					$this->_output .= $this->_a . $this->_b;
-					
+
 					while (true) {
 						$this->_a = $this->_iterator->next(true);
-						
+
 						if ($this->_a === '/') {
 							break;
 						} else if ($this->_a === '\\') {
@@ -314,10 +314,10 @@ class Zym_Js_Minifier
                               'Unterminated regular expression literal "%s" at char %d', $this->_a, $this->_iterator->key()
                             ));
 						}
-						
+
 						$this->_output .= $this->_a;
 					}
-					
+
 					$this->_b = $this->_iterator->next();
 				}
 		}

@@ -3,6 +3,33 @@
     xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.validate.set" version="5.0">
     <title>Standard Validation Classes</title>
     
+    <section xml:id="zym.validate.set.confirm">
+        <title>Confirm</title>
+        
+        <para>
+            The confirm validate checks whether the value provided is the same
+            as the context value. This is particularly useful in validating
+            password fields with <classname>Zend_Form</classname>.
+        </para>
+        
+        <example xml:id="zym.validate.set.example.confirm">
+            <title>Using Zym_Validate_Confirm</title>
+            
+            <para>
+                The construct requires the field name of the context value if it is an
+                array. The context value can be provided in the contructor if you
+                are using the validator by itself or <classname>Zend_Filter_Input</classname>.
+                With <classname>Zend_Form</classname>, the context is handled automatically.
+            </para>
+            
+            <programlisting role="php"><xi:include href="set/confirm/example/confirm.php" parse="text" /></programlisting>
+            
+            <para>Standalone usage is like so:</para>
+            
+            <programlisting role="php"><xi:include href="set/confirm/example/standalone.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
     <section xml:id="zym.validate.set.float">
         <title>Float</title>
         
