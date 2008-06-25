@@ -55,7 +55,7 @@ class Zym_Validate_ConfirmTest extends PHPUnit_Framework_TestCase
         $confirm = new Zym_Validate_Confirm(null);
         $isValid = $confirm->isValid('test', 'test');
 
-        $this->assertEquals(false, $isValid);
+        $this->assertEquals(true, $isValid);
     }
 
     public function testContextStringInMethodIsNotValid()
@@ -87,7 +87,7 @@ class Zym_Validate_ConfirmTest extends PHPUnit_Framework_TestCase
         $confirm = new Zym_Validate_Confirm(null, 'test');
         $isValid = $confirm->isValid('test');
 
-        $this->assertEquals(false, $isValid);
+        $this->assertEquals(true, $isValid);
     }
 
     public function testContextStringInConstructorIsNotValid()
@@ -100,9 +100,9 @@ class Zym_Validate_ConfirmTest extends PHPUnit_Framework_TestCase
 
     public function testNoContext()
     {
+        $this->setExpectedException('Zym_Validate_Exception');
+
         $confirm = new Zym_Validate_Confirm(null);
         $isValid = $confirm->isValid('invalid');
-
-        $this->setExpectedException('Zym_Validate_Exception');
     }
 }

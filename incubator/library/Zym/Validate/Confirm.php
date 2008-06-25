@@ -41,7 +41,7 @@ class Zym_Validate_Confirm extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageTemplates = array(
-        self::NOT_EQUAL => 'Values are not the same',
+        self::NOT_SAME => 'Values are not the same',
     );
 
     /**
