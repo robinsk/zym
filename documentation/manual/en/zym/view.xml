@@ -2,5 +2,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.view" version="5.0">        
     <title>Zym_View</title>
+    
+    <xi:include href="view/helpers.xml" />
     <xi:include href="view/streams.xml" />
 </chapter>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.view.helpers" version="5.0">
+    <title>View Helpers</title>
+
+    <para>
+        Zym provides view helpers under the <classname>Zym_View_Helper_*</classname>
+        prefix.
+    </para>
+    
+    <section xml:id="zym.view.helpers.object">
+        <title>Object Helper</title>
+        
+        <para>
+            The object helper assists in creating an html <![CDATA[<object>]]> element
+            which can have complex params and attributes.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>object(data, type, attribs, params, content)</para></listitem>
+        </itemizedlist>
+    </section>
+    
+    <section xml:id="zym.view.helpers.xmldeclaration">
+        <title>XmlDeclaration Helper</title>
+        
+        <para>
+            The xml declaration helper generates xml declarations (<![CDATA[<?xml verion="1.0" ?>]]>) just like its
+            name suggests. Whenever you are using PHP for templates, you should
+            use the xmlDeclaration helper because of inconsistencies between environments.
+            You'll never know if short tags is enabled or not which can cause
+            errors with xml declarations.
+        </para>
+
+        <itemizedlist>
+            <listitem><para>xmlDeclaration($version, $encoding, $standalone)</para></listitem>
+        </itemizedlist>
+
+        <example xml:id="zym.view.helpers.xmldeclaration.example">
+            <title>Using Zym_View_Helper_XmlDeclaration</title>
+            
+            <programlisting><xi:include href="helpers/example/xmldeclaration.php" parse="text" /></programlisting>
+        </example>
+    </section>
+</section>

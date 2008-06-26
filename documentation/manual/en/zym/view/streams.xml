@@ -11,6 +11,16 @@
         for the stream wrapper.
     </para>
     
+    <section xml:id="zym.view.streams.disableFlag">
+        <title>Disabling/Enabling stream functionality</title>
+        
+        <para>
+            While the stream functionality is useful, it is usually not needed
+            100 percent of the time. Streams can be disabled via the <methodname>setStreamFlag(bool)</methodname>
+            method.
+        </para>
+    </section>
+    
     <section xml:id="zym.view.streams.protocol">
         <title>Changing the protocol</title>
         
