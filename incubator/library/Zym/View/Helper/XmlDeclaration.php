@@ -34,7 +34,7 @@ class Zym_View_Helper_XmlDeclaration
      * @param string $standalone
      * @return string
      */
-    public function XmlDeclaration($version = '1.0', $encoding = 'UTF-8', $standalone = null)
+    public function xmlDeclaration($version = '1.0', $encoding = 'UTF-8', $standalone = null)
     {
         $attrs = array(
             'version'    => is_numeric($version) ? sprintf('%01.1f', $version) // Handle int/float input
@@ -42,7 +42,7 @@ class Zym_View_Helper_XmlDeclaration
             'encoding'   => $encoding,
             'standalone' => $standalone
         );
-        
+
         // Assemble the string
         $attrString = '';
         foreach ($attrs as $key => $value) {

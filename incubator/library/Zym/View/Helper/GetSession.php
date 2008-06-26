@@ -33,7 +33,7 @@ class Zym_View_Helper_GetSession
     /**
      * Get a session namespace object
      *
-     * @return string
+     * @return Zend_Session_Namespace
      */
     public function getSession($namespace = 'Default', $singleInstance = false)
     {
