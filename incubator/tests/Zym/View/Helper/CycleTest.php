@@ -25,8 +25,8 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zym/View/Helper/Cycle.php';
 
 /**
- * Zym_View_Helper_FileSize test case.
- * 
+ * Zym_View_Helper_Cycle test case.
+ *
  * @author  Geoffrey Tran
  * @license http://www.zym-project.com//License New BSD License
  * @category Zym
@@ -36,27 +36,66 @@ require_once 'Zym/View/Helper/Cycle.php';
  */
 class Zym_View_Helper_CycleTest extends PHPUnit_Framework_TestCase
 {
-
-    /**
-     * Cycle view helper
-     * 
-     * @var Zym_View_Helper_Cycke
-     */
-    protected $_helper;
-
-    /**
-     * Prepares the environment before running a test.
-     */
-    protected function setUp()
+    public function testSetAndGetValues()
     {
-        $this->_helper = new Zym_View_Helper_Cycle();
+        $helper = new Zym_View_Helper_Cycle();
+        $helper->setValues(array(1, 2, 3));
+
+        $this->assertEquals(array(1, 2, 3), $helper->getValues());
     }
 
-    /**
-     * Cleans up the environment after running a test.
-     */
-    protected function tearDown()
+    public function testGetValue()
     {
-        $this->_helper = null;
+        $helper = new Zym_View_Helper_Cycle();
+        $helper->setValues(array(1, 2, 3));
+
+        $this->assertEquals(1, $helper->getValue());
+    }
+
+    public function testCycleReturnsInstance()
+    {
+        $helper = new Zym_View_Helper_Cycle();
+        $this->assertEquals($helper, $helper->cycle());
+    }
+
+    public function testCycleReturnsNextValue()
+    {
+        $helper = new Zym_View_Helper_Cycle();
+        $helper->setValues(array(1, 2, 3));
+
+        $this->assertEquals(1, (string) $helper->cycle());
+        $this->assertEquals(2, (string) $helper->cycle());
+        $this->assertEquals(3, (string) $helper->cycle());
+        $this->assertEquals(1, (string) $helper->cycle());
+    }
+
+    public function testCycleSetValues()
+    {
+        $helper = new Zym_View_Helper_Cycle();
+        $helper->cycle(array(1, 2, 3));
+
+        $this->assertEquals(array(1, 2, 3), $helper->getValues());
+    }
+
+    public function testToString()
+    {
+        $helper = new Zym_View_Helper_Cycle();
+        $helper->cycle(array(1, 2, 3));
+
+        $this->assertEquals('1', (string) $helper);
+        $this->assertEquals('2', $helper->toString());
+    }
+
+    public function testIteratorLoop()
+    {
+        $helper = new Zym_View_Helper_Cycle();
+        $helper->setValues(array(1, 2, 3));
+
+        $values = array();
+        foreach ($helper as $item) {
+        	$values[] = $item;
+        }
+
+        $this->assertEquals(array(1, 2, 3), $values);
     }
 }

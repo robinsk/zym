@@ -15,9 +15,9 @@
  */
 
 /**
- * @see PHPUnit_Framework_TestSuite
+ * @see Zym_PhpUnit_Framework_TestSuite
  */
-require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'Zym/PhpUnit/Framework/TestSuite.php';
 
 /**
  * TestSuite
@@ -28,8 +28,8 @@ require_once 'PHPUnit/Framework/TestSuite.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_ViewSuite extends PHPUnit_Framework_TestSuite
-{    
+class Zym_ViewSuite extends Zym_PhpUnit_Framework_TestSuite
+{
     /**
      * Construct
      *
@@ -37,9 +37,9 @@ class Zym_ViewSuite extends PHPUnit_Framework_TestSuite
      */
     public function __construct()
     {
-        parent::__construct(__FILE__);   
+        parent::__construct(__FILE__);
     }
-    
+
     /**
      * Get suite
      *

@@ -78,11 +78,11 @@ class Zym_View_Helper_Cycle implements Iterator
     {
         return $this->_values;
     }
-    
+
     /**
      * Get the next value
      *
-     * @return
+     * @return mixed
      */
     public function getValue()
     {
@@ -158,7 +158,7 @@ class Zym_View_Helper_Cycle implements Iterator
     {
         return (string) $this->getValue();
     }
-    
+
     /**
      * ToString
      *
