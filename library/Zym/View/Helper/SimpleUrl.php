@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zend_Controller_Front
+ */
+require_once 'Zend/Controller/Front.php';
+
+/**
  * @see Zend_View_Helper_Url
  */
 require_once 'Zend/View/Helper/Url.php';
@@ -26,7 +31,7 @@ require_once 'Zend/View/Helper/Url.php';
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Helper_SimpleUrl extends Zym_View_Helper_Abstract
+class Zym_View_Helper_SimpleUrl extends Zend_View_Helper_Url
 {
     /**
      * Url action helper
@@ -44,24 +49,25 @@ class Zym_View_Helper_SimpleUrl extends Zym_View_Helper_Abstract
      * @param  array $params
      * @return string
      */
-    public function simpleUrl($action, $controller = null, $module = null, array $params = null, $encode = true)
+    public function simpleUrl($action, $controller = null, $module = null, array $params = array(), $encode = true)
     {
-        $view = $this->getView();
+        $request = Zend_Controller_Front::getInstance()->getRequest();
 
-        $request    = $view->getRequest();
-
+        // Get defaults
         if ($module === null) {
-            $module     = $view->getModuleName();
+            $module     = $request->getModuleName();
         }
 
         if ($controller === null) {
-            $controller = $view->getControllerName();
+            $controller = $request->getControllerName();
         }
 
+
+        // Create url
         $urlOptions = array_merge($params, array('module'     => $module,
                                                  'controller' => $controller,
                                                  'action'     => $action));
-        $url  = $view->url($urlOptions, 'default', true, $encode);
+        $url        = $this->url($urlOptions, 'default', true, $encode);
 
         return $url;
     }
