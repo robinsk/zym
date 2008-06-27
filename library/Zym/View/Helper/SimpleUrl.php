@@ -51,7 +51,9 @@ class Zym_View_Helper_SimpleUrl extends Zend_View_Helper_Url
      */
     public function simpleUrl($action, $controller = null, $module = null, array $params = array(), $encode = true)
     {
-        $request = Zend_Controller_Front::getInstance()->getRequest();
+        if ($controller === null || $module === null) {
+            $request = Zend_Controller_Front::getInstance()->getRequest();
+        }
 
         // Get defaults
         if ($module === null) {
