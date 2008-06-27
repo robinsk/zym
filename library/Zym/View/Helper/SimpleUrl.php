@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zend_Controller_Action_HelperBroker
+ * @see Zend_View_Helper_Url
  */
-require_once 'Zend/Controller/Action/HelperBroker.php';
+require_once 'Zend/View/Helper/Url.php';
 
 /**
  * @author Geoffrey Tran
@@ -26,7 +26,7 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Helper_SimpleUrl
+class Zym_View_Helper_SimpleUrl extends Zym_View_Helper_Abstract
 {
     /**
      * Url action helper
@@ -34,24 +34,35 @@ class Zym_View_Helper_SimpleUrl
      * @var Zend_Controller_Action_Helper_Url
      */
     protected $_actionHelper;
-    
+
     /**
      * Create URL based on default route
      *
-     * @todo consider copying code from the action helper to reduce loaded files
-     * 
      * @param  string $action
      * @param  string $controller
      * @param  string $module
      * @param  array $params
      * @return string
      */
-    public function simpleUrl($action, $controller = null, $module = null, array $params = null)
+    public function simpleUrl($action, $controller = null, $module = null, array $params = null, $encode = true)
     {
-        if (!$this->_actionHelper instanceof Zend_Controller_Action_Helper_Url) {
-            $this->_actionHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
+        $view = $this->getView();
+
+        $request    = $view->getRequest();
+
+        if ($module === null) {
+            $module     = $view->getModuleName();
         }
-        
-        return $this->_actionHelper->simple($action, $controller, $module, $params);
+
+        if ($controller === null) {
+            $controller = $view->getControllerName();
+        }
+
+        $urlOptions = array_merge($params, array('module'     => $module,
+                                                 'controller' => $controller,
+                                                 'action'     => $action));
+        $url  = $view->url($urlOptions, 'default', true, $encode);
+
+        return $url;
     }
 }
