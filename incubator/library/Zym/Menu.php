@@ -79,7 +79,7 @@ class Zym_Menu extends Zym_Menu_Abstract
         $menuItems = array();
 
         foreach ($this->_menuItems as $menuItem) {
-        	$menuItems[] = $menuItem->toArray();
+            $menuItems[] = $menuItem->toArray();
         }
 
         return $menuItems;

@@ -39,33 +39,33 @@ class Zym_Filter_SprintfTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Filter_Interface
      */
-    protected $_filter;	
+    protected $_filter;
     
-	/**
-	 * Prepares the environment before running a test.
-	 */
-	protected function setUp()
-	{
-	    $this->_filter = new Zym_Filter_Sprintf();
-	}
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp()
+    {
+        $this->_filter = new Zym_Filter_Sprintf();
+    }
 
-	/**
-	 * Cleans up the environment after running a test.
-	 */
-	protected function tearDown()
-	{
-		$this->_filter = null;	
-	}
-	
-	/**
-	 * Test filter
-	 *
-	 */
-	public function testFilter()
-	{
-	    $filter = $this->_filter;
-	    $filter->setArgs('placeholder1', 'placeholder2');
-	    
-	    $this->assertSame('placeholder1 placeholder2', $filter->filter('%s %s'));
-	}
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown()
+    {
+        $this->_filter = null;    
+    }
+    
+    /**
+     * Test filter
+     *
+     */
+    public function testFilter()
+    {
+        $filter = $this->_filter;
+        $filter->setArgs('placeholder1', 'placeholder2');
+        
+        $this->assertSame('placeholder1 placeholder2', $filter->filter('%s %s'));
+    }
 }

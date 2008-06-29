@@ -336,12 +336,12 @@ class Zym_Js_Beautify
         $this->_output = '';
         $this->_pos = 0;
         while(true) {
-        	list($tokenText, $tokenType) = $this->_getNextToken($source);
-        	if ($tokenType == self::TK_EOF) {
-        	    break;
-        	}
+            list($tokenText, $tokenType) = $this->_getNextToken($source);
+            if ($tokenType == self::TK_EOF) {
+                break;
+            }
 
-        	switch ($tokenType) {
+            switch ($tokenType) {
                 case self::TK_START_EXPR:
                     $this->_in(self::IN_EXPR);
                     if ($this->_lastType == self::TK_END_EXPR || $this->_lastType == self::TK_START_EXPR) {
@@ -555,7 +555,7 @@ class Zym_Js_Beautify
                 case self::TK_UNKNOWN:
                     $this->_token($tokenText);
                     break;
-        	}
+            }
 
             if ($tokenType != self::TK_COMMENT) {
                 $this->_lastType = $tokenType;

@@ -93,7 +93,7 @@ class Zym_View_Helper_CycleTest extends PHPUnit_Framework_TestCase
 
         $values = array();
         foreach ($helper as $item) {
-        	$values[] = $item;
+            $values[] = $item;
         }
 
         $this->assertEquals(array(1, 2, 3), $values);

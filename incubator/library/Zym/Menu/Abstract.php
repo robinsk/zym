@@ -64,7 +64,7 @@ abstract class Zym_Menu_Abstract
     public function setMenuItems(array $items)
     {
         foreach ($items as $item) {
-        	$this->addMenuItem($item);
+            $this->addMenuItem($item);
         }
 
         return $this;

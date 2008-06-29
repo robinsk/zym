@@ -47,26 +47,26 @@ class Zym_Notification
      */
     protected $_wildcard = '*';
 
-	/**
-	 * The collection of objects that registered to notifications
-	 *
-	 * @var array
-	 */
-	protected $_observers = array();
+    /**
+     * The collection of objects that registered to notifications
+     *
+     * @var array
+     */
+    protected $_observers = array();
 
-	/**
-	 * Collection of available events.
-	 *
-	 * @var array
-	 */
-	protected $_events = array();
+    /**
+     * Collection of available events.
+     *
+     * @var array
+     */
+    protected $_events = array();
 
-	/**
-	 * Singleton instance
-	 *
-	 * @var array
-	 */
-	protected static $_instances = array();
+    /**
+     * Singleton instance
+     *
+     * @var array
+     */
+    protected static $_instances = array();
 
     /**
      * Get a notification instance from the internal registry
@@ -105,34 +105,34 @@ class Zym_Notification
         return isset(self::$_instances[$namespace]);
     }
 
-	/**
-	 * Singleton constructor
-	 *
-	 */
-	protected function __construct()
-	{
-	}
+    /**
+     * Singleton constructor
+     *
+     */
+    protected function __construct()
+    {
+    }
 
-	/**
-	 * Get the wildcard
-	 *
-	 * @return string
-	 */
-	public function getWildcard()
-	{
-	    return $this->_wildcard;
-	}
+    /**
+     * Get the wildcard
+     *
+     * @return string
+     */
+    public function getWildcard()
+    {
+        return $this->_wildcard;
+    }
 
-	/**
-	 * Post a notification
-	 *
-	 * @param string $name
-	 * @param object $sender
-	 * @param array $data
-	 * @return Zym_Notification
-	 */
-	public function post($name, $sender = null, array $data = array())
-	{
+    /**
+     * Post a notification
+     *
+     * @param string $name
+     * @param object $sender
+     * @param array $data
+     * @return Zym_Notification
+     */
+    public function post($name, $sender = null, array $data = array())
+    {
         $toNotify = array();
 
         foreach ($this->_events as $event) {
@@ -183,31 +183,31 @@ class Zym_Notification
             }
         }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Register an observer for the specified notification
-	 *
-	 * @param object $observer
-	 * @param string|array $events
-	 * @param string $callback
-	 * @return Zym_Notification
-	 */
-	public function attach($observer, $events = null, $callback = null)
-	{
-	    if (!$events) {
-	        $events = array($this->_wildcard);
-	    }
+    /**
+     * Register an observer for the specified notification
+     *
+     * @param object $observer
+     * @param string|array $events
+     * @param string $callback
+     * @return Zym_Notification
+     */
+    public function attach($observer, $events = null, $callback = null)
+    {
+        if (!$events) {
+            $events = array($this->_wildcard);
+        }
 
-	    if (!$callback) {
+        if (!$callback) {
             $callback = $this->_defaultCallback;
         }
 
-	    $events = (array) $events;
-	    $observerHash = spl_object_hash($observer);
+        $events = (array) $events;
+        $observerHash = spl_object_hash($observer);
 
-	    foreach ($events as $event) {
+        foreach ($events as $event) {
             if (!$this->isRegistered($event)) {
                 $this->reset($event);
             }
@@ -222,17 +222,17 @@ class Zym_Notification
         }
 
         return $this;
-	}
+    }
 
-	/**
-	 * Remove an observer
-	 *
-	 * @param object $observer
-	 * @param string|array $event
-	 * @return Zym_Notification
-	 */
-	public function detach($observer, $events = null)
-	{
+    /**
+     * Remove an observer
+     *
+     * @param object $observer
+     * @param string|array $event
+     * @return Zym_Notification
+     */
+    public function detach($observer, $events = null)
+    {
         if (!$events) {
             $events = $this->_events;
         } else {
@@ -241,48 +241,48 @@ class Zym_Notification
 
         $observerHash = spl_object_hash($observer);
 
-	    foreach ($events as $event) {
-	        if ($this->isRegistered($event) &&
-    	        $this->hasObserver($observerHash, $event)) {
-    	        unset($this->_observers[$event][$observerHash]);
+        foreach ($events as $event) {
+            if ($this->isRegistered($event) &&
+                $this->hasObserver($observerHash, $event)) {
+                unset($this->_observers[$event][$observerHash]);
 
-    	        if (empty($this->_observers[$event])) {
-    	            unset($this->_events[$event]);
-    	        }
-    	    }
+                if (empty($this->_observers[$event])) {
+                    unset($this->_events[$event]);
+                }
+            }
         }
 
-	    return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Clear an event.
-	 * If no event is specified all events will be cleared.
-	 *
-	 * @param string $event
+    /**
+     * Clear an event.
+     * If no event is specified all events will be cleared.
+     *
+     * @param string $event
      * @return Zym_Notification
-	 */
-	public function reset($event = null)
-	{
-	    if (!$event) {
-	        $this->_observers = array();
+     */
+    public function reset($event = null)
+    {
+        if (!$event) {
+            $this->_observers = array();
         } else {
             $this->_observers[$event] = array();
         }
 
         return $this;
-	}
+    }
 
-	/**
-	 * Check if an event is registered
-	 *
-	 * @param string $event
-	 * @return boolean
-	 */
-	public function isRegistered($event)
-	{
-	    return isset($this->_observers[$event]);
-	}
+    /**
+     * Check if an event is registered
+     *
+     * @param string $event
+     * @return boolean
+     */
+    public function isRegistered($event)
+    {
+        return isset($this->_observers[$event]);
+    }
 
     /**
      * Check if the observer is registered for the specified event

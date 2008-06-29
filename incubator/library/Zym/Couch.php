@@ -60,14 +60,14 @@ class Zym_Couch
         $config = array_merge($defaults, $config);
 
         foreach ($defaults as $key => $value) {
-        	if (empty($config[$key])) {
-        	    /**
+            if (empty($config[$key])) {
+                /**
                  * @see Zym_Couch_Exception
                  */
                 require_once 'Zym/Couch/Exception.php';
 
-        	    throw new Zym_Couch_Exception('Config entry "' . $key . '" can\'t be empty.');
-        	}
+                throw new Zym_Couch_Exception('Config entry "' . $key . '" can\'t be empty.');
+            }
         }
 
         $connection = new Zym_Couch_Connection($config['host'], $config['port']);

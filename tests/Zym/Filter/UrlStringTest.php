@@ -48,23 +48,23 @@ class Zym_Filter_UrlStringTest extends PHPUnit_Framework_TestCase
      */
     protected $_filter2;
     
-	/**
-	 * Prepares the environment before running a test
-	 */
-	protected function setUp()
-	{
+    /**
+     * Prepares the environment before running a test
+     */
+    protected function setUp()
+    {
         $this->_filter1 = new Zym_Filter_UrlString();
         $this->_filter2 = new Zym_Filter_UrlString(null, true, null, '_');
-	}
+    }
 
-	/**
-	 * Cleans up the environment after running a test
-	 */
-	protected function tearDown()
-	{
+    /**
+     * Cleans up the environment after running a test
+     */
+    protected function tearDown()
+    {
         $this->_filter1 = null;
-        $this->_filter2 = null;	
-	}
+        $this->_filter2 = null;    
+    }
 
     /**
      * Tests a short string (that shouldn't be filtered')
@@ -75,13 +75,13 @@ class Zym_Filter_UrlStringTest extends PHPUnit_Framework_TestCase
         $string = 'This is a short string';
         $this->assertSame('This-is-a-short-string', $this->_filter1->filter($string));
     }
-	
-	/**
-	 * Test a too long string
-	 *
-	 */
-	public function testTooLongString()
-	{
+    
+    /**
+     * Test a too long string
+     *
+     */
+    public function testTooLongString()
+    {
         $string = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. '
                 . 'Nunc nunc est, eleifend eu, dapibus eget, pretium a, urna. '
                 . 'Cras ullamcorper venenatis mauris. Donec eu nisi.';
@@ -91,36 +91,36 @@ class Zym_Filter_UrlStringTest extends PHPUnit_Framework_TestCase
                 . 'Cras';
         
         $this->assertSame(urlencode($expect), $this->_filter1->filter($string));
-	}
-	
-	/**
-	 * Tests the $encodeSlashes flag
-	 *
-	 */
-	public function testSlashEncoding()
-	{
+    }
+    
+    /**
+     * Tests the $encodeSlashes flag
+     *
+     */
+    public function testSlashEncoding()
+    {
         $string = 'should/this/be/encoded';
         
         $this->assertSame($string, $this->_filter1->filter($string));
         $this->assertSame(urlencode($string), $this->_filter2->filter($string));
-	}
-	
-	/**
-	 * Tests custom word separator
-	 *
-	 */
-	public function testWordSeparator()
-	{
-	    $string1 = 'this should contain underscores';
-	    $expect1 = str_replace(' ', '_', $string1);
-	    
-	    $string2 = 'this should contain Leo Tolstoys first name';
-	    $expect2 = urlencode(str_replace(' ', 'Лев', $string2));
-	    
+    }
+    
+    /**
+     * Tests custom word separator
+     *
+     */
+    public function testWordSeparator()
+    {
+        $string1 = 'this should contain underscores';
+        $expect1 = str_replace(' ', '_', $string1);
+        
+        $string2 = 'this should contain Leo Tolstoys first name';
+        $expect2 = urlencode(str_replace(' ', 'Лев', $string2));
+        
         $this->assertSame($expect1, $this->_filter2->filter($string1));
         $this->_filter2->setWordSeparator('Лев');
         $this->assertSame($expect2, $this->_filter2->filter($string2));
-	}
+    }
 
     /**
      * Tests using null as input

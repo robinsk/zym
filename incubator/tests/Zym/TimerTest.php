@@ -39,50 +39,50 @@ class Zym_TimerTest extends PHPUnit_Framework_TestCase
      */
     protected $_timer;
     
-	/**
-	 * Prepares the environment before running a test.
-	 * 
-	 */
-	protected function setUp()
-	{		
-		$this->_timer = new Zym_Timer();
-	}
-	
-	/**
-	 * Tear down the environment after running a test
-	 *
-	 */
-	protected function tearDown()
-	{
-	    unset($this->_timer);
-	}
-	
-	public function testStart()
-	{
-	    $timer = clone $this->_timer;
-	    $timer->start();
-	    
-	    $this->assertAttributeNotEquals(null, '_start', $timer);
-	}
-	
-	public function testStop()
-	{
-	    $timer1 = clone $this->_timer;
+    /**
+     * Prepares the environment before running a test.
+     * 
+     */
+    protected function setUp()
+    {        
+        $this->_timer = new Zym_Timer();
+    }
+    
+    /**
+     * Tear down the environment after running a test
+     *
+     */
+    protected function tearDown()
+    {
+        unset($this->_timer);
+    }
+    
+    public function testStart()
+    {
+        $timer = clone $this->_timer;
+        $timer->start();
+        
+        $this->assertAttributeNotEquals(null, '_start', $timer);
+    }
+    
+    public function testStop()
+    {
+        $timer1 = clone $this->_timer;
 
-	    $timer1->start();
-	    $run = $timer1->stop();
-	    
-	    $this->assertGreaterThan(0, $run);
-	    $this->assertEquals(1, count($timer1->getRunAsArray()));
-	    
-	    // Test exception
-	    $timer2 = clone $this->_timer;
-	    $this->setExpectedException('Zym_Timer_Exception');
-	    $timer2->stop();
-	}
+        $timer1->start();
+        $run = $timer1->stop();
+        
+        $this->assertGreaterThan(0, $run);
+        $this->assertEquals(1, count($timer1->getRunAsArray()));
+        
+        // Test exception
+        $timer2 = clone $this->_timer;
+        $this->setExpectedException('Zym_Timer_Exception');
+        $timer2->stop();
+    }
 
-	public function testGetCalls()
-	{
+    public function testGetCalls()
+    {
         $timer = clone $this->_timer;
 
         // Test first run
@@ -99,47 +99,47 @@ class Zym_TimerTest extends PHPUnit_Framework_TestCase
         $timer->start();
         $this->assertEquals(3, $timer->getCalls());
         $timer->stop();
-	}
-	
-	public function testIsStarted()
-	{
-	    $timer = clone $this->_timer;
-	    
-	    $timer->start();
-	    $this->assertTrue($timer->isStarted());
-	    
-	    $timer->stop();
-	    $this->assertFalse($timer->isStarted());
-	}
-	
-	public function testGetElapsed()
-	{
-	    $timer = clone $this->_timer;
-	    
-	    $this->assertEquals(0, $timer->getElapsed());
-	    
-	    $timer->start();
-	    $this->assertNotEquals(0, $timer->getElapsed());
-	}
-	
-	public function testGetElapsedAverage()
-	{
-	    $timer = clone $this->_timer;
-	    $timer->start();
-	    $timer->stop();
-	    
-	    $this->assertNotEquals(0, $timer->getElapsedAverage());
-	}
-	
-	public function testGetRun()
-	{
-	    $timer = clone $this->_timer;
-	    $timer->start();
-	    $timer->stop();
-	    
-	    $this->assertNotEquals(0, $timer->getRun());
-	}
-	
+    }
+    
+    public function testIsStarted()
+    {
+        $timer = clone $this->_timer;
+        
+        $timer->start();
+        $this->assertTrue($timer->isStarted());
+        
+        $timer->stop();
+        $this->assertFalse($timer->isStarted());
+    }
+    
+    public function testGetElapsed()
+    {
+        $timer = clone $this->_timer;
+        
+        $this->assertEquals(0, $timer->getElapsed());
+        
+        $timer->start();
+        $this->assertNotEquals(0, $timer->getElapsed());
+    }
+    
+    public function testGetElapsedAverage()
+    {
+        $timer = clone $this->_timer;
+        $timer->start();
+        $timer->stop();
+        
+        $this->assertNotEquals(0, $timer->getElapsedAverage());
+    }
+    
+    public function testGetRun()
+    {
+        $timer = clone $this->_timer;
+        $timer->start();
+        $timer->stop();
+        
+        $this->assertNotEquals(0, $timer->getRun());
+    }
+    
     public function testGetRunAverage()
     {
         $timer = clone $this->_timer;
@@ -149,7 +149,7 @@ class Zym_TimerTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals(0, $timer->getRunAverage());
     }
     
-	public function testGetRunAsArray()
+    public function testGetRunAsArray()
     {
         $timer = clone $this->_timer;
         

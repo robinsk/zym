@@ -48,23 +48,23 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
      */
     protected $_filter2;
     
-	/**
-	 * Prepares the environment before running a test
-	 */
-	protected function setUp()
-	{
+    /**
+     * Prepares the environment before running a test
+     */
+    protected function setUp()
+    {
         $this->_filter1 = new Zym_Filter_SentenceLength();
         $this->_filter2 = new Zym_Filter_SentenceLength(32, false);
-	}
+    }
 
-	/**
-	 * Cleans up the environment after running a test
-	 */
-	protected function tearDown()
-	{
+    /**
+     * Cleans up the environment after running a test
+     */
+    protected function tearDown()
+    {
         $this->_filter1 = null;
-        $this->_filter2 = null;	
-	}
+        $this->_filter2 = null;    
+    }
 
     /**
      * Tests a short string (that shouldn't be filtered')
@@ -75,13 +75,13 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
         $string = 'This is a short string';
         $this->assertSame($string, $this->_filter1->filter($string));
     }
-	
-	/**
-	 * Test a too long string
-	 *
-	 */
-	public function testTooLongString()
-	{
+    
+    /**
+     * Test a too long string
+     *
+     */
+    public function testTooLongString()
+    {
         $string = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. '
                 . 'Nunc nunc est, eleifend eu, dapibus eget, pretium a, urna. '
                 . 'Cras ullamcorper venenatis mauris. Donec eu nisi.';
@@ -91,7 +91,7 @@ class Zym_Filter_SentenceLengthTest extends PHPUnit_Framework_TestCase
                 . 'Cras';
         
         $this->assertSame($expect, $this->_filter1->filter($string));
-	}
+    }
 
     /**
      * Tests removing repeated whitespace using default filter values

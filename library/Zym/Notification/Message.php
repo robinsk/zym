@@ -23,68 +23,68 @@
  */
 class Zym_Notification_Message
 {
-	/**
-	 * Notification name
-	 *
-	 * @var string
-	 */
-	protected $_name;
+    /**
+     * Notification name
+     *
+     * @var string
+     */
+    protected $_name;
 
-	/**
-	 * The object that sent the notification
-	 *
-	 * @var object
-	 */
-	protected $_sender;
+    /**
+     * The object that sent the notification
+     *
+     * @var object
+     */
+    protected $_sender;
 
-	/**
-	 * Optional objects
-	 *
-	 * @var array
-	 */
-	protected $_data = array();
+    /**
+     * Optional objects
+     *
+     * @var array
+     */
+    protected $_data = array();
 
-	/**
-	 * Constructor
-	 *
-	 * @param string $name
-	 * @param object $sender
-	 * @param array $data
-	 */
-	public function __construct($name, $sender, array $data = array())
-	{
-		$this->_name   = $name;
-		$this->_sender = $sender;
-		$this->_data   = $data;
-	}
+    /**
+     * Constructor
+     *
+     * @param string $name
+     * @param object $sender
+     * @param array $data
+     */
+    public function __construct($name, $sender, array $data = array())
+    {
+        $this->_name   = $name;
+        $this->_sender = $sender;
+        $this->_data   = $data;
+    }
 
-	/**
-	 * Get notification name
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->_name;
-	}
+    /**
+     * Get notification name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
 
-	/**
-	 * Get the object that sent the notification
-	 *
-	 * @return object
-	 */
-	public function getSender()
-	{
-		return $this->_sender;
-	}
+    /**
+     * Get the object that sent the notification
+     *
+     * @return object
+     */
+    public function getSender()
+    {
+        return $this->_sender;
+    }
 
-	/**
-	 * Get the optional information
-	 *
-	 * @return array
-	 */
-	public function getData()
-	{
-		return $this->_data;
-	}
+    /**
+     * Get the optional information
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->_data;
+    }
 }

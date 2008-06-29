@@ -51,7 +51,7 @@ class Zym_CsvTest extends PHPUnit_Framework_TestCase
     public function testGetRowByColumnName()
     {
         foreach ($this->Zym_Csv_NoHeader as $row) {
-        	$this->assertEquals('r1c1', $row['col1']);
+            $this->assertEquals('r1c1', $row['col1']);
             $this->assertEquals('r1c2', $row['col2']);
             break;
         }

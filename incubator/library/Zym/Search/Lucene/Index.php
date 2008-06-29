@@ -33,7 +33,7 @@ class Zym_Search_Lucene_Index
      *
      * @var string
      */
-	protected $_recordId = 'ZSLPKID';
+    protected $_recordId = 'ZSLPKID';
 
     /**
      * The search index
@@ -49,7 +49,7 @@ class Zym_Search_Lucene_Index
      */
     public function __construct(Zend_Search_Lucene_Interface $searchIndex)
     {
-    	$this->_searchIndex = $searchIndex;
+        $this->_searchIndex = $searchIndex;
     }
 
     /**
@@ -75,13 +75,13 @@ class Zym_Search_Lucene_Index
             $searchField = $this->_recordId;
         }
 
-		$docIds = $this->getDocumentIDsByID($id, $searchField);
+        $docIds = $this->getDocumentIDsByID($id, $searchField);
 
-		foreach ($docIds as $id) {
-		    $this->_searchIndex->delete($id);
-		}
+        foreach ($docIds as $id) {
+            $this->_searchIndex->delete($id);
+        }
 
-		return $this;
+        return $this;
     }
 
     /**
@@ -112,16 +112,16 @@ class Zym_Search_Lucene_Index
      * @param string $searchField
      * @return Zym_Search_Lucene_Index
      */
-	public function index($indexables, $update = true, $searchField = null)
-	{
-	    $indexables = (array) $indexables;
+    public function index($indexables, $update = true, $searchField = null)
+    {
+        $indexables = (array) $indexables;
 
-	    foreach ($indexables as $indexable) {
-	        if (!$indexable instanceof Zym_Search_Lucene_Indexable_Interface) {
-	            $this->_throwException('The object needs to have Zym_Search_Lucene_Indexable_Interface implemented.');
-	        }
+        foreach ($indexables as $indexable) {
+            if (!$indexable instanceof Zym_Search_Lucene_Indexable_Interface) {
+                $this->_throwException('The object needs to have Zym_Search_Lucene_Indexable_Interface implemented.');
+            }
 
-	    	if (!$searchField) {
+            if (!$searchField) {
                 $searchField = $this->_recordId;
             }
 
@@ -142,18 +142,18 @@ class Zym_Search_Lucene_Index
             }
 
             $this->_searchIndex->addDocument($document);
-	    }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Execute the query
-	 *
-	 * @param Zym_Search_Lucene_Query_Interface $query
-	 * @param int $resultSetLimit
-	 * @return array
-	 */
+    /**
+     * Execute the query
+     *
+     * @param Zym_Search_Lucene_Query_Interface $query
+     * @param int $resultSetLimit
+     * @return array
+     */
     public function search(Zym_Search_Lucene_Query_Interface $query, $resultSetLimit = 0)
     {
         Zend_Search_Lucene::setResultSetLimit((int) $resultSetLimit);

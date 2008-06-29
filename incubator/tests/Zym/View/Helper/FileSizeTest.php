@@ -67,7 +67,7 @@ class Zym_View_Helper_FileSizeTest extends PHPUnit_Framework_TestCase
             "0 B"     => 0,
             "1 B"     => 1,
             "1 kB"    => 1024,
-        	"1 MB"    => 1024 * 1024,
+            "1 MB"    => 1024 * 1024,
             "1 GB"    => 1024 * 1024 * 1024,
             "1 TB"    => 1024 * 1024 * 1024 * 1024,
             "1024 TB" => 1024 * 1024 * 1024 * 1024 * 1024

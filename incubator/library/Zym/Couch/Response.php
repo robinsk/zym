@@ -103,7 +103,7 @@ class Zym_Couch_Response
         $response['status'] = $this->_status;
 
         foreach ($this->_headers as $header => $value) {
-        	$response[$header] = $value;
+            $response[$header] = $value;
         }
 
         $response['body'] = $this->_body;

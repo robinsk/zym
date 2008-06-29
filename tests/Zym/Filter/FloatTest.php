@@ -39,66 +39,66 @@ class Zym_Filter_FloatTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Filter_Interface
      */
-    protected $_filter;	
+    protected $_filter;
     
-	/**
-	 * Prepares the environment before running a test.
-	 */
-	protected function setUp()
-	{
-	    $this->_filter = new Zym_Filter_Float();
-	}
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp()
+    {
+        $this->_filter = new Zym_Filter_Float();
+    }
 
-	/**
-	 * Cleans up the environment after running a test.
-	 */
-	protected function tearDown()
-	{
-		$this->_filter = null;	
-	}
-	
-	/**
-	 * Test string to float conversion
-	 *
-	 */
-	public function testStringToFloat()
-	{
-	    $locale = localeconv();
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown()
+    {
+        $this->_filter = null;    
+    }
+    
+    /**
+     * Test string to float conversion
+     *
+     */
+    public function testStringToFloat()
+    {
+        $locale = localeconv();
         $string = "13{$locale['decimal_point']}543";
         $this->assertSame(13.543, $this->_filter->filter($string));
-	}
-	
-	/**
-	 * Test string with thousands separator
-	 *
-	 */
-	public function testStringWithThousandsSeparator()
-	{
-	    $locale = localeconv();
-	    $string = "1{$locale['thousands_sep']}300";
-	    $this->assertSame((float) 1300, $this->_filter->filter($string));
-	    
+    }
+    
+    /**
+     * Test string with thousands separator
+     *
+     */
+    public function testStringWithThousandsSeparator()
+    {
+        $locale = localeconv();
+        $string = "1{$locale['thousands_sep']}300";
+        $this->assertSame((float) 1300, $this->_filter->filter($string));
+        
         $string = "1{$locale['thousands_sep']}300.54";
         $this->assertSame((float) 1300.54, $this->_filter->filter($string));
-	}
-	
-	/**
-	 * Test float to float
-	 *
-	 */
-	public function testFloat()
-	{
-	    $float = (float) 13.54;
-	    $this->assertSame($float, $this->_filter->filter($float));
-	}
-	
-	/**
-	 * Test int to float
-	 *
-	 */
-	public function testIntToFloat()
-	{
-	    $int = (int) 5;
-	    $this->assertSame((float) 5, $this->_filter->filter($int));
-	}
+    }
+    
+    /**
+     * Test float to float
+     *
+     */
+    public function testFloat()
+    {
+        $float = (float) 13.54;
+        $this->assertSame($float, $this->_filter->filter($float));
+    }
+    
+    /**
+     * Test int to float
+     *
+     */
+    public function testIntToFloat()
+    {
+        $int = (int) 5;
+        $this->assertSame((float) 5, $this->_filter->filter($int));
+    }
 }

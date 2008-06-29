@@ -78,7 +78,7 @@ class Zym_Paginate_IteratorTest extends PHPUnit_Framework_TestCase
         $content = array();
 
         foreach ($page as $key => $value) {
-        	$content[$key] = $value;
+            $content[$key] = $value;
         }
 
         $this->assertEquals($expected, $content);

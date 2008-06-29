@@ -63,14 +63,14 @@ class Zym_Validate_StringEquals extends Zend_Validate_Abstract
         $this->_setValue((array) $value);
 
         // Check if equals
-    	$referenceValue = array_shift($this->_value);
-    	foreach ($this->_value as $val) {
-   			if ($val != $referenceValue) {
-   				$this->_error(self::NOT_EQUAL);
-   				return false;
-   			}
-    	}
+        $referenceValue = array_shift($this->_value);
+        foreach ($this->_value as $val) {
+               if ($val != $referenceValue) {
+                   $this->_error(self::NOT_EQUAL);
+                   return false;
+               }
+        }
 
-    	return true;
+        return true;
     }
 }

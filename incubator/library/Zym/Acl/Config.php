@@ -121,15 +121,15 @@ class Zym_Acl_Config extends Zym_Acl
                 $resources = array();
 
                 foreach ($resources as $resource) {
-                	$resources[] = new Zend_Acl_Resource($resource->id);
+                    $resources[] = new Zend_Acl_Resource($resource->id);
                 }
             }
 
-        	if (!isset($rule->action) || $rule->action == 'deny') {
-        	    $this->deny($role, $resources);
-        	} else {
-        	    $this->allow($role, $resources);
-        	}
+            if (!isset($rule->action) || $rule->action == 'deny') {
+                $this->deny($role, $resources);
+            } else {
+                $this->allow($role, $resources);
+            }
         }
 
         return $this;
@@ -150,7 +150,7 @@ class Zym_Acl_Config extends Zym_Acl
                  $parent = new Zend_Acl_Resourc($resource->parent->id);
             }
 
-        	$this->add(new Zend_Acl_Resource($resource->id), $parent);
+            $this->add(new Zend_Acl_Resource($resource->id), $parent);
         }
 
         return $this;

@@ -101,7 +101,7 @@ class Zym_Calendar
     public function setEvents(array $events)
     {
         foreach ($events as $event) {
-        	$this->_addEvent($event);
+            $this->_addEvent($event);
         }
 
         return $this;
@@ -128,9 +128,9 @@ class Zym_Calendar
         $events = array();
 
         foreach ($this->_events as $event) {
-        	if ($event->isOnDate($date)) {
-        	    $events[] = $event;
-        	}
+            if ($event->isOnDate($date)) {
+                $events[] = $event;
+            }
         }
 
         return $events;

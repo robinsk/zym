@@ -100,7 +100,7 @@ class Zym_Csv implements Iterator
             $headers = array();
 
             foreach ($headerRow as $column) {
-            	$headers[] = $column;
+                $headers[] = $column;
             }
 
             $this->_headers = $headers;
@@ -134,7 +134,7 @@ class Zym_Csv implements Iterator
             $return = array();
 
             foreach ($this->_headers as $index => $header) {
-            	$return[$header] = $this->_currentElement[$index];
+                $return[$header] = $this->_currentElement[$index];
             }
 
             return $return;

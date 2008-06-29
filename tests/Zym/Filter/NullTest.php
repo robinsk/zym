@@ -39,31 +39,31 @@ class Zym_Filter_NullTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Filter_Interface
      */
-    protected $_filter;	
+    protected $_filter;
     
-	/**
-	 * Prepares the environment before running a test.
-	 */
-	protected function setUp()
-	{
-	    $this->_filter = new Zym_Filter_Null();
-	}
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp()
+    {
+        $this->_filter = new Zym_Filter_Null();
+    }
 
-	/**
-	 * Cleans up the environment after running a test.
-	 */
-	protected function tearDown()
-	{
-		$this->_filter = null;	
-	}
-	
-	/**
-	 * Test filter
-	 *
-	 */
-	public function testFilter()
-	{
-	    $value = 'test';
-	    $this->assertSame($value, $this->_filter->filter($value));
-	}
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown()
+    {
+        $this->_filter = null;    
+    }
+    
+    /**
+     * Test filter
+     *
+     */
+    public function testFilter()
+    {
+        $value = 'test';
+        $this->assertSame($value, $this->_filter->filter($value));
+    }
 }

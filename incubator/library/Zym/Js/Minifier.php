@@ -96,84 +96,84 @@ class Zym_Js_Minifier
         // Create iterator
         $this->_iterator = new Zym_Js_Minifier_Iterator($javascript);
 
-		$this->_a = "\n";
-		$this->_action(3);
+        $this->_a = "\n";
+        $this->_action(3);
 
-		while ($this->_a !== null) {
-			switch ($this->_a) {
-				case ' ':
-					if ($this->_isAlphaNumeric($this->_b)) {
-						$this->_action(1);
-					} else {
-						$this->_action(2);
-					}
-				    break;
+        while ($this->_a !== null) {
+            switch ($this->_a) {
+                case ' ':
+                    if ($this->_isAlphaNumeric($this->_b)) {
+                        $this->_action(1);
+                    } else {
+                        $this->_action(2);
+                    }
+                    break;
 
-				case "\n":
-					switch ($this->_b) {
-						case '{':
-						case '[':
-						case '(':
-						case '+':
-						case '-':
-							$this->_action(1);
-						    break;
+                case "\n":
+                    switch ($this->_b) {
+                        case '{':
+                        case '[':
+                        case '(':
+                        case '+':
+                        case '-':
+                            $this->_action(1);
+                            break;
 
-						case ' ':
-							$this->_action(3);
-						    break;
+                        case ' ':
+                            $this->_action(3);
+                            break;
 
-						default:
-							if ($this->_isAlphaNumeric($this->_b)) {
-								$this->_action(1);
-							} else {
-								$this->_action(2);
-							}
-						    break;
-					}
-				    break;
+                        default:
+                            if ($this->_isAlphaNumeric($this->_b)) {
+                                $this->_action(1);
+                            } else {
+                                $this->_action(2);
+                            }
+                            break;
+                    }
+                    break;
 
-				default:
-					switch ($this->_b) {
-						case ' ':
-							if ($this->_isAlphaNumeric($this->_a)) {
-								$this->_action(1);
-								break;
-							}
+                default:
+                    switch ($this->_b) {
+                        case ' ':
+                            if ($this->_isAlphaNumeric($this->_a)) {
+                                $this->_action(1);
+                                break;
+                            }
 
-							$this->_action(3);
-						break;
+                            $this->_action(3);
+                        break;
 
-						case "\n":
-							switch ($this->_a) {
-								case '}':
-								case ']':
-								case ')':
-								case '+':
-								case '-':
-								case '"':
-								case '\'':
-									$this->_action(1);
-								    break;
+                        case "\n":
+                            switch ($this->_a) {
+                                case '}':
+                                case ']':
+                                case ')':
+                                case '+':
+                                case '-':
+                                case '"':
+                                case '\'':
+                                    $this->_action(1);
+                                    break;
 
-								default:
-									if ($this->_isAlphaNumeric($this->_a)) {
-										$this->_action(1);
-									} else {
-										$this->_action(3);
-									}
-							}
-						    break;
+                                default:
+                                    if ($this->_isAlphaNumeric($this->_a)) {
+                                        $this->_action(1);
+                                    } else {
+                                        $this->_action(3);
+                                    }
+                            }
+                            break;
 
-						default :
-							$this->_action(1);
-						    break;
-					}
-					break;
-			}
-		}
+                        default :
+                            $this->_action(1);
+                            break;
+                    }
+                    break;
+            }
+        }
 
-		return $this->_output;
+        return $this->_output;
     }
 
     /**
@@ -257,55 +257,55 @@ class Zym_Js_Minifier
      */
     protected function _action($action)
     {
-		switch ($action) {
-			case 1:
-				$this->_output .= $this->_a;
+        switch ($action) {
+            case 1:
+                $this->_output .= $this->_a;
 
-			case 2:
-				$this->_a = $this->_b;
+            case 2:
+                $this->_a = $this->_b;
 
-				if ($this->_a === "'" || $this->_a === '"') {
-					while (true) {
-						$this->_output .= $this->_a;
-						$this->_a       = $this->_iterator->next(true);
+                if ($this->_a === "'" || $this->_a === '"') {
+                    while (true) {
+                        $this->_output .= $this->_a;
+                        $this->_a       = $this->_iterator->next(true);
 
-						if ($this->_a === $this->_b) {
-							break;
-						}
+                        if ($this->_a === $this->_b) {
+                            break;
+                        }
 
-						if (ord($this->_a) <= self::ORD_LF) {
+                        if (ord($this->_a) <= self::ORD_LF) {
                             /**
                              * @see Zym_Js_Minifier_Exception_UnterminatedStringLiteral
                              */
-						    require_once 'Zym/Js/Minifier/Exception/UnterminatedStringLiteral.php';
-						    throw new Zym_Js_Minifier_Exception_UnterminatedStringLiteral(sprintf(
-						      'Unterminated string literal "%s" at char %d', $this->_a, $this->_iterator->key()
-						    ));
-						}
+                            require_once 'Zym/Js/Minifier/Exception/UnterminatedStringLiteral.php';
+                            throw new Zym_Js_Minifier_Exception_UnterminatedStringLiteral(sprintf(
+                              'Unterminated string literal "%s" at char %d', $this->_a, $this->_iterator->key()
+                            ));
+                        }
 
-						if ($this->_a === '\\') {
-							$this->_output .= $this->_a;
-							$this->_a       = $this->_iterator->next(true);
-						}
-					}
-				}
+                        if ($this->_a === '\\') {
+                            $this->_output .= $this->_a;
+                            $this->_a       = $this->_iterator->next(true);
+                        }
+                    }
+                }
 
-			case 3:
-				$this->_b = $this->_iterator->next();
+            case 3:
+                $this->_b = $this->_iterator->next();
 
-				$chars = array('(', ',', '=', ':', '[', '!', '&', '|', '?');
-				if ($this->_b === '/' && in_array($this->_a, $chars)) {
-					$this->_output .= $this->_a . $this->_b;
+                $chars = array('(', ',', '=', ':', '[', '!', '&', '|', '?');
+                if ($this->_b === '/' && in_array($this->_a, $chars)) {
+                    $this->_output .= $this->_a . $this->_b;
 
-					while (true) {
-						$this->_a = $this->_iterator->next(true);
+                    while (true) {
+                        $this->_a = $this->_iterator->next(true);
 
-						if ($this->_a === '/') {
-							break;
-						} else if ($this->_a === '\\') {
-							$this->_output .= $this->_a;
-							$this->_a       = $this->_iterator->next(true);
-						} else if (ord($this->_a) <= self::ORD_LF) {
+                        if ($this->_a === '/') {
+                            break;
+                        } else if ($this->_a === '\\') {
+                            $this->_output .= $this->_a;
+                            $this->_a       = $this->_iterator->next(true);
+                        } else if (ord($this->_a) <= self::ORD_LF) {
                             /**
                              * @see Zym_Js_Minifier_Exception_UnterminatedRegex
                              */
@@ -313,13 +313,13 @@ class Zym_Js_Minifier
                             throw new Zym_Js_Minifier_Exception_UnterminatedRegex(sprintf(
                               'Unterminated regular expression literal "%s" at char %d', $this->_a, $this->_iterator->key()
                             ));
-						}
+                        }
 
-						$this->_output .= $this->_a;
-					}
+                        $this->_output .= $this->_a;
+                    }
 
-					$this->_b = $this->_iterator->next();
-				}
-		}
+                    $this->_b = $this->_iterator->next();
+                }
+        }
     }
 }

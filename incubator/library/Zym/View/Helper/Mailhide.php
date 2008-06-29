@@ -7,7 +7,7 @@ class Zym_View_Helper_Mailhide
         $url = htmlentities($mailhide->url());
 
         foreach ($emailParts as $key => $part) {
-        	$emailParts[$key] = htmlentities($part);
+            $emailParts[$key] = htmlentities($part);
         }
 
         return $emailParts[0] . '<a href="' . $url . '" onclick="window.open('

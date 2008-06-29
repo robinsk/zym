@@ -40,7 +40,7 @@ class Zym_View_Helper_FlashMessenger
         // Retrieve instance
         $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 
-		// Set namespace to retrieve
+        // Set namespace to retrieve
         if ($namespace !== null) {
             $flashMessenger->setNamespace($namespace);
         }

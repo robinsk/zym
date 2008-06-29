@@ -35,71 +35,71 @@ require_once 'Zend/Registry.php';
  */
 class Zym_Search_Lucene_Index_Factory
 {
-	/**
-	 * Registry key prefix
-	 *
-	 */
-	const REGISTRY_PREFIX = 'ZSL';
+    /**
+     * Registry key prefix
+     *
+     */
+    const REGISTRY_PREFIX = 'ZSL';
 
-	/**
-	 * Exception
-	 *
-	 */
-	const INDEX_DOESNT_EXISTS = 'Index "%s" does not exists';
-
-	/**
+    /**
      * Exception
      *
      */
-	const NO_PATH_SPECIFIED = 'No index path specified';
+    const INDEX_DOESNT_EXISTS = 'Index "%s" does not exists';
 
-	/**
-	 * Default path for the search index.
-	 * Usefull when the application has just one search index.
-	 *
-	 * Only used if set.
-	 *
-	 * @var string
-	 */
-	protected static $_defaultIndexPath;
+    /**
+     * Exception
+     *
+     */
+    const NO_PATH_SPECIFIED = 'No index path specified';
 
-	/**
-	 * Set the default index path
-	 *
-	 * @param string $path
-	 */
-	public static function setDefaultIndexPath($path)
-	{
-		self::$_defaultIndexPath = $path;
-	}
+    /**
+     * Default path for the search index.
+     * Usefull when the application has just one search index.
+     *
+     * Only used if set.
+     *
+     * @var string
+     */
+    protected static $_defaultIndexPath;
 
-	/**
-	 * Get a Zend_Search_Lucene instance
-	 *
-	 * @param string $indexPath
-	 * @return Zend_Search_Lucene_Interface
-	 */
-	public static function getIndex($indexPath = null, $appendDefaultPath = true, $createIfNotExists = false)
-	{
-		if (!$indexPath && !self::$_defaultIndexPath) {
-		    self::_throwException(self::NO_PATH_SPECIFIED);
-		}
+    /**
+     * Set the default index path
+     *
+     * @param string $path
+     */
+    public static function setDefaultIndexPath($path)
+    {
+        self::$_defaultIndexPath = $path;
+    }
 
-		$trimMask = '/\\';
+    /**
+     * Get a Zend_Search_Lucene instance
+     *
+     * @param string $indexPath
+     * @return Zend_Search_Lucene_Interface
+     */
+    public static function getIndex($indexPath = null, $appendDefaultPath = true, $createIfNotExists = false)
+    {
+        if (!$indexPath && !self::$_defaultIndexPath) {
+            self::_throwException(self::NO_PATH_SPECIFIED);
+        }
 
-		rtrim($indexPath, $trimMask);
+        $trimMask = '/\\';
 
-		if ($appendDefaultPath) {
-			$indexPath = rtrim(self::$_defaultIndexPath, $trimMask) . DIRECTORY_SEPARATOR . ltrim($indexPath, $trimMask);
-		}
+        rtrim($indexPath, $trimMask);
 
-		$registryKey = self::REGISTRY_PREFIX . $indexPath;
+        if ($appendDefaultPath) {
+            $indexPath = rtrim(self::$_defaultIndexPath, $trimMask) . DIRECTORY_SEPARATOR . ltrim($indexPath, $trimMask);
+        }
 
-		if (Zend_Registry::isRegistered($registryKey)) {
-			$index = Zend_Registry::get($registryKey);
-		} else {
-		    if (file_exists($indexPath)) {
-		        $index = Zend_Search_Lucene::open($indexPath);
+        $registryKey = self::REGISTRY_PREFIX . $indexPath;
+
+        if (Zend_Registry::isRegistered($registryKey)) {
+            $index = Zend_Registry::get($registryKey);
+        } else {
+            if (file_exists($indexPath)) {
+                $index = Zend_Search_Lucene::open($indexPath);
             } else {
                 if (!$createIfNotExists) {
                     self::_throwException(sprintf(self::INDEX_DOESNT_EXISTS, $indexPath));
@@ -109,24 +109,24 @@ class Zym_Search_Lucene_Index_Factory
             }
 
             Zend_Registry::set($registryKey, $index);
-		}
+        }
 
-		return new Zym_Search_Lucene_Index($index);
-	}
+        return new Zym_Search_Lucene_Index($index);
+    }
 
-	/**
-	 * Throw an exception
-	 *
-	 * @throws Zym_Search_Lucene_Exception
-	 * @param string $message
-	 */
-	protected static function _throwException($message)
-	{
-	    /**
+    /**
+     * Throw an exception
+     *
+     * @throws Zym_Search_Lucene_Exception
+     * @param string $message
+     */
+    protected static function _throwException($message)
+    {
+        /**
          * @see Zym_Search_Lucene_Exception
          */
         require_once 'Zym/Search/Lucene/Exception.php';
 
         throw new Zym_Search_Lucene_Exception($message);
-	}
+    }
 }

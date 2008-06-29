@@ -37,31 +37,31 @@ class Zym_Filter_Nl2BrTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Filter_Interface
      */
-    protected $_filter;	
+    protected $_filter;
     
-	/**
-	 * Prepares the environment before running a test.
-	 */
-	protected function setUp()
-	{
-	    $this->_filter = new Zym_Filter_Nl2Br();
-	}
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp()
+    {
+        $this->_filter = new Zym_Filter_Nl2Br();
+    }
 
-	/**
-	 * Cleans up the environment after running a test.
-	 */
-	protected function tearDown()
-	{
-		$this->_filter = null;	
-	}
-	
-	/**
-	 * Test filter
-	 *
-	 */
-	public function testFilter()
-	{
-	    $value = "foo\nbar\nbat\t";
-	    $this->assertSame(nl2br($value), $this->_filter->filter($value));
-	}
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown()
+    {
+        $this->_filter = null;    
+    }
+    
+    /**
+     * Test filter
+     *
+     */
+    public function testFilter()
+    {
+        $value = "foo\nbar\nbat\t";
+        $this->assertSame(nl2br($value), $this->_filter->filter($value));
+    }
 }

@@ -143,7 +143,7 @@ class Zym_Timer_Manager implements Countable
     {
         $runTime = 0;
         foreach ($this->getTimers() as $timer) {
-        	$runTime += $timer->getRun();
+            $runTime += $timer->getRun();
         }
         
         return $runTime;

@@ -139,7 +139,7 @@ class Zym_Controller_Router_Route_HttpQuery extends Zend_Controller_Router_Route
                 if ($encode) {
                    $queryParams[] = urlencode($key) . '=' . urlencode($val);
                 } else {
-            	   $queryParams[] = $key . '=' . $val;
+                   $queryParams[] = $key . '=' . $val;
                 }
             }
             

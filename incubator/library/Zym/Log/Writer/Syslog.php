@@ -31,31 +31,31 @@ require_once 'Zend/Log/Writer/Abstract.php';
  */
 class Zym_Log_Writer_Syslog extends Zend_Log_Writer_Abstract
 {
-	/**
-	 * Class constructor
-	 *
-	 * @param string $ident
-	 * @param string $option
-	 * @param string $facility
-	 */
-	public function __construct($ident, $option, $facility)
-	{
-	    if ($ident === null && $option === null && $facility === null) {
-	        return;
-	    }
-	    
-		// Open connection to syslog
-		$result = openlog($ident, $option, $facility);
-		if ($result === false) {
-		    /**
-		     * @see Zym_Log_Writer_Exception
-		     */
-		    require_once 'Zym/Log/Writer/Exception.php';
-		    throw new Zym_Log_Writer_Exception(
-		        'Failed to open a connection to syslog'
-		    );
-		}
-	}
+    /**
+     * Class constructor
+     *
+     * @param string $ident
+     * @param string $option
+     * @param string $facility
+     */
+    public function __construct($ident, $option, $facility)
+    {
+        if ($ident === null && $option === null && $facility === null) {
+            return;
+        }
+        
+        // Open connection to syslog
+        $result = openlog($ident, $option, $facility);
+        if ($result === false) {
+            /**
+             * @see Zym_Log_Writer_Exception
+             */
+            require_once 'Zym/Log/Writer/Exception.php';
+            throw new Zym_Log_Writer_Exception(
+                'Failed to open a connection to syslog'
+            );
+        }
+    }
 
     /**
      * Set a new formatter for this writer
@@ -76,19 +76,19 @@ class Zym_Log_Writer_Syslog extends Zend_Log_Writer_Abstract
      * @param  array  $event  log data event
      * @return void
      */
-	protected function _write($event)
-	{
-		// Write to log
-		syslog($event['priority'], "({$event['priorityName']}) " . $event['message']);
-	}
+    protected function _write($event)
+    {
+        // Write to log
+        syslog($event['priority'], "({$event['priorityName']}) " . $event['message']);
+    }
 
-	/**
-	 * Perform syslog shutdown
-	 *
-	 */
-	public function shutdown()
-	{
-		// Close connection
-		closelog();
-	}
+    /**
+     * Perform syslog shutdown
+     *
+     */
+    public function shutdown()
+    {
+        // Close connection
+        closelog();
+    }
 }

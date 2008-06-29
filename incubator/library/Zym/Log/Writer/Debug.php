@@ -69,8 +69,8 @@ class Zym_Log_Writer_Debug extends Zend_Log_Writer_Abstract
      * @param  array $event log data event
      * @return void
      */
-	protected function _write($event)
-	{
+    protected function _write($event)
+    {
         if ($this->_shutdown == true) {
             throw new Zym_Log_Exception(
                 'Database adapter instance has been removed by shutdown'
@@ -78,14 +78,14 @@ class Zym_Log_Writer_Debug extends Zend_Log_Writer_Abstract
         }
 
         $this->_events[] = $event;
-	}
+    }
 
-	/**
-	 * Perform shutdown
-	 *
-	 */
-	public function shutdown()
-	{
+    /**
+     * Perform shutdown
+     *
+     */
+    public function shutdown()
+    {
         $this->_shutdown = true;
-	}
+    }
 }

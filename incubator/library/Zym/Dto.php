@@ -194,7 +194,7 @@ class Zym_Dto implements Zym_ArrayData_Interface, ArrayAccess, Iterator, Seriali
     public function setFromArray(array $data)
     {
         foreach ($data as $key => $value) {
-        	$this->setValue($key, $value);
+            $this->setValue($key, $value);
         }
 
         return $this;

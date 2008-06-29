@@ -187,9 +187,9 @@ class Zym_App_Registry
     {
         $alias = $this->_normalizeIndex($alias);
         foreach ($this->_aliasMap as $aliases) {
-        	if (isset($aliases[$alias])) {
-        	    return true;
-        	}
+            if (isset($aliases[$alias])) {
+                return true;
+            }
         }
 
         return false;
@@ -221,7 +221,7 @@ class Zym_App_Registry
         if ($this->isAlias($alias)) { // Handle alias input
             foreach ($this->_aliasMap as $dataIndex => $aliases) {
                 if (isset($aliases[$alias])) {
-            	   unset($this->_aliasMap[$dataIndex][$alias]);
+                   unset($this->_aliasMap[$dataIndex][$alias]);
                 }
             }
         } else if ($this->_hasData($alias)) { // Handle data input
@@ -260,9 +260,9 @@ class Zym_App_Registry
     {
         $alias = $this->_normalizeIndex($alias);
         foreach ($this->_aliasMap as $dataIndex => $aliases) {
-        	if (isset($aliases[$alias])) {
-        	    return $dataIndex;
-        	}
+            if (isset($aliases[$alias])) {
+                return $dataIndex;
+            }
         }
 
         throw $this->_getException(sprintf('An alias with the name "%s" does not exist', $alias));

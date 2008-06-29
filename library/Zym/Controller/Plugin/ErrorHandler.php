@@ -211,7 +211,7 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         $type = strtolower($type);
         
         foreach ((array) $exceptionClasses as $class) {
-        	$this->_typeMap[$class] = $type;
+            $this->_typeMap[$class] = $type;
         }
         
         return $this;
@@ -230,8 +230,8 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
      */
     public function setTypeMap(array $map)
     {
-    	$this->_typeMap = $map;
-    	return $this;
+        $this->_typeMap = $map;
+        return $this;
     }
     
     /**
@@ -377,10 +377,10 @@ class Zym_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_ErrorHan
         
         $typeMap = array_reverse($this->getTypeMap(), true);
         foreach ($typeMap as $eClass => $eType) {
-        	if ($exception instanceof $eClass) {
-        	    $type = $eType;
-        	    break;
-        	}
+            if ($exception instanceof $eClass) {
+                $type = $eType;
+                break;
+            }
         }
         
         // Make sure there is a type

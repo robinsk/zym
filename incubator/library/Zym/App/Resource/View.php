@@ -242,7 +242,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     ? $viewConfig->get('filter')->toArray()
                     : array($viewConfig->get('filter'));
         foreach ($filters as $filter) {
-        	$view->addFilter($filter);
+            $view->addFilter($filter);
         }
         
         // Helpers
@@ -375,7 +375,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         if ($filters = ($config->get('filter') instanceof Zend_Config)
                             ? $config->get('filter')->toArray() : array($config->get('filter'))) {
             foreach ($filters as $filter) {
-            	$view->addStreamFilter($filter);
+                $view->addStreamFilter($filter);
             }
         }
     }

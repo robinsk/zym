@@ -52,9 +52,9 @@ class Zym_Couch_Document
         $reserved = array('_id', '_rev');
 
         foreach ($reserved as $key) {
-        	if (!isset($content[$key])) {
-        	    $content[$key] = '';
-        	}
+            if (!isset($content[$key])) {
+                $content[$key] = '';
+            }
         }
 
         $this->_content = $content;
