@@ -12,7 +12,7 @@
  * @package    Zym_Db
  * @subpackage Table_Exception
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license    http://www.zym-project.com//License New BSD License
+ * @license    http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -26,7 +26,7 @@ require_once 'Zym/Exception.php';
  * @package    Zym_Db
  * @subpackage Table_Exception
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license    http://www.zym-project.com//License New BSD License
+ * @license    http://www.zym-project.com/license New BSD License
  */
 class Zym_Db_Table_Exception_ColumnNotInTable extends Zym_Exception
 {

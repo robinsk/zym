@@ -10,7 +10,7 @@
  * @category Zym_Tests
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -27,7 +27,7 @@ require_once 'Zym/Filter/Sprintf.php';
  * Sprintf filtering
  *
  * @author Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym_Tests
  * @package Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)

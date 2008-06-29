@@ -11,7 +11,7 @@
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -33,7 +33,7 @@ require_once 'Zym/View/Helper/ObjectFlash.php';
  * Zym_View_Helper_ObjectFlash test case.
  *
  * @author  Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
+ * @license http://www.zym-project.com/license New BSD License
  * @category Zym
  * @package Zym_View
  * @subpackage Helper
