@@ -16,12 +16,12 @@
 /**
  * @see PHPUnite_Framework_TestCase
  */
-require_once('PHPUnit/Framework/TestCase.php');
+require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
  * @see Zym_Timer
  */
-require_once('Zym/Timer.php');
+require_once 'Zym/Timer.php';
 
 /**
  * @author Geoffrey Tran

@@ -21,11 +21,9 @@
 require_once 'Zym/Navigation/Page.php';
 
 /**
- * Used to assemble URLs
- * 
- * @see Zend_Controller_Action_Helper_Url
+ * @see Zend_Controller_Action_HelperBroker
  */
-require_once 'Zend/Controller/Action/Helper/Url.php';
+require_once 'Zend/Controller/Action/HelperBroker.php';
 
 /**
  * Used to check if page is active
@@ -131,16 +129,16 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     /**
      * Returns bool value indicating whether page is active or not
      * 
-     * If not set active, this method will compare the page the request object.
+     * This method will compare the page against the request object.
      *
-     * @param  bool $childDependent  [optional] whether page should be
-     *                               considered active if any child pages
-     *                               are active, defaults to false
+     * @param  bool $recursive  [optional] whether page should be
+     *                          considered active if any child pages
+     *                          are active, defaults to false
      * @return bool
      */
-    public function isActive($childDependent = false)
+    public function isActive($recursive = false)
     {
-        if (!$this->_active) {  
+        if (!$this->_active) {
             $reqParams = Zend_Controller_Front::getInstance()
                             ->getRequest()->getParams();
             
@@ -150,15 +148,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
                 'action'     => $this->_action
             ));
             
-            // TODO: verify this
+            // TODO: verify that this is desired behaviour
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
                 count($myParams)) {
                 return $this->_active = true;
             }
         }
         
-        return parent::isActive($childDependent);
-        //return $this->_active;
+        return parent::isActive($recursive);
     }
     
     /**
@@ -188,7 +185,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function setAction($action)
     {
-        if (!is_string($action) || empty($action)) {
+        if (!is_string($action) || strlen($action) < 1) {
             $msg = '$action must be a non-empty string';
             throw new InvalidArgumentException($msg);
         }
@@ -214,7 +211,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function setController($controller)
     {
-        if (!is_string($controller) || empty($controller)) {
+        if (!is_string($controller) || strlen($controller) < 1) {
             $msg = '$controller must be a non-empty string';
             throw new InvalidArgumentException($msg);
         }
@@ -240,7 +237,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function setModule($module)
     {
-        if (!is_string($module) || empty($module)) {
+        if (null !== $module && (!is_string($module) || strlen($module) < 1)) {
             $msg = '$module must be a non-empty string';
             throw new InvalidArgumentException($msg);
         }
@@ -299,8 +296,8 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function setRoute($route)
     {
-        if (!is_string($route) || empty($route)) {
-            $msg = '$route must be a non-empty string';
+        if (null !== $route && (!is_string($route) || strlen($route) < 1)) {
+            $msg = '$route must be a non-empty string or null';
             throw new InvalidArgumentException($msg);
         }
         
@@ -332,7 +329,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @return bool
      */
-    public function isResetParams()
+    public function getResetParams()
     {
         return $this->_resetParams;
     }
@@ -362,7 +359,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             'module'       => $this->getModule(),
             'params'       => $this->getParams(),
             'route'        => $this->getRoute(),
-            'reset_params' => $this->isResetParams()
+            'reset_params' => $this->getResetParams()
         )); 
     }
 }

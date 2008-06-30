@@ -41,6 +41,9 @@ class Zym_Navigation extends Zym_Navigation_Container
     {
         if (is_array($pages) || $pages instanceof Zend_Config) {
             $this->addPages($pages);
+        } elseif (null !== $pages) {
+            $msg = '$pages must be an array, Zend_Config or null';
+            throw new InvalidArgumentException($msg);
         }
     }
 }

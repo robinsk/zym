@@ -64,7 +64,8 @@ $config = array(
         'label' => 'Page 3',
         'action' => 'index',
         'controller' => 'index',
-        'module' => 'mymodule'
+        'module' => 'mymodule',
+        'reset_params' => false
     ),
     array(
         'label' => 'Page 4',

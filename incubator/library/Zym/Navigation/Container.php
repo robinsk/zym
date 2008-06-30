@@ -120,6 +120,10 @@ abstract class Zym_Navigation_Container
         
         $id = spl_object_hash($page);
         
+        if (array_key_exists($id, $this->_order)) {
+            return $this;
+        }
+        
         $this->_pages[$id] = $page;
         $this->_order[$id] = $page->getPosition();
         $this->_orderUpdated = true;
@@ -134,6 +138,7 @@ abstract class Zym_Navigation_Container
      *
      * @param  array|Zend_Config $pages  pages to add
      * @return Zym_Navigation_Container
+     * @throws InvalidArgumentException  if $pages is not array or Zend_Config
      */
     public function addPages($pages)
     {
@@ -141,12 +146,13 @@ abstract class Zym_Navigation_Container
             $pages = $pages->toArray();
         }
         
+        if (!is_array($pages)) {
+            $msg = '$pages must be an array or a Zend_Config object';
+            throw new InvalidArgumentException($msg);
+        }
+        
         foreach ($pages as $page) {
-            if ($page instanceof Zym_Navigation_Page) {
-                $this->addPage($page);
-            } elseif (is_array($page) || $page instanceof Zend_Config) {
-                $this->addPage(Zym_Navigation_Page::factory($page));
-            }
+            $this->addPage($page);
         }
         
         return $this;
@@ -173,22 +179,21 @@ abstract class Zym_Navigation_Container
      */
     public function removePage($page)
     {
+        $this->_sort();
+        
         if (is_int($page)) {
-            $this->_sort();
-            if ($hash = array_search($page, $this->_order)) {
-                unset($this->_order[$hash]);
-                unset($this->_pages[$hash]);
-                $this->_orderUpdated = true;
-                return true;
-            }
+            $hash = array_search($page, $this->_order);
         } elseif ($page instanceof Zym_Navigation_Page) {
             $hash = spl_object_hash($page);
-            if (isset($this->_order[$hash])) {
-                unset($this->_order[$hash]);
-                unset($this->_pages[$hash]);
-                $this->_orderUpdated = true;
-                return true;
-            }
+        } else {
+            return false;
+        }
+        
+        if (isset($this->_order[$hash])) {
+            unset($this->_order[$hash]);
+            unset($this->_pages[$hash]);
+            $this->_orderUpdated = true;
+            return true;
         }
         
         return false;
@@ -204,6 +209,30 @@ abstract class Zym_Navigation_Container
         $this->_pages = array();
         $this->_order = array();
         return $this;
+    }
+    
+    /**
+     * Checks if the container has the given page
+     *
+     * @param  Zym_Navigation_Page $page
+     * @param  bool                $recursive [optional] defaults to false
+     * @return bool
+     */
+    public function hasPage(Zym_Navigation_Page $page, $recursive = false)
+    {
+        $hash = spl_object_hash($page);
+        
+        if (array_key_exists($hash, $this->_order)) {
+            return true;
+        } elseif ($recursive) {
+            foreach ($this->_pages as $childPage) {
+                if ($childPage->hasPage($page, true)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
     
     /**
@@ -226,12 +255,24 @@ abstract class Zym_Navigation_Container
      */
     public function setParent(Zym_Navigation_Container $parent = null)
     {
-        // remove from old parent
-        if (null !== $this->_parent && $this instanceof Zym_Navigation_Page) {
-             $this->_parent->removePage($this);
+        // return if the given parent already is parent
+        if ($parent === $this->_parent) {
+            return $this;
         }
         
+        // remove from old parent if page
+        if (null !== $this->_parent && $this instanceof Zym_Navigation_Page) {
+            $this->_parent->removePage($this);
+        }
+        
+        // set new parent
         $this->_parent = $parent;
+        
+        // add to parent if page and not already a child
+        if (null !== $this->_parent && $this instanceof Zym_Navigation_Page) {
+            $this->_parent->addPage($this);
+        }
+        
         return $this;
     }
     

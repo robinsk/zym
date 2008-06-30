@@ -263,8 +263,8 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function setLabel($label)
     {
-        if (!is_string($label) || empty($label)) {
-            $msg = '$label must be a non-empty string';
+        if (!is_string($label) || strlen($label) < 1) {
+            $msg = '$label must be string with at least 1 character';
             throw new InvalidArgumentException($msg);
         }
         
@@ -453,14 +453,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Returns bool value indicating whether page is active or not
      *
-     * @param  bool $childDependent  [optional] whether page should be
-     *                               considered active if any child pages
-     *                               are active, defaults to false
+     * @param  bool $recursive  [optional] whether page should be
+     *                          considered active if any child pages
+     *                          are active, defaults to false
      * @return bool
      */
-    public function isActive($childDependent = false)
+    public function isActive($recursive = false)
     {
-        if ((bool) $childDependent) {
+        if ((bool) $recursive) {
             if ($this->_active) {
                 return true;
             } else {
@@ -556,7 +556,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Returns page label
      *
-     * @return unknown
+     * @return string
      */
     public function __toString()
     {
@@ -575,6 +575,16 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     // Public methods:
     
     /**
+     * Returns custom properties as an array
+     *
+     * @return array
+     */
+    public function getCustomProperties()
+    {
+        return $this->_properties;
+    }
+    
+    /**
      * Returns an array representation of the page
      *
      * @return array
@@ -583,7 +593,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return array_merge($this->_properties, array(
             'label'    => $this->getlabel(),
-            'href'     => $this->getHref(),
+            //'href'     => $this->getHref(),
             'id'       => $this->getId(),
             'class'    => $this->getClass(),
             'title'    => $this->getTitle(),
