@@ -97,7 +97,8 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests that hrefs are generated correctly using the URL helper
+     * Tests that hrefs are generated correctly using the URL helper when
+     * page has a route specified
      *
      */
     public function testHrefGeneratedIsRouteAware()
@@ -112,55 +113,145 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
             )
         ));
         
-        $router = $this->_front->getRouter();
-        $route  = new Zend_Controller_Router_Route(
-            'lolcat/:action/:page',
-            array(
-                'module'     => 'default',
-                'controller' => 'foobar',
-                'action'     => 'bazbat',
-                'page'       => 1
+        $this->_front->getRouter()->addRoute(
+            'myroute',
+            new Zend_Controller_Router_Route(
+                'lolcat/:action/:page',
+                array(
+                    'module'     => 'default',
+                    'controller' => 'foobar',
+                    'action'     => 'bazbat',
+                    'page'       => 1
+                )
             )
         );
-        $router->addRoute('myroute', $route);
         
         $this->assertEquals('/lolcat/myaction/1337', $page->getHref());
     }
     
     /**
-     * Tests that isActive() tests against actual request params
+     * Tests that isActive() returns true if module, controller and action
+     * are the same as in the request
      *
      */
-    public function testIsActiveShouldTestAgainstRequestParams()
+    public function testIsActiveReturnsTrueOnIdenticalModuleControllerAction()
     {
-        // TODO: implement
-        $this->fail('test not implemented yet');
-        /*
         $page = new Zym_Navigation_Page_Mvc(array(
             'label' => 'foo',
             'action' => 'index',
             'controller' => 'index'
         ));
         
-        $request = $this->_front->getRequest();
-        $request->setActionName('index');
-        $request->setControllerName('index');
-        $request->setModuleName('index');
-        $request->setDispatched();
-        $this->_front->setRequest($request);
+        $this->_front->getRequest()->setParams(array(
+            'module' => 'default',
+            'controller' => 'index',
+            'action' => 'index'
+        ));
         
-        echo "\n\n====================\n";
+        $this->assertEquals(true, $page->isActive()); 
+    }
+    
+    /**
+     * Tests that isActive() returns false if module, controller and action
+     * are not exactly the same as in the request
+     *
+     */
+    public function testIsActiveReturnsFalseOnDifferentModuleControllerAction()
+    {
+        $page = new Zym_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'bar',
+            'controller' => 'index'
+        ));
         
-        $reqParams = Zend_Controller_Front::getInstance()
-                        ->getRequest()->getParams();
-        var_dump($reqParams);
+        $this->_front->getRequest()->setParams(array(
+            'module' => 'default',
+            'controller' => 'index',
+            'action' => 'index'
+        ));
         
-        $request = $this->_front->getRequest();
+        $this->assertEquals(false, $page->isActive()); 
+    }
+    
+    /**
+     * Tests that isActive() returns true if module, controller and action
+     * are the same as in the request, and page also includes params that
+     * are in the request
+     *
+     */
+    public function testIsActiveReturnsTrueOnIdenticalIncludingPageParams()
+    {
+        $page = new Zym_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'view',
+            'controller' => 'post',
+            'module' => 'blog',
+            'params' => array(
+                'id' => '1337'
+            )
+        ));
         
-        echo "\n====================\n\n";
+        $this->_front->getRequest()->setParams(array(
+            'module' => 'blog',
+            'controller' => 'post',
+            'action' => 'view',
+            'id' => '1337'
+        ));
         
-        $this->assertEquals(true, $page->isActive());
-        */
+        $this->assertEquals(true, $page->isActive()); 
+    }
+    
+    /**
+     * Tests that isActive() returns true if module, controller and action
+     * are the same as in the request, and request includes user params
+     * that are not in the page
+     *
+     */
+    public function testIsActiveReturnsTrueWhenRequestHasMoreParams()
+    {
+        $page = new Zym_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'view',
+            'controller' => 'post',
+            'module' => 'blog'
+        ));
+        
+        $this->_front->getRequest()->setParams(array(
+            'module' => 'blog',
+            'controller' => 'post',
+            'action' => 'view',
+            'id' => '1337'
+        ));
+        
+        $this->assertEquals(true, $page->isActive()); 
+    }
+    
+    /**
+     * Tests that isActive() returns false if module, controller and action
+     * are the same as in the request, but page includes user params that
+     * are not in the request
+     *
+     */
+    public function testIsActiveReturnsFalseWhenRequestHasLessParams()
+    {
+        $page = new Zym_Navigation_Page_Mvc(array(
+            'label' => 'foo',
+            'action' => 'view',
+            'controller' => 'post',
+            'module' => 'blog',
+            'params' => array(
+                'id' => '1337'
+            )
+        ));
+        
+        $this->_front->getRequest()->setParams(array(
+            'module' => 'blog',
+            'controller' => 'post',
+            'action' => 'view',
+            'id' => null
+        ));
+        
+        $this->assertEquals(false, $page->isActive()); 
     }
     
     /**
