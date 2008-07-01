@@ -57,16 +57,22 @@ class Zym_View_Helper_FileSize
      *
      * @param integer $fileSize Filesize in bytes
      * @param integer $precision Precision
+     * @param string $norm Which norm use - 'traditional' (1 KB = 2^10 B), 'si' (1 KB = 10^3 B), 'iec' (1 KiB = 2^10 B)
      * @param string $type Defined export type
-     * @param boolean $iec Use SI units?
      */
-    public function fileSize($fileSize, $precision = 0, $type = null, $iec = false)
+    public function fileSize($fileSize, $precision = 0, $norm = 'traditional', $type = null)
     {
         $m = new Zend_Measure_Binary($fileSize);
-
-        if ($type !== null) {
+        
+        $m->setType('BYTE');
+        
+        if (null === $norm) {
+            $norm = 'traditional';
+        }
+        
+        if (isset($type)) {
             $m->setType($type);
-        } else if ($iec === false) {
+        } elseif ($norm === 'traditional') {
             if ($fileSize >= $this->_getUnitSize('TERABYTE')) {
                 $m->setType(Zend_Measure_Binary::TERABYTE);
             } else if ($fileSize >= $this->_getUnitSize('GIGABYTE')) {
@@ -76,7 +82,7 @@ class Zym_View_Helper_FileSize
             } else if ($fileSize >= $this->_getUnitSize('KILOBYTE')) {
                 $m->setType(Zend_Measure_Binary::KILOBYTE);
             }
-        } else if ($iec === true) {
+        } elseif ($norm === 'si') {
             if ($fileSize >= $this->_getUnitSize('TERABYTE_SI')) {
                 $m->setType(Zend_Measure_Binary::TERABYTE_SI);
             } else if ($fileSize >= $this->_getUnitSize('GIGABYTE_SI')) {
@@ -85,6 +91,16 @@ class Zym_View_Helper_FileSize
                 $m->setType(Zend_Measure_Binary::MEGABYTE_SI);
             } else if ($fileSize >= $this->_getUnitSize('KILOBYTE_SI')) {
                 $m->setType(Zend_Measure_Binary::KILOBYTE_SI);
+            }
+        }  elseif ($norm === 'iec') {
+            if ($fileSize >= $this->_getUnitSize('TEBIBYTE')) {
+                $m->setType(Zend_Measure_Binary::TEBIBYTE);
+            } else if ($fileSize >= $this->_getUnitSize('GIBIBYTE')) {
+                $m->setType(Zend_Measure_Binary::GIBIBYTE);
+            } else if ($fileSize >= $this->_getUnitSize('MEBIBYTE')) {
+                $m->setType(Zend_Measure_Binary::MEBIBYTE);
+            } else if ($fileSize >= $this->_getUnitSize('KIBIBYTE')) {
+                $m->setType(Zend_Measure_Binary::KIBIBYTE);
             }
         }
 

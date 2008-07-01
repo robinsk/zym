@@ -93,21 +93,33 @@ class Zym_View_Helper_FileSizeTest extends PHPUnit_Framework_TestCase
      */
     public function testDefinedType()
     {
-        $this->assertEquals('1048576 kB', $this->_fs->fileSize(1024 * 1024 * 1024, null, 'KILOBYTE'));
-        $this->assertEquals('1024 MB', $this->_fs->fileSize(1024 * 1024 * 1024, null, 'MEGABYTE'));
-        $this->assertEquals('1 GB', $this->_fs->fileSize(1024 * 1024 * 1024, null, 'GIGABYTE'));
+        $this->assertEquals('1048576 kB', $this->_fs->fileSize(1024 * 1024 * 1024, null, null, 'KILOBYTE'));
+        $this->assertEquals('1024 MB', $this->_fs->fileSize(1024 * 1024 * 1024, null, null, 'MEGABYTE'));
+        $this->assertEquals('1 GB', $this->_fs->fileSize(1024 * 1024 * 1024, null, null, 'GIGABYTE'));
+        
+    }
+    
+	/**
+     * Test defined export type
+     */
+    public function testNormSi()
+    {
+        $this->assertEquals('1.00000 B', $this->_fs->fileSize(1, 5, 'si'));
+        $this->assertEquals('1.00000 kB.', $this->_fs->fileSize(1000, 5, 'si'));
+        $this->assertEquals('1.00000 MB.', $this->_fs->fileSize(1000 * 1000, 5, 'si'));
+        $this->assertEquals('1.00000 GB.', $this->_fs->fileSize(1000 * 1000 * 1000, 5, 'si'));
         
     }
 
     /**
      * Test iec convert
      */
-    public function testIec()
+    public function testNormIec()
     {
-        $this->assertEquals('1 B', $this->_fs->fileSize(1, null, null, true));
-        $this->assertEquals('1 kB.', $this->_fs->fileSize(1024, null, null, true));
-        $this->assertEquals('1 MB.', $this->_fs->fileSize(1024 * 1024, null, null, true));
-        $this->assertEquals('1 GB.', $this->_fs->fileSize(1024 * 1024 * 1024, null, null, true));
+        $this->assertEquals('1 B', $this->_fs->fileSize(1, null, 'iec'));
+        $this->assertEquals('1 KiB', $this->_fs->fileSize(1024, null, 'iec'));
+        $this->assertEquals('1 MiB', $this->_fs->fileSize(1024 * 1024, null, 'iec'));
+        $this->assertEquals('1 GiB', $this->_fs->fileSize(1024 * 1024 * 1024, null, 'iec'));
         
     }
 }
