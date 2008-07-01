@@ -260,11 +260,12 @@ class Zym_App
      */
     public function setConfig($config, $format = null)
     {
+    	$environment = $this->getEnvironment();
+    	
         if (!$config instanceof Zend_Config) {
-            $environment = $this->getEnvironment();
             $configObj   = $this->_loadConfig($config, $environment, $format);
         } else {
-            $config = $configObj;
+            $configObj = $config;
         }
         
         // Merge default config with user config
