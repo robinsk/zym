@@ -66,6 +66,8 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_Html_Navigation
         if (is_string($ulClass)) {
             $this->_ulClass = $ulClass;
         }
+        
+        return $this;
     }
     
     /**
