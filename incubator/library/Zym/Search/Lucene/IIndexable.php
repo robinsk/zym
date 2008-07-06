@@ -10,7 +10,7 @@
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Search_Lucene
- * @subpackage Query
+ * @subpackage Indexable
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -19,23 +19,23 @@
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Search_Lucene
- * @subpackage Query
+ * @subpackage Indexable
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_Search_Lucene_Query_Interface
+interface Zym_Search_Lucene_IIndexable
 {
     /**
-     * Return the query as string
+     * Returns the unique identifier for the search index
      *
-     * @return string
+     * @return int|string
      */
-    public function toString();
+    public function getRecordId();
 
     /**
-     * Get a unique hash for this query
+     * Gets a complete search document used for indexing.
      *
-     * @return string
+     * @return Zend_Search_Lucene_Document
      */
-    public function getQueryHash();
+    public function getSearchDocument();
 }

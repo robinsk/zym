@@ -29,11 +29,34 @@ require_once 'Zend/Search/Lucene/Index/Term.php';
 class Zym_Search_Lucene_Index
 {
     /**
+     * Registry key prefix
+     *
+     */
+    const REGISTRY_PREFIX = 'lucene://';
+    
+    /**
+     * Default path for the search index.
+     * Usefull when the application has just one search index.
+     *
+     * Only used if set.
+     *
+     * @var string
+     */
+    protected static $_defaultIndexPath = null;
+    
+    /**
+     * Default resultset limit
+     * 
+     * @var int
+     */
+    protected static $_defaultResultSetLimit = 0;
+    
+    /**
      * Record ID key
      *
      * @var string
      */
-    protected $_recordId = 'ZSLPKID';
+    protected $_defaultIdKey = 'zsl_record_id';
 
     /**
      * The search index
@@ -42,6 +65,77 @@ class Zym_Search_Lucene_Index
      */
     protected $_searchIndex = null;
 
+    /**
+     * Set the default index path
+     *
+     * @param string $path
+     */
+    public static function setDefaultIndexPath($path)
+    {
+        self::$_defaultIndexPath = $path;
+    }
+    
+    /**
+     * Set the default resultset limit
+     * 
+     * @param int $limit
+     */
+    public static function setDefaultResultSetLimit($limit)
+    {
+        self::$_defaultResultSetLimit = (int) $limit;
+    }
+    
+    /**
+     * Get a Zend_Search_Lucene instance
+     *
+     * @param string $indexPath
+     * @return Zend_Search_Lucene_Interface
+     */
+    public static function factory($indexPath = null, $useDefaultPath = true, $createIfNotExists = true)
+    {
+        if (!$indexPath && !self::$_defaultIndexPath) {
+            /**
+             * @see Zym_Search_Lucene_Exception
+             */
+            require_once 'Zym/Search/Lucene/Exception.php';
+    
+            throw new Zym_Search_Lucene_Exception('No index path specified');
+        }
+
+        $trimMask = '/\\';
+
+        rtrim($indexPath, $trimMask);
+
+        if ($useDefaultPath) {
+            $indexPath = rtrim(self::$_defaultIndexPath, $trimMask) . DIRECTORY_SEPARATOR . ltrim($indexPath, $trimMask);
+        }
+
+        $registryKey = self::REGISTRY_PREFIX . $indexPath;
+
+        if (Zend_Registry::isRegistered($registryKey)) {
+            $index = Zend_Registry::get($registryKey);
+        } else {
+            if (file_exists($indexPath)) {
+                $index = Zend_Search_Lucene::open($indexPath);
+            } else {
+                if (!$createIfNotExists) {
+                    /**
+                     * @see Zym_Search_Lucene_Exception
+                     */
+                    require_once 'Zym/Search/Lucene/Exception.php';
+            
+                    throw new Zym_Search_Lucene_Exception('Index "' . $indexPath . '" does not exists');
+                }
+
+                $index = Zend_Search_Lucene::create($indexPath);
+            }
+
+            Zend_Registry::set($registryKey, $index);
+        }
+
+        return new Zym_Search_Lucene_Index($index);
+    }
+    
     /**
      * Construct the indexer
      *
@@ -53,31 +147,21 @@ class Zym_Search_Lucene_Index
     }
 
     /**
-     * Get the search index
-     *
-     * @return Zend_Search_Lucene_Interface
-     */
-    public function getSearchIndex()
-    {
-        return $this->_searchIndex;
-    }
-
-    /**
      * Remove a record from the search index
      *
      * @param string $value
      * @param string $searchField
      * @return Zym_Search_Lucene_Index
      */
-    public function delete($id, $searchField = null)
+    public function delete($value, $searchField = null)
     {
         if (!$searchField) {
-            $searchField = $this->_recordId;
+            $searchField = $this->_defaultIdKey;
         }
 
-        $docIds = $this->getDocumentIDsByID($id, $searchField);
+        $documentIds = $this->getDocumentIds($value, $searchField);
 
-        foreach ($docIds as $id) {
+        foreach ($documentIds as $id) {
             $this->_searchIndex->delete($id);
         }
 
@@ -85,22 +169,33 @@ class Zym_Search_Lucene_Index
     }
 
     /**
-     * Get the lucene doc ids by a search
+     * Get the Lucene document IDs by search the specified search field.
+     * If no search field is specified, the default ID field is used.
      *
-     * @param string $id
+     * @param string $value
      * @param string $searchField
      * @return array
      */
-    public function getDocumentIDsByID($id, $searchField = null)
+    public function getDocumentIds($value, $searchField = null)
     {
         if (!$searchField) {
-            $searchField = $this->_recordId;
+            $searchField = $this->_defaultIdKey;
         }
 
-        $term = new Zend_Search_Lucene_Index_Term($id, $searchField);
+        $term = new Zend_Search_Lucene_Index_Term($value, $searchField);
         $docIds = $this->_searchIndex->termDocs($term);
 
         return $docIds;
+    }
+    
+    /**
+     * Get the search index
+     *
+     * @return Zend_Search_Lucene_Interface
+     */
+    public function getSearchIndex()
+    {
+        return $this->_searchIndex;
     }
 
     /**
@@ -114,22 +209,34 @@ class Zym_Search_Lucene_Index
      */
     public function index($indexables, $update = true, $searchField = null)
     {
-        $indexables = (array) $indexables;
+        if (!is_array($indexables)) {
+            $indexables = array($indexables);
+        }
+        
+        if (!$searchField) {
+            $searchField = $this->_defaultIdKey;
+        }
 
         foreach ($indexables as $indexable) {
-            if (!$indexable instanceof Zym_Search_Lucene_Indexable_Interface) {
-                $this->_throwException('The object needs to have Zym_Search_Lucene_Indexable_Interface implemented.');
-            }
-
-            if (!$searchField) {
-                $searchField = $this->_recordId;
+            if (!$indexable instanceof Zym_Search_Lucene_IIndexable) {
+                /**
+                 * @see Zym_Search_Lucene_Exception
+                 */
+                require_once 'Zym/Search/Lucene/Exception.php';
+        
+                throw new Zym_Search_Lucene_Exception('The object needs to have Zym_Search_Lucene_Indexable_Interface implemented.');
             }
 
             if ($update) {
                 $recordId = $indexable->getRecordID();
 
                 if (!$recordId) {
-                    $this->_throwException('Record ID can\'t be null');
+                    /**
+                     * @see Zym_Search_Lucene_Exception
+                     */
+                    require_once 'Zym/Search/Lucene/Exception.php';
+            
+                    throw new Zym_Search_Lucene_Exception('The record ID must not be null');
                 }
 
                 $this->delete($recordId, $searchField);
@@ -138,7 +245,12 @@ class Zym_Search_Lucene_Index
             $document = $indexable->getSearchDocument();
 
             if (!$document instanceof Zend_Search_Lucene_Document) {
-                $this->_throwException('The document is not an instance of Zend_Search_Lucene_Document, so it can\'t be indexed.');
+                /**
+                 * @see Zym_Search_Lucene_Exception
+                 */
+                require_once 'Zym/Search/Lucene/Exception.php';
+        
+                throw new Zym_Search_Lucene_Exception('The document is not an instance of Zend_Search_Lucene_Document.');
             }
 
             $this->_searchIndex->addDocument($document);
@@ -150,30 +262,18 @@ class Zym_Search_Lucene_Index
     /**
      * Execute the query
      *
-     * @param Zym_Search_Lucene_Query_Interface $query
+     * @param string|Zym_Search_Lucene_IQuery $query
      * @param int $resultSetLimit
      * @return array
      */
-    public function search(Zym_Search_Lucene_Query_Interface $query, $resultSetLimit = 0)
+    public function search($query, $resultSetLimit = null)
     {
+        if (!$resultSetLimit) {
+            $resultSetLimit = self::$_defaultResultSetLimit;
+        }
+        
         Zend_Search_Lucene::setResultSetLimit((int) $resultSetLimit);
 
-        return $this->_searchIndex->find($query->toString());
-    }
-
-    /**
-     * Throw the exception
-     *
-     * @param string $message
-     * @throws Zym_Search_Lucene_Exception
-     */
-    protected function _throwException($message)
-    {
-        /**
-         * @see Zym_Search_Lucene_Exception
-         */
-        require_once 'Zym/Search/Lucene/Exception.php';
-
-        throw new Zym_Search_Lucene_Exception($message);
+        return $this->_searchIndex->find((string) $query);
     }
 }
