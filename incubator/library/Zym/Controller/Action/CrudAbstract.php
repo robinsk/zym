@@ -16,14 +16,19 @@
  */
 
 /**
- * @see Zend_Db_Table_Abstract
- */
-require_once 'Zend/Db/Table/Abstract.php';
-
-/**
  * @see Zym_Controller_Action_Abstract
  */
 require_once 'Zym/Controller/Action/Abstract.php';
+
+/**
+ * @see Zend_Data_Paginator
+ */
+require_once 'Zend/Data/Paginator.php';
+
+/**
+ * @see Zend_Db_Table_Abstract
+ */
+require_once 'Zend/Db/Table/Abstract.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -33,7 +38,7 @@ require_once 'Zym/Controller/Action/Abstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action_Abstract
+abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_Abstract
 {
     /**
      * Table instance
@@ -68,14 +73,14 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      *
      * @var int
      */
-    protected $_defaultPageLimit = null;
+    protected $_defaultPageRange = null;
 
     /**
      * Default page number for pagination
      *
      * @var int
      */
-    protected $_defaultPageNr = 1;
+    protected $_defaultPageNumber = 1;
 
     /**
      * Primary ID key
@@ -292,20 +297,20 @@ abstract class Zym_Controller_Action_Crud_Abstract extends Zym_Controller_Action
      */
     public function listAction()
     {
-        $limit = (int) $this->_getParam('limit', $this->_defaultPageLimit);
-        $page  = (int) $this->_getParam('page', $this->_defaultPageNr);
+        $range = (int) $this->_getParam('range', $this->_defaultPageRange);
+        $page  = (int) $this->_getParam('page', $this->_defaultPageNumber);
 
-        $paginate = new Zym_Paginate_DbTable($this->_getTable(), $this->_getListSelect());
+        $paginator = Zend_Data_Paginator::factory($this->_getListSelect());
 
-        if ($limit > 0) {
-            $paginate->setRowLimit($limit);
+        if ($range > 0) {
+            $paginator->setPageRange($range);
         }
 
-        if ($page > 0 && $paginate->hasPageNumber($page)) {
-            $paginate->setCurrentPageNumber($page);
+        if ($page > 0) {
+            $paginator->setCurrentPageNumber($page);
         }
 
-        $this->view->items = $paginate;
+        $this->view->paginator = $paginator;
     }
 
     /**
