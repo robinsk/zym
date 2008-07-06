@@ -362,7 +362,7 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
     protected function _setHelperBrokerPaths(Zend_Config $paths)
     {
         foreach ($paths as $pathConfig) {
-            $path   = isset($pathConfig->paths)  ? $pathConfig->get('paths')  : null;
+            $path   = isset($pathConfig->path)  ? $pathConfig->get('path')  : null;
             $prefix = isset($pathConfig->prefix) ? $pathConfig->get('prefix') : null;
             
             if ($path === null) {
@@ -375,6 +375,5 @@ class Zym_App_Resource_Controller extends Zym_App_Resource_Abstract
                 Zend_Controller_Action_HelperBroker::addPath($path, $prefix);
             }
         }
-        
     }
 }
