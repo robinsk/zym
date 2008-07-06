@@ -20,6 +20,11 @@
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 /**
+ * @see Zend_Registry
+ */
+require_once 'Zend/Registry.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Search_Lucene
