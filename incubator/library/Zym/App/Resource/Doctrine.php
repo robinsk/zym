@@ -76,7 +76,7 @@ class Zym_App_Resource_Doctrine extends Zym_App_Resource_Abstract
             // all paths are relative to app's home directory
             'path_config' => array(
                 'data_fixtures_path'  =>  'data/doctrine/data/fixtures',
-                'models_path'         =>  'application/library/models',
+                'models_path'         =>  'application/models',
                 'migrations_path'     =>  'data/doctrine/migrations',
                 'sql_path'            =>  'data/doctrine/data/sql',
                 'yaml_schema_path'    =>  'data/doctrine/schema'
