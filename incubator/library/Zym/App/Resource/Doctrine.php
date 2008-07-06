@@ -20,26 +20,6 @@
 require_once 'Zym/App/Resource/Abstract.php';
 
 /**
- * Doctrine includes
- */
-/* rely on autoloading?
-require_once 'Doctrine/Locator/Injectable.php';
-require_once 'Doctrine/Configurable.php';
-require_once 'Doctrine/Connection.php';
-require_once 'Doctrine/Connection/Common.php';
-require_once 'Doctrine/Connection/Mysql.php';
-require_once 'Doctrine/Record/Listener/Interface.php';
-require_once 'Doctrine/Record/Listener.php';
-require_once 'Doctrine/EventListener/Interface.php';
-require_once 'Doctrine/EventListener.php';
-require_once 'Doctrine.php';
-require_once 'Doctrine/Null.php';
-require_once 'Doctrine/Locator/Injectable.php';
-require_once 'Doctrine/Configurable.php';
-require_once 'Doctrine/Manager.php';
-*/
-
-/**
  * Doctrine
  * 
  * @link http://www.phpdoctrine.org/
