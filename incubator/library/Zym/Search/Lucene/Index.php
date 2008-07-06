@@ -57,11 +57,18 @@ class Zym_Search_Lucene_Index
     protected static $_defaultResultSetLimit = 0;
     
     /**
-     * Record ID key
+     * Default record ID key
      *
      * @var string
      */
-    protected $_defaultIdKey = 'zsl_record_id';
+    public static $defaultIdKey = 'zsl_record_id';
+    
+    /**
+     * Record ID key
+     * 
+     * @var string
+     */
+    protected $_idKey = null;
 
     /**
      * The search index
@@ -149,6 +156,7 @@ class Zym_Search_Lucene_Index
     public function __construct(Zend_Search_Lucene_Interface $searchIndex)
     {
         $this->_searchIndex = $searchIndex;
+        $this->_idKey = self::$defaultIdKey;
     }
 
     /**
@@ -161,7 +169,7 @@ class Zym_Search_Lucene_Index
     public function delete($value, $searchField = null)
     {
         if (!$searchField) {
-            $searchField = $this->_defaultIdKey;
+            $searchField = $this->_idKey;
         }
 
         $documentIds = $this->getDocumentIds($value, $searchField);
@@ -184,13 +192,33 @@ class Zym_Search_Lucene_Index
     public function getDocumentIds($value, $searchField = null)
     {
         if (!$searchField) {
-            $searchField = $this->_defaultIdKey;
+            $searchField = $this->_idKey;
         }
 
         $term = new Zend_Search_Lucene_Index_Term($value, $searchField);
         $docIds = $this->_searchIndex->termDocs($term);
 
         return $docIds;
+    }
+    
+    /**
+     * Get the ID key
+     */
+    public function getIdKey()
+    {
+        return $this->_idKey;
+    }
+    
+    /**
+     * Set the ID key
+     * 
+     * @return Zym_Search_Lucene_Index
+     */
+    public function setIdKey($idKey)
+    {
+        $this->_idKey = $idKey;
+        
+        return $this;
     }
     
     /**
@@ -219,7 +247,7 @@ class Zym_Search_Lucene_Index
         }
         
         if (!$searchField) {
-            $searchField = $this->_defaultIdKey;
+            $searchField = $this->_idKey;
         }
 
         foreach ($indexables as $indexable) {
