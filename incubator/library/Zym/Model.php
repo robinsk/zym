@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Model_Interface
+ * @see Zym_Model_IModel
  */
-require_once 'Zym/Model/Interface.php';
+require_once 'Zym/Model/IModel.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,7 +26,7 @@ require_once 'Zym/Model/Interface.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_Model implements Zym_Model_Interface
+abstract class Zym_Model implements Zym_Model_IModel
 {
 
     /**
