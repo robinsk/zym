@@ -8,24 +8,132 @@
         prefix.
     </para>
     
+    <section xml:id="zym.view.helpers.getrequest">
+        <title>GetRequest Helper</title>
+        
+        <para>
+            The helper allows access to the request object (<classname>Zend_Controller_Response_Abstract</classname>) available within 
+            <classname>Zend_Controller_Front</classname>. Retrieving the request
+            object in the view is not recommended; however, this helper is provided
+            as a convince.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>getRequest()</para></listitem>
+        </itemizedlist>
+    </section>
+    
+    <section xml:id="zym.view.helpers.getresponse">
+        <title>GetResponse Helper</title>
+        
+        <para>
+            Allows access to the response object (<classname>Zend_Controller_Response_Abstract</classname>) within 
+            <classname>Zend_Controller_Front</classname>.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>getResponse()</para></listitem>
+        </itemizedlist>        
+    </section>
+    
+    <section xml:id="zym.view.helpers.getsession">
+        <title>GetSession Helper</title>
+        
+        <para>
+            This helper returns a <classname>Zend_Session_Namespace</classname>.
+            A session should be started if <classname>Zend_Session</classname>
+            strict is set. See <classname>Zend_Session_Namespace</classname> documentation
+            for usage. (hint: usage is similar to it)
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>getSession($namespace = 'Default', $singleInstance = false)</para></listitem>
+        </itemizedlist>
+    </section>
+    
     <section xml:id="zym.view.helpers.object">
         <title>Object Helper</title>
         
         <para>
             The object helper assists in creating an html <![CDATA[<object>]]> element
-            which can have complex params and attributes.
+            which can have complex params and attributes. The benefits of this
+            helper is that it can easily be extended to simply creation of specific
+            types of objects such as Flash videos or embedding quicktime.
         </para>
         
         <itemizedlist>
-            <listitem><para>object(data, type, attribs, params, content)</para></listitem>
+            <listitem><para>object($data, $type, array $attribs = array(), array $params = array(), $content = null)</para></listitem>
         </itemizedlist>
+        
+        <example xml:id="zym.view.helpers.object.example">
+            <title>Using Zym_View_Helper_Object</title>
+            
+            <programlisting role="php"><xi:include href="helpers/example/object.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.view.helpers.objectflash">
+        <title>ObjectFlash Helper</title>
+        
+        <para>
+            This is a child of the object helper and simplifies the creation of 
+            adobe flash animation objects.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>objectFlash($data, array $attribs = array(), array $params = array(), $content = null)</para></listitem>
+        </itemizedlist>
+        
+        <example xml:id="zym.view.helpers.objectflash.example">
+            <title>Using Zym_View_Helper_ObjectFlash</title>
+            
+            <programlisting role="php"><xi:include href="helpers/example/objectflash.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.view.helpers.objecthtml">
+        <title>ObjectHtml Helper</title>
+        
+        <para>
+            This helper allows creation of objects containing html data.
+            It is similar to iframes which are deprecated in xhtml.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>objectHtml($data, array $attribs = array(), array $params = array(), $content = null)</para></listitem>
+        </itemizedlist>
+        
+        <example xml:id="zym.view.helpers.objecthtml.example">
+            <title>Using Zym_View_Helper_ObjectHtml</title>
+            
+            <programlisting role="php"><xi:include href="helpers/example/objecthtml.php" parse="text" /></programlisting>
+        </example>
+    </section>
+
+    <section xml:id="zym.view.helpers.objectquicktime">
+        <title>ObjectQuicktime Helper</title>
+        
+        <para>
+            The quicktime helper allows you to embed quicktime objects without having
+            to remember the cumbersome class id's.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>objectQuicktime($data, array $attribs = array(), array $params = array(), $content = null)</para></listitem>
+        </itemizedlist>
+        
+        <example xml:id="zym.view.helpers.objectquicktime.example">
+            <title>Using Zym_View_Helper_ObjectQuicktime</title>
+            
+            <programlisting role="php"><xi:include href="helpers/example/objectquicktime.php" parse="text" /></programlisting>
+        </example>
     </section>
     
     <section xml:id="zym.view.helpers.xmldeclaration">
         <title>XmlDeclaration Helper</title>
         
         <para>
-            The xml declaration helper generates xml declarations (<![CDATA[<?xml verion="1.0" ?>]]>) just like its
+            The xml declaration helper generates xml declarations (<![CDATA[<?xml version="1.0" ?>]]>) just like its
             name suggests. Whenever you are using PHP for templates, you should
             use the xmlDeclaration helper because of inconsistencies between environments.
             You'll never know if short tags is enabled or not which can cause
@@ -33,13 +141,13 @@
         </para>
 
         <itemizedlist>
-            <listitem><para>xmlDeclaration($version, $encoding, $standalone)</para></listitem>
+            <listitem><para>xmlDeclaration($version = '1.0', $encoding = 'UTF-8', $standalone = null)</para></listitem>
         </itemizedlist>
 
         <example xml:id="zym.view.helpers.xmldeclaration.example">
             <title>Using Zym_View_Helper_XmlDeclaration</title>
             
-            <programlisting><xi:include href="helpers/example/xmldeclaration.php" parse="text" /></programlisting>
+            <programlisting role="php"><xi:include href="helpers/example/xmldeclaration.php" parse="text" /></programlisting>
         </example>
     </section>
 </section>

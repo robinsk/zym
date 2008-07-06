@@ -11,7 +11,7 @@
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com/license New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -25,21 +25,21 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zym/View.php';
 
 /**
- * @see Zym_View_Helper_ObjectHtml
+ * @see Zym_View_Helper_Object
  */
-require_once 'Zym/View/Helper/ObjectHtml.php';
+require_once 'Zym/View/Helper/Object.php';
 
 /**
- * Zym_View_Helper_ObjectHtml test case.
+ * Zym_View_Helper_Object test case.
  *
  * @author  Geoffrey Tran
- * @license http://www.zym-project.com/license New BSD License
+ * @license http://www.zym-project.com//License New BSD License
  * @category Zym
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Helper_ObjectHtmlTest extends PHPUnit_Framework_TestCase
+class Zym_View_Helper_ObjectTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Helper
@@ -51,46 +51,35 @@ class Zym_View_Helper_ObjectHtmlTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $view = new Zym_View();
-        $this->_helper = new Zym_View_Helper_ObjectHtml();
+        $this->_helper = new Zym_View_Helper_Object();
         $this->_helper->setView($view);
     }
 
-    public function testObjectHtml()
+    public function testObject()
     {
-        $object = $this->_helper->objectHtml('http://test.com');
-
+        $object = $this->_helper->object('http://test.com', 'text/html');
         $this->assertRegExp('/object/si', $object);
         $this->assertRegExp('/data="http:\/\/test.com"/si', $object);
-
-        // Check type
         $this->assertRegExp('/type="text\/html"/si', $object);
-
-        // Check classid
-        $this->assertRegExp('/classid="/si', $object);
-
-        // Check params
-        $this->assertRegExp('/value="http:\/\/test.com"/si', $object);
-        $this->assertRegExp('/name="src"/si', $object);
     }
 
-    public function testObjectHtmlWithAttribs()
+    public function testObjectWithAttribs()
     {
-        $object = $this->_helper->objectHtml('http://test.com', array('test' => 'value'));
+        $object = $this->_helper->object('http://test.com', 'text/html', array('test' => 'value'));
         $this->assertRegExp('/test="value"/si', $object);
-        $this->assertRegExp('/classid="/si', $object);
     }
 
-    public function testObjectHtmlWithParams()
+    public function testObjectWithParams()
     {
-        $object = $this->_helper->objectHtml('http://test.com', array(), array('test' => 'value'));
+        $object = $this->_helper->object('http://test.com', 'text/html', array(), array('test' => 'value'));
         $this->assertRegExp('/name="test"/si', $object);
         $this->assertRegExp('/value="value"/si', $object);
 
     }
 
-    public function testObjectHtmlWithContent()
+    public function testObjectWithContent()
     {
-        $object = $this->_helper->objectHtml('http://test.com', array(), array(), 'Oops');
+        $object = $this->_helper->object('http://test.com', 'text/html', array(), array(), 'Oops');
         $this->assertRegExp('/Oops/si', $object);
     }
 }

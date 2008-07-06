@@ -33,7 +33,7 @@ class Zym_View_Helper_GetResponse
     /**
      * Get the response  object
      *
-     * @return string
+     * @return Zend_Controller_Response_Abstract
      */
     public function getResponse()
     {

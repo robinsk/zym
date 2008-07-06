@@ -12,12 +12,13 @@
     </para>
     
     <para>
-        Performance is an important aspect of almost every application. In efficient
+        Performance is an important aspect of almost every application. Inefficient
         SQL queries and costly algorithms can be a show stopper. When designing an app
         you should keep performance in mind, but not let it overtake you. Pre-optimization
-        is the root of all evil! The first step you need to do is get something live.
-        There is more than one aspect to optimize, external influences such as the network
-        can have a significant effect. Webserver configuration makes a big difference.
+        is the root of all evil! Remember that you need something that's actually usable before you need performance.
+        There is more than one aspect to performance as external influences such as the network
+        can have a significant effect. Aside from code,
+        webserver configuration does makes a big difference.
     </para>
     
     <para>
@@ -30,7 +31,7 @@
     
     <para>
         Use an opcode cache! If you aren't using an opcode cache, you probably don't
-        care much about performance. Opcode caches and optimizes compiled php code
+        care much about performance. Opcode caches optimizes and caches compiled php code
         so the same code does not have to be compiled by php every request before execution.
         There are a variety of opcode caches out there, but
         the best supported is <link xlink:href="http://php.net/apc">APC Opcode Cache</link>.
@@ -71,5 +72,45 @@ foreach ($classes as $class) {;
     }
 }
 ]]></programlisting>
+    </section>
+    
+    <section xml:id="appendix.performance.stat">
+        <title>Disabling APC stat with ZF</title>
+        
+        <para>
+            The <emphasis>apc.stat = Off</emphasis> setting in APC tells PHP to ignore all
+            file includes and requires. Improper usage of this option often leads to white pages
+            or cryptic and wierd PHP exceptions. What this setting does is on the first
+            run, APC stores looks for and stores all includes/requires declared
+            and on the next request, PHP will ignore all file includes/requires. Okay, so now your thinking
+            that this is simple, but the catch is that all includes/requires
+            must be absolute (from /). Because most, perhaps every library does not
+            use absolute paths, generally for most people, this setting will cause problems; however,
+            if you use a script to replace the relative paths with absolute paths, a performance improvement 
+            of up to the APC advertised 30% can be achieved.
+        </para>
+    </section>
+    
+    <section xml:id="appendix.performance.autoloadingargument">
+        <title>The Autoloading VS. Requires Argument</title>
+        
+        <para>
+            Autoloading is the process of lazy loading dependencies whenever they
+            are needed, while on the otherhand the traditional require declaration
+            is considered the wasteful style where dependencies are loaded immediately.
+            While these are the definitions, these are the extremes. ZF uses a mixture
+            of the two styles. Generally most files that are always needed are "required"
+            in the file header where opcode caches like APC can pick them up and other
+            dependencies that are not needed on every request such as exceptions or adapters
+            are loaded conditionally.
+        </para>
+        
+        <section xml:id="appendix.performance.autoloadingargument.faster">
+            <title>So which one is better?</title>
+            
+            <para>
+                
+            </para>
+        </section>
     </section>
 </appendix>

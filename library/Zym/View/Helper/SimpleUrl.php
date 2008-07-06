@@ -15,11 +15,6 @@
  */
 
 /**
- * @see Zend_Controller_Front
- */
-require_once 'Zend/Controller/Front.php';
-
-/**
  * @see Zend_View_Helper_Url
  */
 require_once 'Zend/View/Helper/Url.php';
@@ -34,13 +29,6 @@ require_once 'Zend/View/Helper/Url.php';
 class Zym_View_Helper_SimpleUrl extends Zend_View_Helper_Url
 {
     /**
-     * Url action helper
-     *
-     * @var Zend_Controller_Action_Helper_Url
-     */
-    protected $_actionHelper;
-
-    /**
      * Create URL based on default route
      *
      * @param  string $action
@@ -52,6 +40,10 @@ class Zym_View_Helper_SimpleUrl extends Zend_View_Helper_Url
     public function simpleUrl($action, $controller = null, $module = null, array $params = array(), $encode = true)
     {
         if ($controller === null || $module === null) {
+            /**
+             * @see Zend_Controller_Front
+             */
+            require_once 'Zend/Controller/Front.php';
             $request = Zend_Controller_Front::getInstance()->getRequest();
         }
 

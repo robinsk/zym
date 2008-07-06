@@ -4,7 +4,7 @@
     <title>Bootstrap configuration options</title>
     
     <table xml:id="zym.app.configuration.options.values">
-        <title>Options</title>
+        <title>Zym_App Configuration Options</title>
         <tgroup cols="2">
             <thead>
                 <row>

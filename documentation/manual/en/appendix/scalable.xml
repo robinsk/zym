@@ -15,7 +15,7 @@
         adapters and change functionality easily. Design with scalability in mind and
         you shouldn't have much of a hard time scaling. It is also important to remember
         that not everyone is going to have 100 million hits a month and optimizing when your
-        not even "live" is almost pointless. It is the architecture that scales, not a language
+        not even "live" is time not spent efficiently. It is the architecture that scales, not a language
         or framework.
     </para>
     

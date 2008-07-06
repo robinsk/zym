@@ -62,9 +62,9 @@ class Zym_Timer
             throw new Zym_Timer_Exception('Timer already stopped');
         }
 
-        $spentTime = microtime(true) - $this->_start;
+        $spentTime          = microtime(true) - $this->_start;
         $this->_totalTime[] = $spentTime;
-        $this->_start = null;
+        $this->_start       = null;
 
         return $spentTime;
     }
@@ -85,7 +85,7 @@ class Zym_Timer
     }
 
     /**
-     * Time elapsed
+     * Time elapsed (including time if currently running)
      *
      * @return integer
      */
@@ -97,12 +97,12 @@ class Zym_Timer
         if ($this->_start !== null) {
             $elapsedTime += microtime(true) - $this->_start;
         }
-        
+
         return $elapsedTime;
     }
 
     /**
-     * Get elapsed average
+     * Get elapsed average of all starts and stops (including w/ stopping)
      *
      * @return integer
      */
@@ -133,7 +133,7 @@ class Zym_Timer
     {
         return array_sum($this->_totalTime);
     }
-    
+
     /**
      * Get runtime average
      *
@@ -156,7 +156,7 @@ class Zym_Timer
         $averageTime = $this->getRun() / $calls;
         return $averageTime;
     }
-    
+
     /**
      * Get runtimes of complete start and stop's
      *
@@ -166,7 +166,7 @@ class Zym_Timer
     {
         return $this->_totalTime;
     }
-    
+
     /**
      * Whether the timer is running
      *
@@ -176,7 +176,7 @@ class Zym_Timer
     {
         return (bool) $this->_start;
     }
-    
+
     /**
      * Reset object
      *
@@ -186,7 +186,7 @@ class Zym_Timer
     {
         $this->_start     = null;
         $this->_totalTime = array();
-        
+
         return $this;
     }
 }

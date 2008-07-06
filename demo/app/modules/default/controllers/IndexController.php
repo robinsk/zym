@@ -21,7 +21,7 @@ require_once 'Zym/Controller/Action/Abstract.php';
  * @license http://www.zym-project.com/license New BSD License
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Default_IndexController extends Zym_Controller_Action_Abstract 
+class Default_IndexController extends Zym_Controller_Action_Abstract
 {
     /**
      * Index
@@ -37,10 +37,10 @@ class Default_IndexController extends Zym_Controller_Action_Abstract
         foreach ($classes as $class) {;
             if (strtolower(substr($class, 0, 4)) == 'zend' || strtolower(substr($class, 0, 3)) == 'zym') {
                $zendZym[] = str_ireplace('_', '/', $class) . '.php';
-               
+
                echo 'require_once \'' . str_ireplace('_', '/', $class) . '.php\';'.'<br />';
             }
         }
-        */        
+        */
     }
 }
