@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation" version="5.0">
+    <title>Zym_Navigation</title>
+
+    <para>
+        <classname>Zym_Navigation</classname> is a component for managing a
+        hierarchical structure of (logical representations of) web pages.
+        It can be used for creating menus, breadcrumbs and sitemaps, and may
+        be iterated and traversed in your very own way.
+    </para>
+
+    <section xml:id="zym.navigation.creating">
+        <title>Creating a navigational structure</title>
+
+        <para>
+            Registering to a notification is done at <code>Zym_Notification</code>:
+        </para>
+
+        <example xml:id="zym.notification.registering.example">
+            <title>Registering a notification</title>
+            <programlisting role="php"><xi:include href="notification/example/registering.php" parse="text" /></programlisting>
+        </example>
+
+        <para>
+            In this snippet, an object is attached to the testEvent notification.
+            All posts that are sent to the ‘testEvent’ notification will then be passed to
+            the <code>$receivingObject</code>. By default the notifications will be posted to the
+            <code>notify()</code> method. An optional third parameter in the <code>attach()</code> method allows
+            you to use a custom method.
+        </para>
+
+        <para>
+            In this case, all ‘testEvent’ notifications will be posted to the
+            <code>customMethod()</code> method in <code>$theReceivingObject</code>. There is a special attach
+            method called <code>attachCatchAll()</code>. An object that is registered to the
+            catch-all will receive all notifications. If you want to unregister an
+            object from the notification center you can call the <code>detach()</code> method. This
+            method takes one mandatory and one optional argument. The first argument is
+            the object you want to detach. The second, optional, argument is the
+            notification that you want to detach the object from. If the second argument
+            is left blank, the notification center will remove the object from all
+            notifications. Don’t forget to detach an object when it’s destroyed! See the next section for an example
+            of how to make sure this gets done.
+        </para>
+
+        <example xml:id="zym.notification.example.complex">
+            <title>Attaching, Detaching and Receiving Notifications</title>
+            <programlisting role="php"><xi:include href="notification/example/complex.php" parse="text" /></programlisting>
+        </example>
+
+        <para>
+            In the example above the MyClass instance is automatically registered
+            to the ‘testEvent’ notification at instantiation. If and when the
+            ‘testEvent’ notification is sent, the <code>notify()</code> method will receive it so it
+            can be processed. Note the <code>__destruct()</code> method which explicitly detaches the
+            object from the notification center.
+        </para>
+    </section>
+</chapter>
