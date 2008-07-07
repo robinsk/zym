@@ -62,7 +62,7 @@
         </para>
         
         <programlisting role="php"><![CDATA[
-$classes = array_merge(get_declared_classes(), get_declared_interfaces());
+$classes = array_merge(get_declared_interfaces(), get_declared_classes());
 foreach ($classes as $class) {;
     if (strtolower(substr($class, 0, 4)) == 'zend' 
         || strtolower(substr($class, 0, 3)) == 'zym') {

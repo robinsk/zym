@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appendix xmlns="http://docbook.org/ns/docbook" 
+          xmlns:xlink="http://www.w3.org/1999/xlink" 
+          xmlns:xi="http://www.w3.org/2001/XInclude" 
+          xml:lang="en"
+          xml:id="appendix.copyright"
+          version="5.0">
+    <title>Copyright Information</title>
+    
+    <para>
+        The following copyrights are applicable to portions of the Zym Framework.
+    </para>
+    
+    <para>
+        Copyright &#169; <?dbtimestamp format="Y"?> Zym. (<link xlink:href="http://www.zym-project.com" />)
+    </para>
+</appendix>

@@ -7,4 +7,6 @@
         Zym includes basic resources required to bootstrap a project.
     </para>
     
+    <xi:include href="set/autoload.xml" />
+    <xi:include href="set/cache.xml" />
 </section>

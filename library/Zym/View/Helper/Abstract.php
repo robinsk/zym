@@ -23,14 +23,15 @@
  * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-abstract class Zym_View_Helper_Abstract
+abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
+    implements Zend_View_Helper_Interface
 {
     /**
      * View Object
      *
      * @var Zend_View_Abstract
      */
-    protected $_view;
+    private $_view;
 
     /**
      * Clone view object
@@ -62,6 +63,7 @@ abstract class Zym_View_Helper_Abstract
     public function setView(Zend_View_Abstract $view)
     {
         $this->_view = $view;
+        
         return $this;
     }
 

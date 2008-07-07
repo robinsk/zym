@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<book xmlns="http://docbook.org/ns/docbook" 
+      xmlns:xlink="http://www.w3.org/1999/xlink" 
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xml:lang="en"
+      version="5.0">
+    <info>
+        <title>Programmer's Reference Guide</title>
+        <subtitle>Zym Framework - Deprecated Components</subtitle>
+        <edition>Programmer's Reference Guide for Zym Framework (Deprecated Components)</edition>
+        <pubdate><?dbtimestamp format="Y-m-d" ?></pubdate>
+
+        <copyright>
+            <year><?dbtimestamp format="Y" ?></year>
+            <holder>
+                Zym (<link xlink:href="http://www.zym-project.com/" />)
+            </holder>
+        </copyright>
+                
+        <!-- START: Front Cover -->
+        <cover>
+            <para role="tagline">The official documentation for Zym Framework</para>
+        </cover>
+        <!-- END: Front Cover -->
+        
+        <!-- START: Back Cover -->
+        <cover>
+            <para>Zym Framework demystified!</para>
+        </cover>
+        <!-- END: Back Cover -->
+    </info>
+    
+    <!-- START: Chapters -->
+    <xi:include href="zym/view.xml" />
+    <!-- END: Chapters -->
+    
+    <!-- START: Appendix -->
+    <xi:include href="appendix/copyright.xml" />
+    <!-- END:: Appendix -->
+</book>
