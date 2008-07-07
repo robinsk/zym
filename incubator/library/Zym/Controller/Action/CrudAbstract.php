@@ -32,6 +32,7 @@ require_once 'Zend/Db/Table/Abstract.php';
 
 /**
  * @TODO Make this compatible with MultiPageForm
+ * @TODO Add global view scripts
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Controller
