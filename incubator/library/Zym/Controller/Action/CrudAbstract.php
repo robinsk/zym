@@ -31,6 +31,7 @@ require_once 'Zend/Data/Paginator.php';
 require_once 'Zend/Db/Table/Abstract.php';
 
 /**
+ * @TODO Make this compatible with MultiPageForm
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Controller
@@ -45,14 +46,14 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      *
      * @var Zend_Db_Table_Abstract
      */
-    protected $_table;
+    protected $_table = null;
 
     /**
      * Form instance
      *
      * @var Zend_Form
      */
-    protected $_form;
+    protected $_form = null;
 
     /**
      * The add-edit action
@@ -62,11 +63,11 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected $_addEditAction = 'addEdit';
 
     /**
-     * The list action
+     * The browse action
      *
      * @var string
      */
-    protected $_listAction = 'list';
+    protected $_browseAction = 'browse';
 
     /**
      * Default page limit for pagination
@@ -89,6 +90,40 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      */
     protected $_primaryIdKey = null;
 
+    /**
+     * Range parameter
+     * 
+     * @var string
+     */
+    protected $_rangeParam = 'range';
+    
+    /**
+     * Page parameter
+     * 
+     * @var string
+     */
+    protected $_pageParam = 'page';
+    
+    /**
+     * Browse query
+     * 
+     * @var Zend_Db_Select
+     */
+    protected $_browseQuery = null;
+    
+    /**
+     * Allows this to work when setDefaultAction() has been set to something other than 'index'
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $front = Zend_Controller_Front::getInstance();
+        if ($this->getRequest()->getActionName() == $front->getDefaultAction() && $this->getRequest()->getActionName() != 'index') {
+            $this->_forward($this->_getBrowseAction());
+        }
+    }
+    
     /**
      * Get the table for this model
      *
@@ -242,28 +277,28 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     }
 
     /**
-     * Get the name of the action that takes care of the listing
+     * Get the name of the action that takes care of the browsing
      *
      * @return string
      */
-    protected function _getListAction()
+    protected function _getBrowseAction()
     {
-        if (!$this->_listAction) {
-            $this->_throwException('You must set a list action.');
+        if (!$this->_browseAction) {
+            $this->_throwException('You must set a browse action.');
         }
 
-        return $this->_listAction;
+        return $this->_browseAction;
     }
 
     /**
-     * Set the add-edit action
+     * Set the browse action
      *
      * @param string $action
      * @return Zym_Controller_Action_Crud_Abstract
      */
-    protected function _setListAction($action)
+    protected function _setBrowseAction($action)
     {
-        $this->_listAction = $action;
+        $this->_browseAction = $action;
 
         return $this;
     }
@@ -285,22 +320,22 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     }
 
     /**
-     * Index action. Forward to the list action
+     * Index action. Forward to the browse action
      */
     public function indexAction()
     {
-        $this->_forward($this->_getListAction());
+        $this->_forward($this->_getBrowseAction());
     }
 
     /**
-     * Show a list with all available models
+     * Browse through your models
      */
-    public function listAction()
+    public function browseAction()
     {
-        $range = (int) $this->_getParam('range', $this->_defaultPageRange);
-        $page  = (int) $this->_getParam('page', $this->_defaultPageNumber);
+        $range = (int) $this->_getParam($this->_rangeParam, $this->_defaultPageRange);
+        $page  = (int) $this->_getParam($this->_pageParam, $this->_defaultPageNumber);
 
-        $paginator = Zend_Data_Paginator::factory($this->_getListSelect());
+        $paginator = Zend_Data_Paginator::factory($this->_getBrowseQuery());
 
         if ($range > 0) {
             $paginator->setPageRange($range);
@@ -314,13 +349,30 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     }
 
     /**
-     * Get the select object for the list action
+     * Get the select object for the browse action
      *
      * @return Zend_Db_Table_Select
      */
-    protected function _getListSelect()
+    protected function _getBrowseQuery()
     {
-        return $this->_getTable()->select();
+        if (!$this->_browseQuery) {
+            $this->_browseQuery = $this->_getTable()->select();
+        }
+        
+        return $this->_browseQuery; 
+    }
+    
+    /**
+     * Set the select object for the browse action
+     *
+     * @param Zend_Db_Select $query
+     * @return Zym_Controller_Action_CrudAbstract
+     */
+    protected function _setBrowseQuery(Zend_Db_Select $query)
+    {
+        $this->_browseQuery = $query;
+        
+        return $this; 
     }
 
     /**
@@ -378,7 +430,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         switch (true) {
             case array_key_exists('_cancel', $postData);
-                $this->_goto($this->_getListAction());
+                $this->_goto($this->_getBrowseAction());
                 break;
         }
     }
@@ -407,7 +459,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         $row->save();
 
-        $this->_goto($this->_getListAction());
+        $this->_goto($this->_getBrowseAction());
     }
 
     /**
@@ -426,6 +478,6 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
             $table->delete($where);
         }
 
-        $this->_goto($this->_getListAction());
+        $this->_goto($this->_getBrowseAction());
     }
 }
