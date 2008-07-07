@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.cache" version="5.0">
+    <title>Cache Resource</title>
+
+    <para>
+        This resource configures the <classname>Zym_Cache</classname> factory which
+        enables application wide cache control.
+    </para>
+    
+    <para>
+        This resource's configuration options are 1:1 with <classname>Zym_Cache::setConfig()</classname>
+        except for the cavet that 'cache_dir' and 'cache_db_complete_path' paths are relative to
+        <classname>Zym_App::PATH_DATA</classname>. Below are the table of options that are overridden
+        by default based on the environment.
+    </para>
+    
+    <table xml:id="zym.app.resources.set.cache.options">
+        <title>Cache Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>default_backend</entry>
+                    <entry>
+                        file
+                    </entry>
+                </row>
+                <row>
+                    <entry>frontend</entry>
+                </row>
+                <row>
+                    <entry>frontend.core.automatic_serialization</entry>
+                    <entry>true</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+    
+    <note>
+        <para>
+            Priority is high
+        </para>
+    </note>
+</section>

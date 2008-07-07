@@ -91,6 +91,37 @@ foreach ($classes as $class) {;
         </para>
     </section>
     
+    <section xml:id="appendix.performance.autoloading">
+        <title>Autoloading ZF and Zym</title>
+        
+        <para>
+            Switching from the ZF and Zym default of requires to autoloading is fairly simple
+            but it requires that you keep a separate custom copy of the libraries.
+            Running the script below on the library files will remove all references to
+            requires allowing you to use autoloading as you choose.
+        </para>
+        
+        <programlisting role="php"><![CDATA[<?php
+$directories = array(
+    '../library/Zend',
+    '../library/Zym'
+);
+
+foreach ($directories as $directory) {
+    $iterator = new RecursiveDirectoryIterator($directory);
+
+    foreach(new RecursiveIteratorIterator($iterator) as $file) {
+        if ($file->isFile() && substr($file, -4) == '.php') {
+            $contents = file_get_contents($file);
+            $contents = preg_replace('/[\t\r]*require_once\s+?[(\'"].+?;[\t\r]*/six', '', $contents);
+            $fh = fopen($file, 'w');
+            fwrite($fh, $contents);
+            fclose($fh);
+        }
+    }
+}]]></programlisting>
+    </section>
+    
     <section xml:id="appendix.performance.autoloadingargument">
         <title>The Autoloading VS. Requires Argument</title>
         

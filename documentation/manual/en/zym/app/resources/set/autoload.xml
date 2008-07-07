@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.autoload" version="5.0">
+    <title>Autoload Resource</title>
+
+    <para>
+        Autoloading simplifies development and dependency concerns. This resource
+        handles the setting up of autoloading systems such as <classname>Zend_Loader</classname>.
+        Loading this resource by default is the same as calling <methodname>Zend_Loader::registerAutoload()</methodname>.
+    </para>
+    
+    <table xml:id="zym.app.resources.set.autoload.options">
+        <title>Autoload Resource Options</title>
+        
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>class</entry>
+                    <entry>
+                        <itemizedlist>
+                            <listitem><para>default - Zend_Loader</para></listitem>
+                        </itemizedlist>
+                    </entry>
+                    <entry>
+                        Class to use as autoloader. It should implement 
+                        <link xlink:href="zym.loader.autoload.writingyourown"><classname>Zym_Loader_Autoload_Interface</classname></link>
+                        or have an autoload() function.
+                        This key be specified multiple times.
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+    
+    <note>
+        <para>
+            Priority is high
+        </para>
+    </note>
+</section>
