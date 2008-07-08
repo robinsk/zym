@@ -39,7 +39,7 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
      *
      * @var string
      */
-    protected $_uri;
+    protected $_uri = null;
     
     /**
      * Checks if the page is valid (has required properties)

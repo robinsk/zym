@@ -137,14 +137,23 @@ abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abst
     {
         // get attribs for anchor element
         $attribs = array(
-            'href'   => $page->getHref(),
             'id'     => $page->getId(),
             'title'  => $page->getTitle(),
-            'class'  => $page->getClass(),
-            'target' => $page->getTarget()
+            'class'  => $page->getClass()
         );
         
-        return "<a {$this->_htmlAttribs($attribs)}>{$page->getLabel()}</a>";
+        if ($page->getHref()) {
+            $attribs = array_merge($attribs, array('href'   => $page->getHref(),
+                                                   'target' => $page->getTarget()));
+            
+            $element = 'a';
+        } else {
+            $element = 'span';
+        }
+        
+        return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
+             . $page->getLabel()
+             . '</' . $element . '>';
     }
     
     /**

@@ -52,14 +52,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @var string
      */
-    protected $_action;
+    protected $_action = null;
     
     /**
      * Controller name
      *
      * @var string
      */
-    protected $_controller;
+    protected $_controller = null;
     
     /**
      * Module name
@@ -100,7 +100,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * @see getHref()
      * @var Zend_Controller_Action_Helper_Url
      */
-    protected static $_urlHelper;
+    protected static $_urlHelper = null;
     
     /**
      * Checks if the page is valid (has required properties)
@@ -161,10 +161,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     /**
      * Returns href for this page
      *
-     * @return string
+     * @return string|null
      */
     public function getHref()
     {
+        if (!$this->_controller && !$this->_action) {
+            return null;
+        }
+        
         if (null === self::$_urlHelper) {
             self::$_urlHelper =
                 Zend_Controller_Action_HelperBroker::getStaticHelper('url');
