@@ -18,7 +18,7 @@
 /**
  * @see Zym_View_Helper_Html_Navigation
  */
-require_once 'Zym/View/Helper/Html/Navigation.php';
+require_once 'Zym/View/Helper/NavigationAbstract.php';
 
 /**
  * Helper for printing menus as 'ul' HTML elements
