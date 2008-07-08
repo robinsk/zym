@@ -298,12 +298,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function setId($id = null)
     {
-        if (null !== $id && !is_string($id)) {
-            $msg = '$id must be a string or null';
+        if (null !== $id && !is_string($id) && !is_numeric($id)) {
+            $msg = '$id must be a string, number or null';
             throw new InvalidArgumentException($msg);
         }
         
-        $this->_id = $id;
+        $this->_id = (string) $id;
+        
         return $this;
     }
     
