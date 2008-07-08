@@ -10,7 +10,6 @@ when improvements and bugfixes are made. Please visit the website
 http://zym-project.com for more information. To be notified of new
 releases, monitor the Zym mailinglist.
 
-
 DOCUMENTATION
 -------------
 
@@ -27,7 +26,6 @@ Zym classes can be found in the following directory:
 
 Your PHP include_path should contain the Zym library. For
 more information, see INSTALL.txt.
-
 
 SEE ALSO
 --------
