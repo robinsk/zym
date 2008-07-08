@@ -175,9 +175,15 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
         if (!array_key_exists($key, $this->_data)) {
             $this->_throwException(sprintf('Specified column "%s" is not in the row', $key));
         }
+        
+        $data = $this->_data;
+        $modified = $this->_modifiedFields;
 
-        $this->_data[$key] = $value;
-        $this->_modifiedFields[$key] = true;
+        $data[$key] = $value;
+        $modified[$key] = true;
+        
+        $this->_data = $data;
+        $this->_modifiedFields = $modified;
     }
 
     /**
@@ -191,6 +197,26 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
         $key = $this->_transformKey($key);
 
         return array_key_exists($key, $this->_data);
+    }
+    
+    /**
+     * Unsets the attribute
+     *
+     * @param  string $key The user-specified attribute name.
+     */
+    public function __unset($key)
+    {
+        if ($this->__isset[$key]) {
+            // Work around that nasty PHP 5.2.0 "feature"
+            $data = $this->_data;
+            $modified = $this->_modifiedFields;
+            
+            unset($data[$key]);
+            unset($modified[$key]);
+            
+            $this->_data = $data;
+            $this->_modifiedFields = $modified;
+        }
     }
 
     /**
