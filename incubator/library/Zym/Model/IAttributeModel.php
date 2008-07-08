@@ -29,19 +29,34 @@ require_once 'Zym/Model/IModel.php';
 interface Zym_Model_IAttributeModel extends Zym_Model_IModel
 {
     /**
-     * Retrieve row field value
+     * Get an attribute
      *
-     * @param  string $key The user-specified column name.
-     * @return string The corresponding column value.
+     * @param  string $key The user-specified attribute name.
+     * @return string The corresponding attribute value.
      */
     public function __get($key);
     
     /**
-     * Set row field value
+     * Set an attribute
      *
-     * @param  string $key The column key.
-     * @param  mixed  $value The value for the property.
+     * @param  string $key The attribute key.
+     * @param  mixed  $value The value for the attribute.
      * @return void
      */
     public function __set($key, $value);
+    
+    /**
+     * Checks if the attribute is set
+     *
+     * @param  string $key The user-specified attribute name.
+     * @return bool
+     */
+    public function __isset($key);
+    
+    /**
+     * Unsets the attribute
+     *
+     * @param  string $key The user-specified attribute name.
+     */
+    public function __unset($key);
 }
