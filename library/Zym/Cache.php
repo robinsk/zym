@@ -27,7 +27,7 @@ require_once 'Zend/Cache.php';
  * @package Zym_Cache
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-abstract class Zym_Cache extends Zend_Cache
+abstract class Zym_Cache
 {
     /**
      * Default backend
@@ -177,10 +177,10 @@ abstract class Zym_Cache extends Zend_Cache
     /**
      * Factory
      *
-     * @param string $frontend frontend name
-     * @param string $backend backend name Leave as null for default backend
-     * @param array $frontendOptions associative array of options for the corresponding frontend constructor
-     * @param array $backendOptions associative array of options for the corresponding backend constructor
+     * @param string  $frontend frontend name
+     * @param string  $backend backend name Leave as null for default backend
+     * @param array   $frontendOptions associative array of options for the corresponding frontend constructor
+     * @param array   $backendOptions associative array of options for the corresponding backend constructor
      * @param boolean $customFrontendNaming if true, the frontend argument is used as a complete class name ; if false, the frontend argument is used as the end of "Zend_Cache_Frontend_[...]" class name
      * @param boolean $customBackendNaming if true, the backend argument is used as a complete class name ; if false, the backend argument is used as the end of "Zend_Cache_Backend_[...]" class name
      * @param boolean $autoload if true, there will no require_once for backend and frontend (usefull only for custom backends/frontends)
@@ -204,7 +204,7 @@ abstract class Zym_Cache extends Zend_Cache
         $backendOptions  = self::_arrayMergeRecursiveOverwrite(self::getBackendOptions($backend),
                                                               (array) $backendOptions);
 
-        return parent::factory($frontend, $backend, $frontendOptions, $backendOptions, $customFrontendNaming, $customBackendNaming, $autoload = false);
+        return Zend_Cache::factory($frontend, $backend, $frontendOptions, $backendOptions, $customFrontendNaming, $customBackendNaming, $autoload = false);
     }
 
     /**
