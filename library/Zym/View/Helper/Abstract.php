@@ -60,7 +60,7 @@ abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
      * @param Zend_View_Abstract $view
      * @return Zym_View_Helper_Abstract
      */
-    public function setView(Zend_View_Abstract $view)
+    public function setView(Zend_View_Interface $view)
     {
         $this->_view = $view;
         
