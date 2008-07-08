@@ -1,3 +1,7 @@
+<?
+$this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
+$this->menu()->setRole(array('nav-member', 'nav-bar'));
+?>
 <? $this->headTitle('Navigation Demo') ?>
 <? $this->headStyle()->captureStart(); ?>
 #pageprops {

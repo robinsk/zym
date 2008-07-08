@@ -169,7 +169,7 @@ abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abst
      */
     public function setRole($role = null)
     {
-        if (null === $role || is_string($role || is_array($role))) {
+        if (null === $role || is_string($role) || is_array($role)) {
             $this->_role = $role;
         } else {
             $msg = '$role must be null|string|array';
@@ -217,7 +217,7 @@ abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abst
         foreach ($helperRole as $hRole) {
             foreach ($pageRole as $pRole) {
                 if ($hRole == $pRole ||
-                    $this->_acl->inherits($hRole, $pRole)) {
+                    $this->_acl->inheritsRole($hRole, $pRole)) {
                     return true;
                 }
             }

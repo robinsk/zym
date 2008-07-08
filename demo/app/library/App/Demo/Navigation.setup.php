@@ -119,6 +119,49 @@ $config = array(
                 )
             )
         )
+    ),
+    array(
+        'label' => 'ACL page 1 (guest)',
+        'uri' => '#acl-guest',
+        'role' => 'nav-guest',
+        'pages' => array(
+            array(
+                'label' => 'ACL page 1.1 (foo)',
+                'uri' => '#acl-foo',
+                'role' => 'nav-foo'
+            ),
+            array(
+                'label' => 'ACL page 1.2 (bar)',
+                'uri' => '#acl-bar',
+                'role' => 'nav-bar'
+            ),
+            array(
+                'label' => 'ACL page 1.3 (baz)',
+                'uri' => '#acl-baz',
+                'role' => 'nav-baz'
+            ),
+            array(
+                'label' => 'ACL page 1.4 (bat)',
+                'uri' => '#acl-bat',
+                'role' => 'nav-bat'
+            )
+        )
+    ),
+    array(
+        'label' => 'ACL page 2 (member)',
+        'uri' => '#acl-member',
+        'role' => 'nav-member'
+    ),
+    array(
+        'label' => 'ACL page 3 (admin',
+        'uri' => '#acl-admin',
+        'role' => 'nav-admin',
+        'pages' => array(
+            array(
+                'label' => 'ACL page 3.1 (nothing)',
+                'uri' => '#acl-nada'
+            )
+        )
     )
 );
 
@@ -138,3 +181,20 @@ $router->addRoute(
         'controller' => 'page2', 'action' => 'index')
     )
 );
+
+// add some ACL stuff
+$navAcl = new Zend_Acl();
+$navAcl->addRole(new Zend_Acl_Role('nav-guest'));
+$navAcl->addRole(new Zend_Acl_Role('nav-member'), 'nav-guest');
+$navAcl->addRole(new Zend_Acl_Role('nav-admin'), 'nav-member');
+$navAcl->addRole(new Zend_Acl_Role('nav-foo'));
+$navAcl->addRole(new Zend_Acl_Role('nav-bar'));
+$navAcl->addRole(new Zend_Acl_Role('nav-baz'));
+$navAcl->addRole(new Zend_Acl_Role('nav-bat'));
+Zend_Registry::set('Zym_Navigation_Demo_Acl', $navAcl);
+
+// do the following in the view (for this demo we keep it simple)
+/*
+$this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
+$this->menu()->setRole(array('nav-member', 'nav-bar'));
+*/

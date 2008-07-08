@@ -455,7 +455,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function setRole($role = null)
     {
-        if (null === $role || is_string($role || is_array($role))) {
+        if (null === $role || is_string($role) || is_array($role)) {
             $this->_role = $role;
         } else {
             $msg = '$role must be null|string|array';
