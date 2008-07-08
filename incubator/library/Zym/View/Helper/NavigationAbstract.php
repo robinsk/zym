@@ -40,7 +40,7 @@ require_once 'Zend/Acl.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */ 
-abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abstract
+abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_Abstract
 {
     /**
      * Container to operate on
@@ -142,8 +142,10 @@ abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abst
             'class'  => $page->getClass()
         );
         
-        if ($page->getHref()) {
-            $attribs = array_merge($attribs, array('href'   => $page->getHref(),
+        $href = $page->getHref();
+        
+        if ($href) {
+            $attribs = array_merge($attribs, array('href'   => $href,
                                                    'target' => $page->getTarget()));
             
             $element = 'a';

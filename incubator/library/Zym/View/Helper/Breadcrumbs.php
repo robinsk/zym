@@ -30,7 +30,7 @@ require_once 'Zym/View/Helper/Html/Navigation.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */ 
-class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_Html_Navigation
+class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
 {
     /**
      * Breadcrumbs separator string
