@@ -97,6 +97,12 @@ abstract class Zym_Model implements Zym_Model_IModel
         $this->init();
     }
 
+    /**
+     * Throw an exception with the specified message
+     *
+     * @param string $message
+     * @throws Zym_Model_Exception
+     */
     protected function _throwException($message)
     {
         /**
@@ -214,21 +220,41 @@ abstract class Zym_Model implements Zym_Model_IModel
         $this->_readOnly = (bool) $flag;
     }
 
+    /**
+     * Get the changed keys
+     *
+     * @return array
+     */
     public function getChangedKeys()
     {
         return array_intersect_key($this->_data, $this->_modifiedFields);
     }
 
+    /**
+     * Check if the model is modified
+     *
+     * @return bool
+     */
     public function isModified()
     {
         return !empty($this->_modifiedFields);
     }
 
+    /**
+     * Check if the model is new and unaltered
+     *
+     * @return bool
+     */
     public function isNew()
     {
         return empty($this->_cleanData);
     }
 
+    /**
+     * Reset the model data
+     *
+     * @return Zym_Model
+     */
     public function reset()
     {
         /**
@@ -238,6 +264,8 @@ abstract class Zym_Model implements Zym_Model_IModel
             array_keys($this->_data),
             array_fill(0, count($this->_data), null)
         );
+        
+        return $this;
     }
 
     /**
