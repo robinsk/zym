@@ -17,7 +17,12 @@
 /**
  * @see Zym_Model_IModel
  */
-require_once 'Zym/Model/IModel.php';
+require_once 'Zym/Model/IArrayModel.php';
+
+/**
+ * @see Zym_Model_IModel
+ */
+require_once 'Zym/Model/IAttributeModel.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,7 +31,7 @@ require_once 'Zym/Model/IModel.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_Model implements Zym_Model_IModel
+abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Model_IAttributeModel 
 {
 
     /**
