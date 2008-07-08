@@ -374,8 +374,8 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_Html_Navigation
         
         // iterate navigation
         foreach ($iterator as $page) {
-            if (!$page->isVisible(true)) {
-                // skip invisible pages
+            if (!$this->_accept($page)) {
+                // page is not accepted
                 continue;
             }
             

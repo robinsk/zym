@@ -26,6 +26,11 @@ require_once 'Zym/View/Helper/Html/Abstract.php';
 require_once 'Zym/Navigation.php';
 
 /**
+ * @see Zend_Acl
+ */
+require_once 'Zend/Acl.php';
+
+/**
  * Base class for navigation related helpers
  *
  * @category   Zym
@@ -45,11 +50,24 @@ abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abst
     protected $_container;
     
     /**
+     * ACL role to use when iterating pages
+     * 
+     * @var string|array|null
+     */
+    protected $_role;
+    
+    /**
+     * ACL to use when iterating pages
+     * 
+     * @var Zend_Acl
+     */
+    protected $_acl;
+    
+    /**
      * Proxy to the navigation container
      *
      * @param  string $method     method in the container to call
      * @param  array  $arguments  [optional] arguments to pass
-     * @return Zym_View_Helper_Navigation
      * @throws BadMethodCallException  if method does not exist in container
      */
     public function __call($method, $arguments = null)
@@ -127,6 +145,107 @@ abstract class Zym_View_Helper_Html_Navigation extends Zym_View_Helper_Html_Abst
         );
         
         return "<a {$this->_htmlAttribs($attribs)}>{$page->getLabel()}</a>";
+    }
+    
+    /**
+     * Sets ACL to use when iterating pages
+     * 
+     * @param  Zend_Acl $acl  [optional] ACL object, defaults to null which
+     *                        sets no ACL object
+     * @return Zym_View_Helper_Navigation
+     */
+    public function setAcl(Zend_Acl $acl = null)
+    {
+        $this->_acl = $acl;
+    }
+    
+    /**
+     * Sets ACL role(s) to use when iterating pages
+     * 
+     * @param  null|string|array $role   a single role, or an array of roles,
+     *                                   defaults to null, which sets no role
+     * @throws InvalidArgumentException  if $role is not null|string|array
+     * @return Zym_Navigation_Page
+     */
+    public function setRole($role = null)
+    {
+        if (null === $role || is_string($role || is_array($role))) {
+            $this->_role = $role;
+        } else {
+            $msg = '$role must be null|string|array';
+            throw new InvalidArgumentException($msg);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Returns ACL role(s) to use when iterating pages
+     * 
+     * @return array|null  returns null if no role is set 
+     */
+    public function getRole()
+    {
+        if (null === $this->_role || is_array($this->_role)) {
+            return $this->_role;
+        }
+        
+        return (array) $this->_role;
+    }
+    
+    /**
+     * Determines whether a page should be accepted when iterating using ACL
+     * 
+     * Validates that the role set in helper inherits or is the same as
+     * the role(s) found in the page
+     * 
+     * @return bool
+     */
+    protected function _acceptAcl(Zym_Navigation_Page $page)
+    {
+        if (!$pageRole = $page->getRole()) {
+            // accept it if page has no role
+            return true;
+        }
+        
+        if (!$helperRole = $this->getRole()) {
+            // don't accept if helper has no role
+            return false;
+        }
+        
+        // loop all roles
+        foreach ($helperRole as $hRole) {
+            foreach ($pageRole as $pRole) {
+                if ($hRole == $pRole ||
+                    $this->_acl->inherits($hRole, $pRole)) {
+                    return true;
+                }
+            }
+        }
+        
+        // does not inherit, so do not accept
+        return false;
+    }
+    
+    /**
+     * Determines whether a page should be accepted when iterating
+     *
+     * @param Zym_Navigation_Page $page  page to verify
+     */
+    protected function _accept(Zym_Navigation_Page $page)
+    {
+        if (!$page->isVisible()) {
+            // don't accept invisible pages
+            return false;
+        }
+        
+        if (null !== $this->_acl) {
+            // determine using ACL
+            return $this->_acceptAcl($page);
+        }
+        
+        // accept by default
+        return true;
     }
     
     /**

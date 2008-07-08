@@ -80,6 +80,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     protected $_position = null;
     
     /**
+     * ACL role required to see this page
+     * 
+     * @var string|array|null
+     */
+    protected $_role = null;
+    
+    /**
      * Whether this page should be considered active
      *
      * @var bool
@@ -439,6 +446,40 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
     
     /**
+     * Sets ACL role(s) required to view this page
+     * 
+     * @param  null|string|array $role   a single role, or an array of roles,
+     *                                   defaults to null, which sets no role
+     * @throws InvalidArgumentException  if $role is not null|string|array
+     * @return Zym_Navigation_Page
+     */
+    public function setRole($role = null)
+    {
+        if (null === $role || is_string($role || is_array($role))) {
+            $this->_role = $role;
+        } else {
+            $msg = '$role must be null|string|array';
+            throw new InvalidArgumentException($msg);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Returns ACL role(s) required to view this page
+     * 
+     * @return array|null  returns null if no role is set 
+     */
+    public function getRole()
+    {
+        if (null === $this->_role || is_array($this->_role)) {
+            return $this->_role;
+        }
+        
+        return (array) $this->_role;
+    }
+    
+    /**
      * Sets whether page should be active or not
      *
      * @param  bool $active  whether page should be active or not
@@ -563,15 +604,6 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         return $this->_label;
     }
     
-    // Abstract methods:
-    
-    /**
-     * Returns href for this page
-     *
-     * @return string
-     */
-    abstract public function getHref();
-    
     // Public methods:
     
     /**
@@ -591,7 +623,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function toArray()
     {
-        return array_merge($this->_properties, array(
+        return array_merge($this->getCustomProperties(), array(
             'label'    => $this->getlabel(),
             //'href'     => $this->getHref(),
             'id'       => $this->getId(),
@@ -599,8 +631,18 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             'title'    => $this->getTitle(),
             'target'   => $this->getTarget(),
             'position' => $this->getPosition(),
+            'role'     => $this->getRole(),
             'active'   => $this->isActive(),
             'visible'  => $this->isVisible()
         ));
     }
+    
+    // Abstract methods:
+    
+    /**
+     * Returns href for this page
+     *
+     * @return string
+     */
+    abstract public function getHref();
 }

@@ -166,7 +166,8 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_Html_Navigation
         
         // step 1: find the deepest active page
         foreach ($iterator as $page) {
-            if (!$page->isVisible(true)) {
+            if (!$this->_accept($page)) {
+                // page is not accepted
                 continue;
             }
             if ($page->isActive() && $iterator->getDepth() > $depth) {

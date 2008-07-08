@@ -104,8 +104,8 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_Html_Navigation
         
         // loop pages
         foreach ($container as $page) {
-            if (!$page->isVisible()) {
-                // skip invisible pages
+            if (!$this->_accept($page)) {
+                // page is not accepted
                 continue;
             }
             
