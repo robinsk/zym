@@ -20,9 +20,24 @@
 require_once 'Zym/Model/IArrayModel.php';
 
 /**
- * @see Zym_Model_IModel
+ * @see Zym_Model_IAttributeModel
  */
 require_once 'Zym/Model/IAttributeModel.php';
+
+/**
+ * @see Zym_Model_IReadOnlyModel
+ */
+require_once 'Zym/Model/IReadOnlyModel.php';
+
+/**
+ * @see Zym_Model_IModifiable
+ */
+require_once 'Zym/Model/IModifiable.php';
+
+/**
+ * @see Zym_Model_IRelationModel
+ */
+require_once 'Zym/Model/IRelationModel.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -31,13 +46,15 @@ require_once 'Zym/Model/IAttributeModel.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Model_IAttributeModel 
+abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Model_IAttributeModel,
+                                                  Zym_Model_IReadOnlyModel, Zym_Model_IModifiable,
+                                                  Zym_Model_IRelationModel
 {
 
     /**
-     * The data for each column in the row (column_name => value).
+     * The data for each column in the model (column_name => value).
      * The keys must match the physical names of columns in the
-     * table for which this row is defined.
+     * table for which this model is defined.
      *
      * @var array
      */
@@ -61,9 +78,9 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     protected $_modifiedFields = array();
 
     /**
-     * A row is marked read only if it contains columns that are not physically represented within
+     * A model is marked read only if it contains columns that are not physically represented within
      * the database schema (e.g. evaluated columns/Zend_Db_Expr columns). This can also be passed
-     * as a run-time config options as a means of protecting row data.
+     * as a run-time config options as a means of protecting model data.
      *
      * @var boolean
      */
@@ -74,7 +91,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
      *
      * Supported params for $config are:-
      * - table       = class name or object of type Zend_Db_Table_Abstract
-     * - data        = values of columns in this row.
+     * - data        = values of columns in this model.
      *
      * @param  array $config OPTIONAL Array of user-specified config options.
      * @return void
@@ -139,25 +156,25 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     }
 
     /**
-     * Retrieve row field value
+     * Retrieve model field value
      *
      * @param  string $key The user-specified column name.
      * @return string             The corresponding column value.
-     * @throws Zym_Model_Exception if the $key is not a column in the row.
+     * @throws Zym_Model_Exception if the $key is not a column in the model.
      */
     public function __get($key)
     {
         $key = $this->_transformKey($key);
 
         if (!array_key_exists($key, $this->_data)) {
-            $this->_throwException(sprintf('Specified column "%s" is not in the row', $key));
+            $this->_throwException(sprintf('Specified column "%s" is not in the model', $key));
         }
 
         return $this->_data[$key];
     }
 
     /**
-     * Set row field value
+     * Set model field value
      *
      * @param  string $key The column key.
      * @param  mixed  $value      The value for the property.
@@ -173,7 +190,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
         $key = $this->_transformKey($key);
 
         if (!array_key_exists($key, $this->_data)) {
-            $this->_throwException(sprintf('Specified column "%s" is not in the row', $key));
+            $this->_throwException(sprintf('Specified column "%s" is not in the model', $key));
         }
         
         $data = $this->_data;
@@ -187,7 +204,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     }
 
     /**
-     * Test existence of row field
+     * Test existence of model field
      *
      * @param  string  $key   The column key.
      * @return boolean
@@ -231,7 +248,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     }
 
     /**
-     * Test the read-only status of the row.
+     * Test the read-only status of the model.
      *
      * @return boolean
      */
@@ -241,7 +258,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     }
 
     /**
-     * Set the read-only status of the row.
+     * Set the read-only status of the model.
      *
      * @param boolean $flag
      * @return boolean
@@ -289,7 +306,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     public function reset()
     {
         /**
-         * Reset all fields to null to indicate that the row is not there
+         * Reset all fields to null to indicate that the model is not there
          */
         $this->_data = array_combine(
             array_keys($this->_data),
@@ -310,7 +327,7 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
     }
 
     /**
-     * Sets all data in the row from an array.
+     * Sets all data in the model from an array.
      *
      * @param  array $data
      * @return Zym_Model Provides a fluent interface
@@ -323,64 +340,40 @@ abstract class Zym_Model_ModelAbstract implements Zym_Model_IArrayModel, Zym_Mod
 
         return $this;
     }
-
+    
     /**
-     * Allows pre-insert logic to be applied to row.
-     * Subclasses may override this method.
+     * hasOne
      *
-     * @return void
      */
-    public function preInsert()
+    public function hasOne()
     {
+        // TODO: Implement this
     }
-
+    
     /**
-     * Allows post-insert logic to be applied to row.
-     * Subclasses may override this method.
+     * hasMany
      *
-     * @return void
      */
-    public function postInsert()
+    public function hasMany()
     {
+        // TODO: Implement this
     }
-
+    
     /**
-     * Allows pre-update logic to be applied to row.
-     * Subclasses may override this method.
+     * belongsTo
      *
-     * @return void
      */
-    public function preUpdate()
+    public function belongsTo()
     {
+        // TODO: Implement this
     }
-
+    
     /**
-     * Allows post-update logic to be applied to row.
-     * Subclasses may override this method.
+     * hasAndBelongsToMany
      *
-     * @return void
      */
-    public function postUpdate()
+    public function hasAndBelongsToMany()
     {
-    }
-
-    /**
-     * Allows pre-delete logic to be applied to row.
-     * Subclasses may override this method.
-     *
-     * @return void
-     */
-    public function preDelete()
-    {
-    }
-
-    /**
-     * Allows post-delete logic to be applied to row.
-     * Subclasses may override this method.
-     *
-     * @return void
-     */
-    public function postDelete()
-    {
+        // TODO: Implement this
     }
 }
