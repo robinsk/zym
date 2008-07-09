@@ -9,4 +9,9 @@
     
     <xi:include href="set/autoload.xml" />
     <xi:include href="set/cache.xml" />
+    <xi:include href="set/json.xml" />
+    <xi:include href="set/locale.xml" />
+    <xi:include href="set/php.xml" />
+    <xi:include href="set/route.xml" />
+    <xi:include href="set/translate.xml" />
 </section>

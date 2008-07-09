@@ -31,9 +31,9 @@ require_once 'Zend/Registry.php';
 
 /**
  * Zym_App_Resource_Navigation
- * 
+ *
  * Resource class for Zym_Navigation.
- * 
+ *
  * @category   Zym
  * @package    Zym_App
  * @subpackage Resource
@@ -44,7 +44,7 @@ require_once 'Zend/Registry.php';
 class Zym_App_Resource_Navigation extends Zym_App_Resource_Abstract
 {
     const DEFAULT_REGISTRY_KEY = 'Zym_Navigation';
-    
+
     /**
      * Default config
      *
@@ -65,13 +65,14 @@ class Zym_App_Resource_Navigation extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         //Zend_Debug::dump($config->toArray());
-        
+
         // determine registry key
-        $key = is_string($config->registry_key) && strlen($config->registry_key)
-             ? $config->registry_key
-             : self::DEFAULT_REGISTRY_KEY;
-        
-        $nav = new Zym_Navigation($config->pages);
+        $confKey = $config->get('registry_key');
+        $key     = is_string($confKey) && strlen($confKey)
+                     ? $confKey
+                     : self::DEFAULT_REGISTRY_KEY;
+
+        $nav = new Zym_Navigation($config->get('pages'));
         Zend_Registry::set($key, $nav);
     }
 }

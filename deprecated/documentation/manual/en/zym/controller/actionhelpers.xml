@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.actionhelpers" version="5.0">
+    <title>Action Helpers</title>
+
+    <para>
+        In addition to the action helpers provided by <link xlink:href="http://framework.zend.com">Zend Framework</link>,
+        Zym includes many useful helpers that deal with specific tasks. Helpers are
+        located in a similar fashion to ZF as they are located at <filename>Zym/Controller/Action/Helper/*.php</filename>
+        with the class name prefix of <classname>Zym_Controller_Action_Helper_</classname>.
+    </para>
+    
+    <xi:include href="actionhelpers/multipageform.xml" />
+</section>

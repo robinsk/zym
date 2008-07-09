@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.locale" version="5.0">
+    <title>Locale Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Locale</classname>
+    </para>
+    
+    <table xml:id="zym.app.resources.set.locale.options">
+        <title>Locale Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>cache</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>production</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Enables caching using Zym_Cache. <code>Zend_Locale::setCache()</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>class</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zend_Locale</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Locale class to use
+                    </entry>
+                </row>
+                <row>
+                    <entry>default</entry>
+                    <entry>
+                        null
+                    </entry>
+                    <entry>
+                        Default locale: <code>Zend_Locale::setDefault()</code>
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+    
+    <note>
+        <para>
+            Priority is high
+        </para>
+    </note>
+</section>

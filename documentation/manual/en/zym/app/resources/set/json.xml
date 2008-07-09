@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.json" version="5.0">
+    <title>Json Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Json</classname>
+    </para>
+    
+    <table xml:id="zym.app.resources.set.json.options">
+        <title>Json Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>class</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zend_Json</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        <classname>Zend_Json</classname> class to setup
+                    </entry>
+                </row>
+                <row>
+                    <entry>use_builtin_encoder_decoder</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>null</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        <code>Zend_Json::$use_builtin_encoder_decoder = (true|false)</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>max_recursion_depth_allowed</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>null</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        <code>Zend_Json::$max_recursion_depth_allowed = (int)</code>
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

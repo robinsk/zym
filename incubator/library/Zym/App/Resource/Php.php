@@ -84,7 +84,7 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
         $this->_parseConfig($config);
 
         // Set/Force default timezone?
-        $this->_forceDefaultTimezone($config->date);
+        $this->_forceDefaultTimezone($config->get('date'));
 
         // Set include path
         $this->_setIncludePath($config);
@@ -174,16 +174,16 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
     {
         // Setting the include path is an expensive operation
         // Only do it when needed
-        if (!$config->include_path) {
+        if (!$config->get('include_path')) {
             return;
         }
 
         // Handle array
-        if ($config->include_path instanceof Zend_Config) {
-            $paths = implode(PATH_SEPARATOR, $config->include_path->toArray());
+        if ($config->get('include_path') instanceof Zend_Config) {
+            $paths = implode(PATH_SEPARATOR, $config->get('include_path')->toArray());
         } else {
             // Normalize include path string
-            $paths = str_replace(array(':', ';'), PATH_SEPARATOR, $config->include_path);
+            $paths = str_replace(array(':', ';'), PATH_SEPARATOR, $config->get('include_path'));
         }
 
         set_include_path($paths . get_include_path());
@@ -199,7 +199,7 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      */
     protected function _undoMagicQuotesGpc(Zend_Config $config)
     {
-        $isMagicQuotesGpc = (isset($config->magic_quotes_gpc) && !$config->magic_quotes_gpc);
+        $isMagicQuotesGpc = (isset($config->magic_quotes_gpc) && !$config->get('magic_quotes_gpc'));
         if ($isMagicQuotesGpc && get_magic_quotes_gpc()) {
             $in = array(&$_GET, &$_POST, &$_COOKIE);
             while (list($k,$v) = each($in)) {

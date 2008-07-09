@@ -24,11 +24,14 @@
             <tbody>
                 <row>
                     <entry>class</entry>
-                    <entry>
-                        <itemizedlist>
-                            <listitem><para>default - Zend_Loader</para></listitem>
-                        </itemizedlist>
-                    </entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zend_Loader</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Class to use as autoloader. It should implement 
                         <link xlink:href="zym.loader.autoload.writingyourown"><classname>Zym_Loader_Autoload_Interface</classname></link>

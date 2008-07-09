@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.navigation" version="5.0">
+    <title>Navigation Resource</title>
+
+    <para>
+        This resource sets up <classname>Zym_Navigation</classname>
+    </para>
+    
+    <example xml:id="zym.app.resources.set.navigation.example">
+        <title>Setting up the navigation resource</title>
+        
+        <programlisting role="xml"><xi:include href="navigation/example/navigation.xml" parse="text" /></programlisting>
+    </example>
+    
+    <table xml:id="zym.app.resources.set.navigation.options">
+        <title>Navigation Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>registry_key</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zym_Navigation</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Registry to set the object to. (<code>Zend_Registry::set('Zym_Navigation', $nav)</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>pages</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Pages config
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

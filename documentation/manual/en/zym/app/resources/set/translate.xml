@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.translate" version="5.0">
+    <title>Translate Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Translate</classname>
+    </para>
+    
+    <example xml:id="zym.app.resources.set.translate.example.gettext">
+        <title>Translate resource gettext usage example</title>
+        
+        <programlisting role="xml"> 
+<![CDATA[<adapter>gettext</adapter>
+<options>
+    <scan>1</scan>
+</options>]]></programlisting>
+    </example>
+    
+    <table xml:id="zym.app.resources.set.translate.options">
+        <title>Translate Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>adapter</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>tmx</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        <classname>Zend_Translate</classname> adapter to use.
+                    </entry>
+                </row>
+                <row>
+                    <entry>cache</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>production</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Setup caching with <code>Zend_Translate::setCache()</code>.
+                        Uses <classname>Zym_Cache</classname> for retrieving the cache object.
+                    </entry>
+                </row>
+                <row>
+                    <entry>data</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>locale/</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Path to locale data relative to the data directory value
+                        of <classname>Zym_App</classname>
+                    </entry>
+                </row>
+                <row>
+                    <entry>options</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Options in array form
+                    </entry>
+                </row>
+                <row>
+                    <entry>registry.enabled</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Whether to set the translate object to the registry (<classname>Zend_Registry</classname>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>registry.key</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zend_Translate</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Name of the registry key to set the translate object to.
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

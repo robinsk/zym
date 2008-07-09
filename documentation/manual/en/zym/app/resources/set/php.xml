@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.php" version="5.0">
+    <title>PHP Resource</title>
+
+    <para>
+        This resource sets up PHP ini_set() options. All available ini_set() options are separated by "."
+        The table below shows the defaults that loading this resource will set.
+    </para>
+    
+    <programlisting role="php">
+<![CDATA["date.timezone"
+// XML
+<date>
+    <timezone>UTC</timezone>
+</date>
+
+// INI
+date.timezone = UTC
+
+// Array()
+'date' => array(
+    'timezone' => 'UTC'
+)
+]]></programlisting>
+    
+    <table xml:id="zym.app.resources.set.php.options">
+        <title>PHP Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>display_errors</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>development</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Whether to display errors or not
+                    </entry>
+                </row>
+                <row>
+                    <entry>date.force_default_timezone</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Custom resource setting that allows you to force the default
+                        server timezone. This prevents the set default timezone warnings from PHP.
+                    </entry>
+                </row>
+                <row>
+                    <entry>date.timezone</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Europe/London</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Default timezone
+                    </entry>
+                </row>
+                <row>
+                    <entry>error_reporting</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>341</entry>
+                            </row>
+                            <row>
+                                <entry>development</entry>
+                                <entry>8191</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Error reporting setting... 
+                        341 = E_PARSE | E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR | E_USER_ERROR
+                        8191 = E_ALL | E_STRICT
+                    </entry>
+                </row>
+                <row>
+                    <entry>include_path</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Accepts an array or an include_path string. Path separators (':', ';') do not matter
+                        as they are translated according to the OS.
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

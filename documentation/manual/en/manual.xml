@@ -40,7 +40,6 @@
     <xi:include href="zym/js.xml" />
     <xi:include href="zym/loader.xml" />
     <xi:include href="zym/notification.xml" />
-    <xi:include href="zym/paginate.xml" />
     <xi:include href="zym/session.xml" />
     <xi:include href="zym/timer.xml" />
     <xi:include href="zym/validate.xml" />

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.route" version="5.0">
+    <title>Route Resource</title>
+
+    <para>
+        This resource adds routes to the router in <classname>Zend_Controller_Front</classname>.
+        It is exactly the same as <code>Zend_Controller_Front::getInstance()->getRouter()->addConfig()</code>.
+        Config options are those for the router
+    </para>
+    
+    <example xml:id="zym.app.resources.set.route.example">
+        <title>Route Resource config</title>
+        
+        <programlisting role="xml">
+<![CDATA[<user>
+    <type>Zym_Controller_Router_Route_HttpHost</type>
+    <host>:user.*.*</host>
+    <route>:action/*</route>
+    <defaults>
+        <module>demo</module>
+        <controller>form</controller>
+        <action>index</action>
+    </defaults>
+    <reqs>
+        <!-- Since its a subdomain, prevent matching www -->
+        <user>&lt;![CDATA[^.+(?<!^(www))$]]&gt;</user>
+    </reqs>
+</user>]]></programlisting>
+    </example>
+</section>
