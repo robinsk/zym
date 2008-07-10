@@ -17,17 +17,38 @@
             <tbody>
                 <row>
                     <entry>name</entry>
-                    <entry>Zym</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zym</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>A unique application name/id</entry>
                 </row>
                 <row>
                     <entry>home</entry>
-                    <entry>../</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>../</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>The base project directory</entry>
                 </row>
                 <row>
                     <entry>namespace</entry>
-                    <entry>array('Zym' =&gt; 'Zym_App_Resource')</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array('Zym' =&gt; 'Zym_App_Resource')</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Namespaces to use for loading resources. 
                         They should be in the form of key/value as the
@@ -38,7 +59,14 @@
                 
                 <row>
                     <entry>path</entry>
-                    <entry>array()</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Path declarations for <classname>Zym_App</classname>
                         Can significantly effect directory structure of an app
@@ -54,7 +82,14 @@
                 </row>
                 <row>
                     <entry>path.app</entry>
-                    <entry>app</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>app</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Path of "app" directory containing application
                         related files (modules, layouts).
@@ -62,21 +97,42 @@
                 </row>
                 <row>
                     <entry>path.config</entry>
-                    <entry>config</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>config</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Path of "config" directory containing configs.
                     </entry>
                 </row>
                 <row>
                     <entry>path.data</entry>
-                    <entry>data</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>data</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Path of "data" directory contain application data.
                     </entry>
                 </row>
                 <row>
                     <entry>path.temp</entry>
-                    <entry>temp</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>temp</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Path of "temp" directory for temporary files.
                     </entry>
@@ -84,14 +140,32 @@
                 
                 <row>
                     <entry>cache</entry>
-                    <entry>array()</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Caching configuration
                     </entry>
                 </row>
                 <row>
                     <entry>cache.enabled</entry>
-                    <entry>false|production=true</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>production</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         (boolean)
                         Whether <classname>Zym_App</classname> should use
@@ -101,7 +175,14 @@
                 </row>
                 <row>
                     <entry>cache.prefix</entry>
-                    <entry>%s__</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>%__</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Prefix used for cache id's. "%s" contains the
                         value of the "name" config. This prefix string must conform
@@ -111,8 +192,14 @@
                 
                 <row>
                     <entry>default_resource</entry>
-                    <entry>array()</entry>
-                    <entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>                    <entry>
                         Default configuration for dispatching of resources.
                         Refer to the "resource" item config for more details.
                         Changing an item here will change the default for
@@ -121,13 +208,26 @@
                 </row>
                 <row>
                     <entry>default_resource.disabled</entry>
-                    <entry>false</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>(boolean) Determines whether the resource is dispatched</entry>
                 </row>
                 <row>
                     <entry>default_resource.config</entry>
-                    <entry>%s.xml</entry>
-                    <entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>%s.xml</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>                    <entry>
                         (string|array)
                         Where to load configuration from. This path is relative
                         to path.config unless path is from root ("/foo/bar").
@@ -139,7 +239,14 @@
                 </row>
                 <row>
                     <entry>default_resource.environment</entry>
-                    <entry></entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Allows you to override the environment used to configure and dispatch
                         resources.
@@ -147,7 +254,14 @@
                 </row>
                 <row>
                     <entry>default_resource.namespace</entry>
-                    <entry></entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Allows you to override the namespace used in dispatching resources.
                         Refer to "namespace" key.
@@ -155,16 +269,28 @@
                 </row>
                 <row>
                     <entry>default_resource.priority</entry>
-                    <entry></entry>
-                    <entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>                    <entry>
                         Override resources' dispatching priority
                     </entry>
                 </row>
                 
                 <row>
                     <entry>resource</entry>
-                    <entry>array()</entry>
-                    <entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>                    <entry>
                         Resources to dispatch. The key is the resource.
                         (eg. resource.controller) Refer to default_resource for each item's
                         configuration options and defaults.
@@ -172,7 +298,14 @@
                 </row>
                 <row>
                     <entry>resource.{resource}.disabled</entry>
-                    <entry>refer to default_resource.disabled</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>refer to default_resource.disabled</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Disables the resource from dispatching. Useful for
                         quick debugging.
@@ -180,7 +313,14 @@
                 </row>
                 <row>
                     <entry>resource.{resource}.config</entry>
-                    <entry>refer to default_resource.config</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>refer to default_resource.config</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         (string|array)
                         Where to load configuration from. This path is relative
@@ -197,7 +337,14 @@
                 </row>
                 <row>
                     <entry>resource.{resource}.environment</entry>
-                    <entry>refer to default_resource.environment</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>refer to default_resource.environment</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Allows you to override the environment used to configure and dispatch
                         the current resource.
@@ -205,7 +352,14 @@
                 </row>
                 <row>
                     <entry>resource.{resource}.namespace</entry>
-                    <entry>refer to default_resource.namespace</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>refer to default_resource.namespace</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         Allows you to override the namespace used in dispatching the resource.
                         Refer to "namespace" key.
@@ -213,7 +367,14 @@
                 </row>
                 <row>
                     <entry>resource.{resource}.priority</entry>
-                    <entry>refer to default_resource.priority</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>refer to default_resource.priority</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
                     <entry>
                         (int)
                         Higher priority is 10, lower is 50 and default is 25
@@ -223,8 +384,14 @@
                 
                 <row>
                     <entry>registry</entry>
-                    <entry>Zym_App_Registry</entry>
-                    <entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zym_App_Registry</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>                    <entry>
                         The internal registry class to use.
                         It should be a child of Zym_App_Registry.
                     </entry>
