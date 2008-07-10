@@ -20,13 +20,18 @@
 require_once 'Zym/App/Resource/Abstract.php';
 
 /**
+ * @see Zend_Loader
+ */
+require_once 'Zend/Loader.php';
+
+/**
  * @see Zend_Mail
  */
 require_once 'Zend/Mail.php';
 
 /**
  * Mail component configuration
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -41,7 +46,7 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
      *
      */
     const DEFAULT_TRANSPORT_PREFIX = 'Zym_App_Resource_Mail_Transport';
-    
+
     /**
      * Default config
      *
@@ -49,7 +54,7 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
-            'default_transport' => null,        
+            'default_transport' => null,
             'transport'         => array(),
             'transport_map'     => array()
         )
@@ -63,23 +68,24 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         // Don't do anything if we already have our default obj
-        if ($config->get('default_transport') instanceof Zend_Mail_Transport_Abstract) {
-            Zend_Mail::setDefaultTransport($config->get('default_transport'));
+        $defaultTransport = $config->get('default_transport');
+        if ($defaultTransport instanceof Zend_Mail_Transport_Abstract) {
+            Zend_Mail::setDefaultTransport($defaultTransport);
             return;
         }
-        
-        // Do we skip?
-        if (!$config->get('default_transport')) {
+
+        // No default transport? Zend_Mail will use its own default
+        if (!$defaultTransport) {
             return;
         }
-        
+
         // Transport Config
         $transport = $this->_loadTransport($config);
-        
+
         // Set default mail transport
         Zend_Mail::setDefaultTransport($transport);
     }
-    
+
     /**
      * Load transport settings
      *
@@ -91,15 +97,12 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
         // Make lowercase
         $defaultTransport = strtolower($config->get('default_transport'));
         $transportMap     = array_change_key_case($config->get('transport_map')->toArray(), CASE_LOWER);
-        
+
         // Load transport
-        $transportConfig = null;
-        if ($config->get('transport')->$defaultTransport instanceof Zend_Config) {
-            $transportConfig = $config->get('transport')->$defaultTransport;
-        }
-        
+        $transportConfig = $config->get('transport')->get($defaultTransport);
+
         $transportClass = $this->_parseTransportMap($defaultTransport, $transportMap);
-        $transport = call_user_func(array($transportClass, 'getTransport'), $transportConfig);
+        $transport      = call_user_func(array($transportClass, 'getTransport'), $transportConfig);
 
         if (!$transport instanceof Zend_Mail_Transport_Abstract) {
             /**
@@ -110,12 +113,24 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
                 'Could not load mail transport "' . $defaultTransport . '"'
             );
         }
-        
+
         return $transport;
     }
-    
+
     /**
      * Parse transport map
+     *
+     * Transport map is used to load a map of a different prefix
+     *
+     * <code>
+     * array(
+     *    'sendmail' => array(
+     *        'prefix' => 'Foo_App_Resource_Mail_Transport',
+     *        'path'   => 'Foo/App/Resource/Mail/Transport'
+     *    ),
+     *    'smtp' => ''
+     * )
+     * </code>
      *
      * @param string $item
      * @param array $map
@@ -124,17 +139,17 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
     protected function _parseTransportMap($item, array $map)
     {
         $path = null;
-        
+
         if (array_key_exists($item, $map)) {
             $mapItem = $map[$item];
             if (isset($mapItem['prefix']) && isset($mapItem['path'])) {
                 $namespace = $prefix;
-                $path = $mapItem['path'];
+                $path      = $mapItem['path'];
             } else if (is_string($mapItem)) {
                 // Assume prefix was given
                 $namespace = $mapItem;
             }
-            
+
             // Make sure we have a class prefix
             if (!$namespace) {
                 /**
@@ -148,9 +163,10 @@ class Zym_App_Resource_Mail extends Zym_App_Resource_Abstract
         } else {
             $namespace = self::DEFAULT_TRANSPORT_PREFIX;
         }
-        
+
         $classname = rtrim($namespace, '_') . '_' . ucfirst($item);
         Zend_Loader::loadClass($classname, $path);
+
         return $classname;
     }
 }

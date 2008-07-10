@@ -13,7 +13,7 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
- 
+
 /**
  * @see Zym_App_Resource_Abstract
  */
@@ -26,7 +26,7 @@ require_once 'Zend/Session.php';
 
 /**
  * Setup session
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -46,7 +46,7 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
             'auto_start' => true,
             'config'     => array(
                 'save_path' => 'session',
-                'name'      => 'SID'
+                'name'      => '%s_SID'
             )
         )
     );
@@ -58,33 +58,53 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         $sessionConfig = $config->get('config');
-        
-        // Setup config
-        Zend_Session::setOptions($sessionConfig->toArray());
-        
+        $configArray   = $sessionConfig->toArray();
+
         // save_path handler
-        $this->_prependSavePath($sessionConfig);
-        
+        $configArray = $this->_prependSavePath($configArray);
+
+        // name handler
+        $configArray = $this->_parseName($configArray);
+
+        // Setup config
+        Zend_Session::setOptions($configArray);
+
         // Autostart session?
         if ($config->get('auto_start')) {
             // Start session
             Zend_Session::start();
         }
     }
-    
+
     /**
      * Modify base dir for session path
      *
-     * @param Zend_Config $config
+     * @param array $config
      */
-    protected function _prependSavePath(Zend_Config $config)
+    protected function _prependSavePath(array $config)
     {
         $app         = $this->getApp();
-        $savePath    = $config->get('save_path');
+        $savePath    = $config['save_path'];
         $configArray = array(
             'save_path' => $app->getPath(Zym_App::PATH_DATA, $savePath)
         );
 
-        Zend_Session::setOptions($configArray);
+        return $configArray;
+    }
+
+    /**
+     * Modify base dir for session path
+     *
+     * @param array $config
+     */
+    protected function _parseName(array $config)
+    {
+        $app         = $this->getApp();
+        $name        = $config['name'];
+        $configArray = array(
+            'name' => sprintf($name, $app->getName(true))
+        );
+
+        return $configArray;
     }
 }

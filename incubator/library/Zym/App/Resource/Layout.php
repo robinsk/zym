@@ -26,7 +26,7 @@ require_once 'Zend/Layout.php';
 
 /**
  * Init Zend_Layout
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -61,15 +61,15 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
     public function validateConfig(Zend_Config $config)
     {
         // Convert string to object
-        if (is_string($config->inflector)) {
+        if (is_string($config->get('inflector'))) {
             // TODO: finish
         }
-        
-        if (is_string($config->view)) {
+
+        if (is_string($config->get('view'))) {
             // TODO: finish
         }
     }
-    
+
     /**
      * Setup autoloader
      *
@@ -81,7 +81,7 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
         $configArray['LayoutPath'] = $this->getApp()->getPath(Zym_App::PATH_APP, $configArray['LayoutPath']);
         Zend_Layout::startMvc($configArray);
     }
-    
+
     /**
      * Modify config for Zend_Layout
      *
@@ -97,14 +97,14 @@ class Zym_App_Resource_Layout extends Zym_App_Resource_Abstract
                 unset($inflectedConfig[$index]);
             }
         }
-        
+
         // Change underscore items to camelcased
         $inflectedConfig = array_flip($inflectedConfig);
         $inflectedConfig = array_flip(array_map(array($this, '_inflectConfig'), $inflectedConfig));
-        
+
         return $inflectedConfig;
     }
-    
+
     /**
      * Private function used by {@see setup()} to convert undercore items to camel
      * case

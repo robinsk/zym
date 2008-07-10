@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.session" version="5.0">
+    <title>Session Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Session</classname>
+    </para>
+    
+    <table xml:id="zym.app.resources.set.session.options">
+        <title>Session Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>auto_start</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        If true, it will call <code>Zend_Session::start()</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>config</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        This is the array used to populate <code>Zend_Session::setOptions()</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>config.save_path</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>session/</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        This is the session save path relative to <classname>Zym_App</classname>'s data
+                        directory. Path can be absolute.
+                    </entry>
+                </row> 
+                <row>
+                    <entry>config.name</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>%s_SID</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        The session name which should be unique. Accepts "%s" as
+                        a placeholder for the application's unique name specified by <code>Zym_App::getName(true)</code>.
+                        eg. "MyProject_SID"
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

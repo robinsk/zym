@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.mail" version="5.0">
+    <title>Mail Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Mail</classname> with default
+        transports.
+    </para>
+    
+    <table xml:id="zym.app.resources.set.mail.options">
+        <title>Mail Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>default_transport</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Accepts a Zend_Mail transport object or a transport type.
+                        <computeroutput><![CDATA[ex1. array('default_transport' => new Zend_Mail_Transport_Sendmail())
+ex2. 'sendmail'
+ex3. 'smtp' ]]></computeroutput>
+                    </entry>
+                </row>
+                <row>
+                    <entry>transport</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array for the config of transports. The key should be the name of the transport
+                        and the value should be an array of the config values.
+                        
+                        <code>array('smtp' => array('host' => 'smtp.gmail.com'))</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>transport_map</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Map used for custom transport config handlers. Accepts an array
+                        with the key as the transport name and the map specified as prefix/path keys or
+                        a single namespace prefix.
+                        
+                        <computeroutput><![CDATA[ array('sendmail' => 'My_App_Resource_Mail_Transport')
+array('sendmail' => array('prefix' => 'My_App_Resource_Mail_Transport'
+                          'path' => 'My/App/Resource/Mail/Transport')) ]]></computeroutput>
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>
