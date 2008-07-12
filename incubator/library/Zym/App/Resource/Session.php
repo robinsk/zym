@@ -83,13 +83,12 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      */
     protected function _prependSavePath(array $config)
     {
-        $app         = $this->getApp();
-        $savePath    = $config['save_path'];
-        $configArray = array(
-            'save_path' => $app->getPath(Zym_App::PATH_DATA, $savePath)
-        );
 
-        return $configArray;
+        $app                 = $this->getApp();
+        $savePath            = $config['save_path'];
+        $config['save_path'] = $app->getPath(Zym_App::PATH_DATA, $savePath);
+
+        return $config;
     }
 
     /**
@@ -99,12 +98,10 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      */
     protected function _parseName(array $config)
     {
-        $app         = $this->getApp();
-        $name        = $config['name'];
-        $configArray = array(
-            'name' => sprintf($name, $app->getName(true))
-        );
+        $app            = $this->getApp();
+        $name           = $config['name'];
+        $config['name'] = sprintf($name, $app->getName(true));
 
-        return $configArray;
+        return $config;
     }
 }
