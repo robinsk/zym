@@ -9,7 +9,9 @@
     
     <xi:include href="set/autoload.xml" />
     <xi:include href="set/cache.xml" />
+    <xi:include href="set/controller.xml" />
     <xi:include href="set/json.xml" />
+    <xi:include href="set/layout.xml" />
     <xi:include href="set/locale.xml" />
     <xi:include href="set/mail.xml" />    
     <xi:include href="set/navigation.xml" />
@@ -17,4 +19,5 @@
     <xi:include href="set/route.xml" />
     <xi:include href="set/session.xml" />
     <xi:include href="set/translate.xml" />
+    <xi:include href="set/view.xml" />
 </section>

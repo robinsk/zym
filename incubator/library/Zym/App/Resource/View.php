@@ -41,7 +41,7 @@ require_once 'Zend/View/Abstract.php';
 
 /**
  * Setup view
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -50,7 +50,7 @@ require_once 'Zend/View/Abstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_App_Resource_View extends Zym_App_Resource_Abstract
-{   
+{
     /**
      * Default Config
      *
@@ -62,33 +62,33 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                 'class'    => 'Zym_View',
                 'encoding' => null,
                 'escape'   => null,
-        
+
                 'filter' => array(),
-                
+
                 'helper' => array(
                     'doctype' => array('XHTML1_STRICT')
                 ),
-        
+
                 'path' => array(
                     'base' => array(),
-        
+
                     'filter' => array(
                         'Zym' => array(
                             'prefix' => 'Zym_View_Filter',
                             'path'   => 'Zym/View/Filter'
                         )
                     ),
-                    
+
                     'helper' => array(
                         'Zym' => array(
                             'prefix' => 'Zym_View_Helper',
                             'path'   => 'Zym/View/Helper'
                         )
                     ),
-                    
+
                     'script' => array()
                 ),
-                
+
                 'stream' => array(
                     'flag'     => null,
                     'protocol' => null,
@@ -96,10 +96,10 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     'filter'   => array()
                 )
             ),
-            
+
             'view_renderer' => array(
                 'suffix' => null,
-            
+
                 'spec' => array(
                     'base_path'               => null,
                     'script_path'             => null,
@@ -122,7 +122,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     {
         // Get view
         $view = $this->getView($config->view);
-        
+
         $isUseViewRenderer = !Zend_Controller_Front::getInstance()->getParam('noViewRenderer');
         if ($isUseViewRenderer) {
             $viewRenderer = $this->getViewRenderer($config->get('view_renderer'));
@@ -130,7 +130,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
             Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
         }
     }
-    
+
     /**
      * Get view
      *
@@ -141,19 +141,19 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     {
         if (!$view = $this->getCache('view')) {
             $isUseViewRenderer = !Zend_Controller_Front::getInstance()->getParam('noViewRenderer');
-            $viewRenderer = ($isUseViewRenderer) 
+            $viewRenderer = ($isUseViewRenderer)
                                 ? Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer')
                                 : null;
-                                
+
             // Use view from view renderer if possible
             if ($isUseViewRenderer && $viewRenderer->view instanceof Zend_View_Interface) {
                 $view = $viewRenderer->view;
             } else {
                 $viewClass = $config->get('class');
                 Zend_Loader::loadClass($viewClass);
-                
+
                 $view = new $viewClass();
-                
+
                 // Validate object
                 if (!$view instanceof Zend_View_Interface) {
                     /**
@@ -165,17 +165,17 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     ));
                 }
             }
-            
+
             // Setup
             $this->_setupView($view, $config);
-            
+
             // Save
             $this->saveCache($view, 'view');
         }
-        
+
         return $view;
     }
-    
+
     /**
      * Get view renderer objec
      *
@@ -189,17 +189,17 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         if ($isUseViewRenderer && !$viewRenderer = $this->getCache('viewRenderer')) {
             // Get view renderer
             $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
-            
+
             // Setup
             $this->_setupViewRenderer($viewRenderer, $config);
-            
+
             // Save
             $this->saveCache($viewRenderer, 'viewRenderer');
         }
-        
+
         return $viewRenderer;
     }
-    
+
     /**
      * Setup the view
      *
@@ -217,34 +217,34 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                     $view->addScriptPath(trim($obj));
                     continue;
                 }
-                
+
                 // Handle base, filter and helper paths
                 if ($obj instanceof Zend_Config || is_array($obj)) {
-                    $path = $obj->get('path');
+                    $path   = $obj->get('path');
                     $prefix = $obj->get('prefix');
                 } else {
                     // Allow setting namespaces using keys
                     if (empty($obj)) {
                         $obj = $objKey;
                     }
-                    
+
                     $path = str_replace('_', '/', $obj);
                     $prefix = $obj;
                 }
-                
+
                 $method = 'add' . ucfirst($key) . 'Path';
                 call_user_func_array(array($view, $method), array(trim($path), $prefix));
             }
         }
-        
+
         // Filters
-        $filters = ($viewConfig->get('filter') instanceof Zend_Config) 
+        $filters = ($viewConfig->get('filter') instanceof Zend_Config)
                     ? $viewConfig->get('filter')->toArray()
                     : array($viewConfig->get('filter'));
         foreach ($filters as $filter) {
             $view->addFilter($filter);
         }
-        
+
         // Helpers
         $helpers = ($viewConfig->get('helper') instanceof Zend_Config)
                     ? $viewConfig->get('helper')->toArray()
@@ -258,36 +258,36 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         if ($encoding = $viewConfig->get('encoding')) {
             $view->setEncoding($encoding);
         }
-        
+
         // Set escape
         if ($escape = $viewConfig->get('escape')) {
             $view->setEscape($escape);
         }
-        
+
         // Streams
         if ($view instanceof Zym_View_Abstract) {
             $this->_setupViewStreams($view, $viewConfig->get('stream'));
         }
     }
-    
+
     /**
      * Setup view renderer
      *
      * @param Zend_Controller_Action_Helper_ViewRenderer $viewRenderer
      * @param Zend_Config $config
      */
-    protected function _setupViewRenderer(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config) 
+    protected function _setupViewRenderer(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
     {
         // Setup path spec
         $this->_viewRendererSpec($viewRenderer, $config);
-        
+
         // Add the run features
         $this->_viewRendererFlags($viewRenderer, $config);
-        
+
         // Set suffix
         $this->_viewRendererSuffix($viewRenderer, $config);
     }
-    
+
     /**
      * Setup VR, base, filter, helper and script spec
      *
@@ -297,7 +297,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     protected function _viewRendererSpec(Zend_Controller_Action_Helper_ViewRenderer $viewRenderer, Zend_Config $config)
     {
         // Add base, filter, helper and script paths
-        $specKeys = array('base_path'                 => 'setViewBasePathSpec', 
+        $specKeys = array('base_path'                 => 'setViewBasePathSpec',
                           'script_path'               => 'setScriptPathSpec',
                           'script_path_no_controller' => 'setScriptPathNoController');
         foreach($specKeys as $key => $method) {
@@ -306,11 +306,11 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
             if ($setting === null) {
                 continue;
             }
-            
+
             call_user_func_array(array($viewRenderer, $method), array($setting));
         }
     }
-    
+
     /**
      * Setup VR runtime flags
      *
@@ -325,16 +325,16 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
                           'no_render'        => 'setNoRender');
         foreach($flagKeys as $key => $method) {
             $setting = $config->get($key);
-            
+
             // No setting set, continue
             if ($setting === null) {
                 continue;
             }
-            
+
             call_user_func_array(array($viewRenderer, $method), array((bool) $setting));
         }
     }
-    
+
     /**
      * Set VR view suffix
      *
@@ -347,7 +347,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
             $viewRenderer->setViewSuffix($config->get('suffix'));
         }
     }
-    
+
     /**
      * Setup view streams
      *
@@ -360,17 +360,17 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
         if ($flag = $config->get('flag') && $flag !== null) {
             $view->setStreamFlag((bool) $flag);
         }
-        
+
         // Protocol
         if ($protocol = $config->get('protocol')) {
             $view->setStreamProtocol($protocol);
         }
-        
+
         // Wrapper
         if ($wrapperClass = $config->get('wrapper')) {
             $view->setStreamWrapper($wrapperClass);
         }
-        
+
         // Filters
         if ($filters = ($config->get('filter') instanceof Zend_Config)
                             ? $config->get('filter')->toArray() : array($config->get('filter'))) {

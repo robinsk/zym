@@ -29,7 +29,14 @@
         <!-- End: Styles -->
 
         <!-- Start: Scripts -->
-        <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.1.1/dojo/dojo.xd.js"></script>
+        <?
+            $this->dojo()->setDjConfig(array(
+                            'parseOnLoad' => true
+                         ))
+                         ->addStyleSheetModule('dijit.themes.tundra')
+                         ->enable();
+        ?>
+        <?= $this->dojo(); ?>
         <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js'); ?>"></script>
         <script type="text/javascript">
         //<![CDATA[

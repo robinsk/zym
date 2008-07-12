@@ -23,6 +23,10 @@ require_once 'Zym/Controller/Action/Abstract.php';
  */
 class Default_IndexController extends Zym_Controller_Action_Abstract
 {
+    public $contexts = array(
+        'data' => array('json')
+    );
+
     /**
      * Index
      *
@@ -46,6 +50,18 @@ class Default_IndexController extends Zym_Controller_Action_Abstract
 
     public function logAction()
     {
-        $this->getHelper('ViewRenderer')->setNoRender();
+    }
+
+    public function dataAction()
+    {
+        $this->getView()->assign(array(
+            'identifier' => 'name',
+            'label' => 'name',
+            'items' => array(
+                array('name' => 'test'),
+                array('name' => 'test2')
+
+            )
+        ));
     }
 }

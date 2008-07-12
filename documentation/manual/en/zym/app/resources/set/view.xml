@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.view" version="5.0">
+    <title>View Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_View</classname> and the
+        view renderer (<classname>Zend_Controller_Action_Helper_ViewRenderer</classname>)
+    </para>
+    
+    <table xml:id="zym.app.resources.set.view.options">
+        <title>View Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>view.class</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zym_View</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        A view class that implements <classname>Zend_View_Interface</classname>
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.encoding</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set view encoding method (<code>setEncoding</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.escape</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set view escaping method (<code>setEscape()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.filter</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of filters to add for script filtering (<code>addFilter()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.helper</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of helpers to instantiate> this is useful for
+                        stuff like setting doctype. The key is the helper name
+                        and the value is an array used as constructor params via
+                        call_user_func_array();
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.helper.doctype</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>XHTML1_STRICT</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        The default doctype is set to xhtml strict.
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.path.base</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of base paths to add (<code>addBasePath()</code>).
+                        Keys are not used, but serve as a helpful identifier.
+                        Each array should contain 'path' and 'prefix' if needed.
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.path.filter</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of filter paths to add (<code>addFilterPath()</code>).
+                        Keys are not used, but serve as a helpful identifier.
+                        Each array should contain 'path' and 'prefix' if needed.
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.path.helper</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of helper paths to add (<code>addHelperPath()</code>).
+                        Keys are not used, but serve as a helpful identifier.
+                        Each array should contain 'path' and 'prefix' if needed.
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.path.script</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of script paths to add (<code>addScriptPath()</code>).
+                        Format is key/value with value as the path.
+                        Keys are not used, but serve as a helpful identifier.
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.stream.flag</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set stream flag which determines if streams should be 
+                        used (<code>setStreamFlag</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.stream.protocol</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set stream protocol name (<code>setStreamProtocol</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.stream.wrapper</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set stream wrapper class (<code>setStreamWrapper</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view.stream.filter</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Add stream filter (<code>addStreamFilter()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.suffix</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set view script suffix (<code>setViewSuffix()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.spec.base_path</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set base path spec (<code>setViewBasePathSpec()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.spec.script_path</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set script path spec (<code>setViewScriptPathSpec()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.spec.script_path_no_controller</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set script path  no controller spec (<code>setViewScriptPathNoControllerSpec()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.never_controller</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set never controller flag (<code>setNeverController()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.never_render</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set never render flag (<code>setNeverRender()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.no_controller</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set no controller flag (<code>setNoController()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>view_renderer.no_render</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set no render flag (<code>setNoRender()</code>).
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

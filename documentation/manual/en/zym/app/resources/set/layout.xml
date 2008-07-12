@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.layout" version="5.0">
+    <title>Layout Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Layout</classname>
+    </para>
+    
+    <table xml:id="zym.app.resources.set.layout.options">
+        <title>Layout Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>layout_path</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>layouts</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Path to layouts directory relative to the application directory (app/layouts)
+                    </entry>
+                </row>
+                <row>
+                    <entry>layout</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>default</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Default layout name (default.phtml)
+                    </entry>
+                </row>
+                <row>
+                    <entry>content_key</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                    </entry>
+                </row>
+                <row>
+                    <entry>mvc_enabled</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

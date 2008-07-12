@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.controller" version="5.0">
+    <title>Controller Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Controller</classname> and its
+        related components.
+    </para>
+    
+    <table xml:id="zym.app.resources.set.controller.options">
+        <title>Controller Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>class</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zend_Controller_Front</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        <classname>Zend_Controller_Front</classname> class to setup
+                    </entry>
+                </row>
+                <row>
+                    <entry>throw_exception</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>development</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Whether <classname>Zend_Controller_Front</classname> should throw exceptions
+                        or catch them. (<code>throwExceptions()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>module.directory</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array('modules/')</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of path to directories containing modules (<code>addModuleDirectory()</code>).
+                        Paths are relative to the application directory.
+                    </entry>
+                </row>
+                <row>
+                    <entry>module.controller_name</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set the module controller directory name (<code>setModuleControllerDirectoryName()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>controller.directory</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Add controller directories (<code>addControllerDirectory</code>).
+                        Accepts an array in key/value pairs. Keys are used as module names
+                        and values as paths relative to the application directory
+                    </entry>
+                </row>
+                <row>
+                    <entry>base_url</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set the baseUrl (<code>setBaseUrl()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>plugin</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of plugins to load. Plugins class should be specified
+                        as keys. The value is an array containing 'plugin_index' 
+                        to specify a plugin loading index. If the plugin class implements
+                        <classname>Zym_App_Resource_Controller_Plugin_Interface</classname>,
+                        the array value can contain config. <code>registerPlugin()</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>plugin.{plugin name}.plugin_index</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        An integer representing the plugin loading index for <classname>Zend_Controller_Front</classname>
+                    </entry>
+                </row>
+                <row>
+                    <entry>helper_broker.paths</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Add helper broker paths. Paths should be added
+                        as an array containing the 'path' and the 'prefix' key.
+                        The key name does not matter as it is only used as 
+                        an identifier/index only.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default.action</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set default action name (<code>setDefaultAction()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>default.controller_name</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set default controller name (<code>setDefaultControllerName()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>default.module</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set default module name(<code>setDefaultModule()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>params</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of key/value params to set to the Front Controller (<code>setParams()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>request</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zym_Controller_Request_Http</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set request class (<code>setRequest()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>response</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zym_Controller_Response_Http</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set response class (<code>setResponse()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>dispatcher</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set dispatcher class (<code>setDispatcher()</code>).
+                    </entry>
+                </row>
+                <row>
+                    <entry>router</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set router class (<code>setRouter()</code>).
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>
