@@ -43,4 +43,9 @@ class Default_IndexController extends Zym_Controller_Action_Abstract
         }
         */
     }
+
+    public function logAction()
+    {
+        $this->getHelper('ViewRenderer')->setNoRender();
+    }
 }
