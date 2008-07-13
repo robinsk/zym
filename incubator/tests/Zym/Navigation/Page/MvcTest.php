@@ -455,6 +455,9 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $options['route'] = 'default';
         $options['params'] = array();
         
-        $this->assertEquals($options, $toArray);
+        //$this->assertEquals($options, $toArray);
+        
+        $this->assertEquals(array(),
+            array_diff_assoc($options, $page->toArray()));
     }
 }

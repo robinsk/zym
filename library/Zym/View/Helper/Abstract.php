@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zend_View_Helper_Abstract
+ */
+require_once 'Zend/View/Helper/Abstract.php';
+
+/**
  * Abstract view helper
  *
  * @author Geoffrey Tran
@@ -24,7 +29,6 @@
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
-    implements Zend_View_Helper_Interface
 {
     /**
      * View Object

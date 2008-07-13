@@ -97,10 +97,11 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         ));
         
         $this->assertEquals(null, $page->getId());
+        
         $page->setId('bar');
         $this->assertEquals('bar', $page->getId());
         
-        $invalids = array(42, true, (object) null);
+        $invalids = array(true, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setId($invalid);
@@ -111,6 +112,21 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
                 
             }
         }
+    }
+    
+    /**
+     * Tests that the 'id' property can be an integer
+     *
+     */
+    public function testIdCouldBeAnInteger()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'foo',
+            'uri' => '#',
+            'id' => 10
+        ));
+        
+        $this->assertEquals(10, $page->getId());
     }
     
     /**
@@ -448,6 +464,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         
         $page = Zym_Navigation_Page::factory($options);
         
-        $this->assertEquals($options, $page->toArray());
+        $this->assertEquals(array(),
+            array_diff_assoc($options, $page->toArray()));
     }
 }
