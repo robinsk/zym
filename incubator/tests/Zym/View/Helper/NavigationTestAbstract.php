@@ -75,13 +75,6 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
     protected $_nav2;
     
     /**
-     * Old registry value for 'Zym_Navigation'
-     *
-     * @var mixed
-     */
-    protected $_oldRegistryVaue = null;
-    
-    /**
      * Prepares the environment before running a test
      * 
      */
@@ -109,7 +102,7 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
      */
     protected function tearDown()
     {
-        Zend_Registry::set(self::REGISTRY_KEY, $this->_oldRegistryVaue);
+        
     }
     
     /**
