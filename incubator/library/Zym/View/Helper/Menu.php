@@ -56,6 +56,36 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
     }
     
     /**
+     * Returns HTML anchor for the given pages
+     *
+     * @param  Zym_Navigation_Page $page  page to get anchor for
+     * @return string
+     */
+    public function getPageAnchor(Zym_Navigation_Page $page)
+    {
+        // get attribs for anchor element
+        $attribs = array(
+            'id'     => $page->getId(),
+            'title'  => $page->getTitle(),
+            'class'  => $page->getClass()
+        );
+        
+        $href = $page->getHref();
+        
+        if ($href) {
+            $attribs['href'] = $href;
+            $attribs['target'] = $page->getTarget();
+            $element = 'a';
+        } else {
+            $element = 'span';
+        }
+        
+        return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
+             . $page->getLabel()
+             . '</' . $element . '>';
+    }
+    
+    /**
      * Sets CSS class to use for ul elements
      *
      * @param  string $ulClass  class to set

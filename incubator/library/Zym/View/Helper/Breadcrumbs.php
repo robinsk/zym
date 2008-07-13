@@ -198,7 +198,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
     }
     
     /**
-     * Renders the registered container as a ul list
+     * Renders the registered container
      * 
      * @param string|int $indent  [optional]
      * @return string

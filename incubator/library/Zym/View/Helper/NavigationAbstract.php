@@ -84,12 +84,16 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     /**
      * Sets navigation container to operate on
      *
-     * @param  Zym_Navigation_Container $container  container to operate on
-     * @return void
+     * @param  Zym_Navigation_Container $container  [optional] container to
+     *                                              operate on, default is
+     *                                              null, meaning it will be
+     *                                              reset
+     * @return Zym_View_Helper_NavigationAbstract
      */
-    public function setNavigation(Zym_Navigation_Container $container)
+    public function setNavigation(Zym_Navigation_Container $container = null)
     {
         $this->_container = $container;
+        return $this;
     }
     
     /**
@@ -139,23 +143,14 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
         $attribs = array(
             'id'     => $page->getId(),
             'title'  => $page->getTitle(),
-            'class'  => $page->getClass()
+            'class'  => $page->getClass(),
+            'href'   => $page->getHref(),
+            'target' => $page->getTarget()
         );
         
-        $href = $page->getHref();
-        
-        if ($href) {
-            $attribs = array_merge($attribs, array('href'   => $href,
-                                                   'target' => $page->getTarget()));
-            
-            $element = 'a';
-        } else {
-            $element = 'span';
-        }
-        
-        return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
+        return '<a ' . $this->_htmlAttribs($attribs) . '>'
              . $page->getLabel()
-             . '</' . $element . '>';
+             . '</a>';
     }
     
     /**
@@ -168,6 +163,16 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     public function setAcl(Zend_Acl $acl = null)
     {
         $this->_acl = $acl;
+    }
+    
+    /**
+     * Returns ACL or null if it isn't set
+     *
+     * @return Zend_Acl|null
+     */
+    public function getAcl()
+    {
+        return $this->_acl;
     }
     
     /**
