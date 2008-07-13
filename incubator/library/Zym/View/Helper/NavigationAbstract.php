@@ -212,30 +212,45 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      * 
      * @return bool
      */
-    protected function _acceptAcl(Zym_Navigation_Page $page)
+    protected function _acceptAcl(Zym_Navigation_Page $page, $recursive = true)
     {
-        if (!$pageRole = $page->getRole()) {
-            // accept it if page has no role
-            return true;
-        }
+        // do not accept by default
+        $accept = false;
         
         if (!$helperRole = $this->getRole()) {
             // don't accept if helper has no role
             return false;
         }
         
-        // loop all roles
-        foreach ($helperRole as $hRole) {
-            foreach ($pageRole as $pRole) {
-                if ($hRole == $pRole ||
-                    $this->_acl->inheritsRole($hRole, $pRole)) {
-                    return true;
+        if (!$pageRole = $page->getRole()) {
+            // accept it if page has no role
+            $accept = true;
+        } else {   
+            // loop all roles
+            foreach ($helperRole as $hRole) {
+                foreach ($pageRole as $pRole) {
+                    if ($hRole == $pRole ||
+                        $this->_acl->inheritsRole($hRole, $pRole)) {
+                        $accept = true;
+                        break;
+                    }
+                }
+                    
+                if ($accept) {
+                    break;
                 }
             }
         }
         
-        // does not inherit, so do not accept
-        return false;
+        // loop parent(s) recursively if page is accepted and recurisve is true
+        if ($accept && $recursive) {
+            $parent = $page->getParent();
+            if ($parent instanceof Zym_Navigation_Page) {
+                $accept = $this->_acceptAcl($parent, true);
+            }
+        }
+        
+        return $accept;
     }
     
     /**
@@ -243,16 +258,16 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      *
      * @param Zym_Navigation_Page $page  page to verify
      */
-    protected function _accept(Zym_Navigation_Page $page)
+    protected function _accept(Zym_Navigation_Page $page, $recursive = true)
     {
-        if (!$page->isVisible()) {
+        if (!$page->isVisible($recursive)) {
             // don't accept invisible pages
             return false;
         }
         
         if (null !== $this->_acl) {
             // determine using ACL
-            return $this->_acceptAcl($page);
+            return $this->_acceptAcl($page, $recursive);
         }
         
         // accept by default

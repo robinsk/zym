@@ -104,7 +104,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         
         // loop pages
         foreach ($container as $page) {
-            if (!$this->_accept($page)) {
+            if (!$this->_accept($page, false)) {
                 // page is not accepted
                 continue;
             }

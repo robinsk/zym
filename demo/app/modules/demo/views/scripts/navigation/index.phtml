@@ -1,6 +1,10 @@
 <?
 $this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
 $this->menu()->setRole(array('nav-member', 'nav-bar'));
+$this->breadcrumbs()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
+$this->breadcrumbs()->setRole(array('nav-member', 'nav-bar'));
+$this->sitemap()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
+$this->sitemap()->setRole(array('nav-member', 'nav-bar'));
 ?>
 <? $this->headTitle('Navigation Demo') ?>
 <? $this->headStyle()->captureStart(); ?>
@@ -315,16 +319,17 @@ $prevSeparator = $this->breadcrumbs()->getSeparator();
 <?php
 // set some options
 $this->breadcrumbs()->setLinkLast(true);
-$this->breadcrumbs()->setSeparator(' <span class="separator"> &#9654; </span> ');
+$this->breadcrumbs()->setSeparator('<span class="separator"> &#9654; </span>');
 ?>
     <p>
         Customize it by specifying some options, and print it again:
-<code>
-&lt;?php<br/>
-$this-&gt;breadcrumbs()-&gt;setLinkLast(true);<br/>
-$this-&gt;breadcrumbs()-&gt;setSeparator(&apos;&lt;span class=&quot;separator&quot;&gt; &amp;#9654; &lt;/span&gt;&apos;);<br/>
-echo $this-&gt;breadcrumbs();<br/>
-?&gt;</code>
+<?php
+$code = '<?php' . "\n"
+      . '$this->breadcrumbs()->setLinkLast(true);' . "\n"
+      . '$this->breadcrumbs()->setSeparator(\'<span class="separator"> &#9654; </span>\');' . "\n"
+      . 'echo $this->breadcrumbs();';
+echo highlight_string($code, true);
+?>
     </p>
     <p class="example-output">
         <?= $this->breadcrumbs(); ?>

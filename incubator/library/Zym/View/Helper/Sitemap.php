@@ -448,7 +448,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
      * Renders a sitemap for a navigation container
      *
      * @param  Zym_Navigation_Container $container  [optional] container to get
-     *                                              breadcrumbs from, defaults
+     *                                              sitemap from, defaults
      *                                              to what is registered in the
      *                                              helper
      * @return string
