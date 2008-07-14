@@ -31,36 +31,66 @@
 <project name="Zym Framework Reference Guide" description="Zym Framework Reference Guide Build" default="dist" basedir=".">
     <property file="./build.properties" />
     
-    <target name="dist" depends="clean">
-
+    <target name="dist" depends="clean, html">
+        <echo message="Building distribution" />
     </target>
     
-    <target name="html">
-        <copy todir="${path.build.bin}/html">
-            <filterchain>
-                <xincludefilter basedir="${zf.manual.src.dir}"/>
-                <xsltfilter style="html/html.xsl">
-                    <param name="base.dir" expression="${zf.manual.dest.dir}/"/>
-                </xsltfilter>
-            </filterchain>
-            
-            <fileset dir="${zf.manual.src.dir}">
-                <include name="manual.xml" />
+    <target name="html" description="Build HTML docs">
+        <foreach list="${lang}" param="lang.current" target="html.build" />
+    </target>
+    
+    <target name="checkLangExists" description="Make sure lang exists">
+        <available file="${path.src}/${lang.current}/manual.xml" property="lang.${lang.current}.exists" />
+    </target>
+    
+    <target name="html.build" depends="checkLangExists" if="lang.${lang.current}.exists">
+        <echo message="Copying HTML assets..." />
+        <copy todir="${path.build.bin}/html/${lang.current}/" includeemptydirs="true">
+            <fileset dir="${path.build}/html/assets">
+                <include name="*"/>
+                <include name="**"/>
             </fileset>
         </copy>
         
-        <echo msg="Copying html assets..." />
-        <copy file="${path.build}" todir="${path.build.bin}/html" />
+        <phingcall target="html.build.compile" />
+        
+        <delete file="${path.build}/HTML.manifest" />
+        <delete file="${path.build.bin}/html/${lang.current}/manual.xml" verbose="true" /> 
     </target>
     
-    <target name="clean" description="Clean out existing files">
-        <echo msg="Cleaning old documentation..." />
+    <target name="html.build.compile">
+        <!-- Target isolated because xlst causes error and execution of phing stops -->
         
-        <delete includeemptydirs="true">
-            <fileset dir="${phpDoc.target}">
-                <include name="*" />
+        <echo message="Compiling HTML documentation..." />
+        <copy todir="${path.build.bin}/html/${lang.current}">
+            <filterchain>
+                <xincludefilter basedir="${path.src}/${lang.current}/"/>
+                <xsltfilter style="html/html.xsl">
+                    <param name="base.dir" expression="${path.build.bin}/html/${lang.current}/"/>
+                </xsltfilter>
+            </filterchain>
+            
+            <fileset dir="${path.src}/${lang.current}">
+                <include name="manual.xml"/>
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="clean" description="Clean out existing files" depends="clean.html">
+        <echo message="Cleaning out documentation" />
+        
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${path.build.bin}/">
+                <include name="*" />                
                 <include name="**" />
             </fileset> 
         </delete>
+    </target>
+    
+    <target name="clean.html" description="Clean out HTML existing files">
+        <echo message="Cleaning old HTML documentation..." />
+        
+        <delete includeemptydirs="true" failonerror="false" dir="${path.build.bin}/html" />
+        <delete file="${path.build}/HTML.manifest" failonerror="false" />
     </target>
 </project>

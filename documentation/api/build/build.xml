@@ -58,7 +58,6 @@
         
         <delete includeemptydirs="true">
             <fileset dir="${phpDoc.target}">
-                <include name="*" />
                 <include name="**" />
             </fileset> 
         </delete>

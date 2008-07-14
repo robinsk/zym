@@ -145,7 +145,7 @@
         </phpunit2>
     </target>    
     
-    <target name="clean" depends="clean.api, clean.archive, clean.source.export" 
+    <target name="clean" depends="clean.api, clean.archive, clean.source.export, clean.docs" 
         description="Clean out build directories" />
 
     <target name="clean.api" description="Clean out API docs">
@@ -167,6 +167,5 @@
         <echo msg="Cleaning svn export..." />
         
         <delete dir="${path.build.bin.export}" failonerror="false" />
-      <!--  <mkdir dir="${path.build.bin.export}" />-->
     </target>
 </project>
