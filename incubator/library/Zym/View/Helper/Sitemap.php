@@ -316,9 +316,10 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
         } elseif (@preg_match('/^https?:\\/\//m', $href)) {
             $url = $href;
         } else {
-            $url =  $this->_getServerUrl() . $this->getView()->url();
-            $url = dirname($url) . '/' . $href;
-            //exit("got url '$url'");
+            $url = $this->_getServerUrl()
+                 . rtrim($this->getView()->url(), '/') . '/'
+                 . $href;
+            //exit("got url '$url'\n");
         }
 
         return $this->_xmlEscape($url);
@@ -398,7 +399,13 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
             
             // add 'lastmod' element if a valid lastmod is set in page
             if (isset($page->lastmod)) {
-                $lastmod = date('c', strtotime((string)$page->lastmod));
+                $lastmod = strtotime((string)$page->lastmod);
+                
+                // prevent 1970-01-01...
+                if ($lastmod !== false) {
+                    $lastmod = date('c', $lastmod);
+                }
+                
                 if (!$this->getUseSitemapValidators() ||
                     $lastmodValidator->isValid($lastmod)) {
                     $urlNode->appendChild(
@@ -458,7 +465,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
         $dom = $this->getDomSitemap($container);
         return $this->_useXmlDeclaration ?
                $dom->saveXML() :
-               $dom->saveXML($dom->documentElement);
+               $dom->saveXML($dom->documentElement) . "\n";
     }
     
     /**

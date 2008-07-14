@@ -88,9 +88,13 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
         $this->_nav1 = new Zym_Navigation($config->get('nav_test1'));
         $this->_nav2 = new Zym_Navigation($config->get('nav_test2'));
         
+        // create view
+        $view = new Zend_View();
+        $view->addHelperPath('Zym/View/Helper', 'Zym_View_Helper');
+        
         // create helper
         $this->_helper = new $this->_helperName();
-        $this->_helper->setView(new Zend_View());
+        $this->_helper->setView($view);
         
         // set nav1 in helper as default
         $this->_helper->setNavigation($this->_nav1);
