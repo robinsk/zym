@@ -25,6 +25,11 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zym/View/Helper/GetSession.php';
 
 /**
+ * @see Zend_Session
+ */
+require_once 'Zend/Session.php';
+
+/**
  * Zym_View_Helper_GetSession test case.
  *
  * @author  Geoffrey Tran
@@ -36,9 +41,17 @@ require_once 'Zym/View/Helper/GetSession.php';
  */
 class Zym_View_Helper_GetSessionTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        if (headers_sent()) {
+            $this->markTestSkipped('Cannot test: cannot start session because headers already sent');
+        }
+
+        Zend_Session::start();
+    }
+
     public function testGetSession()
     {
-        $this->setExpectedException('Zend_Session_Exception');
         $helper = new Zym_View_Helper_GetSession();
         $this->assertEquals('Zend_Session_Namespace', get_class($helper->getSession()));
     }

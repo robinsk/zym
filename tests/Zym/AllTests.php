@@ -56,7 +56,7 @@ class Zym_AllTests
     {
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
-    
+
     /**
      * Suite
      *
