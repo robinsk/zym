@@ -4,10 +4,29 @@
     <title>Action</title>
 
     <para>
-        The <code>Zym_Controller_Action_Abstract</code> class is an extension
-        of Zend_Controller_Action. It adds get methods for the view object and 
-        view prefix. It also provides a goto method to perform redirects.
+        The <classname>Zym_Controller_Action_Abstract</classname> class is an extension
+        of <classname>Zend_Controller_Action</classname>.
     </para>
+    
+    <section xml:id="zym.controller.action.view">
+        <title>View Accessor</title>
+        
+        <para>
+            A view accessor was added as <code>$this->getView()</code> for consistency.
+        </para>
+        
+        <programlisting role="php">
+<![CDATA[public function indexAction()
+{
+    // Action code...
+
+    // View
+    $this->getView()->assign(array(
+        'data'  => $data,
+        'title' => $title
+    ));
+}]]></programlisting>
+    </section>
     
     <para>
         The goto method provides a proxy to the redirector action helper. 
