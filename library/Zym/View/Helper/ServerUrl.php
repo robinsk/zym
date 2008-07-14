@@ -15,6 +15,8 @@
  */
 
 /**
+ * Returns current server url (w/ or w/o request URI)
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @package Zym_View
@@ -24,6 +26,47 @@
 class Zym_View_Helper_ServerUrl
 {
     /**
+     * Scheme
+     *
+     * @var string
+     */
+    protected $_scheme;
+
+    /**
+     * Host
+     *
+     * Including port
+     *
+     * @var string
+     */
+    protected $_host;
+
+    /**
+     * Construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // Protocol
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 'https': 'http';
+        $this->setScheme($protocol);
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $this->setHost($_SERVER['HTTP_HOST']);
+        } else if (isset($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'])) {
+            $name = $_SERVER['SERVER_NAME'];
+            $port = $_SERVER['SERVER_PORT'];
+
+            if (($protocol == 'http' && $port == 80) || ($protocol == 'https' && $port == 443)) {
+                $this->setHost($name);
+            } else {
+                $this->setHost($name . ':' . $port);
+            }
+        }
+    }
+
+    /**
      * Server url
      *
      * Returns the current hosts url like http://site.com
@@ -32,17 +75,52 @@ class Zym_View_Helper_ServerUrl
      */
     public function serverUrl($requestUri = false)
     {
-        // Protocol
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == TRUE ? 's': '';
-
-        // Display port if it is non-standard
-        $port = ($_SERVER['SERVER_PORT'] == 80 || ($_SERVER['SERVER_PORT'] == 443 && $protocol))
-                    ? '' : ":{$_SERVER['SERVER_PORT']}";
-
         // Display request uri
-        $requestUri = $requestUri ? $_SERVER['REQUEST_URI'] : '';
+        $path = $requestUri ? $_SERVER['REQUEST_URI'] : '';
 
         // Return url
-        return sprintf('http%s://%s%s%s', $protocol, $_SERVER['SERVER_NAME'], $port, $requestUri);
+        return $this->getScheme() . '://' . $this->getHost() . $path;
+    }
+
+    /**
+     * Get host
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->_host;
+    }
+
+    /**
+     * Set host
+     *
+     * @param string $_host
+     */
+    public function setHost($host)
+    {
+        $this->_host = $host;
+    }
+
+    /**
+     * Get scheme
+     *
+     * Http or https
+     *
+     * @return string
+     */
+    public function getScheme()
+    {
+        return $this->_scheme;
+    }
+
+    /**
+     * Set scheme
+     *
+     * @param string $_scheme
+     */
+    public function setScheme($scheme)
+    {
+        $this->_scheme = $scheme;
     }
 }
