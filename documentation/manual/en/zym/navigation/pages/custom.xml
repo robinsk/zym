@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.pages.custom" version="5.0">
+    <title>Creating custom page types</title>
+    
+    <para>
+        When extending <classname>Zym_Navigation_Page</classname>,
+        the child class cannot override the constructor. This is used to 
+        force every page class to accept only an <code>array</code> or a
+        <classname>Zend_Config</classname> object as the only argument
+        to the constructor, so that all page types can created using the
+        <link xlink:href="#zym.navigation.creating.factory">page factory</link> 
+        method.
+    </para>
+    
+    <example xml:id="zym.navigation.custom.example.simple">
+        <title>The most simple custom page</title>
+        
+        <para>
+            The only thing you need to add to a custom page is the
+            <code>getHref()</code> method.
+        </para>
+        
+        <programlisting role="php"><xi:include href="custom/example/simple.php" parse="text" /></programlisting>
+    </example>
+    
+    <para>
+        There is no need to override the <code>setOptions()</code>
+        and <code>setConfig()</code> when extending the abstract
+        page class, even if the new child class have properties that
+        are not in the abstract class. <code>setOptions()</code> will
+        translate the given option name to a potential method name and
+        use <link xlink:href="http://no.php.net/manual/en/function.method-exists.php">method_exists()</link>
+        to determine if there is matching set method for the option.
+    </para>
+    
+    <example xml:id="zym.navigation.custom.example.properties">
+        <title>Adding properties</title>
+        
+        <para>
+            When adding properties to an extended page, there is no need
+            to override/modify <code>setOptions()</code> or
+            <code>setConfig()</code>.
+        </para>
+        
+        <programlisting role="php"><xi:include href="custom/example/properties.php" parse="text" /></programlisting>
+    </example>
+    
+    <para>
+        By default, <classname>Zym_Navigation_Page</classname> will validate
+        that a label is set when the page is being constructed. If you want
+        to add extra validation to be done when constructing, to ensure that
+        a page cannot be in an invalid state, you should overload the
+        <code>_validate()</code> method and add whatever validation you need
+        there.
+    </para>
+    
+    <example xml:id="zym.navigation.custom.example.validation">
+        <title>Adding custom validation</title>
+        
+        <para>
+            This is a snippet from Zym_Navigation_Page_Mvc. Most of the code
+            is left out to focus on the point; adding validation.
+        </para>
+        
+        <programlisting role="php"><xi:include href="custom/example/validation.php" parse="text" /></programlisting>
+    </example>
+</section>

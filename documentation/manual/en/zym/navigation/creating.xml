@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.creating" version="5.0">
+    <title>Creating a navigational structure</title>
+
+    <section xml:id="zym.navigation.creating.factory">
+        <title>Creating pages using the page factory</title>
+    </section>
+
+    <section xml:id="zym.navigation.creating.array">
+        <title>Creating navigation structures using arrays</title>
+    </section>
+
+    <section xml:id="zym.navigation.creating.config">
+        <title>Creating navigation structures using Zend_Config objects</title>
+    </section>
+</section>

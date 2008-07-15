@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.introduction" version="5.0">
+    
+    <title>Introduction</title>
+
+    <para>
+        <classname>Zym_Navigation</classname> is a component for managing
+        hierarchical structures of (logical representations of) web pages.
+        Simply put: It can be used for creating menus, breadcrumbs and
+        sitemaps, or serve as a container or model for other purposes
+        a project might find by having a hierarchical representation
+        of pages.
+    </para>
+    
+    <section xml:id="zym.navigation.introduction.concepts.pages">
+        <title>Pages and Containers</title>
+        
+        <para>
+            There are two ground concepts in <classname>Zym_Navigation</classname>:
+            
+            <important>
+                <title>Pages</title>
+                <para>
+                    A page in <classname>Zym_Navigation</classname> –
+                    in its most basic form – is a holder object for 
+                    <code>label</code> and <code>href</code>, where 
+                    <code>href</code> is a link to the page. There
+                    are of course a number of other other properties
+                    related to pages, all of which are covered in
+                    <link xlink:href="#zym.navigation.pages">the section
+                    on pages</link>. In addition to properties specific
+                    to the page, a page can also be container for other
+                    pages.
+                </para>
+            </important>
+            
+            <important>
+                <title>Containers</title>
+                <para>
+                    A navigation container 
+                    (<classname>Zym_Navigation_Container</classname>) is a
+                    container class for pages. It contains methods for
+                    adding, retrieving, deleting and iterating pages.
+                    It implementes the <link xlink:href="http://php.net/manual/en/book.spl.php">SPL</link> 
+                    interaces <classname>RecursiveIterator</classname> and
+                    <classname>Countable</classname>, so it may be iterated
+                    recursively, either by using the SPL class 
+                    <classname>RecursiveIteratorIterator</classname>
+                    class, or by implementing recursive iteration yourself
+                    using <code>foreach</code> loops.
+                </para>
+                
+                <para>
+                    Both <classname>Zym_Navigation</classname> and
+                    <classname>Zym_Navigation_Page</classname> extend
+                    <classname>Zym_Navigation_Container</classname>, so
+                    both can contain any number of hierarchic levels
+                    of pages.
+                </para>
+            </important>
+                
+            <note>
+                <para>
+                    The difference between <classname>Zym_Navigation</classname>
+                    and <classname>Zym_Navigation_Page</classname> is that
+                    the former does not contain page properties, so it can
+                    only be used as an outer container for pages.
+                </para>
+            </note>
+            
+            <note>
+                <para>
+                    <classname>Zym_Navigation_Container</classname> is
+                    <code>abstract</code>, and can  not be
+                    instantiated directly. Use 
+                    <classname>Zym_Navigation</classname> if you only
+                    want a container.
+                </para>
+            </note>
+        </para>
+        
+    </section>
+    
+    <section xml:id="zym.navigation.introduction.concepts.separation">
+        <title>Separation of logic structure and rendering</title>
+        
+        <para>
+            The classes in the <classname>Zym_Navigation</classname>
+            namespace do not deal with rendering. This responsibility
+            is delegated to the navigation view helpers. However,
+            pages may contain information that is used by view helpers
+            when rendering, such as; CSS class, <code>title</code>
+            attribute, <code>lastmod</code> and <code>priority</code>
+            properties for sitemaps, etc.
+        </para>
+        
+        <para>
+            Read more about navigation rendering navigation objects in
+            <link xlink:href="#zym.view.helpers.navigation">the manual
+            section on navigation view helpers</link>.
+        </para>
+    </section>
+</section>

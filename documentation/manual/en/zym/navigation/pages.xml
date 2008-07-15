@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.pages" version="5.0">
+    <title>Pages</title>
+        
+    <para>
+        There are two types of pages built-in in Zym_Navigation:
+    
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <link xlink:href="#zym.navigation.pages.mvc">MVC pages</link>
+                     – using the class <classname>Zym_Navigation_Page_Mvc</classname>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link xlink:href="#zym.navigation.pages.uri">URI pages</link>
+                     – using the class <classname>Zym_Navigation_Page_Uri</classname>
+                </para>
+            </listitem>
+        </itemizedlist>
+        
+        MVC pages are meant to be "internal" pages, and are defined using MVC
+        parameters like <code>action</code> and <code>controller</code>, while
+        the URI pages are generally considered to be off-site, for example if
+        you want it to link to another site/domain, or you want to have some
+        other special logic to it by using e.g. <code>href="#"</code>.
+    </para>
+    
+    <xi:include href="pages/common.xml" />
+    <xi:include href="pages/mvc.xml" />
+    <xi:include href="pages/uri.xml" />
+    <xi:include href="pages/custom.xml" />
+    
+</section>

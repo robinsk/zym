@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.pages.common" version="5.0">
+    <title>Common page features</title>
+    
+    <para>
+        All page classes must extend <classname>Zym_Navigation_Abstract</classname>,
+        and will thus share a common set of features and properties. Most notably
+        they share the options in the table below, and are forced to use the
+        same initialization process.
+        
+        <note>
+            <para>
+                Read more on extending Zym_Navigation_Page in 
+                <link xlink:href="#zym.navigation.pages.custom">Creating custom page types</link>.
+            </para>
+        </note>
+    </para>
+    
+    <table xml:id="zym.navigation.pages.common.options">
+        <title>Common page options</title>
+                
+        <para>
+            The options listed in the table below are common to all page classes.
+        </para>
+
+        <tgroup cols="4">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Type</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry><code>label</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        A page label, such as Home or Blog. This is the only
+                        required common page option.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>id</code></entry>
+                    <entry><code>string</code> | <code>int</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        An id tag/attribute that may be used for the page,
+                        typically in an anchor element.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>class</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        A CSS class that may be used for the page,
+                        typically in an anchor element. 
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>title</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        A succinct page description, typically for using
+                        as the <code>title</code> attribute in an anchor.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>target</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        Specifies a target that may be used for the page,
+                        typically in an anchor element.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>position</code></entry>
+                    <entry><code>string</code> | <code>int</code> | <code>null</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        Works like order for elements in Zend_Form. If specified,
+                        the page will be iterated in a specific order, meaning
+                        you can force a page to be iterated first by setting
+                        position to something like -100. If a <code>string</code>
+                        is given, it must parse to a valid <code>int</code>. If
+                        <code>null</code> is given, it will be reset, meaning
+                        the order in which the page was added to the container
+                        will be used.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>role</code></entry>
+                    <entry><code>string</code> | <code>array</code> | <code>null</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        ACL role(s) to associate with the page. The intention
+                        is that a user is required to have one of the roles 
+                        associated with the page to be able to display it
+                        in view helpers. Read more in
+                        <link xlink:href="#zym.view_helpers.navigation.acl">the
+                        section ACL integration in view helpers.</link>. A single
+                        <code>string</code> associated only one role with the page.
+                        An <code>array</code> associates several roles. Using
+                        <code>null</code> nulls out the role, meaning no role
+                        is required to display it. 
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>active</code></entry>
+                    <entry><code>bool</code></entry>
+                    <entry><code>false</code></entry>
+                    <entry>
+                        Whether the page should be considered active for the 
+                        current request. If active is false or not given, 
+                        MVC pages will check its properties against the 
+                        request object upon calling <code>$page->isActive()</code>.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>visible</code></entry>
+                    <entry><code>bool</code></entry>
+                    <entry><code>true</code></entry>
+                    <entry>
+                        Whether page should be visible for the user, or just
+                        be a part of the structure. Invisible pages are skipped
+                        by view helpers.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>pages</code></entry>
+                    <entry><code>array</code> | <code>Zend_Config</code> | <code>null</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        Sub pages of the page. This could be an <code>array</code>
+                        or <code>Zend_Config</code> object containing either page
+                        options that can be passed to <code>Zym_Navigation_Page::factory()</code>,
+                        actual <classname>Zym_Navigation_Page</classname> instances, or a mixture of those. 
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>

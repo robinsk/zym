@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.pages.mvc" version="5.0">
+    <title>Zym_Navigation_Page_Mvc</title>
+    
+    <para>
+        MVC pages are defined using MVC parameters from the Zend Framework
+        terminology. An MVC page will use
+        <classname>Zend_Controller_Action_Helper_Url</classname> internally
+        in the <code>getHref()</code> method to generate hrefs, and
+        in <code>isActive()</code> it will intersect the the 
+        <classname>Zend_Controller_Request_Abstract</classname> params
+        with its own params to determine if the page is active.
+    </para>
+    
+    <table xml:id="zym.navigation.pages.mvc.options">
+        <title>MVC page options</title>
+                
+        <para>
+            The options listed in the table below are specific to
+            <classname>Zym_Navigation_Page_Mvc</classname>.
+            All options refer to the according arguments in
+            <classname>Zend_Controller_Action_Helper_Url</classname>.
+        </para>
+
+        <tgroup cols="4">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Type</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry><code>action</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        Action name to use when generating
+                        href to the page. This option is required.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>controller</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        Controller name to use when generating
+                        href to the page. This option is required.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>module</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>default</code></entry>
+                    <entry>
+                        Module name to use when generating
+                        href to the page.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>route</code></entry>
+                    <entry><code>string</code></entry>
+                    <entry><code>default</code></entry>
+                    <entry>
+                        Route name to use when generating
+                        href to the page.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>reset_params</code></entry>
+                    <entry><code>bool</code></entry>
+                    <entry><code>true</code></entry>
+                    <entry>
+                        Whether user params should be reset
+                        when generating href to the page.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>params</code></entry>
+                    <entry><code>array</code></entry>
+                    <entry><code>array</code></entry>
+                    <entry>
+                        User params to use when generating href to the page.
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+    
+    <para>
+        //TODO: example of getHref()
+    </para>
+    
+    <para>
+        //TODO: example of isActive()
+    </para>
+    
+    <para>
+        //TODO: example of using routes
+    </para>
+</section>
