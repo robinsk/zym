@@ -100,7 +100,7 @@ class Zym_Controller_Plugin_LayoutSwitcher_Abstract extends Zend_Controller_Plug
         if (array_key_exists($ruleName, $this->_layouts)) {
             $this->_layout->setLayout($this->_layouts[$ruleName]);
         } else {
-            $this->_layout->setLayout($this->getDefaultLayout());
+            $this->_layout->setLayout($this->_defaultLayout);
         }
     }
 }
