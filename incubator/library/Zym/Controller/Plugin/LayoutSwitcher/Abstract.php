@@ -57,15 +57,6 @@ class Zym_Controller_Plugin_LayoutSwitcher_Abstract extends Zend_Controller_Plug
     protected $_layout = null;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->_layout = Zend_Layout::startMvc();
-        $this->_defaultLayout = $this->_layout->getLayout();
-    }
-
-    /**
      * Add a layout
      *
      * @param string $layoutName
@@ -84,7 +75,7 @@ class Zym_Controller_Plugin_LayoutSwitcher_Abstract extends Zend_Controller_Plug
 
         return $this;
     }
-
+    
     /**
      * Switch layout based on the given condition
      *
@@ -92,10 +83,18 @@ class Zym_Controller_Plugin_LayoutSwitcher_Abstract extends Zend_Controller_Plug
      */
     protected function _switchLayout($ruleName)
     {
+        if (!$this->_layout) {
+            $this->_layout = Zend_Layout::startMvc();
+        }
+        
+        if (!$this->_defaultLayout) {
+            $this->_defaultLayout = $this->_layout->getLayout();
+        }
+        
         if (array_key_exists($ruleName, $this->_layouts)) {
             $this->_layout->setLayout($this->_layouts[$ruleName]);
         } else {
-            $this->_layout->setLayout($this->_defaultLayout);
+            $this->_layout->setLayout($this->getDefaultLayout());
         }
     }
 }
