@@ -84,7 +84,13 @@ class Zym_Controller_Plugin_LayoutSwitcher_Abstract extends Zend_Controller_Plug
     protected function _switchLayout($ruleName)
     {
         if (!$this->_layout) {
-            $this->_layout = Zend_Layout::startMvc();
+            $layout = Zend_Layout::getMvcInstance();
+            
+            if (!$layout) {
+                $layout = Zend_Layout::startMvc();
+            }
+            
+            $this->_layout = $layout;
         }
         
         if (!$this->_defaultLayout) {
