@@ -255,42 +255,18 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests that the constructor requires label, action and controller
+     * Tests that the constructor does not fail when only given a label
      *
      */
-    public function testConstructionRequiresActionAndController()
+    public function testConstructionShouldOnlyRequireLabel()
     {
         try {
             $page = new Zym_Navigation_Page_Mvc(array(
-                'labelz' => 'label',
-                'action' => 'index',
-                'controller' => 'index'
+                'label' => 'foo'
             ));
+            
+        } catch (Exception $e) {
             $this->fail('Should throw exception for missing label');
-        } catch (Zym_Navigation_Page_InvalidException $e) {
-            
-        }
-        
-        try {
-            $page = new Zym_Navigation_Page_Mvc(array(
-                'label' => 'label',
-                'actionz' => 'index',
-                'controller' => 'index'
-            ));
-            $this->fail('Should throw exception for missing action');
-        } catch (Zym_Navigation_Page_InvalidException $e) {
-            
-        }
-        
-        try {
-            $page = new Zym_Navigation_Page_Mvc(array(
-                'label' => 'label',
-                'action' => 'index',
-                'controllerz' => 'index'
-            ));
-            $this->fail('Should throw exception for missing controller');
-        } catch (Zym_Navigation_Page_InvalidException $e) {
-            
         }
     }
     
@@ -307,8 +283,8 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         ));
         
         $props = array('Action', 'Controller');
-        $valids = array('index', 'help', 'home', 'default', '1', ' ');
-        $invalids = array(42, '', (object) null, null);
+        $valids = array('index', 'help', 'home', 'default', '1', ' ', '', null);
+        $invalids = array(42, (object) null);
         
         foreach ($props as $prop) {
             $setter = "set$prop";
@@ -348,7 +324,7 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         
         $props = array('Module', 'Route');
         $valids = array('index', 'help', 'home', 'default', '1', ' ', null);
-        $invalids = array(42, '', (object) null);
+        $invalids = array(42, (object) null);
         
         foreach ($props as $prop) {
             $setter = "set$prop";

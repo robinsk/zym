@@ -102,28 +102,6 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     protected static $_urlHelper = null;
     
-    /**
-     * Checks if the page is valid (has required properties)
-     *
-     * @return void
-     * @throws Zym_Navigation_Page_InvalidException  if page is invalid
-     */
-    protected function _validate()
-    {
-        if (!isset($this->_controller)) {
-            $msg = 'Page controller is not set';
-        } elseif (!isset($this->_action)) {
-            $msg = 'Page action is not set';
-        }
-        
-        if (isset($msg)) {
-            require_once 'Zym/Navigation/Page/InvalidException.php';
-            throw new Zym_Navigation_Page_InvalidException($msg);
-        } else {
-            parent::_validate();
-        }
-    }
-    
     // Accessors:
     
     /**
@@ -142,11 +120,26 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             $reqParams = Zend_Controller_Front::getInstance()
                             ->getRequest()->getParams();
             
-            $myParams = array_merge($this->_params, array(
-                'module'     => $this->_module,
-                'controller' => $this->_controller,
-                'action'     => $this->_action
+            /*
+            $myParams = array_merge($this->getParams(), array(
+                'module'     => $this->getModule(),
+                'controller' => $this->getController(),
+                'action'     => $this->getAction()
             ));
+            */
+            
+            ///*
+            $myParams = $this->_params;
+            if (null !== $this->_module) {
+                $myParams['module'] = $this->_module;
+            }
+            if (null !== $this->_controller) {
+                $myParams['controller'] = $this->_controller;
+            }
+            if (null !== $this->_action) {
+                $myParams['action'] = $this->_action;
+            }
+            //*/
             
             // TODO: verify that this is desired behaviour
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
@@ -189,8 +182,8 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function setAction($action)
     {
-        if (!is_string($action) || strlen($action) < 1) {
-            $msg = '$action must be a non-empty string';
+        if (null !== $action && !is_string($action)) {
+            $msg = '$action must be a string or null';
             throw new InvalidArgumentException($msg);
         }
         
@@ -210,13 +203,13 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     /**
      * Sets controller name for this page
      *
-     * @param  string $controller
+     * @param  string|null $controller
      * @throws InvalidArgumentException  if invalid $controller is given
      */
     public function setController($controller)
     {
-        if (!is_string($controller) || strlen($controller) < 1) {
-            $msg = '$controller must be a non-empty string';
+        if (null !== $controller && !is_string($controller)) {
+            $msg = '$controller must be a string or null';
             throw new InvalidArgumentException($msg);
         }
         
@@ -236,13 +229,13 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     /**
      * Sets module name for this page
      *
-     * @param  string $module
+     * @param  string|null $module
      * @throws InvalidArgumentException  if invalid $module is given
      */
     public function setModule($module)
     {
-        if (null !== $module && (!is_string($module) || strlen($module) < 1)) {
-            $msg = '$module must be a non-empty string';
+        if (null !== $module && !is_string($module)) {
+            $msg = '$module must be a string or null';
             throw new InvalidArgumentException($msg);
         }
         

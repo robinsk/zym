@@ -44,17 +44,21 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Page label
      *
-     * @var string
+     * @var string|null
      */
     protected $_label;
     
     /**
      * Page id
+     *
+     * @var string|null
      */
     protected $_id = null;
     
     /**
      * Style class for this page (CSS)
+     *
+     * @var string|null
      */
     protected $_class = null;
     
@@ -157,16 +161,15 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             }
         }
         
-        if (isset($options['action']) && isset($options['controller'])) {
-            require_once 'Zym/Navigation/Page/Mvc.php';
-            return new Zym_Navigation_Page_Mvc($options);
+        if (isset($options['action']) || isset($options['controller'])) {
+            
         } elseif (isset($options['uri'])) {
             require_once 'Zym/Navigation/Page/Uri.php';
             return new Zym_Navigation_Page_Uri($options);
         }
         
-        $msg = 'Unable to determine what page to construct';
-        throw new UnexpectedValueException($msg);
+        require_once 'Zym/Navigation/Page/Mvc.php';
+        return new Zym_Navigation_Page_Mvc($options);
     }
     
     /**
@@ -303,7 +306,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             throw new InvalidArgumentException($msg);
         }
         
-        $this->_id = (string) $id;
+        $this->_id = null === $id ? $id : (string) $id;
         
         return $this;
     }

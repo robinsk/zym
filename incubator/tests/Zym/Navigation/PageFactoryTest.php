@@ -175,23 +175,16 @@ class Zym_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * The page factory should not work when neither type, uri, action
-     * or controller is given
+     * The page factory should not require anything more than a label
      *
      */
-    public function testShouldFailForInsufficientOptions()
+    public function testShouldOnlyRequireLabel()
     {
         $pageConfig = array(
             'label' => 'My Invalid Page'
         );
         
-        try {
-            $page = Zym_Navigation_Page::factory($pageConfig);
-        } catch(UnexpectedValueException $e) {
-            return;
-        }
-        
-        $this->fail('An UnexpectedValueException has not been thrown');
+        $page = Zym_Navigation_Page::factory($pageConfig);
     }
     
     /**
