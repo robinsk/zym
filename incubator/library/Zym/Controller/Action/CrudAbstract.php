@@ -21,9 +21,9 @@
 require_once 'Zym/Controller/Action/Abstract.php';
 
 /**
- * @see Zend_Data_Paginator
+ * @see Zend_Paginator
  */
-require_once 'Zend/Data/Paginator.php';
+require_once 'Zend/Paginator.php';
 
 /**
  * @see Zend_Db_Table_Abstract
@@ -31,8 +31,10 @@ require_once 'Zend/Data/Paginator.php';
 require_once 'Zend/Db/Table/Abstract.php';
 
 /**
- * @TODO Make this compatible with MultiPageForm
- * @TODO Add global view scripts
+ * TODO: Make this compatible with MultiPageForm
+ * TODO: Add global view scripts
+ * TODO: Order methods
+ * 
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Controller
@@ -111,6 +113,20 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      * @var Zend_Db_Select
      */
     protected $_browseQuery = null;
+    
+    /**
+     * Order direction key
+     *
+     * @var string
+     */
+    protected $_orderKey = 'order';
+    
+    /**
+     * Order by key
+     *
+     * @var string
+     */
+    protected $_byKey = 'by';
     
     /**
      * Allows this to work when setDefaultAction() has been set to something other than 'index'
@@ -303,6 +319,32 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this;
     }
+    
+    /**
+     * Get the order by clause for the overview
+     * TODO: Make a check to see if the requested field is present in the table
+     * 
+     * @return string
+     */
+    protected function _getOrderClause()
+    {
+        $order = strtoupper($this->_getParam($this->_orderKey, 'ASC'));
+        
+        switch ($order) {
+            case 'ASC':
+            case 'DESC':
+                break;
+            
+            default:
+                $order = 'ASC';
+                break;
+        }
+        
+        $byFilter = new Zend_Filter_PregReplace('/[^a-zA-Z0-9\s\-_]/u');
+        $by = $byFilter->filter($this->_getParam($this->_byKey, $this->_primaryIdKey));
+        
+        return $by . ' ' . $order;
+    }
 
     /**
      * Throw an exception
@@ -336,7 +378,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
         $range = (int) $this->_getParam($this->_rangeParam, $this->_defaultPageRange);
         $page  = (int) $this->_getParam($this->_pageParam, $this->_defaultPageNumber);
 
-        $paginator = Zend_Data_Paginator::factory($this->_getBrowseQuery());
+        $paginator = Zend_Paginator::factory($this->_getBrowseQuery());
 
         if ($range > 0) {
             $paginator->setPageRange($range);
@@ -357,7 +399,8 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected function _getBrowseQuery()
     {
         if (!$this->_browseQuery) {
-            $this->_browseQuery = $this->_getTable()->select();
+            $this->_browseQuery = $this->_getTable()->select()
+                                                    ->order($this->_getOrderClause());
         }
         
         return $this->_browseQuery; 
