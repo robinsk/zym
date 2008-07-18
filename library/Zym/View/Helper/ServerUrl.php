@@ -48,17 +48,20 @@ class Zym_View_Helper_ServerUrl
      */
     public function __construct()
     {
-        // Protocol
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 'https': 'http';
-        $this->setScheme($protocol);
+        if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] === true)) {
+            $scheme = 'https';
+        } else {
+            $scheme = 'http';
+        }
+        $this->setScheme($scheme);
 
-        if (isset($_SERVER['HTTP_HOST'])) {
+        if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
             $this->setHost($_SERVER['HTTP_HOST']);
         } else if (isset($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'])) {
             $name = $_SERVER['SERVER_NAME'];
             $port = $_SERVER['SERVER_PORT'];
 
-            if (($protocol == 'http' && $port == 80) || ($protocol == 'https' && $port == 443)) {
+            if (($scheme == 'http' && $port == 80) || ($scheme == 'https' && $port == 443)) {
                 $this->setHost($name);
             } else {
                 $this->setHost($name . ':' . $port);
