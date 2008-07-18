@@ -128,6 +128,24 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected $_table = null;
     
     /**
+     * Append the order-by clause to the specified query
+     *
+     * @param Zend_Db_Select $query
+     */
+    protected function _appendOrderByClause(Zend_Db_Select $query)
+    {
+        $order = strtoupper($this->_getParam($this->_orderKey, 'ASC'));
+        $by = $this->_getParam($this->_orderByKey, $this->_primaryIdKey);
+        
+        if (in_array($by, $this->_getTable()->info('cols'))) {
+            $orderBy = $by . ' ' . $order;
+            $query->order($orderBy);
+        }
+        
+        return $query;
+    }
+    
+    /**
      * Get the name of the action that takes care of the add/edit stuff
      *
      * @return string
@@ -176,18 +194,10 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected function _getBrowseQuery()
     {
         if (!$this->_browseQuery) {
-            $order = strtoupper($this->_getParam($this->_orderKey, 'ASC'));
-            $by = $this->_getParam($this->_orderByKey, $this->_primaryIdKey);
+            $query = $this->_getTable()->select();
             
-            $table = $this->_getTable();
+            $query = $this->_appendOrderByClause($query);
             
-            $query = $table->select();
-            
-            if (in_array($by, $table->info('cols'))) {
-                $orderBy = $by . ' ' . $order;
-                $query->order($orderBy);
-            }
-
             $this->_browseQuery = $query;
         }
         
