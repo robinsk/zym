@@ -183,7 +183,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
             
             $query = $table->select();
             
-            if (!in_array($by, $table->info('cols'))) {
+            if (in_array($by, $table->info('cols'))) {
                 $orderBy = $by . ' ' . $order;
                 $query->order($orderBy);
             }
