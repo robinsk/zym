@@ -157,12 +157,21 @@ class Zym_View_Helper_AbsoluteUrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('https', $helper->getScheme());
 
         // Standard https port
-        $_SERVER['HTTPS']       = true;
+        $_SERVER['HTTPS']       = 'on';
         $_SERVER['SERVER_NAME'] =  'example.com';
         $_SERVER['SERVER_PORT'] = 443;
         $helper = new Zym_View_Helper_AbsoluteUrl();
 
         $this->assertEquals('example.com', $helper->getHost());
         $this->assertEquals('https', $helper->getScheme());
+
+                // Standard https port
+        $_SERVER['HTTPS']       = 'off';
+        $_SERVER['SERVER_NAME'] =  'example.com';
+        $_SERVER['SERVER_PORT'] = 80;
+        $helper = new Zym_View_Helper_AbsoluteUrl();
+
+        $this->assertEquals('example.com', $helper->getHost());
+        $this->assertEquals('http', $helper->getScheme());
     }
 }

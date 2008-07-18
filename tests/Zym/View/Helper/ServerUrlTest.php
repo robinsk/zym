@@ -77,6 +77,10 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
     public function testServerUrlWithNonStandardPort()
     {
         // Non standard port
+        $_SERVER['HTTPS']     = 'off';
+        $_SERVER['HTTP_HOST'] = 'example.com:8888';
+        $this->assertEquals('http://example.com:8888', $this->_helper->serverUrl());
+
         unset($_SERVER['HTTPS']);
         $_SERVER['HTTP_HOST'] = 'example.com:8888';
         $this->assertEquals('http://example.com:8888', $this->_helper->serverUrl());
@@ -94,6 +98,10 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
     {
         // Non standard port
         unset($_SERVER['HTTP_HOST']);
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'example.com:8888';
+        $this->assertEquals('https://example.com:8888', $this->_helper->serverUrl());
+
         $_SERVER['HTTPS'] = true;
         $_SERVER['HTTP_HOST'] = 'example.com:8888';
         $this->assertEquals('https://example.com:8888', $this->_helper->serverUrl());
@@ -109,6 +117,10 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
     public function testServerUrlWithStandardPort()
     {
         // Non standard port
+        $_SERVER['HTTPS']     = 'off';
+        $_SERVER['HTTP_HOST'] = 'example.com';
+        $this->assertEquals('http://example.com', $this->_helper->serverUrl());
+
         unset($_SERVER['HTTPS']);
         $_SERVER['HTTP_HOST'] = 'example.com';
         $this->assertEquals('http://example.com', $this->_helper->serverUrl());
@@ -125,6 +137,10 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
     {
         // Non standard port
         unset($_SERVER['HTTP_HOST']);
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'example.com';
+        $this->assertEquals('https://example.com', $this->_helper->serverUrl());
+
         $_SERVER['HTTPS'] = true;
         $_SERVER['HTTP_HOST'] = 'example.com';
         $this->assertEquals('https://example.com', $this->_helper->serverUrl());
