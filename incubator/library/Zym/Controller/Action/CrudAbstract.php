@@ -33,7 +33,6 @@ require_once 'Zend/Db/Table/Abstract.php';
 /**
  * TODO: Make this compatible with MultiPageForm
  * TODO: Add global view scripts
- * TODO: Order methods
  * 
  * @author     Jurrien Stutterheim
  * @category   Zym
@@ -44,20 +43,6 @@ require_once 'Zend/Db/Table/Abstract.php';
  */
 abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_Abstract
 {
-    /**
-     * Table instance
-     *
-     * @var Zend_Db_Table_Abstract
-     */
-    protected $_table = null;
-
-    /**
-     * Form instance
-     *
-     * @var Zend_Form
-     */
-    protected $_form = null;
-
     /**
      * The add-edit action
      *
@@ -73,6 +58,20 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected $_browseAction = 'browse';
 
     /**
+     * Browse query
+     * 
+     * @var Zend_Db_Select
+     */
+    protected $_browseQuery = null;
+    
+    /**
+     * Default page number for pagination
+     *
+     * @var int
+     */
+    protected $_defaultPageNumber = 1;
+    
+    /**
      * Default page limit for pagination
      *
      * @var int
@@ -80,12 +79,33 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected $_defaultPageRange = null;
 
     /**
-     * Default page number for pagination
+     * Form instance
      *
-     * @var int
+     * @var Zend_Form
      */
-    protected $_defaultPageNumber = 1;
-
+    protected $_form = null;
+    
+    /**
+     * Order by key
+     *
+     * @var string
+     */
+    protected $_orderByKey = 'by';
+    
+    /**
+     * Order direction key
+     *
+     * @var string
+     */
+    protected $_orderKey = 'order';
+    
+    /**
+     * Page parameter
+     * 
+     * @var string
+     */
+    protected $_pageParam = 'page';
+    
     /**
      * Primary ID key
      *
@@ -101,171 +121,12 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected $_rangeParam = 'range';
     
     /**
-     * Page parameter
-     * 
-     * @var string
+     * Table instance
+     *
+     * @var Zym_Db_Table_Abstract
      */
-    protected $_pageParam = 'page';
+    protected $_table = null;
     
-    /**
-     * Browse query
-     * 
-     * @var Zend_Db_Select
-     */
-    protected $_browseQuery = null;
-    
-    /**
-     * Order direction key
-     *
-     * @var string
-     */
-    protected $_orderKey = 'order';
-    
-    /**
-     * Order by key
-     *
-     * @var string
-     */
-    protected $_byKey = 'by';
-    
-    /**
-     * Allows this to work when setDefaultAction() has been set to something other than 'index'
-     *
-     * @return void
-     */
-    public function init()
-    {
-        $front = Zend_Controller_Front::getInstance();
-        if ($this->getRequest()->getActionName() == $front->getDefaultAction() && $this->getRequest()->getActionName() != 'index') {
-            $this->_forward($this->_getBrowseAction());
-        }
-    }
-    
-    /**
-     * Get the table for this model
-     *
-     * @return Zym_Db_Table_Abstract
-     */
-    protected function _getTable()
-    {
-        if (!$this->_table) {
-            $this->_throwException('No table instance set.');
-        }
-
-        return $this->_table;
-    }
-
-    /**
-     * Set the table
-     *
-     * @param Zym_Db_Table_Abstract $table
-     * @return Zym_Controller_Action_Crud_Abstract
-     */
-    protected function _setTable(Zym_Db_Table_Abstract $table)
-    {
-        $this->_table = $table;
-
-        return $this;
-    }
-
-    /**
-     * Get the form for this model
-     *
-     * @return Zend_Form
-     */
-    protected function _getForm()
-    {
-        if (!$this->_form) {
-            $this->_throwException('No form instance set.');
-        }
-
-        return $this->_form;
-    }
-
-    /**
-     * Set a form instance
-     *
-     * @param Zend_Form $form
-     * @return Zym_Controller_Action_Crud_Abstract
-     */
-    protected function _setForm(Zend_Form $form)
-    {
-        $this->_form = $form;
-
-        return $this;
-    }
-
-    /**
-     * Get the primary id from the request
-     *
-     * @return int|null
-     */
-    protected function _getPrimaryId()
-    {
-        return $this->_getParam($this->_getPrimaryIdKey());
-    }
-
-    /**
-     * Get the location to where the form needs to submit for a new entry
-     *
-     * @return array
-     */
-    protected function _getNewSubmitLocation()
-    {
-        return array('module'     => $this->getRequest()->getModuleName(),
-                     'controller' => $this->getRequest()->getControllerName(),
-                     'action'     => $this->_getAddEditAction());
-    }
-
-    /**
-     * Get the location to where the form needs to submit for an edited entry
-     *
-     * @return array
-     */
-    protected function _getEditSubmitLocation()
-    {
-        $location = $this->_getNewSubmitLocation();
-        $location[$this->_getPrimaryIdKey()] = $this->_getPrimaryId();
-
-        return $location;
-    }
-
-    /**
-     * Get the column name of the primary id
-     *
-     * @return string
-     */
-    protected function _getPrimaryIdKey()
-    {
-        if ($this->_primaryIdKey == null) {
-            $info = $this->_getTable()->info();
-
-            $this->_primaryIdKey = (string) array_shift($info[Zend_Db_Table_Abstract::PRIMARY]);
-        }
-
-        return $this->_primaryIdKey;
-    }
-
-    /**
-     * Get the model from the table
-     *
-     * @param int $id
-     * @return Zend_Db_Table_Row_Abstract|null
-     */
-    protected function _getRow($id)
-    {
-        $table = $this->_getTable();
-
-        $row = $table->find((int) $id)
-                     ->current();
-
-        if (!$row) {
-            $this->_throwException('The requested row could not be loaded.');
-        }
-
-        return $row;
-    }
-
     /**
      * Get the name of the action that takes care of the add/edit stuff
      *
@@ -292,7 +153,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this;
     }
-
+    
     /**
      * Get the name of the action that takes care of the browsing
      *
@@ -306,91 +167,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this->_browseAction;
     }
-
-    /**
-     * Set the browse action
-     *
-     * @param string $action
-     * @return Zym_Controller_Action_Crud_Abstract
-     */
-    protected function _setBrowseAction($action)
-    {
-        $this->_browseAction = $action;
-
-        return $this;
-    }
     
-    /**
-     * Get the order by clause for the overview
-     * TODO: Make a check to see if the requested field is present in the table
-     * 
-     * @return string
-     */
-    protected function _getOrderClause()
-    {
-        $order = strtoupper($this->_getParam($this->_orderKey, 'ASC'));
-        
-        switch ($order) {
-            case 'ASC':
-            case 'DESC':
-                break;
-            
-            default:
-                $order = 'ASC';
-                break;
-        }
-        
-        $byFilter = new Zend_Filter_PregReplace('/[^a-zA-Z0-9\s\-_]/u');
-        $by = $byFilter->filter($this->_getParam($this->_byKey, $this->_primaryIdKey));
-        
-        return $by . ' ' . $order;
-    }
-
-    /**
-     * Throw an exception
-     *
-     * @param string $message
-     * @throws Zym_Controller_Action_Exception
-     */
-    protected function _throwException($message)
-    {
-        /**
-         * @see Zym_Controller_Action_Exception
-         */
-        require_once 'Zym/Controller/Action/Exception.php';
-
-        throw new Zym_Controller_Action_Exception($message);
-    }
-
-    /**
-     * Index action. Forward to the browse action
-     */
-    public function indexAction()
-    {
-        $this->_forward($this->_getBrowseAction());
-    }
-
-    /**
-     * Browse through your models
-     */
-    public function browseAction()
-    {
-        $range = (int) $this->_getParam($this->_rangeParam, $this->_defaultPageRange);
-        $page  = (int) $this->_getParam($this->_pageParam, $this->_defaultPageNumber);
-
-        $paginator = Zend_Paginator::factory($this->_getBrowseQuery());
-
-        if ($range > 0) {
-            $paginator->setPageRange($range);
-        }
-
-        if ($page > 0) {
-            $paginator->setCurrentPageNumber($page);
-        }
-
-        $this->view->paginator = $paginator;
-    }
-
     /**
      * Get the select object for the browse action
      *
@@ -399,8 +176,19 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected function _getBrowseQuery()
     {
         if (!$this->_browseQuery) {
-            $this->_browseQuery = $this->_getTable()->select()
-                                                    ->order($this->_getOrderClause());
+            $order = strtoupper($this->_getParam($this->_orderKey, 'ASC'));
+            $by = $this->_getParam($this->_orderByKey, $this->_primaryIdKey);
+            
+            $table = $this->_getTable();
+            
+            $query = $table->select();
+            
+            if (!in_array($by, $table->info('cols'))) {
+                $orderBy = $by . ' ' . $order;
+                $query->order($orderBy);
+            }
+
+            $this->_browseQuery = $query;
         }
         
         return $this->_browseQuery; 
@@ -418,18 +206,203 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
         
         return $this; 
     }
-
+    
     /**
-     * View a model if it exists
+     * Get the location to where the form needs to submit for an edited entry
+     *
+     * @return array
      */
-    public function viewAction()
+    protected function _getEditSubmitLocation()
     {
-        $id = $this->_getPrimaryId();
-        $row = $this->_getRow($id);
+        $location = $this->_getNewSubmitLocation();
+        $location[$this->_getPrimaryIdKey()] = $this->_getPrimaryId();
 
-        $this->view->row = $row;
+        return $location;
+    }
+    
+    /**
+     * Get the form for this model
+     *
+     * @return Zend_Form
+     */
+    protected function _getForm()
+    {
+        if (!$this->_form) {
+            $this->_throwException('No form instance set.');
+        }
+
+        return $this->_form;
     }
 
+    /**
+     * Set a form instance
+     *
+     * @param Zend_Form $form
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setForm(Zend_Form $form)
+    {
+        $this->_form = $form;
+
+        return $this;
+    }
+    
+    /**
+     * Check if a special submit button is used and act accordingly.
+     * @TODO make this nicer...
+     */
+    protected function _handlePostAction()
+    {
+        $postData = $this->getRequest()->getPost();
+
+        switch (true) {
+            case array_key_exists('_cancel', $postData);
+                $this->_goto($this->_getBrowseAction());
+                break;
+        }
+    }
+    
+    /**
+     * Get the location to where the form needs to submit for a new entry
+     *
+     * @return array
+     */
+    protected function _getNewSubmitLocation()
+    {
+        return array('module'     => $this->getRequest()->getModuleName(),
+                     'controller' => $this->getRequest()->getControllerName(),
+                     'action'     => $this->_getAddEditAction());
+    }
+    
+    /**
+     * Get the primary id from the request
+     *
+     * @return int|null
+     */
+    protected function _getPrimaryId()
+    {
+        return $this->_getParam($this->_getPrimaryIdKey());
+    }
+    
+    /**
+     * Get the column name of the primary id
+     *
+     * @return string
+     */
+    protected function _getPrimaryIdKey()
+    {
+        if ($this->_primaryIdKey == null) {
+            $info = $this->_getTable()->info();
+
+            $this->_primaryIdKey = (string) array_shift($info[Zend_Db_Table_Abstract::PRIMARY]);
+        }
+
+        return $this->_primaryIdKey;
+    }
+    
+    /**
+     * Get the model from the table
+     *
+     * @param int $id
+     * @return Zend_Db_Table_Row_Abstract|null
+     */
+    protected function _getRow($id)
+    {
+        $table = $this->_getTable();
+
+        $row = $table->find((int) $id)
+                     ->current();
+
+        if (!$row) {
+            $this->_throwException('The requested row could not be loaded.');
+        }
+
+        return $row;
+    }
+    
+    /**
+     * Get the table for this model
+     *
+     * @return Zym_Db_Table_Abstract
+     */
+    protected function _getTable()
+    {
+        if (!$this->_table) {
+            $this->_throwException('No table instance set.');
+        }
+
+        return $this->_table;
+    }
+    
+    /**
+     * Process the form after it's been succesfully validated
+     *
+     */
+    protected function _processValidForm()
+    {
+        $table = $this->_getTable();
+
+        $formValues = $this->_getForm()->getValues();
+
+        if (!empty($formValues[$this->_getPrimaryIdKey()])) {
+            $row = $this->_getRow($this->_getPrimaryId());
+        } else {
+            $row = $table->createRow();
+        }
+
+        foreach ($formValues as $key => $value) {
+            if (isset($row->$key) && !$table->isIdentity($key)) {
+                $row->$key = $value;
+            }
+        }
+
+        $row->save();
+
+        $this->_goto($this->_getBrowseAction());
+    }
+
+    /**
+     * Set the table
+     *
+     * @param Zym_Db_Table_Abstract $table
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setTable(Zym_Db_Table_Abstract $table)
+    {
+        $this->_table = $table;
+
+        return $this;
+    }
+    
+    /**
+     * Set the browse action
+     *
+     * @param string $action
+     * @return Zym_Controller_Action_Crud_Abstract
+     */
+    protected function _setBrowseAction($action)
+    {
+        $this->_browseAction = $action;
+
+        return $this;
+    }
+
+    /**
+     * Throw an exception
+     *
+     * @param string $message
+     * @throws Zym_Controller_Action_Exception
+     */
+    protected function _throwException($message)
+    {
+        /**
+         * @see Zym_Controller_Action_Exception
+         */
+        require_once 'Zym/Controller/Action/Exception.php';
+
+        throw new Zym_Controller_Action_Exception($message);
+    }
+    
     /**
      * Add or edit a model
      */
@@ -463,49 +436,28 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         $this->view->form = $form;
     }
-
+    
     /**
-     * Check if a special submit button is used and act accordingly.
-     * @TODO make this nicer...
+     * Browse through your models
      */
-    protected function _handlePostAction()
+    public function browseAction()
     {
-        $postData = $this->getRequest()->getPost();
+        $range = (int) $this->_getParam($this->_rangeParam, $this->_defaultPageRange);
+        $page  = (int) $this->_getParam($this->_pageParam, $this->_defaultPageNumber);
 
-        switch (true) {
-            case array_key_exists('_cancel', $postData);
-                $this->_goto($this->_getBrowseAction());
-                break;
+        $paginator = Zend_Paginator::factory($this->_getBrowseQuery());
+
+        if ($range > 0) {
+            $paginator->setPageRange($range);
         }
+
+        if ($page > 0) {
+            $paginator->setCurrentPageNumber($page);
+        }
+
+        $this->view->paginator = $paginator;
     }
-
-    /**
-     * Process the form after it's been succesfully validated
-     *
-     */
-    protected function _processValidForm()
-    {
-        $table = $this->_getTable();
-
-        $formValues = $this->_getForm()->getValues();
-
-        if (!empty($formValues[$this->_getPrimaryIdKey()])) {
-            $row = $this->_getRow($this->_getPrimaryId());
-        } else {
-            $row = $table->createRow();
-        }
-
-        foreach ($formValues as $key => $value) {
-            if (isset($row->$key) && !$table->isIdentity($key)) {
-                $row->$key = $value;
-            }
-        }
-
-        $row->save();
-
-        $this->_goto($this->_getBrowseAction());
-    }
-
+    
     /**
      * Delete a model
      */
@@ -523,5 +475,37 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
         }
 
         $this->_goto($this->_getBrowseAction());
+    }
+    
+    /**
+     * Index action. Forward to the browse action
+     */
+    public function indexAction()
+    {
+        $this->_forward($this->_getBrowseAction());
+    }
+    
+    /**
+     * Allows this to work when setDefaultAction() has been set to something other than 'index'
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $front = Zend_Controller_Front::getInstance();
+        if ($this->getRequest()->getActionName() == $front->getDefaultAction() && $this->getRequest()->getActionName() != 'index') {
+            $this->_forward($this->_getBrowseAction());
+        }
+    }
+    
+    /**
+     * View a model if it exists
+     */
+    public function viewAction()
+    {
+        $id = $this->_getPrimaryId();
+        $row = $this->_getRow($id);
+
+        $this->view->row = $row;
     }
 }
