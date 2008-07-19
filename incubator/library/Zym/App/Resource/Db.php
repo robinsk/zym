@@ -36,7 +36,7 @@ require_once 'Zend/Registry.php';
 
 /**
  * Database
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -52,7 +52,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_dbAdapter = array();
-    
+
     /**
      * Default config
      *
@@ -66,30 +66,30 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
                 )
             )
         ),
-        
+
         Zym_APP::ENV_DEFAULT => array(
             'default_config' => array(
                 'adapter' => 'Mysqli',
-            
+
                 'registry' => array(
                     'disabled' => false,
                     'key' => 'db'
                 ),
-                
+
                 'set_default_adapter' => array(
                     'Zend_Db_Table_Abstract'
                 ),
-                
+
                 'profiler' => array(
                     'enabled' => false,
-                    'class' => null,
-                    'filter' => array(
+                    'class'   => null,
+                    'filter'  => array(
                         'elapsed_secs' => null,
-                        'query_type' => null
+                        'query_type'   => null
                     )
                 )
             ),
-            
+
             'connection' => array()
         )
     );
@@ -108,27 +108,27 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
 
             // TODO: Cleanup config
             // Sigh, bad code in Zend_Db_Adapter_Abstract... we cannot have an empty string for profile class
-            
+
             // Create db adapter
             $db = Zend_Db::factory($dbConfig->get('adapter'), $dbConfig->toArray());
-            
+
             // Setup profiler
             $this->_setupProfiler($dbConfig->get('profiler'), $db);
-            
+
             // Setup tables
             $this->_setupTables($dbConfig, $db);
 
             // Make sure db keys don't already exist, else add numbers to them such as db-2, db-3
             $dbKey = $this->_makeDbKey($dbConfig->get('registry')->get('key'));
-            
+
             // Store db obj
             $this->setAdapter($db, $dbKey);
-            
+
             // Pass to internal registry
             $this->getRegistry()->set($dbKey, $db);
-            
+
             // Determine if we should save the db adapter in the registry
-            $dbRegistryDisabled = (isset($dbConfig->get('registry')->disabled) && $dbConfig->get('registry')->get('disabled') === '') 
+            $dbRegistryDisabled = (isset($dbConfig->get('registry')->disabled) && $dbConfig->get('registry')->get('disabled') === '')
                                     || $dbConfig->get('registry')->get('disabled') == true;
             if (!$dbRegistryDisabled) {
                 // Save in registry
@@ -136,7 +136,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
             }
         }
     }
-    
+
     /**
      * Set the database adapter
      *
@@ -157,7 +157,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
 
         return $this;
     }
-    
+
     /**
      * Get the database adapter
      *
@@ -173,10 +173,10 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
         } else {
             $db = reset($this->_dbAdapter[$matches[0]]);
         }
-        
+
         return $db;
     }
-    
+
     /**
      * Get matches for an adapter id
      *
@@ -190,7 +190,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
         preg_match('/(.*)-(\d*)/', $id, $matches);
         return $matches;
     }
-    
+
     /**
      * Make a db key
      *
@@ -217,10 +217,10 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
         } else {
             $key = $id;
         }
-        
+
         return $key;
     }
-    
+
     /**
      * Setup profiler
      *
@@ -231,19 +231,19 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
     {
         // Get profiler obj
         $profiler = $db->getProfiler();
-        
+
         // Handle profiler elapsed secs filter
         if ($profilerConfig->get('filter')->get('elapsed_secs')) {
             $profiler->setFilterElapsedSecs($profilerConfig->get('filter')->get('elapsed_secs'));
         }
-        
+
         // Handle profiler query type filter
         if ($profilerConfig->get('filter')->get('query_type')) {
-            // TODO: Remove eval() hack used for logical OR of values 
+            // TODO: Remove eval() hack used for logical OR of values
             $profiler->setFilterQueryType(eval("return {$profilerConfig->get('filter')->get('query_type')};"));
         }
     }
-    
+
     /**
      * Setup tables
      *
@@ -256,11 +256,11 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
         $tableDefaultAdapters = (is_string($dbConfig->get('set_default_adapter')))
                                 ? $dbConfig->get('set_default_adapter')
                                 : $dbConfig->get('set_default_adapter')->toArray();
-                                
+
         foreach ((array) $tableDefaultAdapters as $class) {
             call_user_func_array(array($class, 'setDefaultAdapter'), array($db));
         }
-        
+
         // Set metadata cache instance
         // TODO: Zend_Db_Table_Abstract::setDefaultMetadataCache();
     }

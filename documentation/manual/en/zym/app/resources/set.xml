@@ -7,7 +7,19 @@
         Zym includes basic resources required to bootstrap a project.
     </para>
     
+    <note>
+        <title>Note about config file examples></title>
+        
+        <para>
+            Config file examples are provided in XML form and lack the general config
+            environment skeleton to reduce redundancy. See 
+            <link xlink:href="#zym.app.configuration.example.configFileSkeleton" /> for more
+            info.
+        </para>
+    </note>
+    
     <xi:include href="set/autoload.xml" />
+    <xi:include href="set/db.xml" />
     <xi:include href="set/cache.xml" />
     <xi:include href="set/controller.xml" />
     <xi:include href="set/json.xml" />

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connection>
+    <site>
+        <adapter>PDO_MYSQL</adapter>
+        <dbname>app_site</dbname>
+    </site>
+    <forum>
+        <adapter>Mysqli</adapter>
+        <dbname>app_forum</dbname>
+        <registry>
+            <key>db-forum</key>
+        </registry>
+        <set_default_adapter>
+            <adapter>Forum_Db_Table_Abstract</adapter>
+        </set_default_adapter>
+    </forum>
+</connection>

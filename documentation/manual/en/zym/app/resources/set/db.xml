@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.app.resources.set.db" version="5.0">
+    <title>Db Resource</title>
+
+    <para>
+        This resource sets up <classname>Zend_Db</classname> and can support
+        single or multi-db connections. The default_config element is used
+        to supply defaults for all db connections. It is also a template for
+        a single db connection config. Each connection config supports config
+        elements from <code>Zend_Db::factory()</code>. See the <code>Zend_Db</code>
+        factory usage section with <code>Zend_Config</code> for more info.
+    </para>
+    
+    <note>
+        <title>Config Inheritance</title>
+        
+        <para>
+            Because this resource supports handling of multiple connections, each
+            connection config inherits from the "default_config" element instead
+            of from its name like in other resources.
+        </para>
+    </note>
+    
+    <example xml:id="zym.app.resources.set.db.example.single">
+        <title>Single-DB Connection Config Example</title>
+        
+        <para>
+            In this example, the standard options from <classname>Zend_Db::factory()</classname>
+            are set and the registry key to set the adapter instance to is set to "Db-1".
+            From the application you can retrieve the object via <code>$db = Zend_Registry::get('Db-1')</code>.
+            This connection inherits all configs from the "default_config" element.
+        </para>
+        
+        <programlisting role="php"><xi:include href="db/example/single.xml" parse="text" /></programlisting>        
+    </example>
+    
+    <example xml:id="zym.app.resources.set.db.example.multi">
+        <title>Multi-DB Connection Config Example</title>
+        
+        <para>
+            
+        </para>
+        
+        <programlisting role="php"><xi:include href="db/example/multi.xml" parse="text" /></programlisting>    
+    </example>
+    
+    <table xml:id="zym.app.resources.set.db.options">
+        <title>Db Resource Options</title>
+
+        <tgroup cols="2">
+            <thead>
+                <row>
+                    <entry>Key</entry>
+                    <entry>Default</entry>
+                    <entry>Description</entry>
+                </row>
+            </thead>
+            
+            <tbody>
+                <row>
+                    <entry>default_config.adapter</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Mysqli</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Default DB adapter
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.registry.disabled</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Disable setting of db adapter to the registry
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.registry.key</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>db</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Registry key to set adapter to.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.set_default_adapter</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>Zend_Db_Table_Abstract</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Set adapter to <code>Zend_Db_Table_Abstract::setDefaultAdapter()</code>.
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.profiler.enabled</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>development</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Enabled the DB profiler
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.profiler.enabled</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>false</entry>
+                            </row>
+                            <row>
+                                <entry>development</entry>
+                                <entry>true</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Enabled the DB profiler
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.profiler.class</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Profiler class
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.profiler.filter.elapsed_secs</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Elapsed seconds filter (<code>setFilterElapsedSecs()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>default_config.profiler.filter.query_type</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry></entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Elapsed seconds filter (<code>setFilterQueryType()</code>)
+                    </entry>
+                </row>
+                <row>
+                    <entry>connection</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array of db connection configs in key/value form. Key being
+                        an identifier and value being the 
+                    </entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </table>
+</section>
