@@ -66,7 +66,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @var string
      */
-    protected $_module = 'default';
+    protected $_module = null;
     
     /**
      * Params to use when assembling URL
@@ -119,29 +119,21 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
         if (!$this->_active) {
             $reqParams = Zend_Controller_Front::getInstance()
                             ->getRequest()->getParams();
-            
-            /*
-            $myParams = array_merge($this->getParams(), array(
-                'module'     => $this->getModule(),
-                'controller' => $this->getController(),
-                'action'     => $this->getAction()
-            ));
-            */
-            
-            ///*
+
             $myParams = $this->_params;
+            
             if (null !== $this->_module) {
                 $myParams['module'] = $this->_module;
             }
+            
             if (null !== $this->_controller) {
                 $myParams['controller'] = $this->_controller;
             }
+            
             if (null !== $this->_action) {
                 $myParams['action'] = $this->_action;
             }
-            //*/
             
-            // TODO: verify that this is desired behaviour
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
                 count($myParams)) {
                 return $this->_active = true;

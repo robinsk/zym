@@ -247,7 +247,8 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     public function setOptions(array $options)
     {
         foreach ($options as $key => $value) {
-            if (is_string($key) && !empty($key) && $value !== null) {
+            //if (is_string($key) && !empty($key) && $value !== null) {
+            if (is_string($key) && !empty($key)) {
                 $method = 'set' . str_replace(' ', '',
                                     ucfirst(str_replace('_', ' ', $key)));
                 if ($method != 'setOptions' && $method != 'setConfig' &&
@@ -505,7 +506,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function isActive($recursive = false)
     {
-        if ((bool) $recursive) {
+        if ($recursive) {
             if ($this->_active) {
                 return true;
             } else {
