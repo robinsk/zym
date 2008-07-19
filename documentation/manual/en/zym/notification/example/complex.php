@@ -5,7 +5,7 @@ class MyClass
     
     public function __construct()
     {
-        $this->_notification = Zym_Notification::get();
+        $this->_notification = Zym_Message::get();
         $this->_notification->attach($this, 'testEvent');
     }
     
@@ -14,7 +14,7 @@ class MyClass
         $this->_notification->detach($this);
     }
     
-    public function notify(Zym_Notification $notification)
+    public function notify(Zym_Message $notification)
     {
         if ('testEvent' == $notification->getName()) {
             // Assume Zend_Log instance

@@ -9,29 +9,29 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
- * @see Zym_Notification_Message
+ * @see Zym_Message
  */
-require_once 'Zym/Notification/Message.php';
+require_once 'Zym/Message.php';
 
 /**
- * @see Zym_Notification_Registration
+ * @see Zym_Message_Registration
  */
-require_once 'Zym/Notification/Registration.php';
+require_once 'Zym/Message/Registration.php';
 
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Notification
+class Zym_Message_Dispatcher
 {
     /**
      * The default callback method name
@@ -72,7 +72,7 @@ class Zym_Notification
      * Get a notification instance from the internal registry
      *
      * @param string name
-     * @return Zym_Notification
+     * @return Zym_Message
      */
     public static function get($namespace = 'default')
     {
@@ -129,7 +129,7 @@ class Zym_Notification
      * @param string $name
      * @param object $sender
      * @param array $data
-     * @return Zym_Notification
+     * @return Zym_Message
      */
     public function post($name, $sender = null, array $data = array())
     {
@@ -149,7 +149,7 @@ class Zym_Notification
             }
         }
 
-        $notification = new Zym_Notification_Message($name, $sender, $data);
+        $notification = new Zym_Message($name, $sender, $data);
         $notified = array();
 
         foreach ($toNotify as $event) {
@@ -160,21 +160,21 @@ class Zym_Notification
                     $observer = $registration->getObserver();
                     $callback = $registration->getCallback();
 
-                    if ($observer instanceof Zym_Notification_Interface &&
+                    if ($observer instanceof Zym_Message_Interface &&
                         $callback == $this->_defaultCallback) {
 
                         $observer->notify($notification);
                     } else {
                         if (!method_exists($observer, $callback)) {
                             /**
-                             * @see Zym_Notification_Exception_MethodNotImplemented
+                             * @see Zym_Message_Exception_MethodNotImplemented
                              */
-                            require_once 'Zym/Notification/Exception/MethodNotImplemented.php';
+                            require_once 'Zym/Message/Exception/MethodNotImplemented.php';
 
                             $message = sprintf('Method "%s" is not implemented in class "%s"',
                                                $callback, get_class($observer));
 
-                            throw new Zym_Notification_Exception_MethodNotImplemented($message);
+                            throw new Zym_Message_Exception_MethodNotImplemented($message);
                         }
 
                         $observer->$callback($notification);
@@ -192,7 +192,7 @@ class Zym_Notification
      * @param object $observer
      * @param string|array $events
      * @param string $callback
-     * @return Zym_Notification
+     * @return Zym_Message
      */
     public function attach($observer, $events = null, $callback = null)
     {
@@ -215,7 +215,7 @@ class Zym_Notification
             $this->_events[$event] = $event;
 
             if (!$this->hasObserver($observerHash, $event)) {
-                $registration = new Zym_Notification_Registration($observer, $callback);
+                $registration = new Zym_Message_Registration($observer, $callback);
 
                 $this->_observers[$event][$observerHash] = $registration;
             }
@@ -229,7 +229,7 @@ class Zym_Notification
      *
      * @param object $observer
      * @param string|array $event
-     * @return Zym_Notification
+     * @return Zym_Message
      */
     public function detach($observer, $events = null)
     {
@@ -260,7 +260,7 @@ class Zym_Notification
      * If no event is specified all events will be cleared.
      *
      * @param string $event
-     * @return Zym_Notification
+     * @return Zym_Message
      */
     public function reset($event = null)
     {

@@ -25,7 +25,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zym/Paginate/Iterator.php';
 
 /**
- * Test suite for Zym_Notification_Message
+ * Test suite for Zym_Message
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests

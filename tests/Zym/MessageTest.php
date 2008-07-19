@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -20,20 +20,20 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * @see Zym_Notification_Message
+ * @see Zym_Message
  */
-require_once 'Zym/Notification/Message.php';
+require_once 'Zym/Message.php';
 
 /**
- * Test suite for Zym_Notification_Message
+ * Test suite for Zym_Message
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
+class Zym_MessageTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test data
@@ -59,7 +59,7 @@ class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * Message instance
      *
-     * @var Zym_Notification_Message
+     * @var Zym_Message
      */
     private $_message;
 
@@ -68,8 +68,7 @@ class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_message = new Zym_Notification_Message(
-                                 $this->_mockName, $this->_mockSender, $this->_mockData);
+        $this->_message = new Zym_Message($this->_mockName, $this->_mockSender, $this->_mockData);
     }
     
     /**
@@ -81,7 +80,7 @@ class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Zym_Notification_Message->getData()
+     * Tests Zym_Message->getData()
      */
     public function testGetData()
     {
@@ -90,7 +89,7 @@ class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests Zym_Notification_Message->getName()
+     * Tests Zym_Message->getName()
      */
     public function testGetName()
     {
@@ -99,7 +98,7 @@ class Zym_Notification_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests Zym_Notification_Message->getSender()
+     * Tests Zym_Message->getSender()
      */
     public function testGetSender()
     {

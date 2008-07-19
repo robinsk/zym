@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -20,23 +20,23 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * @see Zym_Notification_Registration
+ * @see Zym_Message_Registration
  */
-require_once 'Zym/Notification/Registration.php';
+require_once 'Zym/Message/Registration.php';
 
 /**
- * Test for Zym_Notification_Registration
+ * Test for Zym_Message_Registration
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Notification_RegistrationTest extends PHPUnit_Framework_TestCase
+class Zym_Message_RegistrationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Zym_Notification_Registration
+     * @var Zym_Message_Registration
      */
     private $_registration;
     
@@ -45,7 +45,7 @@ class Zym_Notification_RegistrationTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_registration = new Zym_Notification_Registration('foo', 'bar');
+        $this->_registration = new Zym_Message_Registration('foo', 'bar');
     }
     
     /**
@@ -57,7 +57,7 @@ class Zym_Notification_RegistrationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Zym_Notification_Registration->getCallback()
+     * Tests Zym_Message_Registration->getCallback()
      */
     public function testGetCallback()
     {
@@ -65,7 +65,7 @@ class Zym_Notification_RegistrationTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests Zym_Notification_Registration->getObserver()
+     * Tests Zym_Message_Registration->getObserver()
      */
     public function testGetObserver()
     {

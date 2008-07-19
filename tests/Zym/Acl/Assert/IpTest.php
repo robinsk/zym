@@ -9,7 +9,7 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -34,7 +34,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
  *
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */

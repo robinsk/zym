@@ -9,24 +9,23 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
+ * @see Zym_Exception
+ */
+require_once 'Zym/Exception.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_Notification_Interface
+class Zym_Message_Exception_MethodNotImplemented extends Zym_Exception
 {
-    /**
-     * Notify the observer by passing the Zym_Notification instance
-     *
-     * @param Zym_Notification_Message $notification
-     */
-    public function notify(Zym_Notification_Message $notification);
 }

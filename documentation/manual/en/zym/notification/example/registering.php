@@ -1,3 +1,3 @@
 <?php
-$notification = Zym_Notification::get();
+$notification = Zym_Message::get();
 $notification->attach($theReceivingObject, testEvent, customMethod );

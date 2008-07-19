@@ -9,7 +9,7 @@
  *
  * @author     Geoffrey Tran
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -24,11 +24,11 @@ require_once 'Zym/PhpUnit/Framework/TestSuite.php';
  *
  * @author     Geoffrey Tran
  * @category   Zym_Tests
- * @package    Zym_Notification
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_NotificationSuite extends Zym_PhpUnit_Framework_TestSuite 
+class Zym_MessageSuite extends Zym_PhpUnit_Framework_TestSuite 
 {
     /**
      * Construct
