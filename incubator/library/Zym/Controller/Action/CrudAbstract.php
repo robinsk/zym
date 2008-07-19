@@ -65,6 +65,20 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected $_browseQuery = null;
     
     /**
+     * The column by which the results are ordered by, by default
+     *
+     * @var string
+     */
+    protected $_defaultOrderColumn = null;
+    
+    /**
+     * The direction in which the results are ordered in, by default
+     *
+     * @var string
+     */
+    protected $_defaultOrderDirection = 'ASC';
+    
+    /**
      * Default page number for pagination
      *
      * @var int
@@ -134,12 +148,14 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      */
     protected function _appendOrderByClause(Zend_Db_Select $query)
     {
-        $order = strtoupper($this->_getParam($this->_orderKey, 'ASC'));
-        $by = $this->_getParam($this->_orderByKey, $this->_primaryIdKey);
+        $order   = strtoupper($this->_getParam($this->_orderKey, $this->_defaultOrderDirection));
+        $orderBy = $this->_getParam($this->_orderByKey, $this->_defaultOrderColumn);
         
-        if (in_array($by, $this->_getTable()->info('cols'))) {
-            $orderBy = $by . ' ' . $order;
-            $query->order($orderBy);
+        if (in_array($orderBy, $this->_getTable()->info('cols'))) {
+            $this->view->order   = $order;
+            $this->view->orderBy = $orderBy;
+            
+            $query->order($orderBy . ' ' . $order);
         }
         
         return $query;
@@ -502,6 +518,8 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      */
     public function init()
     {
+        $this->_defaultOrderColumn = $this->_getPrimaryIdKey();
+        
         $front = Zend_Controller_Front::getInstance();
         if ($this->getRequest()->getActionName() == $front->getDefaultAction() && $this->getRequest()->getActionName() != 'index') {
             $this->_forward($this->_getBrowseAction());
