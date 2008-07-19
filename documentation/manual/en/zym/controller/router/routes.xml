@@ -3,6 +3,5 @@
     xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.router.routes" version="5.0">
     <title>Routes</title>
 
-    <xi:include href="routes/httphost.xml" />
     <xi:include href="routes/httpquery.xml" />
 </section>

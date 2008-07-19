@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.notification" version="5.0">
-    <title>Zym_Notification</title>
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.message" version="5.0">
+    <title>Zym_Message</title>
 
     <para>
-        <classname>Zym_Notification</classname> provides an infrastructure to relay messages 
+        <classname>Zym_Message</classname> provides an infrastructure to relay messages 
         between objects that don't necessarily know each other.
         This provides a loose coupling between components and makes your app more flexible.
     </para>
 
-    <section xml:id="zym.notification.registering">
-        <title>Registering a notification</title>
+    <section xml:id="zym.message.registering">
+        <title>Registering a message</title>
 
         <para>
-            Registering to a notification is done at <code>Zym_Notification</code>:
+            Registering to a message is done at <code>Zym_Message</code>:
         </para>
 
-        <example xml:id="zym.notification.registering.example">
-            <title>Registering a notification</title>
-            <programlisting role="php"><xi:include href="notification/example/registering.php" parse="text" /></programlisting>
+        <example xml:id="zym.message.registering.example">
+            <title>Registering a message</title>
+            <programlisting role="php"><xi:include href="message/example/registering.php" parse="text" /></programlisting>
         </example>
 
         <para>
-            In this snippet, an object is attached to the testEvent notification.
-            All posts that are sent to the ‘testEvent’ notification will then be passed to
+            In this snippet, an object is attached to the testEvent message.
+            All posts that are sent to the ‘testEvent’ message will then be passed to
             the <code>$receivingObject</code>. By default the notifications will be posted to the
             <code>notify()</code> method. An optional third parameter in the <code>attach()</code> method allows
             you to use a custom method.
@@ -34,26 +34,26 @@
             <code>customMethod()</code> method in <code>$theReceivingObject</code>. There is a special attach
             method called <code>attachCatchAll()</code>. An object that is registered to the
             catch-all will receive all notifications. If you want to unregister an
-            object from the notification center you can call the <code>detach()</code> method. This
+            object from the message dispatcher you can call the <code>detach()</code> method. This
             method takes one mandatory and one optional argument. The first argument is
             the object you want to detach. The second, optional, argument is the
-            notification that you want to detach the object from. If the second argument
-            is left blank, the notification center will remove the object from all
+            message that you want to detach the object from. If the second argument
+            is left blank, the message dispatcher will remove the object from all
             notifications. Don’t forget to detach an object when it’s destroyed! See the next section for an example
             of how to make sure this gets done.
         </para>
 
-        <example xml:id="zym.notification.example.complex">
+        <example xml:id="zym.message.example.complex">
             <title>Attaching, Detaching and Receiving Notifications</title>
-            <programlisting role="php"><xi:include href="notification/example/complex.php" parse="text" /></programlisting>
+            <programlisting role="php"><xi:include href="message/example/complex.php" parse="text" /></programlisting>
         </example>
 
         <para>
             In the example above the MyClass instance is automatically registered
-            to the ‘testEvent’ notification at instantiation. If and when the
-            ‘testEvent’ notification is sent, the <code>notify()</code> method will receive it so it
+            to the ‘testEvent’ message at instantiation. If and when the
+            ‘testEvent’ message is sent, the <code>notify()</code> method will receive it so it
             can be processed. Note the <code>__destruct()</code> method which explicitly detaches the
-            object from the notification center.
+            object from the message dispatcher.
         </para>
     </section>
 </chapter>

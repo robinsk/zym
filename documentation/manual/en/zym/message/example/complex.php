@@ -5,7 +5,7 @@ class MyClass
     
     public function __construct()
     {
-        $this->_notification = Zym_Message::get();
+        $this->_notification = Zym_Message_Dispatcher::get();
         $this->_notification->attach($this, 'testEvent');
     }
     

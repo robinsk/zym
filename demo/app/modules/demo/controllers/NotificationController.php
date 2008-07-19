@@ -17,9 +17,9 @@
 require_once 'Zym/Controller/Action/Abstract.php';
 
 /**
- * @see Zym_Notification
+ * @see Zym_Message_Dispatcher
  */
-require_once 'Zym/Notification.php';
+require_once 'Zym/Message/Dispatcher.php';
 
 /**
  * @see App_Demo_Notification
@@ -31,7 +31,7 @@ require_once 'App/Demo/Notification.php';
  * @license http://www.zym-project.com/license New BSD License
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Demo_NotificationController extends Zym_Controller_Action_Abstract 
+class Demo_MessageController extends Zym_Controller_Action_Abstract 
 {
     /**
      * init
@@ -41,7 +41,7 @@ class Demo_NotificationController extends Zym_Controller_Action_Abstract
     public function init()
     {
         // Setup notification
-        $this->_setupNotification();    
+        $this->_setupMessageDispatcher();    
     }
     
     /**
