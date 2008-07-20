@@ -171,6 +171,57 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
     }
     
     /**
+     * Renders the inner-most sub menu for the active page in the $container
+     *
+     * @param  Zym_Navigation_Container $container  [optional] container to
+     *                                              render sub menu for,
+     *                                              defaults to what is
+     *                                              registered in the container
+     * @param  string|int               $indent     [optional] indentation
+     * @reutrn string
+     */
+    public function renderSubMenu(Zym_Navigation_Container $container = null,
+                                  $indent = null)
+    {
+        
+        if (null === $container) {
+            $container = $this->getNavigation();
+        }
+        
+        // stuff to use in the two steps below
+        $found = false;
+        $depth = -1;
+        $iterator = new RecursiveIteratorIterator($container,
+            RecursiveIteratorIterator::CHILD_FIRST);
+        
+        // find the deepest active page
+        foreach ($iterator as $page) {
+            if (!$this->_accept($page)) {
+                // page is not accepted
+                continue;
+            }
+            if ($page->isActive() && $iterator->getDepth() > $depth) {
+                $found = $page;
+                $depth = $iterator->getDepth();
+            }
+        }
+        
+        if ($found) {
+            if (count($found)) {
+                return $this->renderMenu($found, $indent, false);
+            }
+            
+            $parent = $found->getParent();
+            if ($parent instanceof Zym_Navigation_Page) {
+                
+                return $this->renderMenu($parent, $indent, false);
+            }
+        }
+        
+        return '';
+    }
+    
+    /**
      * Renders the registered container as a ul list
      * 
      * @param string|int $indent  [optional]
