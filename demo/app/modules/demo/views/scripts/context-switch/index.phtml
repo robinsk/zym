@@ -7,6 +7,7 @@
             url: "<?= $this->simpleUrl('view'); ?>",
             load: function(response){
                 dojo.byId('ajaxContext').innerHTML = response;
+                return response;
             },
             headers: { "X-Requested-With": "XMLHttpRequest" }
         });
@@ -16,6 +17,7 @@
             url: "<?= $this->simpleUrl('view', null, null, array('format' => 'json')); ?>",
             load: function(response){
                 dojo.byId('ajaxContext.json').innerHTML = response;
+                return response;
             },
             headers: { "X-Requested-With": "XMLHttpRequest" }
         });

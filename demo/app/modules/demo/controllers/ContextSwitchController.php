@@ -29,7 +29,7 @@ class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
      * @var array
      */
     public $ajaxable = array(
-        'view' => array('html', 'json')
+        'view' => array('html')
     );
 
     /**
