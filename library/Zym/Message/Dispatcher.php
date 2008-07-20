@@ -174,7 +174,7 @@ class Zym_Message_Dispatcher
                             $message = sprintf('Method "%s" is not implemented in class "%s"',
                                                $callback, get_class($observer));
 
-                            throw new Zym_Message_Exception_MethodNotImplemented($message);
+                            throw new Zym_Message_Exception($message);
                         }
 
                         $observer->$callback($notification);

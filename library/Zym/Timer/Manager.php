@@ -72,7 +72,7 @@ class Zym_Timer_Manager implements Countable
     /**
      * Add a timer instance
      * 
-     * @throws Zym_Timer_Manager_Exception_TimerExists if one already exists
+     * @throws Zym_Timer_Exception if one already exists
      *
      * @param string          $name
      * @param Zym_Timer_Timer $timer

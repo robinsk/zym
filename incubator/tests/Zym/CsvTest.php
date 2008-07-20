@@ -36,7 +36,7 @@ class Zym_CsvTest extends PHPUnit_Framework_TestCase
     {
         try {
             $test = new Zym_Csv('FileDoesntExists.csv');
-        } catch (Zym_Csv_Exception_FileNotExists $e) {
+        } catch (Zym_Csv_Exception $e) {
             $this->assertTrue($e != null);
         }
 

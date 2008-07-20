@@ -187,8 +187,8 @@ class Zym_Message_DispatcherTest extends PHPUnit_Framework_TestCase
         try {
             $this->_dispatcher->post('foo', 'bar', array('baz'));
             $this->fail('Didn\'t throw exception');
-        } catch (Zym_Message_Exception_MethodNotImplemented $e) {
-            $this->assertType('Zym_Message_Exception_MethodNotImplemented', $e);
+        } catch (Zym_Message_Exception $e) {
+            $this->assertType('Zym_Message_Exception', $e);
         }
     }
 

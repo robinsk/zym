@@ -69,7 +69,7 @@ class Zym_Csv implements Iterator
      *
      * @param string $file
      * @param string $delimiter
-     * @throws Zym_Csv_Exception_FileNotReadable
+     * @throws Zym_Csv_Exception
      */
     public function __construct($file, $delimiter = ',', $readHeaders = true)
     {
