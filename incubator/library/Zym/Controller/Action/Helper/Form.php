@@ -203,10 +203,10 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         
         if (!class_exists($className, false)) {
             /**
-             * @see Zym_Controller_Action_Helper_Form_Exception_FormNotFound
+             * @see Zym_Controller_Action_Helper_Form_Exception
              */
-            require_once 'Zym/Controller/Action/Helper/Form/Exception/FormNotFound.php';
-            throw new Zym_Controller_Action_Helper_Form_Exception_FormNotFound($className, $path);
+            require_once 'Zym/Controller/Action/Helper/Form/Exception.php';
+            throw new Zym_Controller_Action_Helper_Form_Exception($className, $path);
         }
         
         return $className;
@@ -342,10 +342,10 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         $moduleDir = $this->getFrontController()->getControllerDirectory($module);
         if ((null === $moduleDir) || is_array($moduleDir)) {
             /**
-             * @see Zym_Controller_Action_Helper_Form_Exception_ModuleNotFound
+             * @see Zym_Controller_Action_Helper_Form_Exception
              */
-            require_once 'Zym/Controller/Action/Helper/Form/Exception/ModuleNotFound.php';
-            throw new Zym_Controller_Action_Helper_Form_Exception_ModuleNotFound();
+            require_once 'Zym/Controller/Action/Helper/Form/Exception.php';
+            throw new Zym_Controller_Action_Helper_Form_Exception();
         }
         
         $this->_moduleDir = dirname($moduleDir);

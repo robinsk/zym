@@ -167,9 +167,9 @@ class Zym_Message_Dispatcher
                     } else {
                         if (!method_exists($observer, $callback)) {
                             /**
-                             * @see Zym_Message_Exception_MethodNotImplemented
+                             * @see Zym_Message_Exception
                              */
-                            require_once 'Zym/Message/Exception/MethodNotImplemented.php';
+                            require_once 'Zym/Message/Exception.php';
 
                             $message = sprintf('Method "%s" is not implemented in class "%s"',
                                                $callback, get_class($observer));

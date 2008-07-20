@@ -20,6 +20,11 @@
 require_once 'Zend/Config.php';
 
 /**
+ * @see Zym_Navigation_Page
+ */
+require_once 'Zym/Navigation/Page.php';
+
+/**
  * Zym_Navigation_Container
  * 
  * Container class for Zym_Navigation_Page classes.  
@@ -406,8 +411,3 @@ abstract class Zym_Navigation_Container
         return count($this->_order);
     }
 }
-
-/**
- * @see Zym_Navigation_Page
- */
-require_once 'Zym/Navigation/Page.php';

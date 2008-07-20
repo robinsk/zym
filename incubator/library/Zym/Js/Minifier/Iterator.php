@@ -139,10 +139,10 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
                         
                         case null:
                             /**
-                             * @see Zym_Js_Minifier_Exception_UnterminatedComment
+                             * @see Zym_Js_Minifier_Exception
                              */
-                            require_once 'Zym/Js/Minifier/Exception/UnterminatedComment.php';
-                            throw new Zym_Js_Minifier_Exception_UnterminatedComment(sprintf(
+                            require_once 'Zym/Js/Minifier/Exception.php';
+                            throw new Zym_Js_Minifier_Exception(sprintf(
                              'Unterminated Comment at %s characters in', $this->key()
                             ));
                             break;

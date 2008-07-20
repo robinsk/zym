@@ -75,20 +75,20 @@ class Zym_Csv implements Iterator
     {
         if (!file_exists($file)) {
             /**
-             * @see Zym_Csv_Exception_FileNotExists
+             * @see Zym_Csv_Exception
              */
-            require_once 'Zym/Csv/Exception/FileNotExists.php';
+            require_once 'Zym/Csv/Exception.php';
 
-            throw new Zym_Csv_Exception_FileNotExists(sprintf('The file "%s" cannot be found.', $file));
+            throw new Zym_Csv_Exception(sprintf('The file "%s" cannot be found.', $file));
         }
 
         if (!is_readable($file)) {
             /**
-             * @see Zym_Csv_Exception_FileNotReadable
+             * @see Zym_Csv_Exception
              */
-            require_once 'Zym/Csv/Exception/FileNotReadable.php';
+            require_once 'Zym/Csv/Exception.php';
 
-            throw new Zym_Csv_Exception_FileNotReadable(sprintf('File "%s" was found, but cannot be read.', $file));
+            throw new Zym_Csv_Exception(sprintf('File "%s" was found, but cannot be read.', $file));
         }
 
         $this->filePointer = fopen($file, 'r');

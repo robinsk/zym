@@ -199,10 +199,10 @@ class Zym_Js_Minifier
     {
         if (!file_exists($file)) {
             /**
-             * @see Zym_Js_Minifier_Exception_FileNotFound
+             * @see Zym_Js_Minifier_Exception
              */
-            require_once 'Zym/Js/Minifier/Exception/FileNotFound.php';
-            throw new Zym_Js_Minifier_Exception_FileNotFound($file);
+            require_once 'Zym/Js/Minifier/Exception.php';
+            throw new Zym_Js_Minifier_Exception($file);
         }
 
         return self::minify(file_get_contents($file));
@@ -275,10 +275,10 @@ class Zym_Js_Minifier
 
                         if (ord($this->_a) <= self::ORD_LF) {
                             /**
-                             * @see Zym_Js_Minifier_Exception_UnterminatedStringLiteral
+                             * @see Zym_Js_Minifier_Exception
                              */
-                            require_once 'Zym/Js/Minifier/Exception/UnterminatedStringLiteral.php';
-                            throw new Zym_Js_Minifier_Exception_UnterminatedStringLiteral(sprintf(
+                            require_once 'Zym/Js/Minifier/Exception.php';
+                            throw new Zym_Js_Minifier_Exception(sprintf(
                               'Unterminated string literal "%s" at char %d', $this->_a, $this->_iterator->key()
                             ));
                         }
@@ -307,10 +307,10 @@ class Zym_Js_Minifier
                             $this->_a       = $this->_iterator->next(true);
                         } else if (ord($this->_a) <= self::ORD_LF) {
                             /**
-                             * @see Zym_Js_Minifier_Exception_UnterminatedRegex
+                             * @see Zym_Js_Minifier_Exception
                              */
-                            require_once 'Zym/Js/Minifier/Exception/UnterminatedRegex.php';
-                            throw new Zym_Js_Minifier_Exception_UnterminatedRegex(sprintf(
+                            require_once 'Zym/Js/Minifier/Exception.php';
+                            throw new Zym_Js_Minifier_Exception(sprintf(
                               'Unterminated regular expression literal "%s" at char %d', $this->_a, $this->_iterator->key()
                             ));
                         }

@@ -215,8 +215,8 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     protected function _validate()
     {
         if (!isset($this->_label)) {
-            require_once 'Zym/Navigation/Page/InvalidException.php';
-            throw new Zym_Navigation_Page_InvalidException('Label is not set');
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception('Label is not set');
         }
     }
     

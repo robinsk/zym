@@ -1,6 +1,6 @@
 <?php
 /**
- * Zym Framework
+ * Zym
  *
  * LICENSE
  *
@@ -9,10 +9,9 @@
  *
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_Db
- * @subpackage Table_Exception
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license    http://www.zym-project.com/license New BSD License
+ * @license    http://www.zym-project.com/license    New BSD License
  */
 
 /**
@@ -23,11 +22,10 @@ require_once 'Zym/Exception.php';
 /**
  * @author     Jurrien Stutterheim
  * @category   Zym
- * @package    Zym_Db
- * @subpackage Table_Exception
+ * @package    Zym_Message
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license    http://www.zym-project.com/license New BSD License
+ * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Db_Table_Exception_ColumnNotInTable extends Zym_Exception
+class Zym_Message_Exception extends Zym_Exception
 {
 }

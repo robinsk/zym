@@ -40,13 +40,13 @@ class Zym_Db_Table_Abstract extends Zend_Db_Table_Abstract
     {
         if (!array_key_exists($column, $this->_metadata)) {
             /**
-             * @see Zym_Db_Table_Exception_ColumnNotInTable
+             * @see Zym_Db_Table_Exception
              */
-            require_once 'Zym/Db/Table/Exception/ColumnNotInTable.php';
+            require_once 'Zym/Db/Table/Exception.php';
 
             $message = sprintf('Specified column "%s" is not in the table', $column);
 
-            throw new Zym_Db_Table_Exception_ColumnNotInTable($message);
+            throw new Zym_Db_Table_Exception($message);
         }
 
         return (bool) $this->_metadata[$column]['IDENTITY'];

@@ -84,10 +84,10 @@ class Zym_Timer_Manager implements Countable
     {
         if ($this->hasTimer($name, $group)) {
             /**
-             * @see Zym_Timer_Manager_Exception_TimerExists
+             * @see Zym_Timer_Exception
              */
-            require_once 'Zym/Timer/Manager/Exception/TimerExists.php';
-            throw new Zym_Timer_Manager_Exception_TimerExists($name, $group);
+            require_once 'Zym/Timer/Exception.php';
+            throw new Zym_Timer_Exception($name, $group);
         }
         
         // Set timer

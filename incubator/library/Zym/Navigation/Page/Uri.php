@@ -45,13 +45,13 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
      * Checks if the page is valid (has required properties)
      *
      * @return void
-     * @throws Zym_Navigation_Page_InvalidException  if page is invalid
+     * @throws Zym_Navigation_Exception  if page is invalid
      */
     protected function _validate()
     {
         if (!isset($this->_uri)) {
-            require_once 'Zym/Navigation/Page/InvalidException.php';
-            throw new Zym_Navigation_Page_InvalidException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception($msg);
         }
         
         parent::_validate();
