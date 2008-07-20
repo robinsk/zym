@@ -32,6 +32,7 @@
     
     <!-- START: Chapters -->
     <xi:include href="zym/controller.xml" />
+    <xi:include href="zym/dto.xml" />
     <xi:include href="zym/paginate.xml" />
     <xi:include href="zym/view.xml" />
     <!-- END: Chapters -->

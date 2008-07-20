@@ -35,7 +35,6 @@
     <xi:include href="zym/array.xml" />
     <xi:include href="zym/cache.xml" />
     <xi:include href="zym/controller.xml" />
-    <xi:include href="zym/dto.xml" />
     <xi:include href="zym/filter.xml" />
     <xi:include href="zym/js.xml" />
     <xi:include href="zym/loader.xml" />
