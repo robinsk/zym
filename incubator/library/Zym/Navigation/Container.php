@@ -20,11 +20,6 @@
 require_once 'Zend/Config.php';
 
 /**
- * @see Zym_Navigation_Page
- */
-require_once 'Zym/Navigation/Page.php';
-
-/**
  * Zym_Navigation_Container
  * 
  * Container class for Zym_Navigation_Page classes.  
@@ -117,6 +112,7 @@ abstract class Zym_Navigation_Container
     public function addPage($page)
     {
         if (is_array($page) || $page instanceof Zend_Config) {
+            require_once 'Zym/Navigation/Page.php';
             $page = Zym_Navigation_Page::factory($page);
         } elseif (!$page instanceof Zym_Navigation_Page) {
             $msg = '$page must be Zym_Navigation_Page|array|Zend_Config';
