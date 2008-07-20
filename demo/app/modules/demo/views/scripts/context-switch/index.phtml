@@ -4,12 +4,11 @@
     dojo.addOnLoad(function(){
         // #ajaxContext
         dojo.xhrGet({
-            url: "<?= $this->simpleUrl('view'); ?>",
+            url: "<?= $this->simpleUrl('view', null, null, array('format' => 'html')); ?>",
             load: function(response){
                 dojo.byId('ajaxContext').innerHTML = response;
                 return response;
-            },
-            headers: { "X-Requested-With": "XMLHttpRequest" }
+            }
         });
 
         // #ajaxContext.json
@@ -18,8 +17,7 @@
             load: function(response){
                 dojo.byId('ajaxContext.json').innerHTML = response;
                 return response;
-            },
-            headers: { "X-Requested-With": "XMLHttpRequest" }
+            }
         });
     });
 //]]>
@@ -61,7 +59,7 @@
         <div>
             <h3>HTML (view.ajax.phtml)</h3>
 
-            <div id="ajaxContext">
+            <div id="ajaxContext" style="border: 1px solid #000;">
                 <p>Unabled to load from ajax.</p>
             </div>
         </div>
@@ -69,7 +67,7 @@
         <div>
             <h3>JSON (serialized view object)</h3>
 
-            <div id="ajaxContext.json">
+            <div id="ajaxContext.json" style="border: 1px solid #000;">
                 <p>Unabled to load from ajax.</p>
             </div>
         </div>

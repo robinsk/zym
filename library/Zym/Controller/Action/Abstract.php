@@ -62,12 +62,16 @@ abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
 
         if (isset($this->ajaxable)) {
             // Init AjaxContexts
-            $this->getHelper('AjaxContext')->initContext();
+            $ajaxContext = $this->getHelper('AjaxContext');
+            $ajaxContext->initContext();
         }
 
         if (isset($this->contexts)) {
-            // Init Contexts
-            $this->getHelper('ContextSwitch')->initContext();
+            // TODO: TEMPORARY FIX FOR ZF-3690
+            if (!isset($ajaxContext) || (isset($ajaxContext) && $ajaxContext->getCurrentContext() === null)) {
+                // Init ContextSwitch
+                $this->getHelper('ContextSwitch')->initContext();
+            }
         }
     }
 
