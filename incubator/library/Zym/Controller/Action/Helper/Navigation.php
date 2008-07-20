@@ -45,25 +45,6 @@ class Zym_Controller_Action_Helper_Navigation
     protected $_container;
     
     /**
-     * Creates navigation helper
-     *
-     */
-    public function __construct()
-    {
-        $this->init();
-    }
-    
-    /**
-     * Api for extending classes
-     *
-     * @return void
-     */
-    public function init()
-    {
-        
-    }
-    
-    /**
      * Sets navigation container to operate on
      *
      * @param  Zym_Navigation_Container $container  container to operate on
@@ -82,19 +63,20 @@ class Zym_Controller_Action_Helper_Navigation
     public function getNavigation()
     {
         if (null === $this->_container) {
-            
+            $this->_container = $this->_getDefaultNavigation();
         }
         
         return $this->_container;
     }
     
     /**
-     * Returns default navigation container
+     * Retrieves default navigation container
      *
-     * @return Zym_Navigation_Container
+     * @return Zym_Navigation
      */
     protected function _getDefaultNavigation()
     {
+        // try to fetch from registry first
         require_once 'Zend/Registry.php';
         if (Zend_Registry::isRegistered('Zym_Navigation')) {
             $nav = Zend_Registry::get('Zym_Navigation');
@@ -102,6 +84,9 @@ class Zym_Controller_Action_Helper_Navigation
                 return $nav;
             }
         }
+        
+        // nothing found, create new container
+        return new Zym_Navigation();
     }
     
     /**
