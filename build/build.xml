@@ -91,24 +91,32 @@
         </delete>
         <delete includeemptydirs="true" failonerror="false">
             <fileset dir="${path.build.bin.export}/documentation/api">
-                <include name="*" />
                 <include name="**" />
             </fileset>
         </delete>
         <delete includeemptydirs="true" failonerror="false">
             <fileset dir="${path.build.bin.export}/documentation/manual">
-                <include name="*" />
                 <include name="**" />
             </fileset>
         </delete>
     </target>
     
     <target name="source.api" depends="source.export, api">
-        <copy file="documentation/api/build" todir="${path.build.export}/documentation/api" />
+        <copy todir="${path.build.export}/documentation/api">
+            <fileset dir="documentation/api/build/HTMLframesExtjsConverter">
+                <include name="*" />
+                <include name="**" />
+            </fileset>
+        </copy>
     </target>
     
     <target name="source.docs" depends="source.export, docs">
-        <copy file="documentation/manual/build/bin" todir="${path.build.export}/documentation/manual" />
+        <copy todir="${path.build.export}/documentation/manual">
+            <fileset dir="documentation/manual/build/bin">
+                <include name="*" />
+                <include name="**" />
+            </fileset>
+        </copy>
     </target>
 
     <target name="api" description="Create API documentation">
