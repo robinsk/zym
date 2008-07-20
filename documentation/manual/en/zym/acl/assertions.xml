@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.acl.assertions" version="5.0">
+    <title>Assertions</title>
+    
+    <para>
+        Assertions are used to check if a condition is met or not. It's common
+        in ACL that access gets denied if an assertion fails. Zym ships with one
+        extra assertion for you to use for securing you applications.
+    </para>
+    
+    <para>
+        The IP-assertion checks if the user's IP-address is available in a
+        custom list of addresses. This is a so-called whitelist check.
+        The IP-address of the user is determined by looking the
+        $_SERVER['REMOTE_ADDR'] variable.
+    </para>
+    
+    <para>
+        The whitelist of IP-addresses is passed as an array to the assertion
+        through the constructor. The simplest form of this array is a plain list
+        of IP-addresses. The next example shows this a simple whitelist being
+        used.
+    </para>
+    
+    <programlisting role="php">
+<![CDATA[
+$whitelist = array('192.168.0.10',
+                   '192.168.0.11',
+                   '192.168.0.12',
+                   '192.168.1.128');
+$assertion = new Zym_Acl_Assert_Ip($whitelist);
+]]>
+    </programlisting>
+    
+    <para>
+        Of course it isn't really effective to type those IP-addresses out by
+        hand. For this reason it's also possible to provide a range of addresses.
+        The next example shows the same whitelist setup using ranges.
+    </para>
+    
+    <programlisting role="php">
+<![CDATA[
+$whitelist = array('192.168.0.(10-12)',
+                   '192.168.1.128');
+$assertion = new Zym_Acl_Assert_Ip($whitelist);
+]]>
+    </programlisting>
+    
+    <para>
+        Now what if you want to clear the entire 192.168 range? For this purpose
+        the assertion supports wildcards: *. You can place a wildcard anywhere
+        in the IP string. The next example will show how to whitelist the entire
+        192.168 range.
+    </para>
+    
+    <programlisting role="php">
+<![CDATA[
+$whitelist = array('192.168.*');
+$assertion = new Zym_Acl_Assert_Ip($whitelist);
+]]>
+    </programlisting>
+</section>
