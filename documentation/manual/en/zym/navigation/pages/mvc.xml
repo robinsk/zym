@@ -40,7 +40,7 @@
                     <entry><code>null</code></entry>
                     <entry>
                         Action name to use when generating
-                        href to the page. This option is required.
+                        href to the page.
                     </entry>
                 </row>
                 <row>
@@ -49,16 +49,24 @@
                     <entry><code>null</code></entry>
                     <entry>
                         Controller name to use when generating
-                        href to the page. This option is required.
+                        href to the page.
                     </entry>
                 </row>
                 <row>
                     <entry><code>module</code></entry>
                     <entry><code>string</code></entry>
-                    <entry><code>default</code></entry>
+                    <entry><code>null</code></entry>
                     <entry>
                         Module name to use when generating
                         href to the page.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>params</code></entry>
+                    <entry><code>array</code></entry>
+                    <entry><code>array</code></entry>
+                    <entry>
+                        User params to use when generating href to the page.
                     </entry>
                 </row>
                 <row>
@@ -79,27 +87,65 @@
                         when generating href to the page.
                     </entry>
                 </row>
-                <row>
-                    <entry><code>params</code></entry>
-                    <entry><code>array</code></entry>
-                    <entry><code>array</code></entry>
-                    <entry>
-                        User params to use when generating href to the page.
-                    </entry>
-                </row>
             </tbody>
         </tgroup>
     </table>
     
-    <para>
-        //TODO: example of getHref()
-    </para>
+    <example xml:id="zym.navigation.pages.mvc.getHref">
+        <title><code>getHref() generates the page URL</code></title>
+        
+        <para>
+            These examples show that MVC pages use
+            <classname>Zend_Controller_Action_Helper_Url</classname> internally
+            to generate URLs when calling <code>$page->getHref()</code>.
+        </para>
+        
+        <note>
+            <para>
+                All examples assume a regular MVC setup with <code>default</code>
+                being the default module name, and that the route named
+                <code>default</code> has not been modified.
+            </para>
+            
+            <para>
+                The URL/URI returned is relative to your application's
+                <code>baseUrl</code>. In the examples, the base is '/'
+                for simplicity.
+            </para>
+        </note>
+        
+        <programlisting role="php"><xi:include href="mvc/example/gethref.php" parse="text" /></programlisting>
+    </example>
     
-    <para>
-        //TODO: example of isActive()
-    </para>
+    <example xml:id="zym.navigation.pages.mvc.isActive">
+        <title><code>isActive()</code> determines if page is active</title>
+        
+        <para>
+            These examples show that MVC pages determine whether they are active
+            by using the params found in the request object.
+        </para>
+        
+        <note>
+            <para>
+                All examples assume a regular MVC setup with <code>default</code>
+                being the default module name, and that the route named
+                <code>default</code> has not been modified.
+            </para>
+        </note>
+        
+        <programlisting role="php"><xi:include href="mvc/example/isactive.php" parse="text" /></programlisting>
+    </example>
     
-    <para>
-        //TODO: example of using routes
-    </para>
+    <example xml:id="zym.navigation.pages.mvc.routes">
+        <title>Using routes</title>
+        
+        <para>
+            MVC pages are aware of routes. Setting what route should be used
+            when generating the URL is done by specifying the <code>route</code>
+            option when constructing, or by calling 
+            <code>$page->setRoute('routeName')</code> on a page instance.
+        </para>
+        
+        <programlisting role="php"><xi:include href="mvc/example/routes.php" parse="text" /></programlisting>
+    </example>
 </section>

@@ -23,6 +23,16 @@
         <para>
             The options listed in the table below are common to all page classes.
         </para>
+        
+        <note>
+            <para>
+                All option keys are translated to their according 
+                <code>set</code> methods. This means that the option
+                <code>position</code> maps to the method <code>setPosition()</code>,
+                and <code>reset_params</code> maps to the method
+                <code>setResetParams()</code>.
+            </para>
+        </note>
 
         <tgroup cols="4">
             <thead>
@@ -147,4 +157,26 @@
             </tbody>
         </tgroup>
     </table>
+                
+    <note>
+        <title>Custom properties</title>
+        <para>
+            All pages support setting and getting of custom properties, by
+            using the magic methods <code>__set($name, $value)</code>,
+            <code>__get($name)</code>, <code>__isset($name)</code> and
+            <code>__unset($name)</code>.Custom properties will also be 
+            included in <code>$page->toArray()</code>.
+        </para>
+    </note>
+    
+    <example xml:id="zym.navigation.pages.common.customprops">
+        <title>Custom page properties</title>
+        
+        <para>
+            This is an example of how custom properties can be used. Custom
+            properties will also be included inf <code>$page->toArray()</code>.
+        </para>
+        
+        <programlisting role="php"><xi:include href="common/example/customprops.php" parse="text" /></programlisting>
+    </example>
 </section>

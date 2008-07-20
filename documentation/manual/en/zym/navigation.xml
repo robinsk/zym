@@ -2,16 +2,8 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation" version="5.0">
     <title>Zym_Navigation</title>
-
-    <para>
-        <classname>Zym_Navigation</classname> is a component for managing a
-        hierarchical structure of (logical representations of) web pages.
-        It can be used for creating menus, breadcrumbs and sitemaps, and may
-        be iterated and traversed in your very own way.
-    </para>
-
-    <section xml:id="zym.navigation.creating">
-        <title>Creating a navigational structure</title>
-        
-    </section>
+    
+    <xi:include href="navigation/introduction.xml" />
+    <xi:include href="navigation/pages.xml" />
+    <xi:include href="navigation/creating.xml" />
 </chapter>

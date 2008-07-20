@@ -51,6 +51,30 @@
         </itemizedlist>
     </section>
     
+    <section xml:id="zym.view.helpers.navigation">
+        <title>Navigation Helpers</title>
+        
+        <para>
+            // TODO: wrtite
+        </para>
+        
+        <section xml:id="zym.view_helpers.navigation.acl">
+            <title>Integration with ACL</title>
+        </section>
+        
+        <section xml:id="zym.view.helpers.navigation.breadcrumbs">
+            <title>Breadcrumbs Helper</title>
+        </section>
+        
+        <section xml:id="zym.view.helpers.navigation.menu">
+            <title>Menu Helper</title>
+        </section>
+        
+        <section xml:id="zym.view.helpers.navigation.sitemap">
+            <title>Sitemap Helper</title>
+        </section>
+    </section>
+    
     <section xml:id="zym.view.helpers.xmldeclaration">
         <title>XmlDeclaration Helper</title>
         

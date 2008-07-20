@@ -59,8 +59,9 @@
         <title>Adding custom validation</title>
         
         <para>
-            This is a snippet from Zym_Navigation_Page_Mvc. Most of the code
-            is left out to focus on the point; adding validation.
+            This is an example of a more strict version of
+            Zym_Navigation_Page_Mvc. Most of the code is left out
+            to focus on the point; adding validation.
         </para>
         
         <programlisting role="php"><xi:include href="custom/example/validation.php" parse="text" /></programlisting>

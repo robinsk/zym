@@ -23,3 +23,11 @@ $page = new My_Navigation_Page(array(
     'foo'     => 'bar',
     'foo_bar' => 'baz'
 ));
+
+// ...or
+$page = Zym_Navigation_Page::factory(array(
+    'type'    => 'My_Navigation_Page',
+    'label'   => 'Property names are translated',
+    'foo'     => 'bar',
+    'foo_bar' => 'baz'
+));

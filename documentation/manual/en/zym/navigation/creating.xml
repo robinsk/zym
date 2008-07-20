@@ -5,13 +5,26 @@
 
     <section xml:id="zym.navigation.creating.factory">
         <title>Creating pages using the page factory</title>
+        
+        <para>
+            All pages, even custom ones, can be created using the page factory,
+            <code>Zym_Navigation_Page::factory()</code>.
+        </para>
     </section>
 
     <section xml:id="zym.navigation.creating.array">
         <title>Creating navigation structures using arrays</title>
+        
+        <para>
+            
+        </para>
     </section>
 
     <section xml:id="zym.navigation.creating.config">
         <title>Creating navigation structures using Zend_Config objects</title>
+        
+        <para>
+            
+        </para>
     </section>
 </section>

@@ -1,11 +1,6 @@
 <?php
-require_once 'Zym/Navigation/Page.php';
-
-class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
+class My_Strict_Page extends Zym_Navigation_Page_Mvc
 {
-    protected $_action = null;
-    protected $_controller = null;
-    
     /**
      * An MVC page must have controller and action set
      *

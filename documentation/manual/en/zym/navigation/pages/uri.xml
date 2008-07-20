@@ -6,8 +6,18 @@
     <para>
         Pages of type <classname>Zym_Navigation_Page_Uri</classname> can be
         used to link to pages on other domains or sites, or to implement
-        custom logic for the page.
+        custom logic for the page. URI pages are really simple; in addition
+        to the common page options, an URI page only takes one option, the
+        <code>uri</code> option. The <code>uri</code> will be returned when
+        using <code>$page->getHref()</code>.
     </para>
+    
+    <note>
+        <classname>Zym_Navigation_Page_Uri</classname> will not try to determine
+        whether it should be active when calling <code>$page->isActive()</code>.
+        It merely returns what currently is set, so to make a URI page active
+        you have to manually call <code>$page->setActive()</code>.
+    </note>
     
     <table xml:id="zym.navigation.pages.uri.options">
         <title>URI page options</title>

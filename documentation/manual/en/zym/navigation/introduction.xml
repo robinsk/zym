@@ -97,8 +97,9 @@
         
         <para>
             Read more about navigation rendering navigation objects in
-            <link xlink:href="#zym.view.helpers.navigation">the manual
-            section on navigation view helpers</link>.
+            the manual section on
+            <link xlink:href="#zym.view.helpers.navigation">navigation 
+            view helpers</link>.
         </para>
     </section>
 </section>
