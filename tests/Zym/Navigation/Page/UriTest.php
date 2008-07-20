@@ -53,10 +53,10 @@ class Zym_Navigation_Page_UriTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests that the constructor requires label and uri
+     * Tests that the constructor requires label
      *
      */
-    public function testConstructionRequiresLabelAndUri()
+    public function testConstructionRequiresLabel()
     {
         try {
             $page = new Zym_Navigation_Page_Uri(array(
@@ -64,17 +64,7 @@ class Zym_Navigation_Page_UriTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             ));
             $this->fail('Should throw exception for missing label');
-        } catch (Zym_Navigation_Page_InvalidException $e) {
-            
-        }
-        
-        try {
-            $page = new Zym_Navigation_Page_Uri(array(
-                'label' => 'label',
-                'uriz' => '#'
-            ));
-            $this->fail('Should throw exception for missing uri');
-        } catch (Zym_Navigation_Page_InvalidException $e) {
+        } catch (Zym_Navigation_Exception $e) {
             
         }
     }
