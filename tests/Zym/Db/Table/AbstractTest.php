@@ -26,9 +26,13 @@ require_once 'Zym/Db/Table/Abstract.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
+ * @see Zend_Db_Adapter_Pdo_Sqlite
+ */
+require_once 'Zend/Db/Adapter/Pdo/Sqlite.php';
+
+/**
  * Zym_Db_Table_Abstract test case.
- * @TODO Create a DB test environment once and for all
- *
+ * 
  * @author     Jurrien Stutterheim
  * @category   Zym_Tests
  * @package    Zym_Db
@@ -43,7 +47,7 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
      *
      * @var Zym_Db_Table_Abstract
      */
-    private $Zym_Db_Table_Abstract;
+    private $_zymTable;
 
     /**
      * Prepares the environment before running a test.
@@ -51,14 +55,17 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        
+        $adapter = new Zend_Db_Adapter_Pdo_Sqlite(array(
+            'dbname' => dirname(__FILE__) . '/_files/testdb.sqlite'
+        ));
+        
+        Zend_Db_Table_Abstract::setDefaultAdapter($adapter);
 
-        $dbconn = Zend_Db::factory('pdo_mysql', array('username' => 'zym',
-                                                      'password' => 'zym',
-                                                      'host'     => 'localhost',
-                                                      'dbname'   => 'test'));
-        Zend_Db_Table_Abstract::setDefaultAdapter($dbconn);
-
-        $this->Zym_Db_Table_Abstract = new Zym_Db_Table_Abstract_Test();
+        $this->_zymTable = new Bugs();
+        $this->_zymTable->addReference('Reporter', 'reported_by', 'Accounts', 'account_name')
+                        ->addReference('Engineer', 'assigned_to', 'Accounts', 'account_name')
+                        ->addReference('Verifier', array('verified_by'), 'Accounts', array('account_name'));
     }
 
     /**
@@ -75,10 +82,10 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testAddReference()
     {
-        $this->Zym_Db_Table_Abstract->addReference('Reporter', 'reported_by', 'Accounts', 'account_name')
-                                    ->addReference('Engineer', 'assigned_to', 'Accounts', 'account_name')
-                                    ->addReference('Verifier', array('verified_by'), 'Accounts', array('account_name'));
-        $reference = $this->Zym_Db_Table_Abstract->getReference('Reporter');
+        
+                                    
+        $reference = $this->_zymTable->getReference('Reporter');
+        
         $expected = array('columns'       => 'reported_by',
                           'refTableClass' => 'Accounts',
                           'refColumns'    => 'account_name');
@@ -91,16 +98,24 @@ class Zym_Db_Table_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testIsIdentity()
     {
-        $this->assertTrue($this->Zym_Db_Table_Abstract->isIdentity('id'));
-        $this->assertFalse($this->Zym_Db_Table_Abstract->isIdentity('key'));
-        $this->assertFalse($this->Zym_Db_Table_Abstract->isIdentity('value'));
+        $this->assertTrue($this->_zymTable->isIdentity('id'));
+        $this->assertFalse($this->_zymTable->isIdentity('assigned_to'));
+        $this->assertFalse($this->_zymTable->isIdentity('verified_by'));
+        $this->assertFalse($this->_zymTable->isIdentity('reported_by'));
     }
 }
 
 /**
  * Custom table class used for testing
+ * TODO: Move this to seperate files
  */
-class Zym_Db_Table_Abstract_Test extends Zym_Db_Table_Abstract
+
+class Accounts extends Zym_Db_Table_Abstract
 {
-    protected $_name = 'zym_db_table';
+    protected $_name = 'Accounts';
+}
+
+class Bugs extends Zym_Db_Table_Abstract
+{
+    protected $_name = 'Bugs';
 }
