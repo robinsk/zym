@@ -45,17 +45,18 @@ class Zym_View_Helper_SimpleUrl extends Zend_View_Helper_Url
              */
             require_once 'Zend/Controller/Front.php';
             $request = Zend_Controller_Front::getInstance()->getRequest();
-        }
 
-        // Get defaults
-        if ($module === null) {
-            $module     = $request->getModuleName();
-        }
+            if ($request instanceof Zend_Controller_Request_Abstract) {
+                // Get defaults
+                if ($module === null) {
+                    $module     = $request->getModuleName();
+                }
 
-        if ($controller === null) {
-            $controller = $request->getControllerName();
+                if ($controller === null) {
+                    $controller = $request->getControllerName();
+                }
+            }
         }
-
 
         // Create url
         $urlOptions = array_merge($params, array('module'     => $module,
