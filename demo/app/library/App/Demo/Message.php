@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Notification_Interface
+ * @see Zym_Message_Interface
  */
-require_once 'Zym/Notification/Interface.php';
+require_once 'Zym/Message/Interface.php';
 
 /**
  * @author Geoffrey Tran
@@ -26,14 +26,14 @@ require_once 'Zym/Notification/Interface.php';
  * @subpackage Notification
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class App_Demo_Notification implements Zym_Notification_Interface 
+class App_Demo_Message implements Zym_Message_Interface 
 {
     /**
      * Enter description here...
      *
-     * @param Zym_Notification_Message $message
+     * @param Zym_Message $message
      */
-    public function notify(Zym_Notification_Message $message)
+    public function notify(Zym_Message $message)
     {
         printf('Name: %s, <br />Sender: %s, <br />Notifier: %s()', 
                 $message->getName(), get_class($message->getSender()), __METHOD__);
@@ -42,9 +42,9 @@ class App_Demo_Notification implements Zym_Notification_Interface
     /**
      * Enter description here...
      *
-     * @param Zym_Notification_Message $message
+     * @param Zym_Message $message
      */
-    public function hello(Zym_Notification_Message $message)
+    public function hello(Zym_Message $message)
     {
         printf('Name: %s, <br />Sender: %s, <br />Notifier: %s()', 
                 $message->getName(), get_class($message->getSender()), __METHOD__);

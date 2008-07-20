@@ -38,54 +38,43 @@ set from <default> for the production environment.
         <pages>
             <home>
                 <label>Home</label>
-                <action>index</action>
-                <controller>index</controller>
             </home>
             <demoHome>
                 <label>Playground</label>
-                <action>index</action>
-                <controller>index</controller>
                 <module>demo</module>
                 <pages>
                     <contextSwitch>
                         <label>ContextSwitch</label>
-                        <action>index</action>
                         <controller>context-switch</controller>
                         <module>demo</module>
                     </contextSwitch>
                     <error>
                         <label>Error</label>
-                        <action>index</action>
                         <controller>error</controller>
                         <module>demo</module>
                     </error>
                     <flashMessenger>
                         <label>Flash Messenger</label>
-                        <action>index</action>
                         <controller>flash-messenger</controller>
                         <module>demo</module>
                     </flashMessenger>
+                    <form>
+                        <label>Form</label>
+                        <controller>form</controller>
+                        <module>demo</module>
+                    </form>
                     <navigation>
                         <label>Navigation</label>
-                        <action>index</action>
                         <controller>navigation</controller>
                         <module>demo</module>
                     </navigation>
-                    <notification>
-                        <label>Notification</label>
-                        <action>index</action>
-                        <controller>notification</controller>
+                    <message>
+                        <label>Message</label>
+                        <controller>message</controller>
                         <module>demo</module>
-                    </notification>
-                    <pagination>
-                        <label>Pagination</label>
-                        <action>index</action>
-                        <controller>paginate</controller>
-                        <module>demo</module>
-                    </pagination>
+                    </message>
                     <translation>
                         <label>Translation</label>
-                        <action>index</action>
                         <controller>translate</controller>
                         <module>demo</module>
                     </translation>

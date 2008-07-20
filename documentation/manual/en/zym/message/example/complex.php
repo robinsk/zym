@@ -1,22 +1,22 @@
 <?php
 class MyClass
 {
-    protected $_notification;
+    protected $_message;
     
     public function __construct()
     {
-        $this->_notification = Zym_Message_Dispatcher::get();
-        $this->_notification->attach($this, 'testEvent');
+        $this->_message = Zym_Message_Dispatcher::get();
+        $this->_message->attach($this, 'testEvent');
     }
     
     public function __destruct()
     {
-        $this->_notification->detach($this);
+        $this->_message->detach($this);
     }
     
-    public function notify(Zym_Message $notification)
+    public function notify(Zym_Message $message)
     {
-        if ('testEvent' == $notification->getName()) {
+        if ('testEvent' == $message->getName()) {
             // Assume Zend_Log instance
             $log = Zend_Registry::get('log');
             $log->log('testEvent was triggered and received by MyClass!');

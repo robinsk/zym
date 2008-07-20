@@ -10,30 +10,5 @@
     </p>
 
     <p>Playground areas:</p>
-    <ul>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'context-switch')) ?>">ContextSwitch</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'error')) ?>">Error</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'flash-messenger')) ?>">Flash Messenger</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'form')) ?>">Forms</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'navigation')) ?>">Navigation</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'notification')) ?>">Notification</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'paginate')) ?>">Pagination</a>
-        </li>
-        <li>
-            <a href="<?= $this->url(array('controller' => 'translate')) ?>">Translation</a>
-        </li>
-    </ul>
+    <?= $this->menu()->renderSubMenu(); ?>
 </div>

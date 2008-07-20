@@ -22,38 +22,37 @@ require_once 'Zym/Controller/Action/Abstract.php';
 require_once 'Zym/Message/Dispatcher.php';
 
 /**
- * @see App_Demo_Notification
+ * @see App_Demo_Message
  */
-require_once 'App/Demo/Notification.php';
+require_once 'App/Demo/Message.php';
 
 /**
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Demo_MessageController extends Zym_Controller_Action_Abstract 
+class Demo_MessageController extends Zym_Controller_Action_Abstract
 {
     /**
      * init
-     * 
+     *
      * @return void
      */
     public function init()
     {
         // Setup notification
-        $this->_setupMessageDispatcher();    
+        $this->_setupMessageDispatcher();
     }
-    
+
     /**
      * Index
      *
      * @return void
      */
     public function indexAction()
-    {   
-
+    {
     }
-    
+
     /**
      * Notify sandy
      *
@@ -61,44 +60,44 @@ class Demo_MessageController extends Zym_Controller_Action_Abstract
      */
     public function notifySandyAction()
     {
-        $notification = Zym_Notification::get();
-        $notification->post('sandy', $this);
-        
+        $dispatcher = Zym_Message_Dispatcher::get();
+        $dispatcher->post('sandy', $this);
+
         $this->getHelper('ViewRenderer')->setNoRender();
     }
-    
+
     /**
      * Notify bill
-     * 
+     *
      * @return void
      */
     public function notifyBillAction()
     {
-        $notification = Zym_Notification::get();
-        $notification->post('bill', $this);
-        
+        $dispatcher = Zym_Message_Dispatcher::get();
+        $dispatcher->post('bill', $this);
+
         $this->getHelper('ViewRenderer')->setNoRender();
     }
-    
+
     /**
-     * Setup notification
+     * Setup message dispatcher
      *
      * @return void
      */
-    protected function _setupNotification()
+    protected function _setupMessageDispatcher()
     {
-        $demo = new App_Demo_Notification();
-        
-        $notification = Zym_Notification::get();
-        
+        $demo = new App_Demo_Message();
+
+        $dispatcher = Zym_Message_Dispatcher::get();
+
         // Register sandy if not already registered
-        if (!$notification->isRegistered('sandy')) {
-            $notification->attach($demo, 'sandy');
+        if (!$dispatcher->isRegistered('sandy')) {
+            $dispatcher->attach($demo, 'sandy');
         }
-        
+
         // Register bill if not already registered
-        if (!$notification->isRegistered('bill')) {
-            $notification->attach($demo, 'bill', 'hello');
+        if (!$dispatcher->isRegistered('bill')) {
+            $dispatcher->attach($demo, 'bill', 'hello');
         }
     }
 }

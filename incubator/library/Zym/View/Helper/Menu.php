@@ -16,7 +16,7 @@
  */
 
 /**
- * @see Zym_View_Helper_Html_Navigation
+ * @see Zym_View_Helper_NavigationAbstract
  */
 require_once 'Zym/View/Helper/NavigationAbstract.php';
 
@@ -29,7 +29,7 @@ require_once 'Zym/View/Helper/NavigationAbstract.php';
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
- */ 
+ */
 class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
 {
     /**
@@ -38,10 +38,10 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
      * @var string
      */
     protected $_ulClass = 'navigation';
-    
+
     /**
      * Retrieves helper and optionally sets container to operate on
-     * 
+     *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              operate on
      * @return Zym_View_Helper_Menu
@@ -51,10 +51,10 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         if (null !== $container) {
             $this->setNavigation($container);
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Returns HTML anchor for the given pages
      *
@@ -69,9 +69,9 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
             'title'  => $page->getTitle(),
             'class'  => $page->getClass()
         );
-        
+
         $href = $page->getHref();
-        
+
         if ($href) {
             $attribs['href'] = $href;
             $attribs['target'] = $page->getTarget();
@@ -79,12 +79,12 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         } else {
             $element = 'span';
         }
-        
+
         return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
              . $page->getLabel()
              . '</' . $element . '>';
     }
-    
+
     /**
      * Sets CSS class to use for ul elements
      *
@@ -96,10 +96,10 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         if (is_string($ulClass)) {
             $this->_ulClass = $ulClass;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Returns CSS class to use for ul elements
      *
@@ -109,7 +109,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
     {
         return $this->_ulClass;
     }
-    
+
     /**
      * Renders ul list menu for the given container
      *
@@ -128,33 +128,33 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         $indent = (null !== $indent)
                 ? $this->_getWhitespace($indent)
                 : $this->getIndent();
-        
+
         // init html
         $html = '';
-        
+
         // loop pages
         foreach ($container as $page) {
             if (!$this->_accept($page, false)) {
                 // page is not accepted
                 continue;
             }
-            
+
             // create li element for page
             $liCss = $page->isActive(true) ? ' class="active"' : '';
             $html .= "$indent    <li$liCss>\n";
-            
+
             // create anchor element
             $html .= "$indent        {$this->getPageAnchor($page)}\n";
-            
+
             // render sub pages, if any
             if ($page->hasPages()) {
                 $html .= $this->renderMenu($page, "$indent        ", false);
             }
-            
+
             // end li element
             $html .= "$indent    </li>\n";
         }
-        
+
         // wrap items in a ul element
         // this is done so an empty list will not be created if
         // every (sub) page is invisible
@@ -166,10 +166,10 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
             }
             $html = "$indent<ul$ulClass>\n$html$indent</ul>\n";
         }
-        
+
         return $html;
     }
-    
+
     /**
      * Renders the inner-most sub menu for the active page in the $container
      *
@@ -223,7 +223,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
     
     /**
      * Renders the registered container as a ul list
-     * 
+     *
      * @param string|int $indent  [optional]
      * @return string
      */
