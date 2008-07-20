@@ -60,14 +60,14 @@ abstract class Zym_Controller_Action_Abstract extends Zend_Controller_Action
     {
         parent::__construct($request, $response, $invokeArgs);
 
-        if (isset($this->contexts)) {
-            // Init Contexts
-            $this->getHelper('ContextSwitch')->initContext();
-        }
-
         if (isset($this->ajaxable)) {
             // Init AjaxContexts
             $this->getHelper('AjaxContext')->initContext();
+        }
+
+        if (isset($this->contexts)) {
+            // Init Contexts
+            $this->getHelper('ContextSwitch')->initContext();
         }
     }
 
