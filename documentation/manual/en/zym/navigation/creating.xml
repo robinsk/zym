@@ -8,23 +8,52 @@
         
         <para>
             All pages, even custom ones, can be created using the page factory,
-            <code>Zym_Navigation_Page::factory()</code>.
+            <code>Zym_Navigation_Page::factory()</code>. The factory can take an 
+            array with options, or a <classname>Zend_Config</classname> object. 
+            Each key in the array/config corresponds to a page option, as seen in 
+            the section on <link xlink:href="#zym.navigation.pages">Pages</link>. 
+            By default, the factory will create a page of type
+            <classname>Zym_Navigation_Page_Mvc</classname>. If the option 
+            <code>uri</code> is given, the page will be of type
+            <classname>Zym_Navigation_Page_Uri</classname>.
+        </para>
+        
+        <para>
+            To create a custom page type using the factory, the <code>type</code>
+            option must be specied to contain the class name of the page type.
+        </para>
+    
+        <example xml:id="zym.navigation.creating.factory.custom">
+            <title>Creating a custom page type using the page factory</title>
+            
+            <programlisting role="php"><xi:include href="example/factory.custom.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.navigation.creating.container">
+        <title>Zym_Navigation, a page container</title>
+        
+        <para>
+            To be able to create a navigation structure without having a root
+            page to keep all other pages in, there is a class 
+            <classname>Zym_Navigation</classname> that merely functions as a 
+            container for pages. It can be constructed enitrely empty, or be
+            given an array or a <classname>Zend_Config</classname> object with
+            pages to put in the container. Each page in the container can also
+            be an array or a <classname>Zend_Config</classname> object, or 
+            indeed <classname>Zym_Navigation_Page</classname> instances.
         </para>
     </section>
 
-    <section xml:id="zym.navigation.creating.array">
-        <title>Creating navigation structures using arrays</title>
+    <example xml:id="zym.navigation.creating.array.example">
+        <title>Creating a navigation structure using an array</title>
         
-        <para>
-            
-        </para>
-    </section>
-
-    <section xml:id="zym.navigation.creating.config">
-        <title>Creating navigation structures using Zend_Config objects</title>
+        <programlisting role="php"><xi:include href="example/array.php" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.navigation.creating.config.example">
+        <title>Creating a navigation structure using a config object</title>
         
-        <para>
-            
-        </para>
-    </section>
+        <programlisting role="php"><xi:include href="example/config.php" parse="text" /></programlisting>
+    </example>
 </section>
