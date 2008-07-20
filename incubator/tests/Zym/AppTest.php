@@ -24,6 +24,11 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zym/App.php';
 
 /**
+ * @see Zend_Config
+ */
+require_once 'Zend/Config.php';
+
+/**
  * Tests the class Zym_App
  *
  * @author    Geoffrey Tran
@@ -37,19 +42,19 @@ class Zym_AppTest extends PHPUnit_Framework_TestCase
     /**
      * Prepares the environment before running a test.
      *
+     * @return void
      */
     protected function setUp()
     {
-
     }
 
     /**
      * Tear down the environment after running a test
      *
+     * @return void
      */
     protected function tearDown()
     {
-
     }
 
     public function testSingletonIsEnforcedFromConstruct()
@@ -78,5 +83,38 @@ class Zym_AppTest extends PHPUnit_Framework_TestCase
 
         $app2 = Zym_App::getInstance();
         $this->assertSame($app, $app2);
+    }
+
+    public function testResetInstanceCreatesNewInstance()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testResetInstance()
+    {
+        $app = Zym_App::getInstance();
+        $app->addResourcePrefix('Test_Prefix', 1);
+
+        Zym_App::resetInstance();
+        $app2 = Zym_App::getInstance();
+    }
+
+    public function testSetConfigArray()
+    {
+        $this->markTestIncomplete();
+        $app = Zym_App::getInstance();
+        $app->setConfig(array('test' => 'test'));
+
+        $this->assertEquals('test', $app->getConfig()->get('test'));
+    }
+
+    public function testSetConfigFromZendConfig()
+    {
+        $app = Zym_App::getInstance();
+        $app->setConfig(new Zend_Config(array(
+            'test' => 'test'
+        )));
+
+        $this->assertEquals('test', $app->getConfig()->get('test'));
     }
 }
