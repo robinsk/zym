@@ -55,7 +55,7 @@ $config = array(
         'action' => 'index',
         'controller' => 'page2',
         // specify a route name and a param for the route
-        'route' => 'myroute',
+        'route' => 'nav-route-example',
         'params' => array(
             'format' => 'json'
         )
@@ -162,6 +162,10 @@ $config = array(
                 'uri' => '#acl-nada'
             )
         )
+    ),
+    array(
+        'label' => 'Zend Framework',
+        'route' => 'zf-route'
     )
 );
 
@@ -176,9 +180,16 @@ Zend_Registry::set('Zym_Navigation_Demo', $navigation);
 $front = Zend_Controller_Front::getInstance();
 $router = $front->getRouter();
 $router->addRoute(
-    'myroute',
+    'nav-route-example',
     new Zend_Controller_Router_Route('page2/:format', array(
         'controller' => 'page2', 'action' => 'index')
+    )
+);
+$router->addRoute(
+    'zf-route',
+    new Zend_Controller_Router_Route(array(
+        'host' => 'framework.zend.com',
+        'path' => '/')
     )
 );
 
