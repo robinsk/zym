@@ -21,6 +21,7 @@
 	<xsl:param name="generate.manifest">1</xsl:param>
 	<xsl:param name="admon.graphics">1</xsl:param>
 	<xsl:param name="admon.style" />
+	<xsl:param name="admon.graphics.extension">.png</xsl:param>
 	<xsl:param name="html.stylesheet">styles/docbook.css</xsl:param>
 	<xsl:param name="header.rule">0</xsl:param>
 	<xsl:param name="footer.rule">0</xsl:param>
