@@ -24,14 +24,14 @@
 class Zym_Message
 {
     /**
-     * Notification name
+     * Message name
      *
      * @var string
      */
     protected $_name;
 
     /**
-     * The object that sent the notification
+     * The object that sent the message
      *
      * @var object
      */
@@ -59,7 +59,7 @@ class Zym_Message
     }
 
     /**
-     * Get notification name
+     * Get message name
      *
      * @return string
      */
@@ -69,7 +69,7 @@ class Zym_Message
     }
 
     /**
-     * Get the object that sent the notification
+     * Get the object that sent the message
      *
      * @return object
      */

@@ -48,7 +48,7 @@ class Zym_Message_Dispatcher
     protected $_wildcard = '*';
 
     /**
-     * The collection of objects that registered to notifications
+     * The collection of objects that registered to messages
      *
      * @var array
      */
@@ -69,10 +69,10 @@ class Zym_Message_Dispatcher
     protected static $_instances = array();
 
     /**
-     * Get a notification instance from the internal registry
+     * Get a message dispatcher instance from the internal registry
      *
      * @param string name
-     * @return Zym_Message
+     * @return Zym_Message_Dispatcher
      */
     public static function get($namespace = 'default')
     {
@@ -84,7 +84,7 @@ class Zym_Message_Dispatcher
     }
 
     /**
-     * Remove a notification instance from the internal registry
+     * Remove a dispatcher instance from the internal registry
      *
      * @param string $name
      */
@@ -124,7 +124,7 @@ class Zym_Message_Dispatcher
     }
 
     /**
-     * Post a notification
+     * Post a message
      *
      * @param string $name
      * @param object $sender
@@ -149,7 +149,7 @@ class Zym_Message_Dispatcher
             }
         }
 
-        $notification = new Zym_Message($name, $sender, $data);
+        $message = new Zym_Message($name, $sender, $data);
         $notified = array();
 
         foreach ($toNotify as $event) {
@@ -163,7 +163,7 @@ class Zym_Message_Dispatcher
                     if ($observer instanceof Zym_Message_Interface &&
                         $callback == $this->_defaultCallback) {
 
-                        $observer->notify($notification);
+                        $observer->notify($message);
                     } else {
                         if (!method_exists($observer, $callback)) {
                             /**
@@ -171,13 +171,13 @@ class Zym_Message_Dispatcher
                              */
                             require_once 'Zym/Message/Exception.php';
 
-                            $message = sprintf('Method "%s" is not implemented in class "%s"',
-                                               $callback, get_class($observer));
+                            $error = sprintf('Method "%s" is not implemented in class "%s"',
+                                             $callback, get_class($observer));
 
-                            throw new Zym_Message_Exception($message);
+                            throw new Zym_Message_Exception($error);
                         }
 
-                        $observer->$callback($notification);
+                        $observer->$callback($message);
                     }
                 }
             }
@@ -187,12 +187,12 @@ class Zym_Message_Dispatcher
     }
 
     /**
-     * Register an observer for the specified notification
+     * Register an observer for the specified message
      *
      * @param object $observer
      * @param string|array $events
      * @param string $callback
-     * @return Zym_Message
+     * @return Zym_Message_Dispatcher
      */
     public function attach($observer, $events = null, $callback = null)
     {
@@ -229,7 +229,7 @@ class Zym_Message_Dispatcher
      *
      * @param object $observer
      * @param string|array $event
-     * @return Zym_Message
+     * @return Zym_Message_Dispatcher
      */
     public function detach($observer, $events = null)
     {
@@ -260,7 +260,7 @@ class Zym_Message_Dispatcher
      * If no event is specified all events will be cleared.
      *
      * @param string $event
-     * @return Zym_Message
+     * @return Zym_Message_Dispatcher
      */
     public function reset($event = null)
     {
