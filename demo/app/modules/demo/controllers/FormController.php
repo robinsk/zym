@@ -21,7 +21,7 @@ require_once 'Zym/Controller/Action/Abstract.php';
  * @license http://www.zym-project.com/license New BSD License
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Demo_FormController extends Zym_Controller_Action_Abstract 
+class Demo_FormController extends Zym_Controller_Action_Abstract
 {
     /**
      * Index
@@ -30,19 +30,20 @@ class Demo_FormController extends Zym_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        $params = $this->getRequest()->getParams();
-        
-        //require_once dirname(__FILE__) . '/../forms/Example.php';
-        Zend_Controller_Action_HelperBroker::addPrefix('Zym_Controller_Action_Helper');
-        //$this->getHelper('Form')->load('Example');
-        $form = $this->getHelper('Form')->create('Example');
+        $request = $this->getRequest();
+        $params  = $request->getParams();
+        $form    = $this->getHelper('Form')->create('Example');
 
-        if ($this->getRequest()->isPost() && $form->isValid($params)) {
+        $isRequestValid = $request->isPost() && $form->isValid($params);
+        if ($isRequestValid) {
             // Success
-        } else {
-            $form->populate($params);
+            $this->getHelper('FlashMessenger')->addMessage('Login Success');
+            $this->_goto('index');
         }
-        
+
+        // Populate form with data
+        $form->populate($params);
+
         // View
         $this->getView()->assign(array(
             'form' => $form

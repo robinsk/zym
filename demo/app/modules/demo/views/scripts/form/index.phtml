@@ -1,11 +1,19 @@
 <? $this->headTitle('Form Demo'); ?>
+<script type="text/javascript">
+//<![CDATA[
+    dojo.addOnLoad(function(){
+        // Focus message input
+        dojo.byId('username').focus();
+    });
+//]]>
+</script>
 <div>
     <h1>Form Demo</h1>
-    
+
     <p>
         Zend_Form is a useful component in ZF that allows the generation and validation
         of forms through a single API.
     </p>
-    
+
     <?= $this->form; ?>
 </div>
