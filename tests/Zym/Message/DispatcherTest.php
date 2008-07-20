@@ -106,7 +106,7 @@ class Zym_Message_DispatcherTest extends PHPUnit_Framework_TestCase
     public function testGet()
     {
         $notification = Zym_Message_Dispatcher::get();
-        $this->assertType('Zym_Message', $notification);
+        $this->assertType('Zym_Message_Dispatcher', $notification);
     }
     
     /**
