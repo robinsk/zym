@@ -31,6 +31,7 @@
     </info>
     
     <!-- START: Chapters -->
+    <xi:include href="zym/array.xml" />
     <xi:include href="zym/controller.xml" />
     <xi:include href="zym/dto.xml" />
     <xi:include href="zym/paginate.xml" />
