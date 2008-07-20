@@ -32,7 +32,6 @@
     
     <!-- START: Chapters -->
     <xi:include href="zym/app.xml" />
-    <xi:include href="zym/array.xml" />
     <xi:include href="zym/cache.xml" />
     <xi:include href="zym/controller.xml" />
     <xi:include href="zym/filter.xml" />
