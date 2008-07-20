@@ -38,7 +38,7 @@ class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
      * @var array
      */
     public $contexts = array(
-        'view' => array('json', 'xml', 'html' => array('suffix' => 'ajax'))
+        'view' => array('json', 'xml')
     );
 
     /**
@@ -59,8 +59,7 @@ class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
         // Init Contexts
         //$this->getHelper('ContextSwitch')->initContext();
 
-        // ZF BUG WORKAROUND!!!!!!!!!! http://framework.zend.com/issues/browse/ZF-3690
-       // $this->getHelper('ContextSwitch')->addContext('html', array('suffix' => 'ajax'));
+        // Watch out for this ZF bug http://framework.zend.com/issues/browse/ZF-3690
     }
 
     /**

@@ -77,7 +77,7 @@ $prevSeparator = $this->breadcrumbs()->getSeparator();
         creating menus, breadcrumbs and sitemaps, and may be iterated and
         traversed in your very own way.
     </p>
-    
+
     <p>In this page:</p>
     <ul>
         <li><a href="#creating">Creating a navigation structure</a></li>
@@ -279,7 +279,7 @@ $prevSeparator = $this->breadcrumbs()->getSeparator();
         So, with that in mind, let's create an example site structure:
     </p>
     <p class="example-output">
-<?= $this->navSetup; ?> 
+<?= $this->navSetup; ?>
     </p>
     <p>
         The navigation instance is now in the registry, and is found
@@ -294,7 +294,7 @@ $prevSeparator = $this->breadcrumbs()->getSeparator();
     <h2><a name="menu"></a>Zym_View_Helper_Menu</h2>
     <p>
         A menu can be printed using the view helper Zym_View_Helper_Menu. To
-        print the menu using 4 initial spaces of indentation, simply do 
+        print the menu using 4 initial spaces of indentation, simply do
         <code>&lt;?= $this-&gt;menu()-&gt;toString(4); ?&gt;</code>, or just
         <code>&lt;?= $this-&gt;menu(); ?&gt;</code> without indentation.
         The output will be:
@@ -350,6 +350,10 @@ echo highlight_string($code, true);
     <? $this->sitemap()->setFormatOutput(true); ?>
     <div class="example-output"><pre><?= htmlentities($this->sitemap()); ?></pre></div>
 
+    <p>
+        This demo app has implemented the sitemap.xml via Default_SitemapController and a route
+        which you can visit here: <a href="<?= $this->url(array(), 'sitemap', true); ?>"><?= $this->url(array(), 'sitemap', true); ?></a>
+    </p>
 </div>
 <?
 // restore state
