@@ -9,34 +9,34 @@
 </script>
 <div>
     <h1>FlashMessenger Demo</h1>
-    
+
     <p>
         The flash messenger action helper bundled with ZF is particularly useful
         for instances where you need to pass a message to be displayed on the
-        next request. This is usually needed in 
-        <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">Post - Redirect - Get (PRG)</a> 
+        next request. This is usually needed in
+        <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">Post - Redirect - Get (PRG)</a>
         patterns where a user posts their form, you process it and redirect them.
         Zym comes in providing a simple flash messenger view helper which
         simplifies accessing messages for display.
     </p>
-    
+
     <p>
         The flash messenger implementation used in this demo consists of setting
         the message in the setAction and displaying it from the layout.
     </p>
-    
+
     <p>
-        You can test it for yourself below by entering a message such as 
+        You can test it for yourself below by entering a message such as
         "Invalid option" and clicking the button. The browser will then post
         to setAction which will redirect back to indexAction where the layout
         will display the message.
     </p>
-    
+
     <form method="post" action="<?= $this->url(array('action' => 'set')) ?>">
         <div>
             <label for="message">Enter a message:</label>
             <input type="text" name="message" id="message" tabindex="1" />
-            <input type="submit" value="Flash" />
+            <input type="submit" value="Flash" tabindex="2" />
         </div>
     </form>
 </div>

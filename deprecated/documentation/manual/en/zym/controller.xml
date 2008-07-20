@@ -4,4 +4,5 @@
     <title>Zym_Controller</title>
     
     <xi:include href="controller/actionhelpers.xml" />
+    <xi:include href="controller/router.xml" />
 </chapter>
