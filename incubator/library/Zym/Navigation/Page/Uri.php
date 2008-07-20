@@ -102,8 +102,10 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
      */
     public function toArray()
     {
-        return array_merge(parent::toArray(), array(
-            'uri' => $this->getUri()
-        )); 
+        return array_merge(
+            parent::toArray(),
+            array(
+                'uri' => $this->getUri()
+            )); 
     }
 }

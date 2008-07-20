@@ -285,6 +285,22 @@ abstract class Zym_Navigation_Container
     {
         return $this->_parent;
     }
+    
+    /**
+     * Returns an array representation of all pages in container
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $pages = array();
+        
+        foreach ($this->_pages as $page) {
+            $pages[] = $page->toArray();
+        }
+        
+        return $pages;
+    }
  
     // RecursiveIterator interface:
 

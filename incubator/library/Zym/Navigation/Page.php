@@ -487,10 +487,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Sets whether page should be active or not
      *
-     * @param  bool $active  whether page should be active or not
+     * @param  bool $active  [optional] whether page should be active or not,
+     *                       defaults to true
      * @return Zym_Navigation_Page
      */
-    public function setActive($active)
+    public function setActive($active = true)
     {
         $this->_active = (bool)$active;
         return $this;
@@ -525,12 +526,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Sets whether the page should be visible or not
      *
-     * @param  bool $visible  whether page should be visible or not
+     * @param  bool $visible  [optional] whether page should be visible or not,
+     *                        defaults to true
      * @return Zym_Navigation_Page
      */
-    public function setVisible($visible)
+    public function setVisible($visible = true)
     {
-        $this->_visible = (bool)$visible;
+        $this->_visible = (bool) $visible;
         return $this;
     }
     
@@ -592,11 +594,25 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Checks if a custom property is set
      *
-     * @param string $name
+     * @param string $name  custom property to check
+     * @return bool
      */
     public function __isset($name)
     {
         return isset($this->_properties[$name]);
+    }
+    
+    /**
+     * Unsets the given custom property
+     *
+     * @param string $name  custom property to unset
+     * @return void
+     */
+    public function __unset($name)
+    {
+        if (isset($this->_properties[$name])) {
+            unset($this->_properties[$name]);
+        }
     }
     
     /**
@@ -628,18 +644,21 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function toArray()
     {
-        return array_merge($this->getCustomProperties(), array(
-            'label'    => $this->getlabel(),
-            //'href'     => $this->getHref(),
-            'id'       => $this->getId(),
-            'class'    => $this->getClass(),
-            'title'    => $this->getTitle(),
-            'target'   => $this->getTarget(),
-            'position' => $this->getPosition(),
-            'role'     => $this->getRole(),
-            'active'   => $this->isActive(),
-            'visible'  => $this->isVisible()
-        ));
+        return array_merge(
+            $this->getCustomProperties(),
+            array(
+                'label'    => $this->getlabel(),
+                'id'       => $this->getId(),
+                'class'    => $this->getClass(),
+                'title'    => $this->getTitle(),
+                'target'   => $this->getTarget(),
+                'position' => $this->getPosition(),
+                'role'     => $this->getRole(),
+                'active'   => $this->isActive(),
+                'visible'  => $this->isVisible(),
+                'type'     => get_class($this),
+                'pages'    => parent::toArray()
+            ));
     }
     
     // Abstract methods:

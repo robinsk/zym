@@ -342,13 +342,15 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function toArray()
     {
-        return array_merge(parent::toArray(), array(
-            'action'       => $this->getAction(),
-            'controller'   => $this->getController(),
-            'module'       => $this->getModule(),
-            'params'       => $this->getParams(),
-            'route'        => $this->getRoute(),
-            'reset_params' => $this->getResetParams()
-        )); 
+        return array_merge(
+            parent::toArray(),
+            array(
+                'action'       => $this->getAction(),
+                'controller'   => $this->getController(),
+                'module'       => $this->getModule(),
+                'params'       => $this->getParams(),
+                'route'        => $this->getRoute(),
+                'reset_params' => $this->getResetParams()
+            )); 
     }
 }
