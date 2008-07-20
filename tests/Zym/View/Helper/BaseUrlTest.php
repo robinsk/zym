@@ -31,7 +31,7 @@ require_once 'Zym/View/Helper/BaseUrl.php';
 
 /**
  * BaseUrl Test Case
- * 
+ *
  * @author  Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -50,7 +50,7 @@ class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * View helper
-     * 
+     *
      * @var Zym_View_Helper_BaseUrl
      */
     protected $_helper;
@@ -73,7 +73,7 @@ class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
         Zend_Controller_Front::getInstance()->setBaseUrl($this->_previousBaseUrl);
         Zend_Controller_Front::getInstance()->resetInstance();
     }
-    
+
     /**
      * Test and make sure base url returned is consistent with the FC
      *
@@ -83,11 +83,11 @@ class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
         $baseUrls = array('', '/subdir', '/subdir/', '/sub/sub/dir');
         foreach ($baseUrls as $baseUrl) {
             Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
-            
-            $this->assertEquals($baseUrl, $this->_helper->baseUrl());
+
+            $this->assertEquals(rtrim($baseUrl, '/\\'), $this->_helper->baseUrl());
         }
     }
-    
+
     /**
      * Test and make sure if paths given without / prefix are fixed
      *
@@ -96,17 +96,17 @@ class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
     {
         $baseUrls = array(
             ''             => '/file.js',
-            '/subdir'      => '/subdir/file.js', 
+            '/subdir'      => '/subdir/file.js',
             '/sub/sub/dir' => '/sub/sub/dir/file.js',
         );
-        
+
         foreach ($baseUrls as $baseUrl => $val) {
             Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
-            
+
             $this->assertEquals($val, $this->_helper->baseUrl('file.js'));
         }
     }
-   
+
     /**
      * Test and make sure baseUrl appended with file works
      *
@@ -115,32 +115,32 @@ class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
     {
         $baseUrls = array(
             ''             => '/file.js',
-            '/subdir'      => '/subdir/file.js', 
+            '/subdir'      => '/subdir/file.js',
             '/sub/sub/dir' => '/sub/sub/dir/file.js',
         );
-        
+
         foreach ($baseUrls as $baseUrl => $val) {
             Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
-            
+
             $this->assertEquals($val, $this->_helper->baseUrl('/file.js'));
         }
     }
-    
+
     /**
-     * Test and makes sure that baseUrl appended with path works    
+     * Test and makes sure that baseUrl appended with path works
      *
      */
     public function testBaseUrlIsAppendedWithPath()
     {
         $baseUrls = array(
             ''             => '/path/bar',
-            '/subdir'      => '/subdir/path/bar', 
+            '/subdir'      => '/subdir/path/bar',
             '/sub/sub/dir' => '/sub/sub/dir/path/bar',
         );
-        
+
         foreach ($baseUrls as $baseUrl => $val) {
             Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
-            
+
             $this->assertEquals($val, $this->_helper->baseUrl('/path/bar'));
         }
     }
