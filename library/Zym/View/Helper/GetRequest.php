@@ -33,7 +33,7 @@ class Zym_View_Helper_GetRequest
     /**
      * Get the request object
      *
-     * @return string
+     * @return Zend_Controller_Request_Abstract|null
      */
     public function getRequest()
     {
