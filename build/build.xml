@@ -103,7 +103,7 @@
     
     <target name="source.api" depends="source.export, api">
         <copy todir="${path.build.bin.export}/documentation/api">
-            <fileset dir="documentation/api/build/HTMLframesExtjsConverter">
+            <fileset dir="${project.basedir}/documentation/api/build/bin/HTMLframesExtjsConverter">
                 <include name="*" />
                 <include name="**" />
             </fileset>
@@ -112,7 +112,7 @@
     
     <target name="source.docs" depends="source.export, docs">
         <copy todir="${path.build.bin.export}/documentation/manual">
-            <fileset dir="documentation/manual/build/bin">
+            <fileset dir="${project.basedir}/documentation/manual/build/bin">
                 <include name="*" />
                 <include name="**" />
             </fileset>
@@ -120,11 +120,11 @@
     </target>
 
     <target name="api" description="Create API documentation">
-        <phing phingfile="documentation/api/build/build.xml" inheritall="false" />
+        <phing phingfile="${project.basedir}/documentation/api/build/build.xml" inheritall="false" />
     </target>
     
     <target name="docs" description="Create reference manual">
-        <phing phingfile="documentation/manual/build/build.xml" inheritall="false" />
+        <phing phingfile="${project.basedir}/documentation/manual/build/build.xml" inheritall="false" />
     </target>
 
     <target name="test" depends="test.core, test.incubator" description="Run tests" />
