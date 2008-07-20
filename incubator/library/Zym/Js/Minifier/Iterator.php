@@ -33,28 +33,28 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
      * @var integer
      */
     protected $_count;
-    
+
     /**
      * String data
      *
      * @var string
      */
     protected $_data;
-    
+
     /**
      * Position
      *
      * @var integer
      */
     protected $_key = 0;
-    
+
     /**
      * Peek
      *
      * @var string
      */
     protected $_peek;
-    
+
     /**
      * Construct
      *
@@ -64,7 +64,7 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     {
         $this->_data = (string) $string;
     }
-    
+
     /**
      * Get Count
      *
@@ -75,10 +75,10 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
         if ($this->_count === null) {
             $this->_count = strlen($this->_data);
         }
-        
+
         return $this->_count;
     }
-    
+
     /**
      * Get current()
      *
@@ -88,7 +88,7 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     {
         return $this->_data{$this->key()};
     }
-    
+
     /**
      * Get key
      *
@@ -98,7 +98,7 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     {
         return $this->_key;
     }
-    
+
     /**
      * Get next char
      *
@@ -112,22 +112,22 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
         if ($noCommentProcess === true) {
             return $char;
         }
-        
+
         if ($char === '/') {
 
         switch ($this->peek()) {
             case '/':
                 while (true){
                     $char = $this->_nextChar();
-                    
+
                     if (ord($char) <= Zym_Js_Minifier::ORD_LF) {
                         return $char;
                     }
                 }
-            
+
             case '*':
                 $this->_nextChar();
-                
+
                 while (true) {
                     switch ($this->_nextChar()) {
                         case '*':
@@ -136,26 +136,26 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
                                 return ' ';
                             }
                             break;
-                        
+
                         case null:
                             /**
                              * @see Zym_Js_Minifier_Exception
                              */
                             require_once 'Zym/Js/Minifier/Exception.php';
                             throw new Zym_Js_Minifier_Exception(sprintf(
-                             'Unterminated Comment at %s characters in', $this->key()
+                                'Unterminated Comment at %s characters in', $this->key()
                             ));
                             break;
                     }
                 }
-            
+
             default :
                 return $char;
-        }         
+        }
         }
         return $char;
     }
-    
+
     /**
      * Peek at the next char
      *
@@ -164,10 +164,10 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     public function peek()
     {
         $this->_peek = $this->_nextChar();
-        
+
         return $this->_peek;
     }
-    
+
     /**
      * Rewind the iterator
      *
@@ -177,7 +177,7 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     {
         $this->_key = 0;
     }
-    
+
     /**
      * Valid
      *
@@ -187,7 +187,7 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     {
         return isset($this->_data{$this->key()});
     }
-    
+
     /**
      * Get next char in data
      *
@@ -197,10 +197,10 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
     {
         $key   = $this->key();
         $count = $this->count();
-        
+
         $char = $this->_peek;
         $this->_peek = null;
-        
+
         if ($char === null) {
             if ($key < $count) {
                 $char = $this->_data{$key};
@@ -209,15 +209,15 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
                 $char = null;
             }
         }
-        
+
         if ($char === "\r") {
             return "\n";
         }
-        
+
         if ($char === null || $char === "\n" || ord($char) >= Zym_Js_Minifier::ORD_SPACE) {
             return $char;
         }
-        
+
         return ' ';
     }
 }

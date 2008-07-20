@@ -202,7 +202,7 @@ class Zym_Js_Minifier
              * @see Zym_Js_Minifier_Exception
              */
             require_once 'Zym/Js/Minifier/Exception.php';
-            throw new Zym_Js_Minifier_Exception($file);
+            throw new Zym_Js_Minifier_Exception('File could not be found: ' . $file);
         }
 
         return self::minify(file_get_contents($file));
@@ -279,7 +279,7 @@ class Zym_Js_Minifier
                              */
                             require_once 'Zym/Js/Minifier/Exception.php';
                             throw new Zym_Js_Minifier_Exception(sprintf(
-                              'Unterminated string literal "%s" at char %d', $this->_a, $this->_iterator->key()
+                                'Unterminated string literal "%s" at char %d', $this->_a, $this->_iterator->key()
                             ));
                         }
 
@@ -311,7 +311,7 @@ class Zym_Js_Minifier
                              */
                             require_once 'Zym/Js/Minifier/Exception.php';
                             throw new Zym_Js_Minifier_Exception(sprintf(
-                              'Unterminated regular expression literal "%s" at char %d', $this->_a, $this->_iterator->key()
+                                'Unterminated regular expression literal "%s" at char %d', $this->_a, $this->_iterator->key()
                             ));
                         }
 

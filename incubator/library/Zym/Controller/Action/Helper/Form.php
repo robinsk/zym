@@ -31,7 +31,7 @@ require_once 'Zend/Loader/PluginLoader/Interface.php';
 
 /**
  * Form Helper
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -43,36 +43,36 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
 {
     /**
      * Word delimiters
-     * 
+     *
      * @see _translateSpec()
      * @var array
      */
     protected $_delimiters;
-    
+
     /**
      * Inflector
-     * 
+     *
      * @var Zend_Filter_Inflector
      */
     protected $_inflector;
 
     /**
      * Inflector target
-     * 
+     *
      * @var string
      */
     protected $_inflectorTarget = '';
 
     /**
      * Current module directory
-     * 
+     *
      * @var string
      */
     protected $_moduleDir = '';
-    
+
     /**
      * Spec for forms path
-     * 
+     *
      * Valid specs:
      *  - :moduleDir
      *  - :module
@@ -82,7 +82,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      * @var string
      */
     protected $_pathSpec = ':moduleDir/forms/:action.php';
-            
+
     /**
      * Construct
      *
@@ -91,7 +91,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
     {
         $this->init();
     }
-    
+
     /**
      * Api for extending classes
      *
@@ -99,22 +99,22 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
      */
     public function init()
     {}
-    
+
     /**
      * Set path spec
-     * 
+     *
      * {@see $this->_pathSpec} for spec format
-     * 
+     *
      * @param string $spec
      * @return Zym_Controller_Action_Helper_Form
      */
     public function setPathSpec($spec)
     {
         $this->_pathSpec = (string) $spec;
-        
+
         return $this;
     }
-    
+
     /**
      * Get path spec
      *
@@ -124,10 +124,10 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
     {
         return $this->_pathSpec;
     }
-    
+
     /**
      * Get a form object
-     * 
+     *
      * @param string            $name Form name
      * @param array|Zend_Config $options Form options
      */
@@ -135,24 +135,24 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
     {
         return $this->createBySpec($name, array(), $options);
     }
-    
+
     /**
      * Get a form object by spec
-     * 
+     *
      * @param string            $name     Form name
      * @param array             $specVars
      * @param array|Zend_Config $options  Form options
-     * 
+     *
      * @return Zend_Form
      */
     public function createBySpec($name = null, array $specVars = array(), $options = null)
     {
         $class = $this->load($name, $specVars);
         $form  = new $class($options);
-        
+
         return $form;
     }
-    
+
     /**
      * Create form
      *
@@ -164,57 +164,59 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
     {
         return $this->create($name, $options);
     }
-    
+
     /**
      * Load a form class
      *
      * @param string $name
      * @param array  $specVars
-     * 
+     *
      * @return void
      */
     public function load($name = null, array $specVars = array())
     {
         // Get a form if none specified
-        if ($name === null) { 
+        if ($name === null) {
             $request    = $this->getRequest();
             $dispatcher = $this->getFrontController()->getDispatcher();
             $controller = substr($dispatcher->formatControllerName($request->getControllerName()), 0, -10);
             $action     = substr($dispatcher->formatActionName($request->getActionName()), 0, -6);
-            
+
             $name =  $controller . ucfirst($action);
         }
-        
+
         $actionSpecVars           = array();
         $specVars['action']       = $name;
         $actionSpecVars['action'] = $name;
-        
+
         // Create class name
         $this->_setInflectorTarget(':action');
         $action    = $this->_translateSpec($actionSpecVars);
         $className = $this->_generateDefaultPrefix() . '_' . str_replace('/', '_', $action);
-        
+
         // Create file path
         if (!class_exists($className, false)) {
             $this->_setInflectorTarget($this->getPathSpec());
             $path = $this->_translateSpec($specVars);
             include_once $path;
         }
-        
+
         if (!class_exists($className, false)) {
             /**
              * @see Zym_Controller_Action_Helper_Form_Exception
              */
             require_once 'Zym/Controller/Action/Helper/Form/Exception.php';
-            throw new Zym_Controller_Action_Helper_Form_Exception($className, $path);
+            throw new Zym_Controller_Action_Helper_Form_Exception(sprintf(
+                'Form action helper could not load form class "%s" at path "%s"', $class, $path
+            );
         }
-        
+
         return $className;
     }
-    
+
     /**
      * Get inflector
-     * 
+     *
      * @return Zend_Filter_Inflector
      */
     public function getInflector()
@@ -224,32 +226,32 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
              * @see Zend_Filter_Inflector
              */
             require_once 'Zend/Filter/Inflector.php';
-            
+
             /**
              * @see Zend_Filter_Word_UnderscoreToSeparator
              */
             require_once 'Zend/Filter/Word/UnderscoreToSeparator.php';
-            
+
             /**
              * @see Zend_Filter_Word_SeparatorToCamelCase
              */
             require_once 'Zend/Filter/Word/SeparatorToCamelCase.php';
-            
+
             $this->_inflector = new Zend_Filter_Inflector();
             // moduleDir must be specified before the less specific 'module'
-            $this->_inflector->setStaticRuleReference('moduleDir', $this->_moduleDir) 
+            $this->_inflector->setStaticRuleReference('moduleDir', $this->_moduleDir)
                              ->addRules(array(
                                  ':module'     => array(
                                     new Zend_Filter_Word_SeparatorToCamelCase('.'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('-')
                                  ),
-                             
+
                                  ':controller' => array(
                                     new Zend_Filter_Word_UnderscoreToSeparator('/'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('.'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('-')
                                  ),
-                                 
+
                                  ':action'     => array(
                                     new Zend_Filter_Word_UnderscoreToSeparator('/'),
                                     new Zend_Filter_Word_SeparatorToCamelCase('.'),
@@ -267,34 +269,34 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
 
     /**
      * Set inflector
-     * 
-     * @param  Zend_Filter_Inflector $inflector 
+     *
+     * @param  Zend_Filter_Inflector $inflector
      * @param  boolean               $reference Whether the moduleDir, target, and suffix should be set as references to ViewRenderer properties
      * @return Zend_Controller_Action_Helper_ViewRenderer Provides a fluent interface
      */
     public function setInflector(Zend_Filter_Inflector $inflector, $reference = false)
     {
         $this->_inflector = $inflector;
-        
+
         if ($reference) {
             $this->_inflector->setStaticRuleReference('moduleDir', $this->_moduleDir)
                              ->setTargetReference($this->_inflectorTarget);
         }
-        
+
         return $this;
     }
 
     /**
      * Set inflector target
-     * 
-     * @param  string $target 
+     *
+     * @param  string $target
      * @return void
      */
     protected function _setInflectorTarget($target)
     {
         $this->_inflectorTarget = (string) $target;
     }
-    
+
     /**
      * Generate a class prefix for form classes
      *
@@ -312,24 +314,24 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
 
         return $prefix;
     }
-    
+
     /**
      * Get current module name
-     * 
+     *
      * @return string
      */
     protected function _getModule()
     {
         $request = $this->getRequest();
         $module  = $request->getModuleName();
-        
+
         if (null === $module) {
             $module = $this->getFrontController()->getDispatcher()->getDefaultModule();
         }
 
         return $module;
     }
-    
+
     /**
      * Get module directory
      *
@@ -345,14 +347,15 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
              * @see Zym_Controller_Action_Helper_Form_Exception
              */
             require_once 'Zym/Controller/Action/Helper/Form/Exception.php';
-            throw new Zym_Controller_Action_Helper_Form_Exception();
+            throw new Zym_Controller_Action_Helper_Form_Exception(
+                'Form action helper could not located module directory');
         }
-        
+
         $this->_moduleDir = dirname($moduleDir);
-        
+
         return $this->_moduleDir;
     }
-    
+
     /**
      * Inflect based on provided vars
      *
@@ -374,7 +377,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
         $controller = substr($dispatcher->formatControllerName($request->getControllerName()), 0, -10);
         $action     = substr($dispatcher->formatActionName($request->getActionName()), 0, -6);
         $name       = $action;
-        
+
         $params     = compact('module', 'controller', 'action');
         foreach ($vars as $key => $value) {
             switch ($key) {
@@ -384,7 +387,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
                 case 'moduleDir' :
                     $params[$key] = (string) $value;
                     break;
-                    
+
                 default:
                     break;
             }
