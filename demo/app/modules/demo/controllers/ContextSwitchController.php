@@ -21,7 +21,7 @@ require_once 'Zym/Controller/Action/Abstract.php';
  * @license http://www.zym-project.com/license New BSD License
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract 
+class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
 {
     /**
      * Ajax actions
@@ -31,7 +31,7 @@ class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
     public $ajaxable = array(
         'view' => array('html', 'json')
     );
-    
+
     /**
      * Contexts
      *
@@ -40,21 +40,27 @@ class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
     public $contexts = array(
         'view' => array('json', 'xml')
     );
-    
+
     /**
      * Init
-     * 
+     *
      * @return void
      */
     public function init()
     {
+        /*
+         * The code below is not needed because Zym_Controller_Action_Abstract
+         * will executed it automatically if public vars $this->ajaxable
+         * or $this->contexts is detected.
+         */
+
         // Init Contexts
-        $this->getHelper('ContextSwitch')->initContext();
-        
+        //$this->getHelper('ContextSwitch')->initContext();
+
         // Init AjaxContexts
-        $this->getHelper('AjaxContext')->initContext();
+        //$this->getHelper('AjaxContext')->initContext();
     }
-    
+
     /**
      * Index
      *
@@ -75,10 +81,10 @@ class Demo_ContextSwitchController extends Zym_Controller_Action_Abstract
             'title'     => 'Contexts are Cool',
             'subTitle'  => 'Demo brought to you by Zym',
             'published' => '5 April 2008',
-        
+
             'content'   => 'Sample context data content'
         );
-        
+
         // Set view
         $this->getView()->assign(array(
             'article' => $article

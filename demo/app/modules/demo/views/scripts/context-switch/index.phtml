@@ -1,13 +1,76 @@
-<? $this->headTitle('Context Demo') ?>
+<? $this->headTitle('Context Switching Demo') ?>
+<script type="text/javascript">
+//<![CDATA[
+    dojo.addOnLoad(function(){
+        // #ajaxContext
+        dojo.xhrGet({
+            url: "<?= $this->simpleUrl('view'); ?>",
+            load: function(response){
+                dojo.byId('ajaxContext').innerHTML = response;
+            },
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        });
+
+        // #ajaxContext.json
+        dojo.xhrGet({
+            url: "<?= $this->simpleUrl('view', null, null, array('format' => 'json')); ?>",
+            load: function(response){
+                dojo.byId('ajaxContext.json').innerHTML = response;
+            },
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        });
+    });
+//]]>
+</script>
 <div>
-    <h1>Context Demo</h1>
-    
+    <h1>Context Switching Demo</h1>
+
+    <p>
+        The context switch action helper allows the serving of different response
+        formats for actions based on the request. Examples of this are serving
+        different views for ajax requests or outputting XML versions of HTML
+        actions.
+    </p>
+
+    <p>
+        The contextSwitch helper works by monitoring the "format" parameter for "json"
+        or "xml". It is possible to add more contexts.
+    </p>
+
+    <ul>
+        <li><a href="<?= $this->simpleUrl('view'); ?>">HTML (view.phtml)</a></li>
+        <li><a href="<?= $this->simpleUrl('view', null, null, array('format' => 'json')); ?>">JSON (serialized view object)</a></li>
+        <li><a href="<?= $this->simpleUrl('view', null, null, array('format' => 'xml')); ?>">XML (view.xml.phtml)</a></li>
+    </ul>
+
     <div>
-        <h2>Ajax</h2>
-        <p></p>
-    </div>
-    
-    <div>
-        <h2></h2>
+        <h2>AjaxContext</h2>
+
+        <p>
+            This helper extends the context switch action helper and provides different response
+            by checking if the request is an ajax request. It does this by checking for
+            the unofficial X-Requested-With header.
+        </p>
+
+        <p>
+            The content below is grabbed via ajax.
+        </p>
+
+        <div>
+            <h3>HTML (view.ajax.phtml)</h3>
+
+            <div id="ajaxContext">
+                <p>Unabled to load from ajax.</p>
+            </div>
+        </div>
+
+        <div>
+            <h3>JSON (serialized view object)</h3>
+
+            <div id="ajaxContext.json">
+                <p>Unabled to load from ajax.</p>
+            </div>
+        </div>
+
     </div>
 </div>
