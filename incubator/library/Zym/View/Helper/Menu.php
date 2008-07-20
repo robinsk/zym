@@ -37,7 +37,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
      *
      * @var string
      */
-    protected $_ulClass = 'Zym_Navigation';
+    protected $_ulClass = 'navigation';
     
     /**
      * Retrieves helper and optionally sets container to operate on
