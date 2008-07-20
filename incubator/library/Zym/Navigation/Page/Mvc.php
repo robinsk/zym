@@ -117,21 +117,27 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     public function isActive($recursive = false)
     {
         if (!$this->_active) {
-            $reqParams = Zend_Controller_Front::getInstance()
-                            ->getRequest()->getParams();
+            $front = Zend_Controller_Front::getInstance();
+            $reqParams = $front->getRequest()->getParams();
 
             $myParams = $this->_params;
             
             if (null !== $this->_module) {
                 $myParams['module'] = $this->_module;
+            } else {
+                $myParams['module'] = $front->getDefaultModule();
             }
             
             if (null !== $this->_controller) {
                 $myParams['controller'] = $this->_controller;
+            } else {
+                $myParams['controller'] = $front->getDefaultControllerName();
             }
             
             if (null !== $this->_action) {
                 $myParams['action'] = $this->_action;
+            } else {
+                $myParams['action'] = $front->getDefaultAction();
             }
             
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
