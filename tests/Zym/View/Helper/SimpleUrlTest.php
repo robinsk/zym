@@ -25,6 +25,11 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Controller/Front.php';
 
 /**
+ * @see Zend_Controller_Front
+ */
+require_once 'Zend/Controller/Front.php';
+
+/**
  * @see Zym_View_Helper_SimpleUrl
  */
 require_once 'Zym/View/Helper/SimpleUrl.php';
@@ -53,6 +58,7 @@ class Zym_View_Helper_SimpleUrlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Zend_Controller_Front::getInstance()->getRouter()->addDefaultRoutes();
         $this->_helper = new Zym_View_Helper_SimpleUrl();
     }
 
@@ -61,6 +67,7 @@ class Zym_View_Helper_SimpleUrlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Zend_Controller_Front::getInstance()->resetInstance();
         $this->_helper = null;
     }
 

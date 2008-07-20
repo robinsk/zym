@@ -76,10 +76,14 @@ class Zym_View_Helper_ServerUrl
      *
      * @return string
      */
-    public function serverUrl($requestUri = false)
+    public function serverUrl($requestUri = null)
     {
         // Display request uri
-        $path = $requestUri ? $_SERVER['REQUEST_URI'] : '';
+        if ($requestUri === true) {
+            $path = $_SERVER['REQUEST_URI'];
+        } else if (is_string($requestUri)) {
+            $path = $requestUri;
+        }
 
         // Return url
         return $this->getScheme() . '://' . $this->getHost() . $path;

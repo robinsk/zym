@@ -26,7 +26,7 @@ final class Zym_Version
      * Framework version
      *
      */
-    const VERSION = '0.5.0PR1';
+    const VERSION = '0.5.0PR';
 
     /**
      * Compare the specified Framework version string $version

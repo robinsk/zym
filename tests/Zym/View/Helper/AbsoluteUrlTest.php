@@ -25,6 +25,11 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Controller/Front.php';
 
 /**
+ * @see Zym_View
+ */
+require_once 'Zym/View.php';
+
+/**
  * @see Zym_View_Helper_AbsoluteUrl
  */
 require_once 'Zym/View/Helper/AbsoluteUrl.php';
@@ -62,13 +67,14 @@ class Zym_View_Helper_AbsoluteUrlTest extends PHPUnit_Framework_TestCase
     {
         $this->_serverBackup = $_SERVER;
 
-        $server = array(
-            'HTTPS' => true,
-            'HTTP_HOST' => 'example.com'
-        );
-        array_merge($_SERVER, $server);
+        $_SERVER['HTTPS']     = true;
+        $_SERVER['HTTP_HOST'] = 'example.com';
 
-        $this->_helper = new Zym_View_Helper_AbsoluteUrl();
+        $helper = new Zym_View_Helper_AbsoluteUrl();
+        $helper->setView(new Zym_View());
+        $this->_helper = $helper;
+
+        Zend_Controller_Front::getInstance()->getRouter()->addDefaultRoutes();
     }
 
     /**
@@ -78,6 +84,7 @@ class Zym_View_Helper_AbsoluteUrlTest extends PHPUnit_Framework_TestCase
     {
         $this->_helper = null;
         $_SERVER = $this->_serverBackup;
+        Zend_Controller_Front::getInstance()->resetInstance();
     }
 
     public function testAbsoluteUrl()
@@ -132,7 +139,7 @@ class Zym_View_Helper_AbsoluteUrlTest extends PHPUnit_Framework_TestCase
     public function testSetScheme()
     {
         $helper = clone $this->_helper;
-        $helper->setHost('http');
+        $helper->setScheme('http');
 
         $this->assertEquals('http', $helper->getScheme());
     }
@@ -141,35 +148,39 @@ class Zym_View_Helper_AbsoluteUrlTest extends PHPUnit_Framework_TestCase
     {
         // Non standard port
         unset($_SERVER['HTTPS'], $_SERVER['HTTP_HOST']);
-        $_SERVER['SERVER_NAME'] =  'example.com';
+        $_SERVER['SERVER_NAME'] = 'example.com';
         $_SERVER['SERVER_PORT'] = 8888;
         $helper = new Zym_View_Helper_AbsoluteUrl();
+        $helper->setView(new Zym_View());
 
         $this->assertEquals('example.com:8888', $helper->getHost());
         $this->assertEquals('http', $helper->getScheme());
 
         // Standard http port
-        $_SERVER['SERVER_NAME'] =  'example.com';
+        $_SERVER['SERVER_NAME'] = 'example.com';
         $_SERVER['SERVER_PORT'] = 80;
         $helper = new Zym_View_Helper_AbsoluteUrl();
+        $helper->setView(new Zym_View());
 
         $this->assertEquals('example.com', $helper->getHost());
-        $this->assertEquals('https', $helper->getScheme());
+        $this->assertEquals('http', $helper->getScheme());
 
         // Standard https port
         $_SERVER['HTTPS']       = 'on';
         $_SERVER['SERVER_NAME'] =  'example.com';
         $_SERVER['SERVER_PORT'] = 443;
         $helper = new Zym_View_Helper_AbsoluteUrl();
+        $helper->setView(new Zym_View());
 
         $this->assertEquals('example.com', $helper->getHost());
         $this->assertEquals('https', $helper->getScheme());
 
-                // Standard https port
+        // Standard https port
         $_SERVER['HTTPS']       = 'off';
         $_SERVER['SERVER_NAME'] =  'example.com';
         $_SERVER['SERVER_PORT'] = 80;
         $helper = new Zym_View_Helper_AbsoluteUrl();
+        $helper->setView(new Zym_View());
 
         $this->assertEquals('example.com', $helper->getHost());
         $this->assertEquals('http', $helper->getScheme());

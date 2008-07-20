@@ -42,13 +42,6 @@ require_once 'Zym/View/Helper/ServerUrl.php';
 class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * View helper
-     *
-     * @var Zym_View_Helper_ServerUrl
-     */
-    protected $_helper;
-
-    /**
      * Back up of $_SERVER
      *
      * @var array
@@ -61,8 +54,6 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_serverBackup    = $_SERVER;
-        $_SERVER['REQUEST_URI'] = '/test';
-        $this->_helper          = new Zym_View_Helper_ServerUrl();
     }
 
     /**
@@ -70,7 +61,6 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_helper = null;
         $_SERVER = $this->_serverBackup;
     }
 
@@ -79,19 +69,20 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
         // Non standard port
         $_SERVER['HTTPS']     = 'off';
         $_SERVER['HTTP_HOST'] = 'example.com:8888';
-        $this->assertEquals('http://example.com:8888', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('http://example.com:8888', $url->serverUrl());
 
         unset($_SERVER['HTTPS']);
         $_SERVER['HTTP_HOST'] = 'example.com:8888';
-        $this->assertEquals('http://example.com:8888', $this->_helper->serverUrl());
-
+        $this->assertEquals('http://example.com:8888', $url->serverUrl());
 
         unset($_SERVER['HTTP_HOST']);
         $_SERVER['SERVER_NAME'] = 'example.com';
         $_SERVER['SERVER_PORT'] = '8888';
-        $this->assertEquals('http://example.com:8888', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('http://example.com:8888', $url->serverUrl());
 
-        $this->assertEquals('http://example.com:8888/test', $this->_helper->serverUrl('/test'));
+        $this->assertEquals('http://example.com:8888/test', $url->serverUrl('/test'));
     }
 
     public function testServerUrlWithNonStandardPortSecure()
@@ -100,18 +91,21 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['HTTP_HOST']);
         $_SERVER['HTTPS'] = 'on';
         $_SERVER['HTTP_HOST'] = 'example.com:8888';
-        $this->assertEquals('https://example.com:8888', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com:8888', $url->serverUrl());
 
-        $_SERVER['HTTPS'] = true;
+        $_SERVER['HTTPS']     = true;
         $_SERVER['HTTP_HOST'] = 'example.com:8888';
-        $this->assertEquals('https://example.com:8888', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com:8888', $url->serverUrl());
 
         unset($_SERVER['HTTP_HOST']);
         $_SERVER['SERVER_NAME'] = 'example.com';
         $_SERVER['SERVER_PORT'] = '8888';
-        $this->assertEquals('https://example.com:8888', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com:8888', $url->serverUrl());
 
-        $this->assertEquals('https://example.com:8888/test', $this->_helper->serverUrl('/test'));
+        $this->assertEquals('https://example.com:8888/test', $url->serverUrl('/test'));
     }
 
     public function testServerUrlWithStandardPort()
@@ -119,18 +113,21 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
         // Non standard port
         $_SERVER['HTTPS']     = 'off';
         $_SERVER['HTTP_HOST'] = 'example.com';
-        $this->assertEquals('http://example.com', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('http://example.com', $url->serverUrl());
 
         unset($_SERVER['HTTPS']);
         $_SERVER['HTTP_HOST'] = 'example.com';
-        $this->assertEquals('http://example.com', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('http://example.com', $url->serverUrl());
 
         unset($_SERVER['HTTP_HOST']);
         $_SERVER['SERVER_NAME'] = 'example.com';
         $_SERVER['SERVER_PORT'] = '80';
-        $this->assertEquals('http://example.com', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('http://example.com', $url->serverUrl());
 
-        $this->assertEquals('http://example.com/test', $this->_helper->serverUrl('/test'));
+        $this->assertEquals('http://example.com/test', $url->serverUrl('/test'));
     }
 
     public function testServerUrlWithStandardPortSecure()
@@ -139,17 +136,20 @@ class Zym_View_Helper_ServerUrlTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['HTTP_HOST']);
         $_SERVER['HTTPS'] = 'on';
         $_SERVER['HTTP_HOST'] = 'example.com';
-        $this->assertEquals('https://example.com', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com', $url->serverUrl());
 
         $_SERVER['HTTPS'] = true;
         $_SERVER['HTTP_HOST'] = 'example.com';
-        $this->assertEquals('https://example.com', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com', $url->serverUrl());
 
         unset($_SERVER['HTTP_HOST']);
         $_SERVER['SERVER_NAME'] = 'example.com';
         $_SERVER['SERVER_PORT'] = '443';
-        $this->assertEquals('https://example.com', $this->_helper->serverUrl());
+        $url = new Zym_View_Helper_ServerUrl();
+        $this->assertEquals('https://example.com', $url->serverUrl());
 
-        $this->assertEquals('https://example.com/test', $this->_helper->serverUrl('/test'));
+        $this->assertEquals('https://example.com/test', $url->serverUrl('/test'));
     }
 }
