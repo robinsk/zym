@@ -102,7 +102,7 @@
     </target>
     
     <target name="source.api" depends="source.export, api">
-        <copy todir="${path.build.export}/documentation/api">
+        <copy todir="${path.build.bin.export}/documentation/api">
             <fileset dir="documentation/api/build/HTMLframesExtjsConverter">
                 <include name="*" />
                 <include name="**" />
@@ -111,7 +111,7 @@
     </target>
     
     <target name="source.docs" depends="source.export, docs">
-        <copy todir="${path.build.export}/documentation/manual">
+        <copy todir="${path.build.bin.export}/documentation/manual">
             <fileset dir="documentation/manual/build/bin">
                 <include name="*" />
                 <include name="**" />
