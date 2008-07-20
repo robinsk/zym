@@ -448,23 +448,71 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
     public function testToArrayMethod()
     {
         $options = array(
-            'label' => 'foo',
-            'uri' => '#',
-            'id' => 'my-id',
-            'class' => 'my-class',
-            'title' => 'my-title',
-            'target' => 'my-target',
+            'label'    => 'foo',
+            'uri'      => '#',
+            'id'       => 'my-id',
+            'class'    => 'my-class',
+            'title'    => 'my-title',
+            'target'   => 'my-target',
             'position' => 100,
-            'active' => true,
-            'visible' => false,
+            'active'   => true,
+            'visible'  => false,
         
-            'foo' => 'bar',
-            'meaning' => 42
+            'role'     => 'joker',
+        
+            'foo'      => 'bar',
+            'meaning'  => 42,
+        
+            'pages'    => array(
+                array(
+                    'label' => 'foo.bar',
+                    'uri'   => '#'
+                ),
+                array(
+                    'label' => 'foo.baz',
+                    'uri'   => '#'
+                )
+            )
         );
         
         $page = Zym_Navigation_Page::factory($options);
+        $toArray = $page->toArray();
         
-        $this->assertEquals(array(),
-            array_diff_assoc($options, $page->toArray()));
+        // tweak options to what we expect toArray() to contain
+        $options['role'] = (array) $options['role'];
+        $options['type'] = 'Zym_Navigation_Page_Uri';
+        
+        // calculate diff between toArray() and $options
+        $diff = array_diff_assoc($toArray, $options);
+        
+        // should be no diff
+        $this->assertEquals(array(), $diff);
+        
+        // $toArray should have 2 sub pages
+        $this->assertEquals(2, count($toArray['pages']));
+        
+        // tweak options to what we expect sub pages 1
+        $options['label'] = 'foo.bar';
+        $options['position'] = null;
+        $options['id'] = null;
+        $options['class'] = null;
+        $options['title'] = null;
+        $options['target'] = null;
+        $options['role'] = null;
+        $options['active'] = false;
+        $options['visible'] = true;
+        unset($options['foo']);
+        unset($options['meaning']);
+        
+        // assert that there is no diff from what we expect
+        $subPageOneDiff = array_diff_assoc($toArray['pages'][0], $options);
+        $this->assertEquals(array(), $subPageOneDiff);
+        
+        // tweak options to what we expect sub page 2 to be
+        $options['label'] = 'foo.baz';
+        
+        // assert that there is no diff from what we expect
+        $subPageTwoDiff = array_diff_assoc($toArray['pages'][1], $options);
+        $this->assertEquals(array(), $subPageTwoDiff);
     }
 }
