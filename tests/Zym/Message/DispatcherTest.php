@@ -20,9 +20,9 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * @see Zym_Message_Notification
+ * @see Zym_Message_Dispatcher
  */
-require_once 'Zym/Message.php';
+require_once 'Zym/Message/Dispatcher.php';
 
 /**
  * @see Zym_Message_Interface
