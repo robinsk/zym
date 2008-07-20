@@ -12,16 +12,13 @@
         <?= $this->headTitle() . "\n"; ?>
 
         <!-- Start: Link Tags -->
+        <!-- <link rel="shortcut icon" href="<?= $this->baseUrl('images/favicon.ico'); ?>" type="image/x-icon" /> -->
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/tools.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/typo.css');  ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/forms.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout-navtop-1col.css'); ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('styles/layout.css'); ?>" />
         <?= $this->headLink() . "\n"; ?>
-
-        <!--[if lte IE 6]>
-        <link rel="stylesheet" type="text/css" href="<?= $this->baseUrl('zym/styles/ie/png-fix.css'); ?>" />
-        <![endif]-->
         <!-- End: Link Tags -->
 
         <!-- Start: Styles -->
@@ -30,26 +27,18 @@
 
         <!-- Start: Scripts -->
         <?
-            $this->dojo()->setDjConfig(array(
-                            'parseOnLoad' => true
-                         ))
-                         ->addStyleSheetModule('dijit.themes.tundra')
-                         ->enable();
+        $this->dojo()->setDjConfig(array(
+                        'parseOnLoad' => true
+                     ))
+                     ->addStyleSheetModule('dijit.themes.tundra')
+                     ->enable();
         ?>
         <?= $this->dojo(); ?>
-        <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js'); ?>"></script>
-        <script type="text/javascript">
-        //<![CDATA[
-            // Bootstrap
-            app.layout.init();
-        //]]>
-        </script>
-
         <?= $this->headScript() . "\n"; ?>
         <!-- End: Scripts -->
     </head>
 
-    <body>
+    <body class="tundra">
         <div id="page">
             <!-- Start: Header -->
             <div id="header" class="clearfix">
@@ -129,7 +118,17 @@
         <div id="extra1">&nbsp;</div>
         <div id="extra2">&nbsp;</div>
 
-        <?= $this->inlineScript(); ?>
+        <!-- Start: Inline Scripts -->
+        <script type="text/javascript" src="<?= $this->baseUrl('scripts/app/layout.js'); ?>"></script>
+        <script type="text/javascript">
+        //<![CDATA[
+            // Bootstrap
+            app.layout.init();
+        //]]>
+        </script>
+
+        <?= $this->inlineScript() . "\n"; ?>
+        <!-- End: Inline Scripts -->
     </body>
 </html>
 <!-- This design was created by jugend from http://www.pluitsolutions.com -->
