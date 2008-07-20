@@ -150,10 +150,6 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      */
     public function getHref()
     {
-        if (!$this->_controller && !$this->_action) {
-            return null;
-        }
-        
         if (null === self::$_urlHelper) {
             self::$_urlHelper =
                 Zend_Controller_Action_HelperBroker::getStaticHelper('url');
