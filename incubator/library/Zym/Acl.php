@@ -79,12 +79,15 @@ class Zym_Acl extends Zend_Acl
         } elseif (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
             return Zend_Registry::get(self::REGISTRY_KEY);
         } else {
-            throw new Zym_Acl_Exception('Cannot access the acl via the front controller or the registry.');
+            throw new Zym_Acl_Exception('Cannot access the acl via the '
+                                      . 'front controller or the registry.');
         }
     }
 
     /**
-     * Shortens the signature for 'isAllowed' - we will retrieve the role from the built-in identity
+     * Shortens the signature for 'isAllowed'
+     * 
+     * The role will be retrieved from the built-in identity
      *
      * @param string $resource
      * @param string $privilege
@@ -94,7 +97,7 @@ class Zym_Acl extends Zend_Acl
     public function isAllowed($resource = null, $privilege = null, $role = null)
     {
         if (empty($role)) {
-            $role = $this->getRole();
+            $role = $this->getIdentityRole();
         }
 
         return parent::isAllowed($role, $resource, $privilege);
@@ -115,7 +118,7 @@ class Zym_Acl extends Zend_Acl
      *
      * @return null|string
      */
-    public function getRole()
+    public function getIdentityRole()
     {
         if (!isset($this->_identity)) {
             return null;
