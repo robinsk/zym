@@ -25,11 +25,6 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Controller/Front.php';
 
 /**
- * @see Zend_Controller_Front
- */
-require_once 'Zend/Controller/Front.php';
-
-/**
  * @see Zym_View_Helper_SimpleUrl
  */
 require_once 'Zym/View/Helper/SimpleUrl.php';

@@ -8,7 +8,7 @@
  * with this package in the file LICENSE.txt.
  *
  * @category  Zym_Tests
- * @package   Zym_Navigation
+ * @package   Zym_App
  * @license   http://www.zym-project.com/license    New BSD License
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */

@@ -15,14 +15,18 @@
  */
 
 /**
- * Imports
+ * @see Zend_Controller_Action_Helper_Abstract
  */
 require_once 'Zend/Controller/Action/Helper/Abstract.php';
+
+/**
+ * @see Zend_Locale
+ */
 require_once 'Zend/Locale.php';
 
 /**
  * Helper for Zend_Translate
- * 
+ *
  * @category   Zym
  * @package    Zym_Controller
  * @subpackage Action_Helper
@@ -54,9 +58,9 @@ class Zym_Controller_Action_Helper_Translator
 
     /**
      * Translates a message
-     * 
+     *
      * The method accepts multiple params or an array of params.
-     * 
+     *
      * If you want to output another locale just set it as last single parameter
      * Example 1: translate('%1\$s + %2\$s', $value1, $value2, $locale);
      * Example 2: translate('%1\$s + %2\$s', array($value1, $value2), $locale);
@@ -66,6 +70,10 @@ class Zym_Controller_Action_Helper_Translator
      */
     public function translate($messageid = null)
     {
+        if ($messageid === null) {
+            return $this;
+        }
+
         $translator = $this->getTranslator();
         if ($translator === null) {
             return $messageid;
@@ -96,9 +104,9 @@ class Zym_Controller_Action_Helper_Translator
 
     /**
      * Translates a message (shorthand)
-     * 
+     *
      * The method accepts multiple params or an array of params.
-     * 
+     *
      * If you want to output another locale just set it as last single parameter
      * Example 1: translate('%1\$s + %2\$s', $value1, $value2, $locale);
      * Example 2: translate('%1\$s + %2\$s', array($value1, $value2), $locale);
@@ -108,32 +116,9 @@ class Zym_Controller_Action_Helper_Translator
      */
     public function _($messageid = null)
     {
-        $translator = $this->getTranslator();
-        if ($translator === null) {
-            return $messageid;
-        }
+        $args = func_get_args();
 
-        $options = func_get_args();
-        array_shift($options);
-
-        $count  = count($options);
-        $locale = null;
-        if ($count > 0) {
-            if (Zend_Locale::isLocale($options[($count - 1)]) !== false) {
-                $locale = array_pop($options);
-            }
-        }
-
-        if ((count($options) === 1) and (is_array($options[0]) === true)) {
-            $options = $options[0];
-        }
-
-        $message = $translator->translate($messageid, $locale);
-        if ($count === 0) {
-            return $message;
-        }
-
-        return vsprintf($message, $options);
+        return call_user_func_array(array($this, 'translate'), $args);
     }
 
     /**
@@ -150,6 +135,9 @@ class Zym_Controller_Action_Helper_Translator
         } else if ($translator instanceof Zend_Translate) {
             $this->_translator = $translator->getAdapter();
         } else {
+            /**
+             * @see Zym_Controller_Action_Helper_Exception
+             */
             require_once 'Zym/Controller/Action/Helper/Exception.php';
             $msg = '$translator must be an instance of Zend_Translate or Zend_Translate_Adapter';
             throw new Zym_Controller_Action_Helper_Exception($msg);
@@ -169,9 +157,13 @@ class Zym_Controller_Action_Helper_Translator
     public function getTranslator()
     {
         if ($this->_translator === null) {
+            /**
+             * @see Zend_Registry
+             */
             require_once 'Zend/Registry.php';
             if (Zend_Registry::isRegistered('Zend_Translate')) {
                 $translator = Zend_Registry::get('Zend_Translate');
+
                 if ($translator instanceof Zend_Translate ||
                     $translator instanceof Zend_Translate_Adapter) {
                     $this->setTranslator($translator);
@@ -193,8 +185,11 @@ class Zym_Controller_Action_Helper_Translator
     {
         $translator = $this->getTranslator();
         if ($translator === null) {
+            /**
+             * @see Zym_Controller_Action_Helper_Exception
+             */
             require_once 'Zym/Controller/Action/Helper/Exception.php';
-            $msg = 'Action helper has no translator instance';
+            $msg = 'You must set an instance of Zend_Translate or Zend_Translate_Adapter';
             throw new Zym_Controller_Action_Helper_Exception($msg);
         }
 
@@ -212,19 +207,22 @@ class Zym_Controller_Action_Helper_Translator
     {
         $translator = $this->getTranslator();
         if ($translator === null) {
+            /**
+             * @see Zym_Controller_Action_Helper_Exception
+             */
             require_once 'Zym/Controller/Action/Helper/Exception.php';
-            $msg = 'Action helper has no translator instance';
+            $msg = 'You must set an instance of Zend_Translate or Zend_Translate_Adapter';
             throw new Zym_Controller_Action_Helper_Exception($msg);
         }
 
         return $translator->getLocale();
     }
-    
+
     /**
      * Strategy pattern: Return instance or call translate()
-     * 
+     *
      * The method accepts multiple params or an array of params.
-     * 
+     *
      * If you want to output another locale just set it as last single parameter
      * Example 1: translate('%1\$s + %2\$s', $value1, $value2, $locale);
      * Example 2: translate('%1\$s + %2\$s', array($value1, $value2), $locale);
@@ -239,7 +237,7 @@ class Zym_Controller_Action_Helper_Translator
         if ($messageId === null) {
             return $this;
         }
-        
+
         return call_user_func_array(array($this, 'translate'), func_get_args());
     }
 }
