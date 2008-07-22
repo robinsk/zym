@@ -27,7 +27,7 @@ require_once 'Zend/Filter/Interface.php';
  * @package Zym_Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Filter_Null implements Zend_Filter_Interface
+class Zym_Filter_Dummy implements Zend_Filter_Interface
 {
     /**
      * Returns the result of filtering $value

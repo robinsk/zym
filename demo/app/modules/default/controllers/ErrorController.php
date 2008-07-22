@@ -24,38 +24,12 @@ require_once 'Zym/Controller/Action/Error.php';
 class Default_ErrorController extends Zym_Controller_Action_Error
 {
     /**
-     * Ajax actions
-     *
-     * @var array
-     */
-    public $ajaxable = array(
-        'not-found' => array('html', 'json'),
-        'internal'  => array('html', 'json')
-    );
-    
-    /**
-     * Contexts
-     *
-     * @var array
-     */
-    public $contexts = array(
-        'not-found' => array('json'),
-        'internal'  => array('json')
-    );
-    
-    /**
      * Init
-     * 
+     *
      * @return void
      */
     public function init()
     {
-        // Init Contexts
-        $this->getHelper('ContextSwitch')->initContext();
-        
-        // Init AjaxContexts
-        $this->getHelper('AjaxContext')->initContext();
-        
         // $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER, 'not-found');
         // $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION, 'not-found');
         // $this->addErrorHandler(Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER, 'internal');
@@ -64,41 +38,41 @@ class Default_ErrorController extends Zym_Controller_Action_Error
         $this->setErrorHandlers(array(
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => 'not-found',
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => 'not-found',
-            
+
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => array(
                 self::ACTION     => 'internal',
-                self::CONTROLLER => 'foo',
-                self::MODULE     => 'module'
+                self::CONTROLLER => 'error',
+                self::MODULE     => 'default'
             )
         ));
     }
-    
+
     /**
      * Unauthorized access
-     * 
+     *
      * HTTP 401
      *
      * @return void
      */
     public function unauthorizedAction()
     {}
-    
+
     /**
      * Forbidden access
-     * 
+     *
      * HTTP 403
      *
      * @return void
      */
     public function forbiddenAction()
     {}
-    
+
     /**
      * Not-Found
-     * 
+     *
      * Action used when an action or controller could not be dispatched.
      * This is commonly referred to as an HTTP 404
-     * 
+     *
      *
      * @return void
      */
@@ -106,16 +80,16 @@ class Default_ErrorController extends Zym_Controller_Action_Error
     {
         // Send 404 HTTP Error
         $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
-        
+
         // View
         $this->getView()->assign(array(
             'error' => $this->getError()
         ));
     }
-    
+
     /**
      * Internal Error
-     * 
+     *
      * Action used when an internal server error occured.
      * Commonly referred to as an HTTP 500
      *
@@ -124,7 +98,7 @@ class Default_ErrorController extends Zym_Controller_Action_Error
     {
         // Send 500 Error
         $this->getResponse()->setRawHeader('HTTP/1.1 500 Internal Server Error');
-        
+
         // View
         $this->getView()->assign(array(
             'error' => $this->getError()
