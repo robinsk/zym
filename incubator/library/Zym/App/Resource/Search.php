@@ -45,16 +45,16 @@ class Zym_App_Resource_Search extends Zym_App_Resource_Abstract
         Zym_App::ENV_DEFAULT => array(
             'search' => array(
                 'defaults' => array(
-                    'indexpath' => null,
-                    'resultsetlimit' => 0
+                    'index_path' => 'data/indexes',
+                    'resultset_limit' => 0
                 ),
                 /*
                 'indexes' => array(
                     array(
-                        'indexpath' => '',
-                        'usedefaultpath' => true,
+                        'name' => '',
+                        'use_default_path' => true,
                         'create' => true,
-                        'idkey' => ''
+                        'id_key' => ''
                     ), ...
                 ),
                 */
@@ -71,25 +71,25 @@ class Zym_App_Resource_Search extends Zym_App_Resource_Abstract
         // Get resource config
         $searchConfig = $config->search;
         
-        Zym_Search_Lucene::setDefaultIndexPath($searchConfig->defaults->indexpath);
-        Zym_Search_Lucene::setDefaultResultSetLimit($searchConfig->defaults->resultsetlimit);
+        $indexPath = $this->getApp()->getHome($searchConfig->defaults->index_path);
+        
+        Zym_Search_Lucene::setDefaultIndexPath($indexPath);
+        Zym_Search_Lucene::setDefaultResultSetLimit($searchConfig->defaults->resultset_limit);
                 
         foreach ($searchConfig->indexes as $index) {
-            if (!isset($index->indexpath)) {
+            if (!isset($index->name)) {
                 require_once 'Zym/App/Resource/Exception.php';
                 
-                throw new Zym_App_Resource_Exception('No index path set for the current index.');
+                throw new Zym_App_Resource_Exception('No index name set for the current index.');
             }
             
-            $indexpath = $index->indexpath;
-            
-            $useDefaultPath = isset($index->usedefaultpath) ? $index->usedefaultpath : true;
+            $useDefaultPath = isset($index->use_default_path) ? $index->use_default_path : true;
             $createIfNotExists = isset($index->create) ? $index->create : true;
             
-            $index = Zym_Search_Lucene::factory($index->indexpath, $useDefaultPath, $createIfNotExists);
+            $index = Zym_Search_Lucene::factory($index->name, $useDefaultPath, $createIfNotExists);
             
-            if (isset($index->idkey)) {
-                $index->setIdKey($index->idKey);
+            if (isset($index->id_key)) {
+                $index->setIdKey($index->id_key);
             }
         }
     }
