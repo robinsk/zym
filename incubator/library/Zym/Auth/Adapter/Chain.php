@@ -34,7 +34,7 @@ require_once 'Zend/Auth/Result.php';
  * @license    http://www.zym-project.com/license New BSD License
  * @category   Zym
  * @package    Zym_Auth
- * @subpackage Adapter_Atlassian
+ * @subpackage Adapter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
