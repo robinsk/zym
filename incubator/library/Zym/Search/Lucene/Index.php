@@ -119,7 +119,8 @@ class Zym_Search_Lucene_Index
         rtrim($indexPath, $trimMask);
 
         if ($useDefaultPath) {
-            $indexPath = rtrim(self::$_defaultIndexPath, $trimMask) . DIRECTORY_SEPARATOR . ltrim($indexPath, $trimMask);
+            $indexPath = rtrim(self::$_defaultIndexPath, $trimMask)
+                       . DIRECTORY_SEPARATOR . ltrim($indexPath, $trimMask);
         }
 
         $registryKey = self::REGISTRY_PREFIX . $indexPath;
@@ -152,11 +153,16 @@ class Zym_Search_Lucene_Index
      * Construct the indexer
      *
      * @param Zend_Search_Lucene_Interface $index
+     * @param string $idKey
      */
-    public function __construct(Zend_Search_Lucene_Interface $searchIndex)
+    public function __construct(Zend_Search_Lucene_Interface $searchIndex, $idKey = null)
     {
+        if (!$idKey) {
+            $idKey = self::$defaultIdKey;
+        }
+        
         $this->_searchIndex = $searchIndex;
-        $this->_idKey = self::$defaultIdKey;
+        $this->_idKey = $idKey;
     }
 
     /**
@@ -257,11 +263,12 @@ class Zym_Search_Lucene_Index
                  */
                 require_once 'Zym/Search/Lucene/Exception.php';
         
-                throw new Zym_Search_Lucene_Exception('The object needs to have Zym_Search_Lucene_Indexable_Interface implemented.');
+                throw new Zym_Search_Lucene_Exception('The object of type "' . get_class($indexable) . '" '
+                                                    . 'is not an instance of Zym_Search_Lucene_Indexable_Interface.');
             }
 
             if ($update) {
-                $recordId = $indexable->getRecordID();
+                $recordId = $indexable->getRecordId();
 
                 if (!$recordId) {
                     /**
@@ -269,7 +276,7 @@ class Zym_Search_Lucene_Index
                      */
                     require_once 'Zym/Search/Lucene/Exception.php';
             
-                    throw new Zym_Search_Lucene_Exception('The record ID must not be null');
+                    throw new Zym_Search_Lucene_Exception('You must provide a valid record ID.');
                 }
 
                 $this->delete($recordId, $searchField);
@@ -283,7 +290,8 @@ class Zym_Search_Lucene_Index
                  */
                 require_once 'Zym/Search/Lucene/Exception.php';
         
-                throw new Zym_Search_Lucene_Exception('The document is not an instance of Zend_Search_Lucene_Document.');
+                throw new Zym_Search_Lucene_Exception('The provided search-document is not '
+                                                    . 'an instance of Zend_Search_Lucene_Document.');
             }
 
             $this->_searchIndex->addDocument($document);
