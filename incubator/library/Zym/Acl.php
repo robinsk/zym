@@ -72,10 +72,10 @@ class Zym_Acl extends Zend_Acl
      */
     public static function getACL()
     {
-        $front = Zend_Controller_Front::getInstance();
+        $frontParam = Zend_Controller_Front::getInstance()->getParam(self::REGISTRY_KEY);
 
-        if ($front->getParam(self::REGISTRY_KEY) instanceof Zend_Acl) {
-            return $front->getParam(self::REGISTRY_KEY);
+        if ($frontParam instanceof Zend_Acl) {
+            return $frontParam;
         } elseif (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
             return Zend_Registry::get(self::REGISTRY_KEY);
         } else {
