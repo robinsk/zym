@@ -15,11 +15,6 @@
  */
 
 /**
- * @see Zend_Soap_Client
- */
-require_once 'Zend/Soap/Client.php';
-
-/**
  * Soap API wrapper for Atlassian Crowd
  *
  * Note to the next poor soul that modifies this code. The mapping for java string[]
@@ -70,6 +65,14 @@ class Zym_Service_Atlassian_Crowd
     public function __construct($wsdl = null, $identity = null, $credential = null)
     {
         if ($wsdl !== null) {
+            if (!extension_loaded('soap')) {
+                /**
+                 * @see Zym_Service_Atlassian_Crowd_Exception
+                 */
+                require_once 'Zym/Service/Atlassian/Crowd/Exception.php';
+                throw new Zym_Service_Atlassian_Crowd_Exception('The Soap extension is required to use this component');
+            }
+
             $client = new SoapClient($wsdl);
             $this->setClient($client);
         }
@@ -86,7 +89,7 @@ class Zym_Service_Atlassian_Crowd
     /**
      * Get soap client
      *
-     * @return Zend_Soap_Client
+     * @return SoapClient
      */
     public function getClient()
     {
