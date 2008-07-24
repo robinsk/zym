@@ -43,7 +43,7 @@ class Zym_App_Resource_Search extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
-            'indexer' => array(
+            'search' => array(
                 'defaults' => array(
                     'indexpath' => null,
                     'resultsetlimit' => 0
@@ -69,12 +69,12 @@ class Zym_App_Resource_Search extends Zym_App_Resource_Abstract
     public function setup(Zend_Config $config)
     {
         // Get resource config
-        $indexerConfig = $config->indexer;
+        $searchConfig = $config->search;
         
-        Zym_Search_Lucene::setDefaultIndexPath($indexerConfig->defaults->indexpath);
-        Zym_Search_Lucene::setDefaultResultSetLimit($indexerConfig->defaults->resultsetlimit);
+        Zym_Search_Lucene::setDefaultIndexPath($searchConfig->defaults->indexpath);
+        Zym_Search_Lucene::setDefaultResultSetLimit($searchConfig->defaults->resultsetlimit);
                 
-        foreach ($indexerConfig->indexes as $index) {
+        foreach ($searchConfig->indexes as $index) {
             if (!isset($index->indexpath)) {
                 require_once 'Zym/App/Resource/Exception.php';
                 
