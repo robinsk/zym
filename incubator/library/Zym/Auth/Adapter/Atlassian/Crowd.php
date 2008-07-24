@@ -63,6 +63,13 @@ class Zym_Auth_Adapter_Atlassian_Crowd implements Zend_Auth_Adapter_Interface
     private $_credential;
 
     /**
+     * User authentication token
+     *
+     * @var string
+     */
+    private $_token;
+
+    /**
      * Construct
      *
      * @param string $wsdl
@@ -88,6 +95,7 @@ class Zym_Auth_Adapter_Atlassian_Crowd implements Zend_Auth_Adapter_Interface
     {
         $username = (string) $this->getIdentity();
         $password = (string) $this->getCredential();
+        $token    = $this->getToken();
 
         try {
             // Try app authentication
@@ -102,14 +110,33 @@ class Zym_Auth_Adapter_Atlassian_Crowd implements Zend_Auth_Adapter_Interface
         }
 
         try {
-            $principal = $client->authenticatePrincipalSimple($username, $password);
+            // Validate SSO
+            if ($token !== null) {
+                $isValidPrincipal = $client->isValidPrincipalToken($token);
+
+                if ($isValidPrincipal === true) {
+                    $username = $client->findPrincipalByToken($token)->getName();
+                } else {
+                    /**
+                     * @see Zym_Service_Atlasian_Crowd_Exception
+                     */
+                    require_once 'Zym/Service/Atlassian/Crowd/Exception.php';
+                    throw new Zym_Service_Atlassian_Crowd_Exception(
+                        'Principal token is not valid'
+                    );
+                }
+            } else { // Validate username/pw
+                $principal = $client->authenticatePrincipalSimple($username, $password);
+            }
+
+            // Authentication success
+            $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $username);
         } catch (Zym_Service_Atlassian_Crowd_Exception $e) {
             // Authentication failure
             $result = new Zend_Auth_Result(Zend_Auth_Result::FAILURE, $username, array($e->getMessage()));
             return $result;
         }
 
-        $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $username);
         return $result;
     }
 
@@ -179,6 +206,31 @@ class Zym_Auth_Adapter_Atlassian_Crowd implements Zend_Auth_Adapter_Interface
     {
         $this->_credential = (string) $credential;
 
+        return $this;
+    }
+
+    /**
+     * Get user authentication token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->_token;
+    }
+
+    /**
+     * Set user authentication token
+     *
+     * Useful for checking authententication of an already logged in
+     * user from another application
+     *
+     * @param string $token
+     * @return Zym_Auth_Adapter_Atlassian_Crowd
+     */
+    public function setToken($token)
+    {
+        $this->_token = $token;
         return $this;
     }
 }
