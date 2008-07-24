@@ -42,7 +42,7 @@ class Zym_Acl extends Zend_Acl
      * ACL registry key
      *
      */
-    const REGISTRY_KEY = 'MACLRegistryKey';
+    const REGISTRY_KEY = 'zym_acl';
 
     /**
      * User identity
@@ -92,13 +92,11 @@ class Zym_Acl extends Zend_Acl
      * @param string $resource
      * @param string $privilege
      * @param string $role
-     * @return unknown
+     * @return bool
      */
-    public function isAllowed($resource = null, $privilege = null, $role = null)
+    public function isAllowedRole($resource = null, $privilege = null)
     {
-        if (empty($role)) {
-            $role = $this->getIdentityRole();
-        }
+        $role = $this->getIdentityRole();
 
         return parent::isAllowed($role, $resource, $privilege);
     }
