@@ -63,7 +63,7 @@ class Zym_App_Resource_Search extends Zym_App_Resource_Abstract
     );
 
     /**
-     * Setup db
+     * Setup search
      *
      */
     public function setup(Zend_Config $config)
