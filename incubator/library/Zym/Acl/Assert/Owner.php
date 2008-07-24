@@ -113,11 +113,14 @@ class Zym_Acl_Assert_Owner implements Zend_Acl_Assert_Interface
     public function assert(Zend_Acl $acl, Zend_Acl_Role_Interface $role = null,
                            Zend_Acl_Resource_Interface $resource = null, $privilege = null)
     {
-        if ($acl->getRole() == 'administrator') {
+        if ($acl->getRole() == $this->getAdminRole()) {
             return true;
         }
         
+        $creatorColumn = $this->getCreatorColumn();
+        
         // Very simple check to match identity credentials to database row
-        return $acl->getIdentity()->id == $resource->author;
+        // TODO: remove hardcoding for id?
+        return $acl->getIdentity()->id == $resource->$creatorColumn;
     }
 }
