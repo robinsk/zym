@@ -8,27 +8,27 @@
  * with this package in the file LICENSE.txt.
  *
  * @category   Zym
- * @package    Zym_Service
- * @subpackage Atlassian_Crowd
+ * @package    Zym_Auth
+ * @subpackage Adapter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license New BSD License
  */
 
 /**
- * @see Zym_Service_Atlassian_Exception
+ * @see Zym_Auth_Exception
  */
-require_once 'Zym/Service/Atlassian/Exception.php';
+require_once 'Zym/Auth/Exception.php';
 
 /**
- * Zym Service Atlassian Crowd Exceptions
+ * Zym Auth Adapter Exceptions
  *
  * @author     Geoffrey Tran
  * @license    http://www.zym-project.com/license New BSD License
  * @category   Zym
- * @package    Zym_Service
- * @subpackage Atlassian_Crowd
+ * @package    Zym_Auth
+ * @subpackage Adapter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Service_Atlassian_Crowd_Exception extends Zym_Service_Atlassian_Exception
+class Zym_Auth_Adapter_Exception extends Zym_Auth_Exception
 {
 }

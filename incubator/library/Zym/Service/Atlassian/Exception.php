@@ -15,7 +15,7 @@
  */
 
 /**
- * @see Zym__Service_Exception
+ * @see Zym_Service_Exception
  */
 require_once 'Zym/Service/Exception.php';
 
