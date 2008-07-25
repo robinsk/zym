@@ -15,17 +15,25 @@
  */
 
 /**
- * @see Zym_Model_ModelAbstract
- */
-require_once 'Zym/Model/ModelAbstract.php';
-
-/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Model
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Model_Model extends Zym_Model_ModelAbstract
+interface Zym_Model_Interface
 {
+    /**
+     * Get the form instance.
+     *
+     * @return Zend_Form
+     */
+    public function getForm();
+    
+    /**
+     * Get the table instance.
+     *
+     * @return Zend_Db_Table_Abstract
+     */
+    public function getTable();
 }

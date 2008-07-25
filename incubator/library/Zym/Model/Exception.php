@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Model_IModel
+ * @see Zym_Exception
  */
-require_once 'Zym/Model/IModel.php';
+require_once 'Zym/Exception.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,20 +26,6 @@ require_once 'Zym/Model/IModel.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_Model_IReadOnlyModel extends Zym_Model_IModel
+class Zym_Model_Exception extends Zym_Exception
 {
-    /**
-     * Test the read-only status of the model.
-     *
-     * @return boolean
-     */
-    public function isReadOnly();
-
-    /**
-     * Set the read-only status of the model.
-     *
-     * @param boolean $flag
-     * @return boolean
-     */
-    public function setReadOnly($flag);
 }
