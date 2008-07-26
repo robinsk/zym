@@ -90,7 +90,7 @@ abstract class Zym_Loader_Abstract
 
         $modelName = str_ireplace('_', '/', $modelName);
         
-        if (class_exists($modelName, false) || interface_exists($modelName, false)) {
+        if (class_exists($modelName, false)) {
             return true;
         }
         
