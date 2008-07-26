@@ -62,6 +62,6 @@ class Zym_Loader_FormLoader extends Zym_Loader_Abstract
     public static function load($formName, $module = null, $modelPrefix = 'Table')
     {
         $formLoader = self::getInstance();
-        $formLoader->loadModel($formName, $modelPrefix, $module);
+        $formLoader->loadModel($formName, $module, $modelPrefix);
     }
 }
