@@ -26,7 +26,7 @@ require_once 'Zym/Loader/Abstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_Loader_FormLoader extends Zym_Loader_Abstract
+class Zym_Loader_TableLoader extends Zym_Loader_Abstract
 {
     /**
      * @var string
@@ -34,14 +34,14 @@ class Zym_Loader_FormLoader extends Zym_Loader_Abstract
     protected $_modelDirectory = 'tables';
 
     /**
-     * @var Zym_Loader_FormLoader
+     * @var Zym_Loader_TableLoader
      */
     protected static $_instance = null;
 
     /**
      * Singleton
      *
-     * @return Zym_Loader_ModelLoader
+     * @return Zym_Loader_TableLoader
      */
     protected static function getInstance()
     {
