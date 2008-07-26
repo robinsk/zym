@@ -108,7 +108,7 @@ class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
      */
     public function addAdapter(Zend_Auth_Adapter_Interface $adapter)
     {
-        $this->_adapter[] = $adapters;
+        $this->_adapters[] = $adapters;
         return $this;
     }
 
