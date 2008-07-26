@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Model_IModel
+ * @see Zym_Model_Interface
  */
-require_once 'Zym/Model/IModel.php';
+require_once 'Zym/Model/Interface.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,29 +26,12 @@ require_once 'Zym/Model/IModel.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_Model_IRelationModel extends Zym_Model_IModel
+interface Zym_Model_Table_Interface extends Zym_Model_Interface
 {
     /**
-     * hasOne
+     * Get the table instance.
      *
+     * @return Zend_Db_Table_Abstract
      */
-    public function hasOne();
-    
-    /**
-     * hasMany
-     *
-     */
-    public function hasMany();
-    
-    /**
-     * belongsTo
-     *
-     */
-    public function belongsTo();
-    
-    /**
-     * hasAndBelongsToMany
-     *
-     */
-    public function hasAndBelongsToMany();
+    public function getTable();
 }

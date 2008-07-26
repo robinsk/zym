@@ -15,6 +15,9 @@
  */
 
 /**
+ * TODO: Support relations (hasOne hasMany belongsTo hasAndBelongsToMany)
+ * TODO: Have a detailed look at Core Data
+ * 
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Model
@@ -23,17 +26,4 @@
  */
 interface Zym_Model_Interface
 {
-    /**
-     * Get the form instance.
-     *
-     * @return Zend_Form
-     */
-    public function getForm();
-    
-    /**
-     * Get the table instance.
-     *
-     * @return Zend_Db_Table_Abstract
-     */
-    public function getTable();
 }

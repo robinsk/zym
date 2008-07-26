@@ -15,9 +15,9 @@
  */
 
 /**
- * @see Zym_Model_IModel
+ * @see Zym_Model_Interface
  */
-require_once 'Zym/Model/IModel.php';
+require_once 'Zym/Model/Interface.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -26,19 +26,12 @@ require_once 'Zym/Model/IModel.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_Model_IArrayModel extends Zym_Model_IModel
+interface Zym_Model_Form_Interface extends Zym_Model_Interface
 {
     /**
-     * Returns the column/value data as an array.
+     * Get the form instance.
      *
-     * @return array
+     * @return Zend_Form
      */
-    public function toArray();
-
-    /**
-     * Sets all data in the row from an array.
-     *
-     * @param  array $data
-     */
-    public function setFromArray(array $data);
+    public function getForm();
 }

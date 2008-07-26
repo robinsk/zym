@@ -15,13 +15,23 @@
  */
 
 /**
+ * @see Zym_Model_Form_Interface
+ */
+require_once 'Zym/Model/Form/Interface.php';
+
+/**
+ * @see Zym_Model_Table_Interface
+ */
+require_once 'Zym/Model/Table/Interface.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Model
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_Model_Abstract implements Zym_Model_Interface
+abstract class Zym_Model_Abstract implements Zym_Model_Form_Interface, Zym_Model_Table_Interface
 {
     /**
      * Form instance
