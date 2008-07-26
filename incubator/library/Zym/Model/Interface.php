@@ -15,9 +15,6 @@
  */
 
 /**
- * TODO: Support relations (hasOne hasMany belongsTo hasAndBelongsToMany)
- * TODO: Have a detailed look at Core Data
- * 
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Model
