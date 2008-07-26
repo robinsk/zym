@@ -60,7 +60,7 @@ abstract class Zym_Loader_Abstract
 
     /**
      * Load the model
-     *
+     * TODO: Use Zend_Loader?
      * @throws Exception
      * @param string $modelName
      * @param string $modelPrefix

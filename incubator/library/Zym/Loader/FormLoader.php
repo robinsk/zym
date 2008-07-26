@@ -53,7 +53,7 @@ class Zym_Loader_FormLoader extends Zym_Loader_Abstract
     }
 
     /**
-     * Load the model
+     * Load the form
      */
     public static function load($formName, $modelPrefix = null, $module = null)
     {
