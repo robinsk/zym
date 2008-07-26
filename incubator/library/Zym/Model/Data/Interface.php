@@ -26,12 +26,12 @@ require_once 'Zym/Model/Interface.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-interface Zym_Model_Table_Interface extends Zym_Model_Interface
+interface Zym_Model_Data_Interface extends Zym_Model_Interface
 {
     /**
-     * Get the table instance.
+     * Get the data source. This can be anything (Db, Service etc.)
      *
-     * @return Zend_Db_Table_Abstract
+     * @return mixed
      */
-    public function getTable();
+    public function getDataSource();
 }
