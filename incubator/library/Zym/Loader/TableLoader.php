@@ -31,7 +31,7 @@ class Zym_Loader_FormLoader extends Zym_Loader_Abstract
     /**
      * @var string
      */
-    protected $_modelDirectory = 'forms';
+    protected $_modelDirectory = 'tables';
 
     /**
      * @var Zym_Loader_FormLoader
@@ -59,7 +59,7 @@ class Zym_Loader_FormLoader extends Zym_Loader_Abstract
      * @param string $module
      * @param string $modelPrefix
      */
-    public static function load($formName, $module = null, $modelPrefix = 'Form')
+    public static function load($formName, $module = null, $modelPrefix = 'Table')
     {
         $formLoader = self::getInstance();
         $formLoader->loadModel($formName, $modelPrefix, $module);

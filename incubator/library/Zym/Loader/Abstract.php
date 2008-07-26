@@ -59,14 +59,17 @@ abstract class Zym_Loader_Abstract
     }
 
     /**
+     * TODO: Split off the generating of the class/file name to allow the ModelLoader
+     * to use an internal registry of model.
+     * 
      * Load the model
-     * TODO: Use Zend_Loader?
+     * 
      * @throws Exception
      * @param string $modelName
-     * @param string $modelPrefix
      * @param string $module
+     * @param string $modelPrefix
      */
-    public function loadModel($modelName, $modelPrefix = null, $module = null)
+    public function loadModel($modelName, $module = null, $modelPrefix = null)
     {
         $modelName = ucfirst($modelName);
 
