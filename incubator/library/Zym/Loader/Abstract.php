@@ -59,9 +59,6 @@ abstract class Zym_Loader_Abstract
     }
 
     /**
-     * TODO: Split off the generating of the class/file name to allow the ModelLoader
-     * to use an internal registry of model.
-     * 
      * Load the model
      * 
      * @throws Exception
@@ -82,10 +79,14 @@ abstract class Zym_Loader_Abstract
         }
 
         if ($modelPrefix) {
-            $modelName = ucfirst($modelPrefix) . '/' . $modelName;
+            $modelName = ucfirst($modelPrefix) . '_' . $modelName;
         }
 
-        $modelName =  str_ireplace('_', '/', $modelName);
+        $modelName = str_ireplace('_', '/', $modelName);
+        
+        if (class_exists($modelName, false) || interface_exists($modelName, false)) {
+            return true;
+        }
 
         $controllerDirectory = $this->_dispatcher->getControllerDirectory($module);
         $moduleDirectory = dirname($controllerDirectory);
@@ -96,10 +97,16 @@ abstract class Zym_Loader_Abstract
 
         $file = implode('/', $filePath) . '.php';
 
-        if (file_exists($file)) {
-            require_once $file;
-        } else {
-            throw new Exception(sprintf('File "%s" could not be loaded', $file));
+        if (!file_exists($file)) {
+            throw new Zym_Loader_Exception('File "' . $file . '" could not be loaded');
         }
+        
+        if (!class_exists($modelName, false)) {
+            throw new Zym_Loader_Exception('Class "' . $modelName . '" could not be found in file "' . $file . '"');
+        }
+        
+        require_once $file;
+        
+        return true;
     }
 }

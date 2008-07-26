@@ -34,13 +34,6 @@ require_once 'Zend/Registry.php';
 class Zym_Model
 {
     /**
-     * Model registry
-     *
-     * @var Zend_Registry
-     */
-    protected static $_models = null;
-    
-    /**
      * Get a model
      *
      * @param string $modelName
@@ -49,16 +42,6 @@ class Zym_Model
      */
     public static function factory($modelName, array $params = array())
     {
-        if (null === self::$_models) {
-            self::$_models = new Zend_Registry();
-        }
-        
-        $registry = self::$_models;
-        
-        if ($registry->offsetExists($modelName)) {
-            return $registry->offsetGet($modelName);
-        }
-        
         Zend_Loader::loadClass($modelName);
         
         $reflectionClass = new ReflectionClass($modelName);
@@ -72,13 +55,21 @@ class Zym_Model
         	throw new Zym_Model_Exception('Model does not implement Zym_Model_Interface.');
         }
         
-        if (empty($params)) {
-            $modelInstance = $reflectionClass->newInstance();
-        } else {
-            $modelInstance = $reflectionClass->newInstanceArgs($params);
-        }
+        if ($reflectionClass->implementsInterface('Zym_Model_Singleton_Interface')) {
+            $reflectionMethod = $reflectionClass->getMethod('getInstance');
         
-        $registry->offsetSet($modelName, $modelInstance);
+            if (empty($params)) {
+                $modelInstance = $reflectionMethod->invoke(null);
+            } else {
+                $modelInstance = $reflectionMethod->invokeArgs(null, $params);
+            }
+        } else {
+            if (empty($params)) {
+                $modelInstance = $reflectionClass->newInstance();
+            } else {
+                $modelInstance = $reflectionClass->newInstanceArgs($params);
+            }
+        }
         
         return $modelInstance;
     }
