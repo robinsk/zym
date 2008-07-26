@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zend_Loader
+ */
+require_once 'Zend/Loader.php';
+
+/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Loader
@@ -69,6 +74,7 @@ abstract class Zym_Loader_Abstract
     public function loadModel($modelName, $module = null, $modelPrefix = null)
     {
         $modelName = ucfirst($modelName);
+        $fileName = $modelName . '.php';
 
         if (!$module) {
             $module = $this->_request->getModuleName();
@@ -87,25 +93,16 @@ abstract class Zym_Loader_Abstract
         if (class_exists($modelName, false) || interface_exists($modelName, false)) {
             return true;
         }
-
+        
         $controllerDirectory = $this->_dispatcher->getControllerDirectory($module);
         $moduleDirectory = dirname($controllerDirectory);
-
-        $filePath = array($moduleDirectory,
-                          $this->_modelDirectory,
-                          $modelName);
-
-        $file = implode('/', $filePath) . '.php';
-
-        if (!file_exists($file)) {
-            throw new Zym_Loader_Exception('File "' . $file . '" could not be loaded');
-        }
+        $modelDirectory = $moduleDirectory . '/' . $this->_modelDirectory;
+        
+        Zend_Loader::loadFile($fileName, $modelDirectory, true);
         
         if (!class_exists($modelName, false)) {
-            throw new Zym_Loader_Exception('Class "' . $modelName . '" could not be found in file "' . $file . '"');
+            throw new Zym_Loader_Exception('Failed to load class "' . $modelName . '"');
         }
-        
-        require_once $file;
         
         return true;
     }
