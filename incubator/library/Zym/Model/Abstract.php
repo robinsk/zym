@@ -20,9 +20,9 @@
 require_once 'Zym/Model/Form/Interface.php';
 
 /**
- * @see Zym_Model_Table_Interface
+ * @see Zym_Model_Data_Interface
  */
-require_once 'Zym/Model/Table/Interface.php';
+require_once 'Zym/Model/Data/Interface.php';
 
 /**
  * @author     Jurrien Stutterheim
@@ -31,7 +31,7 @@ require_once 'Zym/Model/Table/Interface.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_Model_Abstract implements Zym_Model_Form_Interface, Zym_Model_Table_Interface
+abstract class Zym_Model_Abstract implements Zym_Model_Form_Interface, Zym_Model_Data_Interface
 {
     /**
      * Form instance
@@ -48,18 +48,18 @@ abstract class Zym_Model_Abstract implements Zym_Model_Form_Interface, Zym_Model
     protected $_formName = null;
     
     /**
-     * Table instance
+     * Data source instance
      *
-     * @var Zend_Db_Table_Abstract
+     * @var mixed
      */
-    protected $_table = null;
+    protected $_dataSource = null;
     
     /**
-     * Table class name
+     * Data source class name
      *
      * @var string
      */
-    protected $_tableName = null;
+    protected $_dataSourceName = null;
     
     /**
      * Get the form instance. Instantiate a new form object if none is set.
@@ -85,25 +85,25 @@ abstract class Zym_Model_Abstract implements Zym_Model_Form_Interface, Zym_Model
     }
     
     /**
-     * Get the table instance. Instantiate a table object if none is set.
+     * Get the data source. This can be anything (Db, Service etc.)
      *
-     * @return Zend_Db_Table_Abstract
+     * @return mixed
      */
-    public function getTable()
+    public function getDataSource()
     {
-        if (null === $this->_table) {
-            if (null === $this->_formName) {
+        if (null === $this->_dataSource) {
+            if (null === $this->_dataSourceName) {
                 /**
                  * @see Zym_Model_Exception
                  */
                 require_once 'Zym/Model/Exception.php';
                 
-                throw new Zym_Model_Exception('No table instance set and no table class name specified.');
+                throw new Zym_Model_Exception('No data source instance set and no data source class name specified.');
             }
             
-            $this->_table = new $this->_tableName();
+            $this->_dataSource = new $this->_dataSourceName();
         }
         
-        return $this->_table;
+        return $this->_dataSource;
     }
 }
