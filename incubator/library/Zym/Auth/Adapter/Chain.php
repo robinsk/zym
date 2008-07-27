@@ -140,7 +140,7 @@ class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
      */
     public function getLastSuccessfulAdapter()
     {
-        if (!$this->_lastSucessfulAdapter instanceof Zend_Auth_Adapter_Interface) {
+        if (!$this->_lastSuccessfulAdapter instanceof Zend_Auth_Adapter_Interface) {
             /**
              * @see Zend_Auth_Adapter_Exception
              */
@@ -150,6 +150,6 @@ class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
             );
         }
 
-        return $this->_lastSucessfulAdapter;
+        return $this->_lastSuccessfulAdapter;
     }
 }
