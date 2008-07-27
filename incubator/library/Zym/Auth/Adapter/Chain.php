@@ -47,6 +47,13 @@ class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
     private $_adapters = array();
 
     /**
+     * Get the last successfully authenticated adapter
+     *
+     * @var Zend_Auth_Adapter_Interface
+     */
+    private $_lastSuccessfulAdapter;
+
+    /**
      * authenticate() - defined by Zend_Auth_Adapter_Interface.  This method is called to
      * attempt an authenication.  Previous to this call, this adapter would have already
      * been configured with all nessissary information to successfully connect to a database
@@ -77,6 +84,8 @@ class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
 
             // Success
         	if ($result->isValid()) {
+        	    $this->_lastSuccessfulAdapter = $adapter;
+
         	    return $result;
         	}
 
@@ -122,5 +131,25 @@ class Zym_Auth_Adapter_Chain implements Zend_Auth_Adapter_Interface
     {
         $this->_adapters = $adapters;
         return $this;
+    }
+
+    /**
+     * Get last successfully authenticated adapter instance
+     *
+     * @return Zend_Auth_Adapter_Interface
+     */
+    public function getLastSuccessfulAdapter()
+    {
+        if (!$this->_lastSucessfulAdapter instanceof Zend_Auth_Adapter_Interface) {
+            /**
+             * @see Zend_Auth_Adapter_Exception
+             */
+            require_once 'Zend/Auth/Adapter/Exception.php';
+            throw new Zend_Auth_Adapter_Exception(
+                'No adapters have successfully authenticated'
+            );
+        }
+
+        return $this->_lastSucessfulAdapter;
     }
 }

@@ -130,7 +130,7 @@ class Zym_Auth_Adapter_Atlassian_Crowd implements Zend_Auth_Adapter_Interface
             }
 
             // Authentication success
-            $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $username);
+            $result = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $principal);
         } catch (Zym_Service_Atlassian_Crowd_Exception $e) {
             // Authentication failure
             $result = new Zend_Auth_Result(Zend_Auth_Result::FAILURE, $username, array($e->getMessage()));
