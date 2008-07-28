@@ -29,9 +29,9 @@ require_once 'Zym/Model/Interface.php';
 interface Zym_Model_Data_Interface extends Zym_Model_Interface
 {
     /**
-     * Get the data source. This can be anything (Db, Service etc.)
+     * Get the data source. This can be anything (Db adapter, Service etc.)
      *
      * @return mixed
      */
-    public static function getDataSource();
+    public function getDataSource();
 }

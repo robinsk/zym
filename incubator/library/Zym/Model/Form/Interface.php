@@ -33,5 +33,5 @@ interface Zym_Model_Form_Interface extends Zym_Model_Interface
      *
      * @return Zend_Form
      */
-    public static function getForm();
+    public function getForm();
 }
