@@ -41,7 +41,7 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
      * @param integer $errorTypes Can be used to mask the triggering of the error_handler function just like the error_reporting ini setting controls which errors are shown.
      * @return mixed Returns a string containing the previously defined error handler (if any), or NULL on error. If the previous handler was a class method, this function will return an indexed array with the class and the method name.
      */
-    public static function set($class = 'Zym_Error_Handler', $errorTypes = null)
+    public static function register($class = 'Zym_Error_Handler', $errorTypes = null)
     {
         // Load class
         Zend_Loader::loadClass($class);
@@ -81,17 +81,24 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
      * @param string $file
      * @param integer $line
      * @param array $context
+     * @return boolean
      */
     public static function handle($code, $message,
                                   $file = null, $line = null, array $context = array())
     {
+        // Skip suppressed errors @
+        if (error_reporting() == 0) {
+            return false;
+        }
+
         /**
          * @see Zym_Error
          */
         require_once 'Zym/Error.php';
 
         // Create error object
-        $error = new Zym_Error($code, $message, $file, $line, $context);
+        $trace = debug_backtrace();
+        $error = new Zym_Error($code, $message, $file, $line, $context, $trace);
 
         /**
          * @see Zym_Error_Stack
@@ -100,5 +107,7 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
 
         // Store error
         Zym_Error_Stack::getInstance()->push($error);
+
+        return true;
     }
 }

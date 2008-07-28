@@ -32,32 +32,32 @@ class Zym_Error
      * @var integer
      */
     protected $_code;
-    
+
     /**
      * Error message
      *
      * @var string
      */
     protected $_message;
-    
+
     /**
      * File that the error occurred in
      *
      * @var string
      */
     protected $_file;
-    
+
     /**
      * Error line
      *
      * @var integer
      */
     protected $_line;
-    
+
     /**
      * Error context
-     * 
-     * An array of every variable that existed in the scope the 
+     *
+     * An array of every variable that existed in the scope the
      * error was triggered in.
      *
      * @var array
@@ -70,7 +70,7 @@ class Zym_Error
      * @var array
      */
     protected $_trace = array();
-    
+
     /**
      * Error Construct
      *
@@ -80,13 +80,14 @@ class Zym_Error
      * @param integer $line
      * @param array $context
      */
-    public function __construct($code, $message, $file = null, $line = null, array $context = array())
+    public function __construct($code, $message, $file = null, $line = null, array $context = array(), array $trace = array())
     {
         $this->_code    = (int)    $code;
         $this->_message = (string) $message;
         $this->_file    = (string) $file;
         $this->_line    = (int)    $line;
         $this->_context = (array)  $context;
+        $this->_trace   = (array)  $trace;
     }
 
     /**
@@ -146,10 +147,6 @@ class Zym_Error
      */
     public function getTrace()
     {
-        if (!$this->_trace) {
-            $this->_trace = debug_backtrace();
-        }
-
         return $this->_trace;
     }
 }
