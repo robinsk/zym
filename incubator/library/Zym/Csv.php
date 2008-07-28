@@ -91,8 +91,8 @@ class Zym_Csv implements Iterator
             throw new Zym_Csv_Exception(sprintf('File "%s" was found, but cannot be read.', $file));
         }
 
-        $this->filePointer = fopen($file, 'r');
-        $this->delimiter = $delimiter;
+        $this->_filePointer = fopen($file, 'r');
+        $this->_delimiter = $delimiter;
 
         if ($readHeaders) {
             $headerRow = $this->current();
@@ -114,7 +114,7 @@ class Zym_Csv implements Iterator
     public function rewind()
     {
         $this->_rowCounter = 0;
-        rewind($this->filePointer);
+        rewind($this->_filePointer);
     }
 
     /**
@@ -124,7 +124,7 @@ class Zym_Csv implements Iterator
      */
     public function current()
     {
-        $this->currentElement = fgetcsv($this->filePointer, self::ROW_LENGTH, $this->delimiter);
+        $this->_currentElement = fgetcsv($this->_filePointer, self::ROW_LENGTH, $this->_delimiter);
 
         if ($this->next()) {
             $this->_rowCounter += 1;
@@ -139,7 +139,7 @@ class Zym_Csv implements Iterator
 
             return $return;
         } else {
-            return $this->currentElement;
+            return $this->_currentElement;
         }
     }
 
@@ -160,8 +160,8 @@ class Zym_Csv implements Iterator
      */
     public function next()
     {
-        if (is_resource($this->filePointer)) {
-            return !feof($this->filePointer);
+        if (is_resource($this->_filePointer)) {
+            return !feof($this->_filePointer);
         }
 
         return false;
