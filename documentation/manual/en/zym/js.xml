@@ -3,5 +3,14 @@
     xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.js" version="5.0">
     <title>Zym_Js</title>
     
+    <note>
+        <para>
+            The JS family of Zym components are permanently labelled as incubatored
+            until there is enough demand for them to move to core. If you would
+            like to see these components move to core, drop us a line.
+        </para>
+    </note>
+    
     <xi:include href="js/beautify.xml" />
+    <xi:include href="js/minifier.xml" />
 </chapter>

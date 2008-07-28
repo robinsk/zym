@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.js.minifier" version="5.0">
+    <title>Minifier</title>
+    
+    <para>
+        Minifier allows you to minify javascript sourcecode into a compact distributable form.
+        It is a PHP5 port of <link xlink:href="http://www.crockford.com/javascript/jsmin.html">JSMin by Douglas Crockford</link>.
+        <quote xlink:href="http://www.crockford.com/javascript/jsmin.html">
+            JSMin is a filter which removes comments and unnecessary whitespace from JavaScript  files. 
+            It typically reduces filesize by half, resulting in faster downloads. 
+            It also encourages a more expressive programming style because it eliminates the download cost of clean, 
+            literate self-documentation.
+        </quote>
+    </para>
+    
+    <note>
+        <para>
+            The performance of this minifier is not very good compared to the C version;
+            however, it works fairly well for small scripts and cached implementations.
+        </para>
+    </note>
+    
+    <example xml:id="zym.js.minifier.example.string">
+        <title>Minify a javascript string</title>
+        <programlisting role="php"><xi:include href="minifier/example/string.php" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.js.minifier.example.fromfile">
+        <title>Minify and return code from javascript file</title>
+        <programlisting role="php"><xi:include href="minifier/example/fromfile.php" parse="text" /></programlisting>
+    </example>
+    
+    <example xml:id="zym.js.minifier.example.file">
+        <title>Minify a javascript file</title>
+        <programlisting role="php"><xi:include href="minifier/example/file.php" parse="text" /></programlisting>
+    </example>
+</section>

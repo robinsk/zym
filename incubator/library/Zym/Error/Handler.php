@@ -33,18 +33,19 @@ require_once 'Zym/Error/Handler/Interface.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_Error_Handler implements Zym_Error_Handler_Interface
-{        
+{
     /**
      * Set a php error handler
      *
-     * @param string $class
-     * @param integer $errorTypes
+     * @param string  $class
+     * @param integer $errorTypes Can be used to mask the triggering of the error_handler function just like the error_reporting ini setting controls which errors are shown.
+     * @return mixed Returns a string containing the previously defined error handler (if any), or NULL on error. If the previous handler was a class method, this function will return an indexed array with the class and the method name.
      */
     public static function set($class = 'Zym_Error_Handler', $errorTypes = null)
     {
         // Load class
         Zend_Loader::loadClass($class);
-        
+
         // Validate
         if (!method_exists($class, 'handle')) {
             /**
@@ -56,21 +57,21 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
                 " or does not have a handle() method"
             );
         }
-        
+
         // Assume it implements Zym_Error_Handler_Interface
-        set_error_handler(array($class, 'handle'), $errorTypes);
+        return set_error_handler(array($class, 'handle'), $errorTypes);
     }
-    
+
     /**
      * Restore the php error handler
-     * 
+     *
      * @return boolean
      */
     public static function restore()
     {
         return restore_error_handler();
     }
-    
+
     /**
      * PHP Error handler
      *
@@ -80,22 +81,22 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
      * @param integer $line
      * @param array $context
      */
-    public static function handle($code, $message, 
+    public static function handle($code, $message,
                                   $file = null, $line = null, array $context = array())
     {
         /**
          * @see Zym_Error
          */
         require_once 'Zym/Error.php';
-        
+
         // Create error object
         $error = new Zym_Error($code, $message, $file, $line, $context);
-        
+
         /**
          * @see Zym_Error_Stack
          */
         require_once 'Zym/Error/Stack.php';
-        
+
         // Store error
         Zym_Error_Stack::getInstance()->push($error);
     }

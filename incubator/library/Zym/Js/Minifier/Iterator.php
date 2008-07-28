@@ -114,45 +114,45 @@ class Zym_Js_Minifier_Iterator implements Iterator, Countable
         }
 
         if ($char === '/') {
+            switch ($this->peek()) {
+                case '/':
+                    while (true){
+                        $char = $this->_nextChar();
 
-        switch ($this->peek()) {
-            case '/':
-                while (true){
-                    $char = $this->_nextChar();
-
-                    if (ord($char) <= Zym_Js_Minifier::ORD_LF) {
-                        return $char;
+                        if (ord($char) <= Zym_Js_Minifier::ORD_LF) {
+                            return $char;
+                        }
                     }
-                }
 
-            case '*':
-                $this->_nextChar();
+                case '*':
+                    $this->_nextChar();
 
-                while (true) {
-                    switch ($this->_nextChar()) {
-                        case '*':
-                            if ($this->peek() === '/') {
-                                $this->_nextChar();
-                                return ' ';
-                            }
-                            break;
+                    while (true) {
+                        switch ($this->_nextChar()) {
+                            case '*':
+                                if ($this->peek() === '/') {
+                                    $this->_nextChar();
+                                    return ' ';
+                                }
+                                break;
 
-                        case null:
-                            /**
-                             * @see Zym_Js_Minifier_Exception
-                             */
-                            require_once 'Zym/Js/Minifier/Exception.php';
-                            throw new Zym_Js_Minifier_Exception(sprintf(
-                                'Unterminated Comment at %s characters in', $this->key()
-                            ));
-                            break;
+                            case null:
+                                /**
+                                 * @see Zym_Js_Minifier_Exception
+                                 */
+                                require_once 'Zym/Js/Minifier/Exception.php';
+                                throw new Zym_Js_Minifier_Exception(sprintf(
+                                    'Unterminated Comment at %s characters in', $this->key()
+                                ));
+                                break;
+                        }
                     }
-                }
 
-            default :
-                return $char;
+                default :
+                    return $char;
+            }
         }
-        }
+
         return $char;
     }
 

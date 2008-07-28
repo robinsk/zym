@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.xmlrpc.server" version="5.0">
+    <title>XmlRpc Server</title>
+    
+    <section xml:id="zym.xmlrpc.caching">
+        <title>Caching</title>
+        
+        <para>
+            Zym allows caching with <classname>Zend_Cache</classname> instead of the
+            built in file cache provided by <classname>Zend_XmlRpc_Server_Cache</classname>.
+        </para>
+        
+        <example xml:id="zym.xmlrpc.caching.example">
+            <title>Caching Zend_XmlRpc_Server with Zend_Cache</title>
+            
+            <programlisting role="php"><xi:include href="server/example/caching.php" parse="text" /></programlisting>
+        </example>
+    </section>
+</section>

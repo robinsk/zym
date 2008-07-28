@@ -56,24 +56,24 @@ class Zym_XmlRpc_Server_Cache
     /**
      * Add dispatch table from a file
      *
-     * Unserializes a stored dispatch table from $filename. Returns false if it
+     * Unserializes a stored dispatch table. Returns false if it
      * fails in any way, true on success.
      *
      * Useful to prevent needing to build the dispatch list on each XMLRPC
      * request. Sample usage:
      *
      * <code>
-     * if (!Zend_XmlRpc_Server_Cache::get($id, $coreCache, $server)) {
+     * if (!Zym_XmlRpc_Server_Cache::get($id, $coreCache, $server)) {
      *     require_once 'Some/Service/Class.php';
      *     require_once 'Another/Service/Class.php';
      *
      *     // Attach Some_Service_Class with namespace 'some'
-     *     $server->attach('Some_Service_Class', 'some');
+     *     $server->setClass('Some_Service_Class', 'some');
      *
      *     // Attach Another_Service_Class with namespace 'another'
-     *     $server->attach('Another_Service_Class', 'another');
+     *     $server->setClass('Another_Service_Class', 'another');
      *
-     *     Zend_XmlRpc_Server_Cache::save($id, $coreCache, $server);
+     *     Zym_XmlRpc_Server_Cache::save($id, $coreCache, $server);
      * }
      *
      * $response = $server->handle();

@@ -238,10 +238,14 @@
                 calling <code>$helper->setUseSitemapValidators(false)</code>.
                 
                 <note>
-                    If you disable sitemap validators, the custom properties (see table)
-                    are not validated at all.
+                    <para>
+                        If you disable sitemap validators, the custom properties (see table)
+                        are not validated at all.
+                    </para>
                 </note>
             </para>
+            
+
             
             <para>
                 The sitemap helper also supports 
@@ -255,11 +259,15 @@
             <table xml:id="zym.view.helpers.navigation.sitemap.elements">
                 <title>Sitemap XML elements</title>
                         
-                <para>
-                    The following elements/properties can be used for each
-                    page in the sitemap. The only required element is the
-                    <code>loc</code> element.
-                </para>
+                <info>
+                    <abstract>
+                        <para>
+                            The following elements/properties can be used for each
+                            page in the sitemap. The only required element is the
+                            <code>loc</code> element.
+                        </para>
+                    </abstract>
+                </info>               
         
                 <tgroup cols="2">
                     <thead>
@@ -304,13 +312,13 @@
                                     to how often they crawl the page. Valid 
                                     values are:
                                     <itemizedlist>
-                                        <listitem>always</listitem>
-                                        <listitem>hourly</listitem>
-                                        <listitem>daily</listitem>
-                                        <listitem>weekly</listitem>
-                                        <listitem>monthly</listitem>
-                                        <listitem>yearly</listitem>
-                                        <listitem>never</listitem>
+                                        <listitem><para>always</para></listitem>
+                                        <listitem><para>hourly</para></listitem>
+                                        <listitem><para>daily</para></listitem>
+                                        <listitem><para>weekly</para></listitem>
+                                        <listitem><para>monthly</para></listitem>
+                                        <listitem><para>yearly</para></listitem>
+                                        <listitem><para>never</para></listitem>
                                     </itemizedlist>
                                 </para>
                                 <para>

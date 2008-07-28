@@ -45,6 +45,7 @@
     <xi:include href="zym/validate.xml" />
     <xi:include href="zym/version.xml" />
     <xi:include href="zym/view.xml" />
+    <xi:include href="zym/xmlrpc.xml" />
     <!-- END: Chapters -->
     
     <!-- START: Appendix -->
