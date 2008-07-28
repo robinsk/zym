@@ -11,6 +11,6 @@
         </para>
     </note>
     
-    <xi:include href="js/beautify.xml" />
+    <xi:include href="js/beautifier.xml" />
     <xi:include href="js/minifier.xml" />
 </chapter>

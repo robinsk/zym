@@ -27,7 +27,7 @@
  * @package Zym_Js
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Js_Beautify
+class Zym_Js_Beautifier
 {
     const IN_EXPR  = 2;
     const IN_BLOCK = 3;
@@ -53,18 +53,11 @@ class Zym_Js_Beautify
     const PRINT_NL    = 18;
 
     /**
-     * Whether to use tabs or spaces
+     * Indent
      *
-     * @var boolean
+     * @var string
      */
-    protected $_tabsAsSpaces = true;
-
-    /**
-     * Number of spaces to use for a tab
-     *
-     * @var integer
-     */
-    protected $_tabSize = 4;
+    protected $_indent = '    ';
 
     /**
      * Words that should start on a new line
@@ -184,56 +177,34 @@ class Zym_Js_Beautify
     /**
      * Construct
      *
-     * @param boolean $tabsAsSpaces
-     * @param integer $tabSize
+     * @param string $indent
      */
-    public function __construct($tabsAsSpaces = true, $tabSize = 4)
+    public function __construct($indent = null)
     {
-        $this->setTabsAsSpaces($tabsAsSpaces);
-        $this->setTabSize($tabSize);
+        if ($indent !== null) {
+            $this->setIndent($indent);
+        }
     }
 
     /**
-     * Get tabs as spaces setting
+     * Get indent
      *
-     * @return boolean
+     * @return string
      */
-    public function getTabAsSpaces()
+    public function getIndent()
     {
-        return $this->_tabsAsSpaces;
+        return $this->_indent;
     }
 
     /**
-     * Set tabs as spaces
+     * Set indent
      *
      * @param boolean $spaces
-     * @return Zym_Js_Beautify
+     * @return Zym_Js_Beautifier
      */
-    public function setTabsAsSpaces($spaces = true)
+    public function setIndent($indent)
     {
-        $this->_tabsAsSpaces = (bool) $spaces;
-        return $this;
-    }
-
-    /**
-     * Get tabs size setting
-     *
-     * @return integer
-     */
-    public function getTabSize()
-    {
-        return $this->_tabSize;
-    }
-
-    /**
-     * Set tabs size
-     *
-     * @param integer $size
-     * @return Zym_Js_Beautify
-     */
-    public function setTabSize($size)
-    {
-        $this->_tabSize = $size;
+        $this->_indent = (string) $indent;
         return $this;
     }
 
@@ -251,7 +222,7 @@ class Zym_Js_Beautify
      * Set words that should start on a new line
      *
      * @param array $starters
-     * @return Zym_Js_Beautify
+     * @return Zym_Js_Beautifier
      */
     public function setLineStarters(array $starters)
     {
@@ -273,7 +244,7 @@ class Zym_Js_Beautify
      * Set whitespace characters
      *
      * @param array $whitespaces
-     * @return Zym_Js_Beautify
+     * @return Zym_Js_Beautifier
      */
     public function setWhitespaceChars(array $whitespaces)
     {
@@ -295,7 +266,7 @@ class Zym_Js_Beautify
      * Set operators
      *
      * @param array $operators
-     * @return Zym_Js_Beautify
+     * @return Zym_Js_Beautifier
      */
     public function setOperators(array $operators)
     {
@@ -317,7 +288,7 @@ class Zym_Js_Beautify
      * Set word chars
      *
      * @param array $wordChars
-     * @return Zym_Js_Beautify
+     * @return Zym_Js_Beautifier
      */
     public function setWordChars(array $wordChars)
     {
@@ -569,13 +540,54 @@ class Zym_Js_Beautify
     }
 
     /**
-     * Get tab
+     * Beautify js
      *
+     * @param string $string
      * @return string
      */
-    protected function _getTab()
+    public static function beautify($string)
     {
-        return ($this->getTabAsSpaces()) ? str_repeat(' ', $this->_tabSize) : "\t";
+        $self = new self();
+
+        return $self->parse($string);
+    }
+
+    /**
+     * Beautify javascript reading from a file
+     *
+     * @param string $file
+     * @return string
+     */
+    public static function beautifyFromFile($file)
+    {
+        if (!file_exists($file)) {
+            /**
+             * @see Zym_Js_Beautifier_Exception
+             */
+            require_once 'Zym/Js/Beautifier/Exception.php';
+            throw new Zym_Js_Beautifier_Exception('File could not be found: ' . $file);
+        }
+
+        return self::beautify(file_get_contents($file));
+    }
+
+    /**
+     * Beautify a javscript file
+     *
+     * @param string $file
+     * @param string $destination New file name
+     */
+    public static function beautifyFile($file, $destination = null)
+    {
+        if ($destination === null) {
+            $destination = $file;
+        }
+
+        $data = self::beautifyFromFile($file);
+
+        $fp = fopen($destination, 'w');
+        fwrite($fp, $data);
+        fclose($fp);
     }
 
     /**
@@ -740,7 +752,7 @@ class Zym_Js_Beautify
         }
 
         $this->_isLastNl = true;
-        $this->_output .= "\n" . str_repeat($this->_getTab(), $this->_indentSize);
+        $this->_output .= "\n" . str_repeat($this->getIndent(), $this->_indentSize);
     }
 
     /**
@@ -793,7 +805,7 @@ class Zym_Js_Beautify
      */
     protected function _removeIndent()
     {
-        $tabStr = $this->_getTab();
+        $tabStr = $this->getIndent();
         $tabStrLen = strlen($tabStr);
         if (substr($this->_output, -$tabStrLen) == $tabStr) {
             $this->_output = substr($this->_output, 0, -$tabStrLen);

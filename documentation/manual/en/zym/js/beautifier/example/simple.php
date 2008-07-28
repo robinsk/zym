@@ -11,7 +11,7 @@ $json = <<<JSON
 }
 JSON;
 
-$beautifier = new Zym_Js_Beautify();
+$beautifier = new Zym_Js_Beautifier();
 echo $beautifier->parse($json);
 
 /*

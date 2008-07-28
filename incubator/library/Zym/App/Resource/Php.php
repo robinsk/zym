@@ -88,6 +88,9 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
 
         // Set include path
         $this->_setIncludePath($config);
+
+        // Kill the Evil
+        $this->_undoMagicQuotesGpc($config);
     }
 
     /**
@@ -193,6 +196,8 @@ class Zym_App_Resource_Php extends Zym_App_Resource_Abstract
      * Kill magic quotes gpc
      *
      * Strips the crap that magic quotes does...
+     * Reads the magic_quotes_gpc value from the config to determine whether to
+     * enable or disable hack
      *
      * @todo Discuss whether or not to include this hack...
      * @param Zend_Config $config

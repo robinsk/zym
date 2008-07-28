@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.js.beautify" version="5.0">
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.js.beautifier" version="5.0">
     <title>Beautify</title>
     
     <para>
@@ -9,9 +9,9 @@
         be found in the API docs. 
     </para>
     
-    <example xml:id="zym.js.beautify.example.simple">
+    <example xml:id="zym.js.beautifier.example.simple">
         <title>Simple javascript formatting</title>
-        <programlisting role="php"><xi:include href="beautify/example/simple.php" parse="text" /></programlisting>
+        <programlisting role="php"><xi:include href="beautifier/example/simple.php" parse="text" /></programlisting>
     </example>
     
     <note>
