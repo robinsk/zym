@@ -276,35 +276,35 @@ abstract class Zym_Service_Atlassian_Crowd_Entity
      */
     public function setFromArray(array $array)
     {
-        if ($array['ID']) {
+        if (isset($array['ID'])) {
             $this->setId($array['ID']);
         }
 
-        if ($array['active']) {
+        if (isset($array['active'])) {
             $this->setActive($array['active']);
         }
 
-        if ($array['attributes']) {
+        if (isset($array['attributes'])) {
             $this->setAttributes($this->_processAttributes($array['attributes']));
         }
 
-        if ($array['conception']) {
+        if (isset($array['conception'])) {
             $this->setConception($array['conception']);
         }
 
-        if ($array['description']) {
+        if (isset($array['description'])) {
             $this->setDescription($array['description']);
         }
 
-        if ($array['directoryID']) {
+        if (isset($array['directoryID'])) {
             $this->setDirectoryId($array['directoryID']);
         }
 
-        if ($array['lastModified']) {
+        if (isset($array['lastModified'])) {
             $this->setLastModified($array['lastModified']);
         }
 
-        if ($array['name']) {
+        if (isset($array['name'])) {
             $this->setName($array['name']);
         }
 

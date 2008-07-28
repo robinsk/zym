@@ -15,7 +15,7 @@
  */
 
 /**
- * @see Zym__Service_Atlassian_Crowd_Entity
+ * @see Zym_Service_Atlassian_Crowd_Entity
  */
 require_once 'Zym/Service/Atlassian/Crowd/Entity.php';
 
@@ -70,7 +70,7 @@ class Zym_Service_Atlassian_Crowd_Entity_NestableGroup extends Zym_Service_Atlas
     {
         parent::setFromArray($array);
 
-        if ($array['groupMembers']) {
+        if (isset($array['groupMembers'])) {
             $this->setGroupMembers((array) $array['groupMembers']->string);
         }
 

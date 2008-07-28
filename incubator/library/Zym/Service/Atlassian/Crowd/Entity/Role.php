@@ -15,7 +15,7 @@
  */
 
 /**
- * @see Zym__Service_Atlassian_Crowd_Entity
+ * @see Zym_Service_Atlassian_Crowd_Entity
  */
 require_once 'Zym/Service/Atlassian/Crowd/Entity.php';
 
