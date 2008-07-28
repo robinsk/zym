@@ -33,5 +33,5 @@ interface Zym_Model_Data_Interface extends Zym_Model_Interface
      *
      * @return mixed
      */
-    public function getDataSource();
+    public static function getDataSource();
 }
