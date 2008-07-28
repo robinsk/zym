@@ -47,8 +47,8 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
         Zend_Loader::loadClass($class);
 
         // Validate
-        $methods = get_class_methods($class);
-        if (!in_array('handle', (array) $methods)) {
+        $reflect = new ReflectionClass($class);
+        if (!$reflect->implementsInterface('Zym_Error_Handler_Interface')) {
             /**
              * @see Zym_Error_Exception
              */
