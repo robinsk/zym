@@ -47,14 +47,15 @@ class Zym_Error_Handler implements Zym_Error_Handler_Interface
         Zend_Loader::loadClass($class);
 
         // Validate
-        if (!method_exists($class, 'handle')) {
+        $methods = get_class_methods($class);
+        if (!in_array('handle', (array) $methods)) {
             /**
              * @see Zym_Error_Exception
              */
             require_once 'Zym/Error/Exception.php';
             throw new Zym_Error_Exception(
-                "{$class} is not an instance of Zym_Error_Handler_Interface" .
-                " or does not have a handle() method"
+                "{$class} does not implement Zym_Error_Handler_Interface" .
+                ' or does not have a handle() method'
             );
         }
 

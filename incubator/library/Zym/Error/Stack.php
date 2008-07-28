@@ -24,29 +24,29 @@
  * @package Zym_Error
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Error_Stack implements Countable, Iterator 
+class Zym_Error_Stack implements Countable, Iterator
 {
     /**
      * Instance
-     * 
+     *
      * @var Zym_Error_Stack
      */
     protected static $_instance = null;
 
     /**
      * Error stack array
-     * 
+     *
      * @var array
      */
     protected $_errors = array();
-    
+
     /**
      * Iteration index
      *
      * @var integer
      */
     protected $_index = 0;
-    
+
     /**
      * Number of elements in configuration data
      *
@@ -56,14 +56,14 @@ class Zym_Error_Stack implements Countable, Iterator
 
     /**
      * Construct
-     * 
+     *
      */
     protected function __construct()
     {}
 
     /**
      * Clone
-     * 
+     *
      * Do not allow attempts to clone our singleton.
      */
     protected function __clone()
@@ -92,12 +92,13 @@ class Zym_Error_Stack implements Countable, Iterator
      */
     public function push(Zym_Error $error)
     {
-        self::$_errors[] = $error;
+        $this->_errors[] = $error;
+        $this->_count++;
     }
 
     /**
      * Get error count
-     * 
+     *
      * Implements Countable
      *
      * @return integer
@@ -107,10 +108,10 @@ class Zym_Error_Stack implements Countable, Iterator
         if ($this->_count === null) {
             $this->_count = count($this->_errors);
         }
-        
+
         return $this->_count;
     }
-    
+
     /**
      * Defined by Iterator interface
      *
