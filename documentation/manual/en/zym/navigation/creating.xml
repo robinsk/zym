@@ -20,7 +20,7 @@
         
         <para>
             To create a custom page type using the factory, the <code>type</code>
-            option must be specied to contain the class name of the page type.
+            option must be specified to contain the class name of the page type.
         </para>
     
         <example xml:id="zym.navigation.creating.factory.custom">
@@ -37,23 +37,23 @@
             To be able to create a navigation structure without having a root
             page to keep all other pages in, there is a class 
             <classname>Zym_Navigation</classname> that merely functions as a 
-            container for pages. It can be constructed enitrely empty, or be
+            container for pages. It can be constructed entirely empty, or be
             given an array or a <classname>Zend_Config</classname> object with
             pages to put in the container. Each page in the container can also
             be an array or a <classname>Zend_Config</classname> object, or 
             indeed <classname>Zym_Navigation_Page</classname> instances.
         </para>
+        
+        <example xml:id="zym.navigation.creating.array.example">
+            <title>Creating a navigation structure using an array</title>
+            
+            <programlisting role="php"><xi:include href="example/array.php" parse="text" /></programlisting>
+        </example>
+        
+        <example xml:id="zym.navigation.creating.config.example">
+            <title>Creating a navigation structure using a config object</title>
+            
+            <programlisting role="php"><xi:include href="example/config.php" parse="text" /></programlisting>
+        </example>
     </section>
-
-    <example xml:id="zym.navigation.creating.array.example">
-        <title>Creating a navigation structure using an array</title>
-        
-        <programlisting role="php"><xi:include href="example/array.php" parse="text" /></programlisting>
-    </example>
-    
-    <example xml:id="zym.navigation.creating.config.example">
-        <title>Creating a navigation structure using a config object</title>
-        
-        <programlisting role="php"><xi:include href="example/config.php" parse="text" /></programlisting>
-    </example>
 </section>

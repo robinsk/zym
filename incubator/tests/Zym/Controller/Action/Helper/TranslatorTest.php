@@ -237,4 +237,78 @@ class Zym_Controller_Action_Helper_TranslatorTest extends PHPUnit_Framework_Test
         $helper = $this->_helper->translate();
         $this->assertSame($this->_helper, $helper);
     }
+
+    public function testDirectOriginalMessagesAreReturnedWhenNoTranslationObjectPresent()
+    {
+        $this->assertEquals('one', $this->_helper->direct('one'));
+        $this->assertEquals('three', $this->_helper->direct('three'));
+    }
+
+    public function testDirectHelperObjectReturnedWhenNoArgumentsPassed()
+    {
+        $helper = $this->_helper->direct();
+        $this->assertSame($this->_helper, $helper);
+
+        $transLoc = new Zend_Translate('array', array());
+        $this->_helper->setTranslator($transLoc);
+        $helper = $this->_helper->direct();
+        $this->assertSame($this->_helper, $helper);
+    }
+
+    public function testDirectCanTranslateWithOptions()
+    {
+        $trans = new Zend_Translate('array', array('one' => 'eins',
+                                                   "two %1\$s" => "zwei %1\$s",
+                                                   "three %1\$s %2\$s" => "drei %1\$s %2\$s"
+                                            ), 'de');
+        $trans->addTranslation(array(
+            'one' => 'uno',
+            "two %1\$s" => "duo %2\$s",
+            "three %1\$s %2\$s" => "tre %1\$s %2\$s"
+        ), 'it');
+        $trans->setLocale('de');
+
+        $this->_helper->setTranslator($trans);
+        $this->assertEquals("drei 100 200", $this->_helper->direct("three %1\$s %2\$s", "100", "200"));
+        $this->assertEquals("tre 100 200", $this->_helper->direct("three %1\$s %2\$s", "100", "200", 'it'));
+        $this->assertEquals("drei 100 200", $this->_helper->direct("three %1\$s %2\$s", array("100", "200")));
+        $this->assertEquals("tre 100 200", $this->_helper->direct("three %1\$s %2\$s", array("100", "200"), 'it'));
+    }
+
+    public function test_OriginalMessagesAreReturnedWhenNoTranslationObjectPresent()
+    {
+        $this->assertEquals('one', $this->_helper->_('one'));
+        $this->assertEquals('three', $this->_helper->_('three'));
+    }
+
+    public function test_HelperObjectReturnedWhenNoArgumentsPassed()
+    {
+        $helper = $this->_helper->_();
+        $this->assertSame($this->_helper, $helper);
+
+        $transLoc = new Zend_Translate('array', array());
+        $this->_helper->setTranslator($transLoc);
+        $helper = $this->_helper->_();
+        $this->assertSame($this->_helper, $helper);
+    }
+
+    public function test_CanTranslateWithOptions()
+    {
+        $trans = new Zend_Translate('array', array('one' => 'eins',
+                                                   "two %1\$s" => "zwei %1\$s",
+                                                   "three %1\$s %2\$s" => "drei %1\$s %2\$s"
+                                            ), 'de');
+        $trans->addTranslation(array(
+            'one' => 'uno',
+            "two %1\$s" => "duo %2\$s",
+            "three %1\$s %2\$s" => "tre %1\$s %2\$s"
+        ), 'it');
+        $trans->setLocale('de');
+
+        $this->_helper->setTranslator($trans);
+        $this->assertEquals("drei 100 200", $this->_helper->_("three %1\$s %2\$s", "100", "200"));
+        $this->assertEquals("tre 100 200", $this->_helper->_("three %1\$s %2\$s", "100", "200", 'it'));
+        $this->assertEquals("drei 100 200", $this->_helper->_("three %1\$s %2\$s", array("100", "200")));
+        $this->assertEquals("tre 100 200", $this->_helper->_("three %1\$s %2\$s", array("100", "200"), 'it'));
+    }
 }

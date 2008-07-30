@@ -17,22 +17,26 @@
         </note>
     </para>
     
+    <note>
+        <para>
+            All option keys are translated to their according 
+            <code>set</code> methods. This means that the option
+            <code>position</code> maps to the method <code>setPosition()</code>,
+            and <code>reset_params</code> maps to the method
+            <code>setResetParams()</code>.
+        </para>
+    </note>
+    
     <table xml:id="zym.navigation.pages.common.options">
         <title>Common page options</title>
-                
-        <para>
-            The options listed in the table below are common to all page classes.
-        </para>
-        
-        <note>
-            <para>
-                All option keys are translated to their according 
-                <code>set</code> methods. This means that the option
-                <code>position</code> maps to the method <code>setPosition()</code>,
-                and <code>reset_params</code> maps to the method
-                <code>setResetParams()</code>.
-            </para>
-        </note>
+               
+        <info>
+            <abstract>
+                <para>
+                    The options listed in the table below are common to all page classes.
+                </para>
+            </abstract>
+        </info>           
 
         <tgroup cols="4">
             <thead>

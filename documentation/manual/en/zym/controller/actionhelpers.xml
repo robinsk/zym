@@ -12,4 +12,6 @@
     
     <xi:include href="actionhelpers/flashredirector.xml" />
     <xi:include href="actionhelpers/form.xml" />
+    <xi:include href="actionhelpers/navigation.xml" />
+    <xi:include href="actionhelpers/translator.xml" />
 </section>

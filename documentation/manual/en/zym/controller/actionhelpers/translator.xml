@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.actionhelpers.translator" version="5.0">
+    <title>Translator</title>
+
+    <para>
+        The translator action helper is similar to ZF's translate view helper 
+        (<classname>Zend_View_Helper_Translate</classname>). The api of this
+        helper is almost 1:1 and the same goes for usage. This helper
+        allows easy access and usage of a global translate object under the
+        registry key "Zend_Translate" which is used throughout ZF or one stored 
+        internally through <code>setTranslator()</code>. It also supports a
+        translate object during construction.
+    </para>
+   
+    <example xml:id="zym.controller.actionhelpers.translator.example.simple">
+        <title>Using the translator action helper</title>
+        
+        <programlisting role="php"><xi:include href="translator/example/simple.php" parse="text" /></programlisting>
+    </example>
+</section>

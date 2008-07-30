@@ -15,13 +15,17 @@
     
     <table xml:id="zym.navigation.pages.mvc.options">
         <title>MVC page options</title>
-                
-        <para>
-            The options listed in the table below are specific to
-            <classname>Zym_Navigation_Page_Mvc</classname>.
-            All options refer to the according arguments in
-            <classname>Zend_Controller_Action_Helper_Url</classname>.
-        </para>
+           
+        <info>
+            <abstract>
+                <para>
+                    The options listed in the table below are specific to
+                    <classname>Zym_Navigation_Page_Mvc</classname>.
+                    All options refer to the according arguments in
+                    <classname>Zend_Controller_Action_Helper_Url</classname>.
+                </para> 
+            </abstract>
+        </info>       
 
         <tgroup cols="4">
             <thead>

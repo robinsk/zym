@@ -26,7 +26,7 @@ require_once 'Zym/Navigation.php';
 
 /**
  * Helper for Zym_Navigation
- * 
+ *
  * @category   Zym
  * @package    Zym_Controller
  * @subpackage Action_Helper
@@ -42,8 +42,20 @@ class Zym_Controller_Action_Helper_Navigation
      *
      * @var Zym_Navigation_Container
      */
-    protected $_container;
-    
+    private $_container;
+
+    /**
+     * Construct
+     *
+     * @param Zym_Navigation_Container $container
+     */
+    public function __construct(Zym_Navigation_Container $container = null)
+    {
+        if ($container !== null) {
+            $this->setNavigation($container);
+        }
+    }
+
     /**
      * Sets navigation container to operate on
      *
@@ -54,7 +66,7 @@ class Zym_Controller_Action_Helper_Navigation
     {
         $this->_container = $container;
     }
-    
+
     /**
      * Returns navigation container
      *
@@ -65,10 +77,10 @@ class Zym_Controller_Action_Helper_Navigation
         if (null === $this->_container) {
             $this->_container = $this->_getDefaultNavigation();
         }
-        
+
         return $this->_container;
     }
-    
+
     /**
      * Retrieves default navigation container
      *
@@ -84,11 +96,11 @@ class Zym_Controller_Action_Helper_Navigation
                 return $nav;
             }
         }
-        
+
         // nothing found, create new container
         return new Zym_Navigation();
     }
-    
+
     /**
      * Returns navigation container
      *

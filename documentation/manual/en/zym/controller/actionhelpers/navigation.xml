@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.controller.actionhelpers.navigation" version="5.0">
+    <title>Navigation</title>
+
+    <para>
+        The navigation action helper simplifies the retrieval of the navigation
+        object from either the registry under the key "Zym_Navigation" or by
+        storing an internal reference through <code>setNavigation()</code> or the navigation 
+        constructor parameter. For simplicity and consistency with ZF, this helper 
+        will retrieve the object from the registry if possible.
+    </para>
+    
+    <example xml:id="zym.controller.actionhelpers.navigation.example.simple">
+        <title>Using the navigation action helper</title>
+        
+        <programlisting role="php"><xi:include href="navigation/example/simple.php" parse="text" /></programlisting>
+    </example>
+</section>
