@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zend_Search_Lucene
+ */
+require_once 'Zend/Search/Lucene.php';
+
+/**
  * @see Zend_Search_Lucene_Index_Term
  */
 require_once 'Zend/Search/Lucene/Index/Term.php';
