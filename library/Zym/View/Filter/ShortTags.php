@@ -7,23 +7,28 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category Zym
- * @package Zym_View
+ * @category   Zym
+ * @package    Zym_View
  * @subpackage Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com/license New BSD License
+ * @license    http://www.zym-project.com/license New BSD License
  */
+
+/**
+ * @see Zym_View_Filter_Interface
+ */
+require_once 'Zym/View/Filter/Interface.php';
 
 /**
  * Converts short tags to full <?php
  *
- * @author Geoffrey Tran
- * @license http://www.zym-project.com/license New BSD License
- * @package Zym_View
+ * @author     Geoffrey Tran
+ * @license    http://www.zym-project.com/license New BSD License
+ * @package    Zym_View
  * @subpackage Filter
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_View_Filter_ShortTags
+class Zym_View_Filter_ShortTags implements Zym_View_Filter_Interface
 {
     /**
      * Filter
@@ -37,16 +42,16 @@ class Zym_View_Filter_ShortTags
         if (ini_get('short_open_tags')) {
             return $buffer;
         }
-        
+
         $pattern = array(
             '/<\\?(?:php|=)?(.*?)\\?>/xisS', // <?= handling
         );
-        
+
         $out = preg_replace_callback($pattern, array($this, '_callBack'), $buffer);
 
         return $out;
     }
-    
+
     /**
      * Preg callback
      *
@@ -57,7 +62,7 @@ class Zym_View_Filter_ShortTags
     {
         // Split up into readable vars
         list($full, $body) = $match;
-        
+
         // Parse <?=
         if ($this->_isEcho($full)) {
             return "<?php echo $body; ?>";
@@ -65,10 +70,10 @@ class Zym_View_Filter_ShortTags
 
         return "<?php $body; ?>";
     }
-    
+
     /**
-     * Check if a string is an echo tag 
-     * 
+     * Check if a string is an echo tag
+     *
      * <?= ?> style
      *
      * @param string $string

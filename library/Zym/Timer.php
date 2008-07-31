@@ -29,14 +29,14 @@ class Zym_Timer
      *
      * @var integer
      */
-    protected $_start;
+    private $_start;
 
     /**
      * Total time
      *
      * @var array
      */
-    protected $_totalTime = array();
+    private $_totalTime = array();
 
     /**
      * Start the timer
