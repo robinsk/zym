@@ -34,7 +34,7 @@ class Zym_Timer_Manager implements Countable
      *
      * @var array
      */
-    protected $_timers = array();
+    private $_timers = array();
 
     /**
      * Get a timer instance
@@ -172,7 +172,6 @@ class Zym_Timer_Manager implements Countable
 
         return $runTime;
     }
-
 
     /**
      * Clear all timer instances

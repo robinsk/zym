@@ -15,7 +15,7 @@
  */
 
 /**
- * @see PHPUnite_Framework_TestCase
+ * @see PHPUnit_Framework_TestCase
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 
@@ -124,7 +124,7 @@ class Zym_Controller_Action_Helper_NavigationTest extends PHPUnit_Framework_Test
     public function testSetNavigation()
     {
         $helper = new Zym_Controller_Action_Helper_Navigation();
-        $helper->setNavigation(new Zym_Navigation();
+        $helper->setNavigation(new Zym_Navigation());
         $this->assertSame($navigation, $helper->getNavigation());
     }
 }

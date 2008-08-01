@@ -14,7 +14,7 @@
  */
 
 /**
- * @see PHPUnite_Framework_TestCase
+ * @see PHPUnit_Framework_TestCase
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 
