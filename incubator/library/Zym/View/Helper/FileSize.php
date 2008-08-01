@@ -62,6 +62,21 @@ class Zym_View_Helper_FileSize
      */
     public function fileSize($fileSize, $precision = 0, $norm = 'traditional', $type = null)
     {
+
+        try {
+            $locale = Zend_Registry::get('Zend_Locale');
+        } catch (Zend_Exception $e) {
+            require_once 'Zend/View/Exception.php';
+            throw new Zend_View_Exception('General Zend_Locale object is not set.');
+        }
+        if (!$locale instanceof Zend_Locale) {
+            require_once 'Zend/Exception.php';
+            throw new Zend_View_Exception('Locale is not set corretly.');
+        }
+        
+        //get localised input value 
+        $fileSize = Zend_Locale_Format::getFloat($fileSize, array('locale' => $locale));
+
         $m = new Zend_Measure_Binary($fileSize);
         
         $m->setType('BYTE');
@@ -104,21 +119,7 @@ class Zym_View_Helper_FileSize
             }
         }
 
-        $value = $m->getValue($precision);
-        $value = $this->_round($value, $precision);
-
-        return $value . ' ' . $this->_getUnitAbr($m->getType());
-    }
-
-    /**
-     * Round $number with set $precision
-     * 
-     * @param float $number Number to round
-     * @param integer $precision Precision
-     */
-    protected function _round($number, $precision)
-    {
-        return Zend_Locale_Math::round($number, $precision);
+        return $m->toString($precision);
     }
 
     /**
@@ -132,19 +133,5 @@ class Zym_View_Helper_FileSize
             return $this->_units[$unit][0];
         }
         return 0;
-    }
-
-    /**
-     * Get unit abbreviation of $unit
-     * 
-     * @param string $unit
-     */
-    protected function _getUnitAbr($unit)
-    {
-        if (array_key_exists($unit, $this->_units)) {
-            return $this->_units[$unit][1];
-        }
-        
-        return '';
     }
 }
