@@ -144,7 +144,11 @@ class Zym_Timer_Manager implements Countable
     public function getRun()
     {
         $runTime = 0;
-        foreach ($this->getTimers() as $timer) {
+
+        $arrayIterator = new RecursiveArrayIterator($this->getTimers());
+        $iterator      = new RecursiveIteratorIterator($arrayIterator);
+
+        foreach ($iterator as $timer) {
             $runTime += $timer->getRun();
         }
 
@@ -166,7 +170,7 @@ class Zym_Timer_Manager implements Countable
             return $runTime;
         }
 
-        foreach ($timers as $timer) {
+        foreach ($timers[$group] as $timer) {
             $runTime += $timer->getRun();
         }
 
