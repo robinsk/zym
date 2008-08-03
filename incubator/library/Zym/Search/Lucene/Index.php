@@ -45,6 +45,13 @@ class Zym_Search_Lucene_Index
     const REGISTRY_PREFIX = 'lucene://';
     
     /**
+     * Default index class
+     *
+     * @var string
+     */
+    protected static $_defaultIndexClass = 'Zym_Search_Lucene_Index';
+    
+    /**
      * Default path for the search index.
      * Usefull when the application has just one search index.
      *
@@ -88,13 +95,16 @@ class Zym_Search_Lucene_Index
      * @var Zend_Search_Lucene_Interface
      */
     protected $_searchIndex = null;
-
+    
     /**
-     * Index class name. Useful for subclassing
+     * Set the default index class
      *
-     * @var string
+     * @param string $path
      */
-    protected $_indexClass = 'Zym_Search_Lucene_Index';
+    public static function setDefaultIndexClass($class)
+    {
+        self::$_defaultIndexClass = $class;
+    }
     
     /**
      * Set the default index path
@@ -130,10 +140,21 @@ class Zym_Search_Lucene_Index
      * Get a Zend_Search_Lucene instance
      *
      * @param string $indexPath
+     * @param array $params
      * @return Zend_Search_Lucene_Interface
      */
-    public static function factory($indexPath = null, $useDefaultPath = true, $createIfNotExists = true)
+    public static function factory($indexPath = null, array $params = array())
     {
+        $defaultParams = array('useDefaultPath'    => true,
+                               'createIfNotExists' => true,
+                               'indexClass'        => self::$_defaultIndexClass);
+                               
+        $params = array_merge($defaultParams, $params);
+        
+        $useDefaultPath    = $params['useDefaultPath'];
+        $createIfNotExists = $params['createIfNotExists'];
+        $indexClass        = $params['indexClass'];
+        
         if (!$indexPath && !self::$_defaultIndexPath) {
             /**
              * @see Zym_Search_Lucene_Exception
@@ -175,7 +196,7 @@ class Zym_Search_Lucene_Index
             Zend_Registry::set($registryKey, $index);
         }
 
-        return new $this->_indexClass($index);
+        return new $indexClass($index);
     }
     
     /**
