@@ -62,6 +62,13 @@ class Zym_Search_Lucene_Index
     protected static $_defaultResultSetLimit = 0;
     
     /**
+     * Result cache
+     *
+     * @var Zend_Cache_Core
+     */
+    protected static $_resultCache = null;
+    
+    /**
      * Default record ID key
      *
      * @var string
@@ -83,6 +90,13 @@ class Zym_Search_Lucene_Index
     protected $_searchIndex = null;
 
     /**
+     * Index class name. Useful for subclassing
+     *
+     * @var string
+     */
+    protected $_indexClass = 'Zym_Search_Lucene_Index';
+    
+    /**
      * Set the default index path
      *
      * @param string $path
@@ -100,6 +114,16 @@ class Zym_Search_Lucene_Index
     public static function setDefaultResultSetLimit($limit)
     {
         self::$_defaultResultSetLimit = (int) $limit;
+    }
+    
+    /**
+     * Set the result cache
+     *
+     * @param Zend_Cache_Core $cache
+     */
+    public static function setResultCache(Zend_Cache_Core $cache)
+    {
+        self::$_resultCache = $cache;
     }
     
     /**
@@ -151,7 +175,7 @@ class Zym_Search_Lucene_Index
             Zend_Registry::set($registryKey, $index);
         }
 
-        return new Zym_Search_Lucene_Index($index);
+        return new $this->_indexClass($index);
     }
     
     /**
@@ -314,12 +338,54 @@ class Zym_Search_Lucene_Index
      */
     public function search($query, $resultSetLimit = null)
     {
+        // If the query is an instance of Zym_Search_Lucene_IQuery serialize it to a string
+        $query = (string) $query;
+        
         if (!$resultSetLimit) {
             $resultSetLimit = self::$_defaultResultSetLimit;
         }
         
+        $cache = self::$_resultCache;
+        
+        if (null !== $cache) {
+            $queryHash = md5($query);
+            
+            if (!($results = $cache->load($queryHash))) {
+                $results = $this->_executeSearch($query, $resultSetLimit);
+                
+                $this->_cacheResults($results);
+            }
+        } else {
+            $results = $this->_executeSearch($query, $resultSetLimit);
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * Execute the search and return the results
+     *
+     * @param string|Zym_Search_Lucene_IQuery $query
+     * @param int $resultSetLimit
+     * @return array
+     */
+    protected function _executeSearch($query, $resultSetLimit)
+    {
         Zend_Search_Lucene::setResultSetLimit((int) $resultSetLimit);
 
         return $this->_searchIndex->find((string) $query);
+    }
+    
+    /**
+     * Cache the search results
+     *
+     * @param Zend_Cache_Core $cache
+     * @param array $results
+     */
+    protected function _cacheResults(Zend_Cache_Core $cache, $results)
+    {
+        $cache->clean(Zend_Cache::CLEANING_MODE_OLD);
+        
+        $cache->save($results);
     }
 }

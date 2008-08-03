@@ -31,11 +31,4 @@ interface Zym_Search_Lucene_IQuery
      * @return string
      */
     public function __toString();
-
-    /**
-     * Get a unique hash for this query
-     *
-     * @return string
-     */
-    public function getQueryHash();
 }
