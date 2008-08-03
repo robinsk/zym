@@ -32,7 +32,7 @@ class Zym_View_Stream_Wrapper
      * @var Zym_View_Abstract
      */
     protected static $_view;
-    
+
     /**
      * Current stream position.
      *
@@ -53,21 +53,21 @@ class Zym_View_Stream_Wrapper
      * @var array
      */
     protected $_stat = array();
-    
+
     /**
      * File handle
      *
      * @var resource
      */
     protected $_fileHandle;
-    
+
     /**
      * File path
      *
      * @var string
      */
     protected $_path;
-    
+
     /**
      * Open
      *
@@ -82,13 +82,13 @@ class Zym_View_Stream_Wrapper
         // Get host part from path (scheme://host)
         $url         = parse_url($path);
         $this->_path = $url['host'] . ((isset($url['path'])) ? '/' . $url['path'] : null);
-        
+
         // Search include path for relative urls?
         $useIncludePath = $this->_checkFlag($options, STREAM_USE_PATH);
 
         // Trigger errors?
         $triggerErrors  = $this->_checkFlag($options, STREAM_REPORT_ERRORS);
-        
+
         // Get contents
         $this->_fileHandle = $triggerErrors ? fopen($this->_path, $mode, $useIncludePath)
                                             : @fopen($this->_path, $mode, $useIncludePath);
@@ -105,10 +105,10 @@ class Zym_View_Stream_Wrapper
         if ($useIncludePath) {
             $opened_path = $this->_path;
         }
-        
+
         // Process data
         $this->_data = $this->_filter($this->_data);
-        
+
         // file_get_contents() won't update PHP's stat cache, so performing
         // another stat() on it will hit the filesystem again.  Since the file
         // has been successfully read, avoid this and just fake the stat
@@ -120,7 +120,7 @@ class Zym_View_Stream_Wrapper
 
         return true;
     }
-    
+
     /**
      * Close file handle
      *
@@ -129,7 +129,7 @@ class Zym_View_Stream_Wrapper
     {
         fclose($this->_fileHandle);
     }
-    
+
     /**
      * Read
      *
@@ -143,7 +143,7 @@ class Zym_View_Stream_Wrapper
 
         return $return;
     }
-    
+
     /**
      * Write
      *
@@ -154,7 +154,7 @@ class Zym_View_Stream_Wrapper
     {
         return fwrite($this->_fileHandle, $data);
     }
-    
+
     /**
      * End of stream indicator
      *
@@ -165,7 +165,7 @@ class Zym_View_Stream_Wrapper
         $isEof = ($this->_pos >= strlen($this->_data));
         return $isEof;
     }
-    
+
     /**
      * Current position
      *
@@ -175,7 +175,7 @@ class Zym_View_Stream_Wrapper
     {
         return $this->_pos;
     }
-    
+
     /**
      * Seek in stream
      *
@@ -215,7 +215,7 @@ class Zym_View_Stream_Wrapper
                 return false;
         }
     }
-    
+
     /**
      * Flush
      *
@@ -225,7 +225,7 @@ class Zym_View_Stream_Wrapper
     {
         return fflush($this->_fileHandle);
     }
-    
+
     /**
      * Stream statistics
      *
@@ -235,7 +235,7 @@ class Zym_View_Stream_Wrapper
     {
         return $this->_stat;
     }
-    
+
     /**
      * Stat url
      *
@@ -251,15 +251,15 @@ class Zym_View_Stream_Wrapper
 
         // Trigger errors?
         $noErrors = $this->_checkFlag($flags, STREAM_URL_STAT_QUIET);
-        
+
         // Stat symlinks
         if ($this->_checkFlag($flags, STREAM_URL_STAT_LINK)) {
             return $noErrors ? @lstat($host) : lstat($host);
         }
-        
+
         return $noErrors ? @stat($host) : stat($host);
     }
-    
+
     /**
      * Set View
      *
@@ -269,7 +269,7 @@ class Zym_View_Stream_Wrapper
     {
         self::$_view = $view;
     }
-    
+
     /**
      * Get view
      *
@@ -279,7 +279,7 @@ class Zym_View_Stream_Wrapper
     {
         return self::$_view;
     }
-    
+
 
     /**
      * Applies the filter callback to a buffer.
@@ -291,7 +291,7 @@ class Zym_View_Stream_Wrapper
     {
         $view = self::getView();
         $streamFilters = $view->getStreamFilters();
-        
+
         // Loop through each filter class
         foreach ($streamFilters as $name) {
             // Load and apply the filter class
@@ -302,7 +302,7 @@ class Zym_View_Stream_Wrapper
         // Done!
         return $buffer;
     }
-    
+
     /**
      * Validate bitwise flags
      *

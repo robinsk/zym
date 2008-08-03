@@ -7,7 +7,7 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category Zym
+ * @category Zym_Tests
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
@@ -29,7 +29,7 @@ require_once 'Zym/View/Helper/GetRequest.php';
  *
  * @author  Geoffrey Tran
  * @license http://www.zym-project.com//License New BSD License
- * @category Zym
+ * @category Zym_Tests
  * @package Zym_View
  * @subpackage Helper
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)

@@ -9,7 +9,7 @@
  *
  * @category   Zym_Tests
  * @package    Zym_View
- * @subpackage Zym_View_Helper
+ * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -26,7 +26,7 @@ require_once 'Zym/View/Helper/Menu.php';
  * @author     Robin Skoglund
  * @category   Zym_Tests
  * @package    Zym_View
- * @subpackage Zym_View_Helper
+ * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -39,14 +39,14 @@ class Zym_View_Helper_MenuTest
      * @var string
      */
     protected $_helperName = 'Zym_View_Helper_Menu';
-    
+
     /**
      * View helper
      *
      * @var Zym_View_Helper_Menu
      */
     protected $_helper;
-    
+
     /**
      * It should be possible to null out the nav structure in the helper
      *
@@ -55,16 +55,16 @@ class Zym_View_Helper_MenuTest
     {
         $old = $this->_helper->getNavigation();
         $oldCount = count($old);
-        
+
         $this->assertGreaterThan(0, $oldCount, 'Empty container before test');
-        
+
         $this->_helper->setNavigation();
         $newCount = count($this->_helper->getNavigation());
         $this->assertEquals(0, $newCount);
-        
+
         $this->_helper->setNavigation($old);
     }
-    
+
     /**
      * It should be possible to autoload the nav structure from Zend_Registry
      *
@@ -76,13 +76,13 @@ class Zym_View_Helper_MenuTest
             $old = Zend_Registry::get(self::REGISTRY_KEY);
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
-        
+
         $expected = file_get_contents($this->_files . '/menu.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         Zend_Registry::set(self::REGISTRY_KEY, $old);
     }
-    
+
     /**
      * It should be possible to set indenting in the helper
      *
@@ -91,16 +91,16 @@ class Zym_View_Helper_MenuTest
     {
         $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
-        
+
         $expected1 = file_get_contents($this->_files . '/menu_indent4.html');
         $expected2 = file_get_contents($this->_files . '/menu_indent8.html');
-        
+
         $this->assertEquals($expected1, $this->_helper->toString(4));
         $this->assertEquals($expected2, $this->_helper->toString());
-        
+
         $this->_helper->setIndent($old);
     }
-    
+
     /**
      * It should be possible to render another nav structure without
      * interfering with the one registered in the helper
@@ -110,13 +110,13 @@ class Zym_View_Helper_MenuTest
     {
         $expected = file_get_contents($this->_files . '/menu.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $expected2 = file_get_contents($this->_files . '/menu2.html');
         $this->assertEquals($expected2, $this->_helper->renderMenu($this->_nav2));
-        
+
         $this->assertEquals($expected, $this->_helper->toString());
     }
-    
+
     /**
      * It should be possible to filter out pages based on ACL roles
      *
@@ -125,18 +125,18 @@ class Zym_View_Helper_MenuTest
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
-        
+
         $acl = $this->_getAcl();
         $this->_helper->setAcl($acl['acl']);
         $this->_helper->setRole($acl['role']);
-        
+
         $expected = file_get_contents($this->_files . '/menu_acl.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
     }
-    
+
     /**
      * It should be possible to set CSS class for the UL element
      *
@@ -145,10 +145,10 @@ class Zym_View_Helper_MenuTest
     {
         $old = $this->_helper->getUlClass();
         $this->_helper->setUlClass('My_Nav');
-        
+
         $expected = file_get_contents($this->_files . '/menu_css.html');
         $this->assertEquals($expected, $this->_helper->renderMenu($this->_nav2));
-        
+
         $this->_helper->setUlClass($old);
     }
 }

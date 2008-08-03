@@ -9,7 +9,7 @@
  *
  * @category   Zym_Tests
  * @package    Zym_View
- * @subpackage Zym_View_Helper
+ * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -26,7 +26,7 @@ require_once 'Zym/View/Helper/Breadcrumbs.php';
  * @author     Robin Skoglund
  * @category   Zym_Tests
  * @package    Zym_View
- * @subpackage Zym_View_Helper
+ * @subpackage Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -39,14 +39,14 @@ class Zym_View_Helper_BreadcrumbsTest
      * @var string
      */
     protected $_helperName = 'Zym_View_Helper_Breadcrumbs';
-    
+
     /**
      * View helper
      *
      * @var Zym_View_Helper_Breadcrumbs
      */
     protected $_helper;
-    
+
     /**
      * It should be possible to null out the nav structure in the helper
      *
@@ -55,16 +55,16 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $old = $this->_helper->getNavigation();
         $oldCount = count($old);
-        
+
         $this->assertGreaterThan(0, $oldCount, 'Empty container before test');
-        
+
         $this->_helper->setNavigation();
         $newCount = count($this->_helper->getNavigation());
         $this->assertEquals(0, $newCount);
-        
+
         $this->_helper->setNavigation($old);
     }
-    
+
     /**
      * It should be possible to autoload the nav structure from Zend_Registry
      *
@@ -76,13 +76,13 @@ class Zym_View_Helper_BreadcrumbsTest
             $old = Zend_Registry::get(self::REGISTRY_KEY);
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
-        
+
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         Zend_Registry::set(self::REGISTRY_KEY, $old);
     }
-    
+
     /**
      * It should be possible to set a custom separator to use between breadcrumbs
      *
@@ -91,13 +91,13 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $old = $this->_helper->getSeparator();
         $this->_helper->setSeparator('foo');
-        
+
         $expected = file_get_contents($this->_files . '/breadcrumbs_sep.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $this->_helper->setSeparator($old);
     }
-    
+
     /**
      * It should be possible to link the last element in the breadcrumb
      *
@@ -106,13 +106,13 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $old = $this->_helper->getLinkLast();
         $this->_helper->setLinkLast(true);
-        
+
         $expected = file_get_contents($this->_files . '/breadcrumbs_linklast.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $this->_helper->setLinkLast($old);
     }
-    
+
     /**
      * It should be possible to set indenting in the helper
      *
@@ -121,15 +121,15 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
-        
+
         $expected = '        <a';
         $actual = substr($this->_helper->toString(), 0, strlen($expected));
-        
+
         $this->assertEquals($expected, $actual);
-        
+
         $this->_helper->setIndent($old);
     }
-    
+
     /**
      * It should be possible to set indenting in the helper
      *
@@ -138,15 +138,15 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
-        
+
         $expected = "\t<a";
         $actual = substr($this->_helper->toString("\t"), 0, strlen($expected));
-        
+
         $this->assertEquals($expected, $actual);
-        
+
         $this->_helper->setIndent($old);
     }
-    
+
     /**
      * It should be possible to render another nav structure without
      * interfering with the one registered in the helper
@@ -156,17 +156,17 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $oldMin = $this->_helper->getMinDepth();
         $this->_helper->setMinDepth(0);
-        
+
         $this->assertEquals("Site 2\n", $this->_helper->renderBreadcrumbs($this->_nav2));
-        
+
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $this->_helper->setMinDepth($oldMin);
     }
-    
+
     /**
      * It should be possible to filter out pages based on ACL roles
      *
@@ -175,14 +175,14 @@ class Zym_View_Helper_BreadcrumbsTest
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
-        
+
         $acl = $this->_getAcl();
         $this->_helper->setAcl($acl['acl']);
         $this->_helper->setRole($acl['role']);
-        
+
         $expected = file_get_contents($this->_files . '/breadcrumbs_acl.html');
         $this->assertEquals($expected, $this->_helper->toString());
-        
+
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
     }

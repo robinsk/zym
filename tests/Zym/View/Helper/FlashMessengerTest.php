@@ -7,11 +7,11 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category Zym
- * @package Zym_View
+ * @category   Zym_Tests
+ * @package    Zym_View
  * @subpackage Helper
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com//License New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com//License New BSD License
  */
 
 /**
@@ -37,12 +37,12 @@ require_once 'Zend/Session.php';
 /**
  * Zym_View_Helper_FlashMessenger test case.
  *
- * @author  Geoffrey Tran
- * @license http://www.zym-project.com//License New BSD License
- * @category Zym
- * @package Zym_View
+ * @author     Geoffrey Tran
+ * @license    http://www.zym-project.com//License New BSD License
+ * @category   Zym_Tests
+ * @package    Zym_View
  * @subpackage Helper
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_View_Helper_FlashMessengerTest extends PHPUnit_Framework_TestCase
 {

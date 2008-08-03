@@ -7,11 +7,11 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category Zym
- * @package Zym_View
+ * @category   Zym_Tests
+ * @package    Zym_View
  * @subpackage Helper
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com/license New BSD License
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -32,12 +32,12 @@ require_once 'Zym/View/Helper/BaseUrl.php';
 /**
  * BaseUrl Test Case
  *
- * @author  Geoffrey Tran
- * @license http://www.zym-project.com/license New BSD License
- * @category Zym
- * @package Zym_View
+ * @author     Geoffrey Tran
+ * @license    http://www.zym-project.com/license New BSD License
+ * @category   Zym_Tests
+ * @package    Zym_View
  * @subpackage Helper
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
 {
