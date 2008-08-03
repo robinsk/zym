@@ -112,24 +112,24 @@ class Zym_Timer_ManagerTest extends PHPUnit_Framework_TestCase
 
     public function testAddTimerThrowsExceptionWhenExists()
     {
+        $this->setExpectedException('Zym_Timer_Manager_Exception');
+
         $timer = new Zym_Timer();
 
         $manager = new Zym_Timer_Manager();
         $manager->addTimer('timer', $timer);
         $manager->addTimer('timer', $timer);
-
-        $this->setExpectedException('Zym_Timer_Manager_Exception');
     }
 
     public function testAddTimerGroupThrowsExceptionWhenExists()
     {
+        $this->setExpectedException('Zym_Timer_Manager_Exception');
+
         $timer = new Zym_Timer();
 
         $manager = new Zym_Timer_Manager();
         $manager->addTimer('timer', $timer,'group');
         $manager->addTimer('timer', $timer, 'group');
-
-        $this->setExpectedException('Zym_Timer_Manager_Exception');
     }
 
     public function testSetTimer()

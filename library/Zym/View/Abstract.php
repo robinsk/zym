@@ -41,6 +41,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
 {
     /**
      * Stack of Zend_View_Filter names to apply as stream filters.
+     *
      * @var array
      */
     private $_streamFilter = array();
@@ -90,7 +91,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
 
         // User-defined stream filters
         if (array_key_exists('streamFilter', $config)) {
-            $this->addFilter($config['streamFilter']);
+            $this->addStreamFilter($config['streamFilter']);
         }
 
         // Call parent
@@ -100,7 +101,8 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
     /**
      * Return array of all currently active filters
      *
-     * Only returns those that have already been instantiated.
+     * Returns array of strings if filters have not been
+     * instantiated
      *
      * @return array
      */
@@ -134,7 +136,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      */
     public function setStreamFilter($name)
     {
-        $this->_steamFilter = array();
+        $this->_streamFilter = array();
         $this->addStreamFilter($name);
 
         return $this;
@@ -145,7 +147,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      *
      * Whether to disable or enable use of stream wrappers
      *
-     * @param string $flag
+     * @param boolean $flag
      * @return Zym_View_Abstract
      */
     public function setStreamFlag($flag)
@@ -160,7 +162,7 @@ abstract class Zym_View_Abstract extends Zend_View_Abstract
      *
      * Whether streams are enabled or not
      *
-     * @return string
+     * @return boolean
      */
     public function getStreamFlag()
     {
