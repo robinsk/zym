@@ -63,10 +63,19 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
      */
     public function getPageAnchor(Zym_Navigation_Page $page)
     {
+        // get label and title for translating
+        $label = $page->getLabel();
+        $title = $page->getTitle();
+        
+        if ($this->_useTranslator && $t = $this->_getTranslator()) {
+            $label = $t->translate($label);
+            $title = $t->translate($title);
+        }
+        
         // get attribs for anchor element
         $attribs = array(
             'id'     => $page->getId(),
-            'title'  => $page->getTitle(),
+            'title'  => $title,
             'class'  => $page->getClass()
         );
 
@@ -81,7 +90,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         }
 
         return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
-             . $page->getLabel()
+             . $label
              . '</' . $element . '>';
     }
 

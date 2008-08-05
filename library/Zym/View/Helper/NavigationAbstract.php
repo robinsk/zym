@@ -64,6 +64,20 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     protected $_acl;
     
     /**
+     * Whether translator should be used
+     * 
+     * @var boolean
+     */
+    protected $_useTranslator = true;
+    
+    /**
+     * Translator
+     * 
+     * @var Zend_Translate_Adapter
+     */
+    protected $_translator;
+    
+    /**
      * Proxy to the navigation container
      *
      * @param  string $method     method in the container to call
@@ -139,18 +153,74 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      */
     public function getPageAnchor(Zym_Navigation_Page $page)
     {
+        // get label and title for translating
+        $label = $page->getLabel();
+        $title = $page->getTitle();
+        
+        if ($this->_useTranslator && $t = $this->_getTranslator()) {
+            $label = $t->translate($label);
+            $title = $t->translate($title);
+        }
+        
         // get attribs for anchor element
         $attribs = array(
             'id'     => $page->getId(),
-            'title'  => $page->getTitle(),
+            'title'  => $title,
             'class'  => $page->getClass(),
             'href'   => $page->getHref(),
             'target' => $page->getTarget()
         );
         
         return '<a ' . $this->_htmlAttribs($attribs) . '>'
-             . $page->getLabel()
+             . $label
              . '</a>';
+    }
+    
+    /**
+     * Sets boolean flag indicating whether translator should be used
+     * 
+     * @param bool $useTranslator  [optional] defaults to true
+     * @return Zym_View_Helper_NavigationAbstract
+     */
+    public function setUseTranslator($useTranslator = true)
+    {
+        $this->_useTranslator = (bool) $useTranslator;
+    }
+    
+    /**
+     * Sets translator object to use
+     * 
+     * @param Zend_Translate|Zend_Translate_Adapter|null $translator
+     */
+    public function setTranslator($translator)
+    {
+        if (null === $translator || $translator instanceof Zend_Translate_Adapter) {
+            $this->_translator = $translator;
+        } elseif ($translator instanceof Zend_Translate) {
+            $this->_translator = $translator->getAdapter();
+        }
+    }
+    
+    /**
+     * Returns translator or null
+     * 
+     * @return Zend_Translate_Adapter|null
+     */
+    protected function _getTranslator()
+    {
+        if (null === $this->_translator) {
+            require_once 'Zend/Registry.php';
+            if (Zend_Registry::isRegistered('Zend_Translate')) {
+                $t = Zend_Registry::get('Zend_Translate');
+                if ($t instanceof Zend_Translate) {
+                    return $t->getAdapter();
+                } elseif ($t instanceof Zend_Translate_Adapter) {
+                    return $t;
+                }
+            }
+        }
+        
+        return $this->_translator;
     }
     
     /**
