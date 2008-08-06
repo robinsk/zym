@@ -259,6 +259,12 @@ class Zym_ViewTest extends PHPUnit_Framework_TestCase
     public function testPluginLoaderAddsZymFilters()
     {
         $view = new Zym_View();
+
+        // Issue 43
+        if (!method_exists($view, 'getPluginLoader')) {
+            $this->markTestSkipped();
+        }
+
         $pluginLoader = $view->getPluginLoader('filter');
 
         $this->assertContains('Zend/View/Filter/', $pluginLoader->getPaths());
@@ -268,6 +274,12 @@ class Zym_ViewTest extends PHPUnit_Framework_TestCase
     public function testPluginLoaderAddsZymHelpers()
     {
         $view = new Zym_View();
+
+        // Issue 43
+        if (!method_exists($view, 'getPluginLoader')) {
+            $this->markTestSkipped();
+        }
+
         $pluginLoader = $view->getPluginLoader('Helper');
 
         $this->assertContains('Zend/View/Helper/', $pluginLoader->getPaths());
