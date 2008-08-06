@@ -238,6 +238,7 @@ class Zym_Controller_Action_Helper_Translator
             return $this;
         }
 
-        return call_user_func_array(array($this, 'translate'), func_get_args());
+        $args = func_get_args();
+        return call_user_func_array(array($this, 'translate'), $args);
     }
 }
