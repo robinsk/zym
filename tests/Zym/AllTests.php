@@ -16,7 +16,10 @@
 
 set_include_path(dirname(__FILE__)  . '/../' . PATH_SEPARATOR
                 . dirname(__FILE__) . '/../../library' . PATH_SEPARATOR
-                . dirname(__FILE__) . '/../../incubator/library' . PATH_SEPARATOR . get_include_path());
+                . dirname(__FILE__) . '/../../incubator/library'
+                . dirname(__FILE__) . '/../../demo/library/incubator' . PATH_SEPARATOR
+                . dirname(__FILE__) . '/../../demo/library' . PATH_SEPARATOR
+                . PATH_SEPARATOR . get_include_path());
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'Zym_AllTests::main');

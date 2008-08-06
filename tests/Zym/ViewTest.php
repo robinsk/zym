@@ -242,18 +242,19 @@ class Zym_ViewTest extends PHPUnit_Framework_TestCase
     {
         $view = new Zym_View();
         $view->setStreamFlag(false)
-             ->addStreamFilter('AspTags');
+             ->addStreamFilter('AspTags')
+             ->addScriptPath(dirname(__FILE__) . '/View');
 
-
-        $this->assertEquals('<% echo ""; %>', $view->render(dirname(__FILE__) . '/_files/test.phtml'));
+        $this->assertEquals('<% echo ""; %>', $view->render('_files/test.phtml'));
     }
 
     public function testRenderUsesStream()
     {
         $view = new Zym_View();
-        $view->addStreamFilter('AspTags');
+        $view->addStreamFilter('AspTags')
+             ->addScriptPath(dirname(__FILE__) . '/View');
 
-        $this->assertEquals('', $view->render(dirname(__FILE__) . '/_files/test.phtml'));
+        $this->assertEquals('', $view->render('_files/test.phtml'));
     }
 
     public function testPluginLoaderAddsZymFilters()

@@ -73,7 +73,7 @@ class Zym_AppTest extends PHPUnit_Framework_TestCase
     public function testGetInstanceCreatesInstance()
     {
         $app = Zym_App::getInstance();
-        $this->assertEquals($this->isInstanceOf('Zym_App'), $app);
+        $this->assertType('Zym_App', $app);
     }
 
     public function testGetInstanceGetsSameInstance()
@@ -92,6 +92,7 @@ class Zym_AppTest extends PHPUnit_Framework_TestCase
 
     public function testResetInstance()
     {
+        $this->markTestIncomplete();
         $app = Zym_App::getInstance();
         $app->addResourcePrefix('Test_Prefix', 1);
 

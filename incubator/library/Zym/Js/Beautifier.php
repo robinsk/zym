@@ -365,7 +365,7 @@ class Zym_Js_Beautifier
                     if ($tokenText == 'case' or $tokenText == 'default') {
                         if ($this->_lastText == ':') {
                             // switch cases following one another
-                            $this->_removeIdent();
+                            $this->_removeIndent();
                         } else {
                             $this->_indentSize--;
                             $this->_nl();

@@ -49,7 +49,7 @@ class Zym_CsvTest extends PHPUnit_Framework_TestCase
     {
         // TODO Auto-generated Zym_CsvTest::setUp()
         $this->Zym_Csv_Header = new Zym_Csv(dirname(__FILE__) . '/Csv/TestCsv.csv');
-        $this->Zym_Csv_NoHeader = new Zym_Csv(dirname(__FILE__) . 'Csv/TestCsv.csv', ',', false);
+        $this->Zym_Csv_NoHeader = new Zym_Csv(dirname(__FILE__) . '/Csv/TestCsv.csv', ',', false);
     }
     /**
      * Cleans up the environment after running a test.
@@ -72,7 +72,7 @@ class Zym_CsvTest extends PHPUnit_Framework_TestCase
 
         try {
             $test = new Zym_Csv(dirname(__FILE__) . '/Csv/TestCsvNoRead.csv');
-        } catch (Zym_Csv_Exception_FileNotReadable $e) {
+        } catch (Zym_Csv_Exception $e) {
             $this->assertTrue($e != null);
         }
     }

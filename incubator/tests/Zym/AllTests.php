@@ -17,6 +17,8 @@
 set_include_path(dirname(__FILE__)  . '/../' . PATH_SEPARATOR
                 . dirname(__FILE__) . '/../../library' . PATH_SEPARATOR
                 . dirname(__FILE__) . '/../../../library' . PATH_SEPARATOR
+                . dirname(__FILE__) . '/../../../demo/library/incubator' . PATH_SEPARATOR
+                . dirname(__FILE__) . '/../../../demo/library' . PATH_SEPARATOR
                 . get_include_path());
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
@@ -57,7 +59,7 @@ class Zym_AllTests
     {
         PHPUnit_TextUI_TestRunner::run(self::suite());
     }
-    
+
     /**
      * Suite
      *

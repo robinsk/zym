@@ -105,7 +105,7 @@ class Zym_Timer_ManagerTest extends PHPUnit_Framework_TestCase
     public function testAddTimer()
     {
         $manager = new Zym_Timer_Manager();
-        $timer = $manager->addTimer('timer');
+        $timer = $manager->createTimer('timer');
 
         $this->assertEquals($timer, $manager->getTimer('timer'));
     }
@@ -217,7 +217,9 @@ class Zym_Timer_ManagerTest extends PHPUnit_Framework_TestCase
         $manager->createTimer('second');
         $manager->createTimer('third');
 
-        $this->assertAttributeEquals(array(). '_timers', $manager);
+        $manager->clearTimers();
+
+        $this->assertAttributeEquals(array(), '_timers', $manager);
         $this->assertEquals(array(), $manager->getTimers());
     }
 

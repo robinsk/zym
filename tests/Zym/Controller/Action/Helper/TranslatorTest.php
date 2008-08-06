@@ -56,7 +56,7 @@ class Zym_Controller_Action_Helper_TranslatorTest extends PHPUnit_Framework_Test
      *
      * @var Zym_Controller_Action_Helper_Translator
      */
-    protected $_helper;
+    private $_helper;
 
     /**
      * Prepares the environment before running a test.
@@ -131,8 +131,8 @@ class Zym_Controller_Action_Helper_TranslatorTest extends PHPUnit_Framework_Test
     {
         try {
             $helper = new Zym_Controller_Action_Helper_Translator('something');
-        } catch (Zend_View_Exception $e) {
-            $this->assertContains('must set an instance of Zend_Translate', $e->getMessage());
+        } catch (Zym_Controller_Action_Helper_Exception $e) {
+            $this->assertContains('must be an instance of Zend_Translate', $e->getMessage());
         }
     }
 
@@ -140,8 +140,8 @@ class Zym_Controller_Action_Helper_TranslatorTest extends PHPUnit_Framework_Test
     {
         try {
             $this->_helper->setTranslator('something');
-        } catch (Zend_View_Exception $e) {
-            $this->assertContains('must set an instance of Zend_Translate', $e->getMessage());
+        } catch (Zym_Controller_Action_Helper_Exception $e) {
+            $this->assertContains('must be an instance of Zend_Translate', $e->getMessage());
         }
     }
 
@@ -149,7 +149,7 @@ class Zym_Controller_Action_Helper_TranslatorTest extends PHPUnit_Framework_Test
     {
         try {
             $this->_helper->getLocale();
-        } catch (Zend_View_Exception $e) {
+        } catch (Zym_Controller_Action_Helper_Exception $e) {
             $this->assertContains('must set an instance of Zend_Translate', $e->getMessage());
         }
     }
@@ -158,7 +158,7 @@ class Zym_Controller_Action_Helper_TranslatorTest extends PHPUnit_Framework_Test
     {
         try {
             $this->_helper->setLocale('de');
-        } catch (Zend_View_Exception $e) {
+        } catch (Zym_Controller_Action_Helper_Exception $e) {
             $this->assertContains('must set an instance of Zend_Translate', $e->getMessage());
         }
     }
