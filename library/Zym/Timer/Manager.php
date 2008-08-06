@@ -145,11 +145,10 @@ class Zym_Timer_Manager implements Countable
     {
         $runTime = 0;
 
-        $arrayIterator = new RecursiveArrayIterator($this->getTimers());
-        $iterator      = new RecursiveIteratorIterator($arrayIterator);
-
-        foreach ($iterator as $timer) {
-            $runTime += $timer->getRun();
+        foreach ($this->getTimers() as $timers) {
+            foreach ($timers as $timer) {
+               $runTime += $timer->getRun();
+            }
         }
 
         return $runTime;
@@ -197,6 +196,12 @@ class Zym_Timer_Manager implements Countable
      */
     public function count()
     {
-        return count($this->_timers);
+        $count = 0;
+
+        foreach ($this->getTimers() as $timers) {
+        	$count += count($timers);
+        }
+
+        return $count;
     }
 }

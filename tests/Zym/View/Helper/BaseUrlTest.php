@@ -83,7 +83,6 @@ class Zym_View_Helper_BaseUrlTest extends PHPUnit_Framework_TestCase
         $baseUrls = array('', '/subdir', '/subdir/', '/sub/sub/dir');
         foreach ($baseUrls as $baseUrl) {
             Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
-
             $this->assertEquals(rtrim($baseUrl, '/\\'), $this->_helper->baseUrl());
         }
     }

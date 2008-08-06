@@ -44,7 +44,7 @@ class Zym_View_Filter_ShortTags implements Zym_View_Filter_Interface
         }
 
         $pattern = array(
-            '/<\\?(?:php|=)?(.*?)\\?>/xisS', // <?= handling
+            '/<\\?(?:php|=)?(?:\s)*(.*?)(?:;?\s*)\\?>/xisS', // <?= handling
         );
 
         $out = preg_replace_callback($pattern, array($this, '_callBack'), $buffer);

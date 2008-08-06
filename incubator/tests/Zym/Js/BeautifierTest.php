@@ -236,7 +236,7 @@ class Zym_Js_BeautifierTest extends PHPUnit_Framework_TestCase
     public function testAssignmentTildeShouldHaveSpace()
     {
         $js = $this->_beautifier->parse('a=~a');
-        $this->assertEquals('if (!a)', $js);
+        $this->assertEquals('a = ~a', $js);
     }
 
     public function testMultiLineComment()
@@ -366,7 +366,7 @@ class Zym_Js_BeautifierTest extends PHPUnit_Framework_TestCase
         $js = $this->_beautifier->parse('if (a in b)');
         $this->assertEquals('if (a in b)', $js);
 
-        $js = $this->_beautifier->parse('if (template.user[n] in bk))');
+        $js = $this->_beautifier->parse('if (template.user[n] in bk)');
         $this->assertEquals('if (template.user[n] in bk)', $js);
     }
 

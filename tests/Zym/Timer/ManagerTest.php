@@ -186,7 +186,7 @@ class Zym_Timer_ManagerTest extends PHPUnit_Framework_TestCase
         $timer2 = $manager->createTimer('test2');
         $timer->start();
         $timer2->start();
-        sleep(1);
+        sleep(2);
         $timer->stop();
         $timer2->stop();
 
@@ -234,6 +234,6 @@ class Zym_Timer_ManagerTest extends PHPUnit_Framework_TestCase
 
         $manager->createTimer('second');
         $this->assertEquals(2, count($manager));
-        $this->assertEquals(1, $manager->count());
+        $this->assertEquals(2, $manager->count());
     }
 }

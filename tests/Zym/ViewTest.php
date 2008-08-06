@@ -268,8 +268,8 @@ class Zym_ViewTest extends PHPUnit_Framework_TestCase
 
         $pluginLoader = $view->getPluginLoader('filter');
 
-        $this->assertContains('Zend/View/Filter/', $pluginLoader->getPaths());
-        $this->assertContains('Zym/View/Filter/', $pluginLoader->getPaths());
+        $this->assertContains(array('Zend/View/Filter/'), $pluginLoader->getPaths());
+        $this->assertContains(array('Zym/View/Filter/'), $pluginLoader->getPaths());
     }
 
     public function testPluginLoaderAddsZymHelpers()
@@ -283,8 +283,8 @@ class Zym_ViewTest extends PHPUnit_Framework_TestCase
 
         $pluginLoader = $view->getPluginLoader('Helper');
 
-        $this->assertContains('Zend/View/Helper/', $pluginLoader->getPaths());
-        $this->assertContains('Zym/View/Helper/', $pluginLoader->getPaths());
+        $this->assertContains(array('Zend/View/Helper/'), $pluginLoader->getPaths());
+        $this->assertContains(array('Zym/View/Helper/'), $pluginLoader->getPaths());
     }
 
     public function testLoadStreamWrapper()
