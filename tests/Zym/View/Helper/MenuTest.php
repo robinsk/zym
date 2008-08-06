@@ -118,10 +118,30 @@ class Zym_View_Helper_MenuTest
     }
 
     /**
-     * It should be possible to filter out pages based on ACL roles
+     * It should be possible to filter out pages based on ACL roles as a string
      *
      */
-    public function testShouldBeAbleToUseAclRoles()
+    public function testShouldBeAbleToUseAclRolesAsString()
+    {
+        $oldAcl = $this->_helper->getAcl();
+        $oldRole = $this->_helper->getRole();
+
+        $acl = $this->_getAcl();
+        $this->_helper->setAcl($acl['acl']);
+        $this->_helper->setRole('member');
+
+        $expected = file_get_contents($this->_files . '/menu_acl_string.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+
+        $this->_helper->setAcl($oldAcl);
+        $this->_helper->setRole($oldRole);
+    }
+
+    /**
+     * It should be possible to filter out pages based on ACL roles as an array
+     *
+     */
+    public function testShouldBeAbleToUseAclRolesAsAnArray()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -131,6 +151,48 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setRole($acl['role']);
 
         $expected = file_get_contents($this->_files . '/menu_acl.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+
+        $this->_helper->setAcl($oldAcl);
+        $this->_helper->setRole($oldRole);
+    }
+
+    /**
+     * It should be possible to filter out pages based on ACL roles
+     *
+     */
+    public function testShouldBeAbleToUseAnActualAclRoleFromAclObject()
+    {
+        $oldAcl = $this->_helper->getAcl();
+        $oldRole = $this->_helper->getRole();
+
+        $acl = $this->_getAcl();
+        $this->_helper->setAcl($acl['acl']);
+        $this->_helper->setRole($acl['acl']->getRole('member'));
+
+        $expected = file_get_contents($this->_files . '/menu_acl_role_interface.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+
+        $this->_helper->setAcl($oldAcl);
+        $this->_helper->setRole($oldRole);
+    }
+
+    /**
+     * It should be possible to filter out pages based on ACL roles that are
+     * constructed directly when setting in the helper, without fetching it
+     * from the existing ACL
+     *
+     */
+    public function testShouldBeAbleToUseConstructedAclRolesNotFromAclObject()
+    {
+        $oldAcl = $this->_helper->getAcl();
+        $oldRole = $this->_helper->getRole();
+
+        $acl = $this->_getAcl();
+        $this->_helper->setAcl($acl['acl']);
+        $this->_helper->setRole(new Zend_Acl_Role('member'));
+
+        $expected = file_get_contents($this->_files . '/menu_acl_role_interface.html');
         $this->assertEquals($expected, $this->_helper->toString());
 
         $this->_helper->setAcl($oldAcl);

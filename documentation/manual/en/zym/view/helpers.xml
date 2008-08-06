@@ -118,6 +118,12 @@
             </para>
             
             <para>
+                It is also possible to use objects that implement 
+                <classname>Zend_Acl_Role_Interface</classname> instead of strings,
+                or an array of role objects.
+            </para>
+            
+            <para>
                 The examples below all show how ACL affects rendering. 
             </para>
         </section>

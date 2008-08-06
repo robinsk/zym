@@ -255,10 +255,11 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      */
     public function setRole($role = null)
     {
-        if (null === $role || is_string($role) || is_array($role)) {
+        if (null === $role || is_string($role) || is_array($role) ||
+            $role instanceof Zend_Acl_Role_Interface) {
             $this->_role = $role;
         } else {
-            $msg = '$role must be null|string|array';
+            $msg = '$role must be null|string|array|Zend_Acl_Role_Interface';
             throw new InvalidArgumentException($msg);
         }
         
@@ -303,7 +304,13 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
         } else {   
             // loop all roles
             foreach ($helperRole as $hRole) {
+                if ($helperRole instanceof Zend_Acl_Role_Interface) {
+                    $helperRole = $helperRole->getRoleId();
+                }
                 foreach ($pageRole as $pRole) {
+                    if ($pageRole instanceof Zend_Acl_Role_Interface) {
+                        $pageRole = $pageRole->getRoleId();
+                    }
                     if ($hRole == $pRole ||
                         $this->_acl->inheritsRole($hRole, $pRole)) {
                         $accept = true;
