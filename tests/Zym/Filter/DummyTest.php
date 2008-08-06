@@ -7,10 +7,10 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category Zym_Tests
- * @package Zym_Filter
+ * @category  Zym_Tests
+ * @package   Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license http://www.zym-project.com/license New BSD License
+ * @license   http://www.zym-project.com/license New BSD License
  */
 
 /**
@@ -19,34 +19,34 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * @see Zym_Filter_Null
+ * @see Zym_Filter_Dummy
  */
-require_once 'Zym/Filter/Null.php';
+require_once 'Zym/Filter/Dummy.php';
 
 /**
  * Fake filter that does not do anything
  *
- * @author Geoffrey Tran
- * @license http://www.zym-project.com/license New BSD License
- * @category Zym_Tests
- * @package Zym_Filter
+ * @author    Geoffrey Tran
+ * @license   http://www.zym-project.com/license New BSD License
+ * @category  Zym_Tests
+ * @package   Zym_Filter
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Filter_NullTest extends PHPUnit_Framework_TestCase
+class Zym_Filter_DummyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Zym Filter
      *
      * @var Zym_Filter_Interface
      */
-    protected $_filter;
-    
+    private $_filter;
+
     /**
      * Prepares the environment before running a test.
      */
     protected function setUp()
     {
-        $this->_filter = new Zym_Filter_Null();
+        $this->_filter = new Zym_Filter_Dummy();
     }
 
     /**
@@ -54,9 +54,9 @@ class Zym_Filter_NullTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_filter = null;    
+        $this->_filter = null;
     }
-    
+
     /**
      * Test filter
      *
