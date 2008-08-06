@@ -16,7 +16,12 @@
 
 /**
  * Imports
+ * 
+ * @see Zend_Controller_Request_Http
+ * @see Zym_View_Helper_NavigationTestAbstract
+ * @see Zym_View_Helper_Sitemap
  */
+require_once 'Zend/Controller/Request/Http.php';
 require_once dirname(__FILE__) . '/NavigationTestAbstract.php';
 require_once 'Zym/View/Helper/Sitemap.php';
 

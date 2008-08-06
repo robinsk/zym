@@ -16,12 +16,21 @@
 
 /**
  * Imports
+ * 
+ * @see Zend_Acl
+ * @see Zend_Acl_Role
+ * @see Zend_Config_Xml
+ * @see Zend_Registry
+ * @see Zend_Translate
+ * @see Zend_View
+ * @see Zym_Navigation
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Acl.php';
 require_once 'Zend/Acl/Role.php';
 require_once 'Zend/Config/Xml.php';
 require_once 'Zend/Registry.php';
+require_once 'Zend/Translate.php';
 require_once 'Zend/View.php';
 require_once 'Zym/Navigation.php';
 
@@ -112,6 +121,7 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
     /**
      * Sets up ACL
      *
+     * @return Zend_Acl
      */
     protected function _getAcl()
     {
@@ -122,5 +132,26 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
         $acl->addRole(new Zend_Acl_Role('special'));
 
         return array('acl' => $acl, 'role' => array('member', 'special'));
+    }
+    
+    /**
+     * Returns translator
+     * 
+     * @return Zend_Translate
+     */
+    protected function _getTranslator()
+    {
+        $data = array(
+            'Page 1'       => 'Side 1',
+            'Page 1.1'     => 'Side 1.1',
+            'Page 2'       => 'Side 2',
+            'Page 2.3'     => 'Side 2.3',
+            'Page 2.3.3.1' => 'Side 2.3.3.1',
+            'Home'         => 'Hjem',
+            'Go home'      => 'Gå hjem'
+        );
+        
+        $t = new Zend_Translate('array', $data, 'nb_NO');
+        return $t;
     }
 }

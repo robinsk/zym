@@ -98,6 +98,32 @@
             </para>
         </example>
         
+        <section xml:id="zym.view.helpers.navigation.i18n">
+            <title>Integration with Zend_Translate</title>
+        
+            <para>
+                The navigation helpers support translating of page labels and titles.
+                You can set a translator of type <classname>Zend_Translate</classname>
+                or <classname>Zend_Translate_Adapter</classname> in the helper using
+                <code>$helper->setTranslator($translator)</code>, or like with other
+                I18n-enabled components; adding the translator to
+                <classname>Zend_Registry</classname> using the key
+                <code>Zend_Translate</code>, in which case it will be found by the
+                helpers.
+            </para>
+            
+            <para>
+                If you want to disable translating, use <code>$helper->setUseTranslator(false)</code>.
+            </para>
+            
+            <note>
+                <para>
+                    There is no translation in the sitemap helper, since there
+                    are no page labels or titles involved in an XML sitemap.
+                </para>
+            </note>
+        </section>
+        
         <section xml:id="zym.view.helpers.navigation.acl">
             <title>Integration with ACL</title>
             

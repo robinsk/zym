@@ -124,7 +124,8 @@ class Zym_Controller_Action_Helper_NavigationTest extends PHPUnit_Framework_Test
     public function testSetNavigation()
     {
         $helper = new Zym_Controller_Action_Helper_Navigation();
-        $helper->setNavigation(new Zym_Navigation());
+        $navigation = new Zym_Navigation();
+        $helper->setNavigation($navigation);
         $this->assertSame($navigation, $helper->getNavigation());
     }
 }

@@ -16,6 +16,9 @@
 
 /**
  * Imports
+ * 
+ * @see Zym_View_HelperNavigationTestAbstract
+ * @see Zym_View_Helper_Breadcrumbs
  */
 require_once dirname(__FILE__) . '/NavigationTestAbstract.php';
 require_once 'Zym/View/Helper/Breadcrumbs.php';
@@ -185,5 +188,72 @@ class Zym_View_Helper_BreadcrumbsTest
 
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
+    }
+    
+    /**
+     * It should be possible to explicitly set a Zend_Translate translator to use
+     *
+     */
+    public function testShouldBeAbleToSetTranslatorAndUseIt()
+    {
+        $translator = $this->_getTranslator();
+        $this->_helper->setTranslator($translator);
+
+        $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+        
+        $this->_helper->setTranslator(null);
+    }
+    
+    /**
+     * It should be possible to explicitly set a Zend_Translate_Adapter to use
+     *
+     */
+    public function testShouldBeAbleToSetTranslateAdapterAndUseIt()
+    {
+        $translator = $this->_getTranslator();
+        $this->_helper->setTranslator($translator->getAdapter());
+
+        $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+        
+        $this->_helper->setTranslator(null);
+    }
+    
+    /**
+     * The helper should be able to retrieve a translator from Zend_Registry
+     *
+     */
+    public function testShouldBeAbleToGetTranslatorFromRegistryAndUseIt()
+    {
+        $oldReg = Zend_Registry::isRegistered('Zend_Translate')
+                ? Zend_Registry::get('Zend_Translate')
+                : null;
+        
+        $translator = $this->_getTranslator();  
+        Zend_Registry::set('Zend_Translate', $translator);
+        
+        $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+        
+        $this->_helper->setTranslator(null);
+        Zend_Registry::set('Zend_Translate', $oldReg);
+    }
+    
+    /**
+     * It should be possible to disable translation even if the helper has a
+     * translator
+     *
+     */
+    public function testShouldBeAbleToDisableTranslation()
+    {
+        $translator = $this->_getTranslator();
+        $this->_helper->setTranslator($translator);
+        $this->_helper->setUseTranslator(false);
+
+        $expected = file_get_contents($this->_files . '/breadcrumbs.html');
+        $this->assertEquals($expected, $this->_helper->toString());
+        
+        $this->_helper->setTranslator(null);
     }
 }

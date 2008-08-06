@@ -176,6 +176,7 @@
         <home>
             <label>Home</label>
             <uri>index</uri>
+            <title>Go home</title>
             <position>-100</position>
         </home>
         

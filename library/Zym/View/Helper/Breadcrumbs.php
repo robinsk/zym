@@ -179,9 +179,16 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
         // step 2: walk back to root
         if ($depth >= $this->_minDepth) {
             // put the current page last
-            $html = $this->_linkLast
-                  ? $this->getPageAnchor($found)
-                  : $found->getLabel();
+            if ($this->_linkLast) {
+                $html = $this->getPageAnchor($found);
+            } else {
+                $html = $found->getLabel();
+                
+                // translate if possible
+                if ($this->_useTranslator && $t = $this->_getTranslator()) {
+                    $html = $t->translate($html);
+                }
+            }
             
             // loop parents and prepend
             while ($parent = $found->getParent()) {
