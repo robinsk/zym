@@ -94,8 +94,8 @@ class Zym_XmlRpc_Server_CacheTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue(Zym_XmlRpc_Server_Cache::save('cache', $this->_cache, $this->_server));
-
         $expected = $this->_server->listMethods();
+
         $server   = new Zend_XmlRpc_Server();
         $this->assertTrue(Zym_XmlRpc_Server_Cache::get('cache', $this->_cache, $server));
 

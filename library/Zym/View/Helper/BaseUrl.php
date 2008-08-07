@@ -42,12 +42,12 @@ class Zym_View_Helper_BaseUrl
     {
         // Get baseUrl
         $baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl();
-        
+
         // Remove trailing slashes
         $file = ($file !== null) ? ltrim($file, '/\\') : null;
-        
+
         // Build return
-        $return = $baseUrl . ($file ? ('/' . $file) : '');
+        $return = rtrim($baseUrl, '/\\') . (($file !== null) ? ('/' . $file) : '');
         return $return;
     }
 }
