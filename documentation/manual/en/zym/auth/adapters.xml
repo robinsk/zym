@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.auth.adapters" version="5.0">
+    <title>Adapters</title>
+
+    <section xml:id="zym.auth.adapters.chain">
+        <title>Chain adapter</title>
+        
+        <para>
+            This adapter allows chaining of other authentication adapters to 
+            authenticate a user from multiple sources. Using this adapter can
+            allows authenticating users from sources such as database, LDAP, and a remote service
+            all in one go.
+        </para>
+        
+        <para>
+            Setting up the chain is simple because you just add adapters to the chain with 
+            <code>addAdapter(Zend_Auth_Adapter_Interface)</code>. The result is returned from
+            the first successful adapter. A result returned from a failed authentication
+            attempt is created by the chain adapter itself with a <code>Zend_Auth_Result::FAILURE</code>
+            code, null identity, and an array of error messages from all failed adapters. Because 
+            it may be helpful to determine which adapter was successful for processing the user, the
+            chain adapter provides the <code>getLastSuccessfulAdapter()</code> method which 
+            returns the successful adapter instance.
+        </para>
+        
+        <example xml:id="zym.auth.adapters.chain.example">
+            <title>Authenticating with multiple adapters</title>
+            
+            <programlisting role="php"><xi:include href="adapters/example/chain.php" parse="text" /></programlisting>
+        </example>
+    </section>
+</section>

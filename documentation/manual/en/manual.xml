@@ -33,6 +33,7 @@
     <!-- START: Chapters -->
     <xi:include href="zym/acl.xml" />
     <xi:include href="zym/app.xml" />
+    <xi:include href="zym/auth.xml" />
     <xi:include href="zym/cache.xml" />
     <xi:include href="zym/controller.xml" />
     <xi:include href="zym/filter.xml" />
