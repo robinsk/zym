@@ -9,7 +9,7 @@
  *
  * @author     Geoffrey Tran
  * @category   Zym_Tests
- * @package    Zym_Cache
+ * @package    Zym_Auth
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
@@ -20,15 +20,15 @@
 require_once 'Zym/PhpUnit/Framework/TestSuite.php';
 
 /**
- * TestSuite
+ * TestSuite for Zym_App
  *
  * @author     Geoffrey Tran
  * @category   Zym_Tests
- * @package    Zym_Cache
+ * @package    Zym_Auth
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_CacheSuite extends Zym_PhpUnit_Framework_TestSuite
+class Zym_AuthSuite extends Zym_PhpUnit_Framework_TestSuite
 {
     /**
      * Construct

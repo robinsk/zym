@@ -69,6 +69,7 @@ class Zym_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Zym Framework - Core');
         $suite->addTestFiles(glob(dirname(__FILE__) . '/*Suite.php'));
+
         return $suite;
     }
 }
