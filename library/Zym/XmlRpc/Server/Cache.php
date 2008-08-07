@@ -32,8 +32,8 @@ class Zym_XmlRpc_Server_Cache
      * Serializes the XMLRPC server callbacks array and stores the information
      * in Zend_Cache_Core
      *
-     * @param string $id
-     * @param Zend_Cache_Core $coreCache
+     * @param string             $id
+     * @param Zend_Cache_Core    $coreCache
      * @param Zend_XmlRpc_Server $server
      * @return bool
      */
@@ -80,19 +80,29 @@ class Zym_XmlRpc_Server_Cache
      * echo $response;
      * </code>
      *
-     * @param string $filename
+     * @param string             $id
+     * @param Zend_Cache_Core    $coreCache
      * @param Zend_XmlRpc_Server $server
+     *
+     * @return boolean
      */
     public static function get($id, Zend_Cache_Core $coreCache, Zend_XmlRpc_Server $server)
     {
         $dispatchArray = @unserialize($coreCache->load($id, false, true));
-        $server->loadFunctions($dispatchArray);
+
+        try {
+            $server->loadFunctions($dispatchArray);
+        } catch (Zend_XmlRpc_Server_Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Remove a cache file
      *
-     * @param string $id
+     * @param string          $id
      * @param Zend_Cache_Core $coreCache
      * @return boolean
      */
