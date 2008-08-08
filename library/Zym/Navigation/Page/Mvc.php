@@ -119,6 +119,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
         if (!$this->_active) {
             $front = Zend_Controller_Front::getInstance();
             $reqParams = $front->getRequest()->getParams();
+            
+            if (!array_key_exists('module', $reqParams)) {
+                $reqParams['module'] = $front->getDefaultModule();
+            }
 
             $myParams = $this->_params;
             
