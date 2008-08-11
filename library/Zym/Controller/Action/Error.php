@@ -73,7 +73,11 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
      *
      * @var array
      */
-    private $_errorHandlers = array();
+    private $_errorHandlers = array(
+        Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => 'not-found',
+        Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => 'not-found',
+        Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => 'internal'
+    );
 
     /**
      * Fall back map
@@ -237,8 +241,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
         // Add them from array
         foreach ($array as $type => $options) {
             $action     = isset($options[self::ACTION]) && is_array($options)
-                            ? $options[self::ACTION] : (is_string($options)
-                                                            ? $options : null);
+                            ? $options[self::ACTION] : (is_string($options) ? $options : null);
 
             $controller = isset($options[self::CONTROLLER]) && is_array($options)
                             ? $options[self::CONTROLLER] : null;
