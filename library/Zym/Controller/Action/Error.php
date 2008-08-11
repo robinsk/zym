@@ -32,32 +32,32 @@ require_once 'Zym/Controller/Plugin/ErrorHandler.php';
  * @subpackage Action
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstract 
+abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstract
 {
     /**
      * Error handler action
      *
      */
     const ACTION     = 'action';
-    
+
     /**
      * Error handler controller
      *
      */
     const CONTROLLER = 'controller';
-    
+
     /**
      * Error handler module
      *
      */
     const MODULE     = 'module';
-    
+
     /**
      * Error handler params
      *
      */
     const PARAMS     = 'params';
-    
+
     /**
      * Exception Object
      *
@@ -66,29 +66,29 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
      *
      * @var Zym_Controller_Plugin_ErrorHandler_Data
      */
-    protected $_error;
-    
+    private $_error;
+
     /**
      * Error handler map
      *
      * @var array
      */
-    protected $_errorHandlers = array();
-    
+    private $_errorHandlers = array();
+
     /**
      * Fall back map
      *
      * @var array
      */
-    protected $_fallBack = array();
-    
+    private $_fallBack = array();
+
     /**
      * No fall back flag
      *
      * @var boolean
      */
-    protected $_noFallBack;
-    
+    private $_noFallBack;
+
     /**
      * Class constructor
      *
@@ -122,56 +122,59 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
         if ($error instanceof Zym_Controller_Plugin_ErrorHandler_Data) {
             $this->setError($error);
         }
-        
+
         // Setup default fallback
         $defaultModule = $this->getFrontController()->getDefaultModule();
         $this->setFallBack('error', 'error', $defaultModule);
-        
+
         // Call Parent
         parent::__construct($request, $response, $invokeArgs);
     }
-    
+
     /**
      * Error handler
-     * 
+     *
      * This is the entrance to this controller used by the ErrorHandler
      * controller plugin (@see Zend_Controller_ErrorHandler)
-     * 
+     *
      * This action cannot be called directly, if someone does, it will
      * show up as a 404 notFound
+     *
+     * The magic of this controller happens in this action. Make sure that
+     * the ErrorHandler is set to forward to this action.
      *
      * @return void
      */
     public function errorAction()
     {
-    
         $error = $this->getError();
         if (!$error instanceof Zym_Controller_Plugin_ErrorHandler_Data) {
             // Reserve this action only for the ErrorHandler plugin
-            throw new Zend_Controller_Action_Exception(
-                'This action cannot be called directly'
+            require_once 'Zym/Controller/Action/Exception.php';
+            throw new Zym_Controller_Action_Exception(
+                'This action was called directly or Zym_Controller_Plugin_ErrorHandler was not used'
             );
         }
 
-        $type = $error->getType();
-        $errorHandlers = $this->getErrorHandlers();
-        
-        $currentModule = $this->getRequest()->getModuleName();
-        
-        $fallBack = $this->getFallBack();
+        $type              = $error->getType();
+        $errorHandlers     = $this->getErrorHandlers();
+        $currentModule     = $this->getRequest()->getModuleName();
+        $currentController = $this->getRequest()->getControllerName();
+        $fallBack          = $this->getFallBack();
 
-        // Prevent looping to the same place                
+        // Prevent looping to the same place
         if (strcasecmp($fallBack[self::MODULE], $currentModule) === 0 || $fallBack[self::MODULE] === null) {
-            $isValidFall = !($fallBack[self::CONTROLLER] == 'error' && $fallBack[self::ACTION] == 'error');
+            $isValidFall = !(strcasecmp($fallBack[self::CONTROLLER], $currentController) === 0
+                            && $fallBack[self::ACTION] == 'error');
         } else {
             $isValidFall = true;
         }
 
         if (isset($errorHandlers[$type])) {
             call_user_func_array(array($this, '_forward'), $errorHandlers[$type]);
-        } else if (!$this->getNoFallBack() && $isValidFall) {
+        } else if (!$this->isNoFallBack() && $isValidFall) {
             call_user_func_array(array($this, '_forward'), $fallBack);
-        } else if (!$this->getNoFallBack() && !$isValidFall) {
+        } else if (!$this->isNoFallBack() && !$isValidFall) {
             /**
              * @see Zym_Controller_Action_Exception
              */
@@ -192,8 +195,12 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
             // Disable ViewRenderer
             $this->getHelper('ViewRenderer')->setNoRender();
         }
+
+        // Clear header/body
+        $this->getResponse()->clearHeaders()
+                            ->clearBody();
     }
-    
+
     /**
      * Set error
      *
@@ -205,7 +212,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
         $this->_error = $error;
         return $this;
     }
-    
+
     /**
      * Get error obj
      *
@@ -215,7 +222,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
     {
         return $this->_error;
     }
-    
+
     /**
      * Clear and set error handlers
      *
@@ -226,33 +233,33 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
     {
         // Clear handlers
         $this->_errorHandlers = array();
-        
+
         // Add them from array
-        foreach ($array as $type => $options) {      
-            $action     = isset($options[self::ACTION]) && is_array($options) 
-                            ? $options[self::ACTION] : (is_string($options) 
+        foreach ($array as $type => $options) {
+            $action     = isset($options[self::ACTION]) && is_array($options)
+                            ? $options[self::ACTION] : (is_string($options)
                                                             ? $options : null);
-                            
-            $controller = isset($options[self::CONTROLLER]) && is_array($options) 
+
+            $controller = isset($options[self::CONTROLLER]) && is_array($options)
                             ? $options[self::CONTROLLER] : null;
-                            
-            $module     = isset($options[self::MODULE]) && is_array($options) 
+
+            $module     = isset($options[self::MODULE]) && is_array($options)
                             ? $options[self::MODULE] : null;
-             
-            $params     = isset($options[self::PARAMS]) && is_array($options) 
+
+            $params     = isset($options[self::PARAMS]) && is_array($options)
                             ? $options[self::PARAMS] : null;
-                            
+
             $this->addErrorHandler($type, $action, $controller, $module, $params);
         }
 
         return $this;
     }
-    
+
     /**
      * Add error handlers
      *
      * Error handlers are added in FIFO order
-     * 
+     *
      * @param string $type
      * @param string $action
      * @param string $controller
@@ -268,10 +275,10 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
             self::MODULE     => $module,
             self::PARAMS     => $params
         );
-        
+
         return $this;
     }
-    
+
     /**
      * Get array of error handlers
      *
@@ -281,30 +288,30 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
     {
         return $this->_errorHandlers;
     }
-    
+
     /**
      * Set to prevent fall back
      *
      * @param boolean $fall
-     * 
+     *
      * @return Zym_Controller_Action_Error
      */
-    protected function setNoFallBack($fall = true)
+    public function setNoFallBack($fall = true)
     {
         $this->_noFallBack = (bool) $fall;
         return $this;
     }
-    
+
     /**
      * Get no fall back flag
      *
      * @return boolean
      */
-    protected function getNoFallBack()
+    public function isNoFallBack()
     {
         return (bool) $this->_noFallBack;
     }
-    
+
     /**
      * Set fall back action
      *
@@ -312,7 +319,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
      * @param string $controller
      * @param string $module
      * @param array  $params
-     * 
+     *
      * @return Zym_Controller_Action_Error
      */
     public function setFallBack($action, $controller = null, $module = null, array $params = null)
@@ -326,7 +333,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
 
         return $this;
     }
-    
+
     /**
      * Get fallback
      *
