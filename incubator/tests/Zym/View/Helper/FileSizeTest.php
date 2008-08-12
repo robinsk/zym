@@ -141,27 +141,28 @@ class Zym_View_Helper_FileSizeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1 MiB', $this->_fs->fileSize(1024 * 1024, null, 'iec'));
         $this->assertEquals('1 GiB', $this->_fs->fileSize(1024 * 1024 * 1024, null, 'iec'));
     }
-    
+
     /**
      * Test localised input string
      */
     public function testLocalised()
     {
-        $locale = new Zend_Locale('cs_CZ');
+        $this->markTestSkipped('This feature will be added in next ZF release.');
         
+        $locale = new Zend_Locale('cs_CZ');
         require_once 'Zend/Registry.php';
         Zend_Registry::set('Zend_Locale', $locale);
-        
+
         $this->assertEquals('1,1 MB', $this->_fs->fileSize('1153433,6', 1));
     }
-    
-	/**
+
+    /**
      * Test when no locale is set
      */
     public function testNoLocaleSet()
     {
-       Zend_Registry::getInstance()->_unsetInstance();
-        
+        Zend_Registry::getInstance()->_unsetInstance();
+
         $this->assertEquals("976.563 kB", $this->_fs->fileSize(1000000, 3));
         $this->assertEquals("976.5625 kB", $this->_fs->fileSize(1000000, 4));
         $this->assertEquals("976.5625000000 kB", $this->_fs->fileSize(1000000, 10));
