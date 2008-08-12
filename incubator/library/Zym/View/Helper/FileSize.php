@@ -15,15 +15,6 @@
  * @license    http://www.zym-project.com/license    New BSD License
  */
 
-/**
- * @see Zend_Locale_Math
- */
-require_once 'Zend/Locale/Math.php';
-
-/**
- * @see Zend_Measure_Binary
- */
-require_once 'Zend/Measure/Binary.php';
 
 /**
  * @author     Martin Hujer
@@ -48,6 +39,10 @@ class Zym_View_Helper_FileSize
      */
     public function __construct()
     {
+        /**
+         * @see Zend_Measure_Binary
+         */
+        require_once 'Zend/Measure/Binary.php';
         $m = new Zend_Measure_Binary(0);
         $this->_units = $units = $m->getConversionList();
     }
@@ -62,22 +57,33 @@ class Zym_View_Helper_FileSize
      */
     public function fileSize($fileSize, $precision = 0, $norm = 'traditional', $type = null)
     {
-
         try {
+            require_once 'Zend/Registry.php';
             $locale = Zend_Registry::get('Zend_Locale');
+            require_once 'Zend/Locale.php';
+            if (!$locale instanceof Zend_Locale) {
+                require_once 'Zend/Exception.php';
+                throw new Zend_Exception('Locale is not set correctly.');
+            }
+            $isLocaleSet = true;
         } catch (Zend_Exception $e) {
-            require_once 'Zend/View/Exception.php';
-            throw new Zend_View_Exception('General Zend_Locale object is not set.');
-        }
-        if (!$locale instanceof Zend_Locale) {
-            require_once 'Zend/Exception.php';
-            throw new Zend_View_Exception('Locale is not set corretly.');
+            $isLocaleSet = false;
+            $locale = null;
         }
         
-        //get localised input value 
-        $fileSize = Zend_Locale_Format::getFloat($fileSize, array('locale' => $locale));
-
-        $m = new Zend_Measure_Binary($fileSize);
+        
+        if ($isLocaleSet) {
+            /**
+             * @see Zend_Locale_Math
+             */
+            require_once 'Zend/Locale/Format.php';
+            //get localised input value 
+            $fileSize = Zend_Locale_Format::getFloat($fileSize, array('locale' => $locale));    
+        } else {
+            $fileSize = floatval($fileSize);
+        }
+        
+        $m = new Zend_Measure_Binary($fileSize, null, $locale);
         
         $m->setType('BYTE');
         
