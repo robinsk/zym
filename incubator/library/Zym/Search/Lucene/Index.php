@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zend_Paginator
+ */
+require_once 'Zend/Paginator.php';
+
+/**
  * @see Zend_Search_Lucene
  */
 require_once 'Zend/Search/Lucene.php';
@@ -366,6 +371,8 @@ class Zym_Search_Lucene_Index
             $resultSetLimit = self::$_defaultResultSetLimit;
         }
         
+        Zend_Search_Lucene::setResultSetLimit((int) $resultSetLimit);
+        
         $cache = self::$_resultCache;
         
         if (null !== $cache) {
@@ -387,13 +394,10 @@ class Zym_Search_Lucene_Index
      * Execute the search and return the results
      *
      * @param string|Zym_Search_Lucene_IQuery $query
-     * @param int $resultSetLimit
      * @return array
      */
-    protected function _executeSearch($query, $resultSetLimit)
+    protected function _executeSearch($query)
     {
-        Zend_Search_Lucene::setResultSetLimit((int) $resultSetLimit);
-
         return $this->_searchIndex->find((string) $query);
     }
     
