@@ -13,7 +13,7 @@
  * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license http://www.zym-project.com/license New BSD License
  */
- 
+
 /**
  * @see Zym_App_Resource_Abstract
  */
@@ -26,7 +26,7 @@ require_once 'Zend/Translate.php';
 
 /**
  * Setup translation
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -45,14 +45,14 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         Zym_App::ENV_PRODUCTION => array(
             'cache' => true
         ),
-        
+
         Zym_App::ENV_DEFAULT => array(
             'cache'   => false,
             'adapter' => 'tmx',
             'data'    => 'locale', // Relative to data directory
-            'locale'  => 'auto',
+            'locale'  => null,
             'options' => array(),
-        
+
             'registry' => array(
                 'enabled' => true,
                 'key'     => 'Zend_Translate'
@@ -72,28 +72,38 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
             $cache = Zym_Cache::factory('Core');
             Zend_Translate::setCache($cache);
         }
-        
+
         $adapter = $config->get('adapter');
         $data    = $this->_parseDataPath($config->get('data'));
-        $locale  = $config->get('locale');
         $options = $this->_parseOptions($config->get('options')->toArray());
 
         $translate = new Zend_Translate($adapter, $data, null, $options);
-        
+
         // Weird Zend_Translate issues
         // We cannot set a locale in the constructor
-        $translate->getAdapter()->setLocale($locale);
-        
+        if ($locale = $config->get('locale')) {
+            $translate->getAdapter()->setLocale($locale);
+        } else {
+            /**
+             * @see Zend_Registry
+             */
+            require_once 'Zend/Registry.php';
+            if (Zend_Registry::isRegistered('Zend_Locale')) {
+                $locale = Zend_Registry::get('Zend_Locale');
+                $translate->getAdapter()->setLocale($locale);
+            }
+        }
+
         if ((bool) $config->get('registry')->get('enabled')) {
             /**
              * @see Zend_Registry
              */
             require_once 'Zend/Registry.php';
-            
+
             Zend_Registry::set($config->get('registry')->get('key'), $translate);
         }
     }
-    
+
     /**
      * Parse data path and make it relative to data dir
      *
@@ -106,14 +116,14 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
             // Change path relative to data dir
             return $this->getApp()->getPath(Zym_App::PATH_DATA, $data);
         }
-        
+
         if ($data instanceof Zend_Config) {
             return $data->toArray();
         }
-        
+
         return $data;
     }
-    
+
     /**
      * Parse options
      *
@@ -124,7 +134,7 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         if (isset($options['scan'])) {
             $options['scan'] = (int) $options['scan'];
         }
-        
+
         return $options;
     }
 }
