@@ -20,11 +20,6 @@
 require_once 'Zym/App/Resource/Abstract.php';
 
 /**
- * @see Zym_Cache
- */
-require_once 'Zym/Cache.php';
-
-/**
  * @see Zend_Locale
  */
 require_once 'Zend/Locale.php';
@@ -36,7 +31,7 @@ require_once 'Zend/Loader.php';
 
 /**
  * Setup default locale
- * 
+ *
  * @author Geoffrey Tran
  * @license http://www.zym-project.com/license New BSD License
  * @category Zym
@@ -45,14 +40,14 @@ require_once 'Zend/Loader.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
-{   
+{
     /**
      * Priority
      *
      * @var integer
      */
     protected $_priority = self::PRIORITY_HIGH;
-    
+
     /**
      * Default Config
      *
@@ -62,11 +57,16 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
         Zym_App::ENV_PRODUCTION => array(
             'cache' => true
         ),
-    
+
         Zym_App::ENV_DEFAULT => array(
             'class'   => 'Zend_Locale',
             'cache'   => false,
-            'default' => null
+            'default' => null,
+
+            'registry' => array(
+                'enabled' => true,
+                'key'     => 'Zend_Locale'
+            )
         )
     );
 
@@ -76,7 +76,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
      * @var string
      */
     protected $_class;
-    
+
     /**
      * PreSetup
      *
@@ -87,21 +87,24 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
         // Load locale class
         $this->_loadLocaleClass($config->get('class'));
     }
-    
+
     /**
      * Setup
      *
      * @param Zend_Config $config
      */
     public function setup(Zend_Config $config)
-    {   
+    {
         // Set cache
         $this->_setCache($config);
-        
+
         // Set default locale
         $this->_setDefault($config);
+
+        // Registry key to set default application locale
+        $this->_setRegistry($config->get('registry'));
     }
-    
+
     /**
      * Load locale class
      *
@@ -112,7 +115,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
         Zend_Loader::loadClass($class);
         $this->_class = $class;
     }
-    
+
     /**
      * Set cache
      *
@@ -124,10 +127,14 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
             return;
         }
 
+        /**
+         * @see Zym_Cache
+         */
+        require_once 'Zym/Cache.php';
         $cache = Zym_Cache::factory('Core');
         call_user_func(array($this->_class, 'setCache'), $cache);
     }
-    
+
     /**
      * Set default locale
      *
@@ -138,6 +145,22 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
         $locale = $config->get('default');
         if (!empty($locale)) {
             call_user_func(array($this->_class, 'setDefault'), $locale);
+        }
+    }
+
+    /**
+     * Set registry key
+     *
+     * @param Zend_Config $config
+     */
+    protected function _setRegistry(Zend_Config $config)
+    {
+        if ((bool) $config->get('enabled')) {
+            /**
+             * @see Zend_Registry
+             */
+            require_once 'Zend/Registry.php';
+            Zend_Registry::set($config->get('key'), $translate);
         }
     }
 }
