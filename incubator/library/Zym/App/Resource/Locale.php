@@ -162,7 +162,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
              */
             require_once 'Zend/Registry.php';
 
-            $locale = new Zend_Locale($this->get('locale'));
+            $locale = new Zend_Locale($config->get('locale'));
             Zend_Registry::set($config->get('registry')->get('key'), $locale);
         }
     }
