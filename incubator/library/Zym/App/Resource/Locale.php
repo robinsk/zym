@@ -62,6 +62,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
             'class'   => 'Zend_Locale',
             'cache'   => false,
             'default' => null,
+            'locale'  => null,
 
             'registry' => array(
                 'enabled' => true,
@@ -102,7 +103,7 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
         $this->_setDefault($config);
 
         // Registry key to set default application locale
-        $this->_setRegistry($config->get('registry'));
+        $this->_setRegistry($config);
     }
 
     /**
@@ -155,12 +156,14 @@ class Zym_App_Resource_Locale extends Zym_App_Resource_Abstract
      */
     protected function _setRegistry(Zend_Config $config)
     {
-        if ((bool) $config->get('enabled')) {
+        if ((bool) $config->get('registry')->get('enabled')) {
             /**
              * @see Zend_Registry
              */
             require_once 'Zend/Registry.php';
-            Zend_Registry::set($config->get('key'), $translate);
+
+            $locale = new Zend_Locale($this->get('locale'));
+            Zend_Registry::set($config->get('registry')->get('key'), $locale);
         }
     }
 }
