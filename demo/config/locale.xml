@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Locale Resource Configuration
+    This resource is used to setup the locales
+
+================================================================================
+Tags below <resource> are configuration for each environment set in Zym_App.
+
+Each section below extends the <default> config section if it has the 
+"extends" attribute. Adding a tag in <production> would override the value
+set from <default> for the production environment.
+-->
+<resource>
+    <!--
+    Production environment overrides
+    -->
+    <production extends="default"></production>
+    
+    <!--
+    Test environment overrides
+    -->
+    <test extends="default"></test>
+    
+    <!--
+    Development environment overrides
+    -->
+    <development extends="default"></development>
+    
+    <!--
+    Default environment config
+    
+    This environment is the default for all environments that extend it.
+    
+    A key specified here will override both the defaults and environment config
+    set inside the resource.
+    -->
+    <default>
+        <locale>en</locale>
+    </default>
+</resource>
