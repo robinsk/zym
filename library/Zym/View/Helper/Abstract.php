@@ -31,20 +31,13 @@ require_once 'Zend/View/Helper/Abstract.php';
 abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
 {
     /**
-     * View Object
-     *
-     * @var Zend_View_Abstract
-     */
-    private $_view;
-
-    /**
      * Clone view object
      *
      * @return Zend_View_Abstract
      */
     public function cloneView()
     {
-        if (!$this->_view instanceof Zend_View_Abstract) {
+        if (!$this->view instanceof Zend_View_Abstract) {
             /**
              * @see Zym_View_Helper_Exception
              */
@@ -57,20 +50,7 @@ abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
         $clonedView = clone $this->getView();
         return $clonedView;
     }
-
-    /**
-     * Set view object
-     *
-     * @param Zend_View_Interface $view
-     * @return Zym_View_Helper_Abstract
-     */
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->_view = $view;
-        
-        return $this;
-    }
-
+    
     /**
      * Get view object
      *
@@ -78,7 +58,7 @@ abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
      */
     public function getView()
     {
-        if (!$this->_view instanceof Zend_View_Abstract) {
+        if (!$this->view instanceof Zend_View_Abstract) {
             /**
              * @see Zym_View_Helper_Exception
              */
@@ -88,6 +68,6 @@ abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
             );
         }
 
-        return $this->_view;
+        return $this->view;
     }
 }

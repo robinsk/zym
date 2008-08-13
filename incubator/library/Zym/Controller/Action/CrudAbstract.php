@@ -370,6 +370,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         $formValues = $this->_getForm()->getValues();
 
+        // TODO: Refactor according to Bill's email
         if (!empty($formValues[$this->_getPrimaryIdKey()])) {
             $row = $this->_getRow($this->_getPrimaryId());
         } else {
