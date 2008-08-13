@@ -37,18 +37,7 @@ abstract class Zym_View_Helper_Abstract extends Zend_View_Helper_Abstract
      */
     public function cloneView()
     {
-        if (!$this->view instanceof Zend_View_Abstract) {
-            /**
-             * @see Zym_View_Helper_Exception
-             */
-            require_once 'Zym/View/Helper/Exception.php';
-            throw new Zym_View_Helper_Exception(
-                'A view object of instance Zend_View_Abstract is not set to this helper.'
-            );
-        }
-
-        $clonedView = clone $this->getView();
-        return $clonedView;
+        return clone $this->getView();
     }
     
     /**
