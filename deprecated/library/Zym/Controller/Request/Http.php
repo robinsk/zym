@@ -36,7 +36,6 @@ class Zym_Controller_Request_Http extends Zend_Controller_Request_Http
      */
     public function getRequestScheme()
     {
-        trigger_error('Zym_Controller_Request_Http::getRequestScheme() is deprecated, use getScheme() instead. This method will be removed in the next release');
         return $this->getScheme();
     }
 
@@ -47,7 +46,6 @@ class Zym_Controller_Request_Http extends Zend_Controller_Request_Http
      */
     public function getRequestHost()
     {
-        trigger_error('Zym_Controller_Request_Http::getRequestHost() is deprecated, use getHttpHost() instead. This method will be removed in the next release');
         return $this->getHttpHost();
     }
 }
