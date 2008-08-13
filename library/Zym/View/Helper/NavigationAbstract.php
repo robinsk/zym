@@ -172,7 +172,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
         );
         
         return '<a ' . $this->_htmlAttribs($attribs) . '>'
-             . $label
+             . $this->getView()->escape($label)
              . '</a>';
     }
     

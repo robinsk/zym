@@ -90,7 +90,7 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
         }
 
         return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
-             . $label
+             . $this->getView()->escape($label)
              . '</' . $element . '>';
     }
 
