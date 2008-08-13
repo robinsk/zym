@@ -58,7 +58,34 @@
                         null
                     </entry>
                     <entry>
-                        Default locale: <code>Zend_Locale::setDefault()</code>
+                        Default locale to fall back when auto detection fails: <code>Zend_Locale::setDefault()</code>
+                    </entry>
+                </row>
+                <row>
+                    <entry>locale</entry>
+                    <entry>
+                        null
+                    </entry>
+                    <entry>
+                        Default site locale to use when setting to the registry
+                    </entry>
+                </row>
+                <row>
+                    <entry>registry.enabled</entry>
+                    <entry>
+                        true
+                    </entry>
+                    <entry>
+                        Set locale to registry
+                    </entry>
+                </row>
+                <row>
+                    <entry>registry.key</entry>
+                    <entry>
+                        Zend_Locale
+                    </entry>
+                    <entry>
+                        Registry key
                     </entry>
                 </row>
             </tbody>
