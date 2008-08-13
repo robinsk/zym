@@ -54,10 +54,12 @@ php_flag short_open_tag on
 
 	# Add trailing slash if url does not have it
 	#RewriteCond %{REQUEST_METHOD}    GET
+        #RewriteCond %{REQUEST_FILENAME}  !-f
 	#RewriteCond ${REQUEST_FILENAME}  !-d
-	#RewriteRule ^(.+)/$ %{REQUEST_URI} [R=301,L] 
+        #RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
+	#RewriteRule ^(.+)$ %{REQUEST_URI}/ [R=301,L] 
 	
-	# Rewrite urls to index.php
+        # Rewrite urls to index.php
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ index.php/$1 [L]
