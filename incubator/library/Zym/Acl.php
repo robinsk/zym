@@ -45,21 +45,26 @@ class Zym_Acl extends Zend_Acl
     const REGISTRY_KEY = 'zym_acl';
 
     /**
+     * Zend_Auth instance
+     *
+     * @var Zend_Auth
+     */
+    protected $_auth = null;
+    
+    /**
      * User identity
      *
      * @var string
      */
-    protected $_identity;
-
+    protected $_identity = null;
+    
     /**
      * Constructor
      *
      */
     public function __construct()
     {
-        if (Zend_Auth::getInstance()->hasIdentity()) {
-            $this->_identity = Zend_Auth::getInstance()->getIdentity();
-        }
+        $this->_auth = Zend_Auth::getInstance();
 
         $this->init();
     }
@@ -108,6 +113,10 @@ class Zym_Acl extends Zend_Acl
      */
     public function getIdentity()
     {
+        if (null == $this->_identity && $this->_auth->hasIdentity()) {
+            $this->_identity = $this->_auth->getIdentity();
+        }
+        
         return $this->_identity;
     }
 
@@ -118,11 +127,13 @@ class Zym_Acl extends Zend_Acl
      */
     public function getIdentityRole()
     {
-        if (!isset($this->_identity)) {
+        if (!$this->_auth->hasIdentity()) {
             return null;
         }
-
-        return $this->_identity->role;
+        
+        $storage = $this->_auth->getStorage()->read();
+        
+        return $storage->role;
     }
 
     /**
