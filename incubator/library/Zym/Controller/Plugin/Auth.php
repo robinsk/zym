@@ -57,7 +57,7 @@ class Zym_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
      * @var array
      */
     protected $_noAuth   = array('module'     => 'default',
-                                 'controller' => 'auth',
+                                 'controller' => 'user',
                                  'action'     => 'login');
 
     /**
@@ -83,6 +83,20 @@ class Zym_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
      */
     protected $_returnURLKey = 'return';
 
+    /**
+     * Constructor
+     *
+     * @param Zym_Acl $acl
+     */
+    public function __construct(Zym_Acl $acl = null)
+    {
+        $this->_acl = $acl;
+        
+        if (!Zend_Registry::isRegistered(Zym_Acl::REGISTRY_KEY)) {
+            Zend_Registry::set(Zym_Acl::REGISTRY_KEY, $acl);
+        }
+    }
+    
     /**
      * Set whether the return url needs to be included in the redirect or not
      *
@@ -187,15 +201,15 @@ class Zym_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
             $resource = null;
         }
 
-        if (!$this->_getAcl()->isAllowed($resource, $action)) {
+        if (!$this->_getAcl()->isAllowedRole($resource, $action)) {
             if (!$this->_getAuth()->hasIdentity()) {
-                $module = $this->_noAuth['module'];
+                $module     = $this->_noAuth['module'];
                 $controller = $this->_noAuth['controller'];
-                $action = $this->_noAuth['action'];
+                $action     = $this->_noAuth['action'];
             } else {
-                $module = $this->_noAcl['module'];
+                $module     = $this->_noAcl['module'];
                 $controller = $this->_noAcl['controller'];
-                $action = $this->_noAcl['action'];
+                $action     = $this->_noAcl['action'];
             }
 
             $returnUrl = urlencode(serialize($request->getParams()));
