@@ -23,10 +23,6 @@ require_once 'Zym/Controller/Action/Abstract.php';
  */
 class Default_IndexController extends Zym_Controller_Action_Abstract
 {
-    public $contexts = array(
-        'data' => array('json')
-    );
-
     /**
      * Index
      *
@@ -34,34 +30,5 @@ class Default_IndexController extends Zym_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        /*
-        $classes = array_merge(get_declared_classes(), get_declared_interfaces());
-
-        $zendZym = array();
-        foreach ($classes as $class) {;
-            if (strtolower(substr($class, 0, 4)) == 'zend' || strtolower(substr($class, 0, 3)) == 'zym') {
-               $zendZym[] = str_ireplace('_', '/', $class) . '.php';
-
-               echo 'require_once \'' . str_ireplace('_', '/', $class) . '.php\';'.'<br />';
-            }
-        }
-        */
-    }
-
-    public function logAction()
-    {
-    }
-
-    public function dataAction()
-    {
-        $this->getView()->assign(array(
-            'identifier' => 'name',
-            'label' => 'name',
-            'items' => array(
-                array('name' => 'test'),
-                array('name' => 'test2')
-
-            )
-        ));
     }
 }

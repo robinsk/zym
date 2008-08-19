@@ -66,7 +66,7 @@ $this->sitemap()->setRole(array('nav-member', 'nav-bar'));
 // save state
 $oldNav = clone Zend_Registry::get('Zym_Navigation');
 Zend_Registry::set('Zym_Navigation', Zend_Registry::get('Zym_Navigation_Demo'));
-$prevLinkLast = $this->breadcrumbs()->getLinkLast();
+$prevLinkLast  = $this->breadcrumbs()->getLinkLast();
 $prevSeparator = $this->breadcrumbs()->getSeparator();
 ?>
 <div>

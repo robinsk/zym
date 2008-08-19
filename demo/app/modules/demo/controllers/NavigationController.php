@@ -26,19 +26,28 @@ require_once 'Zym/Navigation.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Demo_NavigationController extends Zym_Controller_Action_Abstract 
+class Demo_NavigationController extends Zym_Controller_Action_Abstract
 {
     /**
+     * Contexts
+     *
+     * @var array
+     */
+    public $contexts = array(
+        'sitemap' => array('xml')
+    );
+
+    /**
      * init
-     * 
+     *
      * @return void
      */
     public function init()
     {
         // Setup navigation
-        $this->_setupNavigation();    
+        $this->_setupNavigation();
     }
-    
+
     /**
      * Index
      *
@@ -51,19 +60,16 @@ class Demo_NavigationController extends Zym_Controller_Action_Abstract
                                             'Zym_Navigation',
                                             $this->view->navSetup);
     }
-    
+
     /**
      * Prints an XML sitemap
      *
+     * Call sitemap/format/xml for xml sitemap, else it's html
      */
     public function sitemapAction()
     {
-        header('Content-type: text/xml; charset=UTF-8');
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->layout->disableLayout();
-        echo $this->view->sitemap();
     }
-    
+
     /**
      * Setup navigation
      *

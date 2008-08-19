@@ -86,8 +86,7 @@ class Demo_MessageController extends Zym_Controller_Action_Abstract
      */
     protected function _setupMessageDispatcher()
     {
-        $demo = new App_Demo_Message();
-
+        $demo       = new App_Demo_Message();
         $dispatcher = Zym_Message_Dispatcher::get();
 
         // Register sandy if not already registered
