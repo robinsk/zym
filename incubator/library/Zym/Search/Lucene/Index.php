@@ -376,7 +376,7 @@ class Zym_Search_Lucene_Index
         $cache = self::$_resultCache;
         
         if (null !== $cache) {
-            $queryHash = md5($query);
+            $queryHash = $this->_getQueryHash($query);
             
             if (!($results = $cache->load($queryHash))) {
                 $results = $this->_executeSearch($query, $resultSetLimit);
@@ -412,5 +412,16 @@ class Zym_Search_Lucene_Index
         $cache->clean(Zend_Cache::CLEANING_MODE_OLD);
         
         $cache->save($results);
+    }
+    
+    /**
+     * Get the query hash
+     *
+     * @param string|Zym_Search_Lucene_IQuery $query
+     * @return string
+     */
+    protected function _getQueryHash($query)
+    {
+        return md5($query);
     }
 }
