@@ -28,7 +28,7 @@ class Zym_View_Helper_IsAllowed
     /**
      * ACL instance
      *
-     * @var Zend_Acl
+     * @var Zym_Acl
      */
     protected $_acl;
 
@@ -40,8 +40,15 @@ class Zym_View_Helper_IsAllowed
     {
         $this->_acl = Zym_ACL::getACL();
     }
-
-    // Matches signature of MyApp_Acl (we don't need to pass the $role)
+    
+    /**
+     * Check if the use is allowed to view the resource
+     *
+     * @param string $resource
+     * @param string $privilege
+     * @param string $role
+     * @return boolean
+     */
     public function isAllowed($resource = null, $privilege = null, $role = null)
     {
         // Default business rule to return null instead of throwing exceptions for non-known resources
@@ -49,6 +56,10 @@ class Zym_View_Helper_IsAllowed
             $resource = null;
         }
 
-        return $this->_acl->isAllowed($resource, $privilege, $role);
+        if (null === $role) {
+            return $this->_acl->isAllowedRole($resource, $privilege); // Attempt to automatically fetch the role
+        } else {
+            return $this->_acl->isAllowed($resource, $privilege, $role);
+        }
     }
 }
