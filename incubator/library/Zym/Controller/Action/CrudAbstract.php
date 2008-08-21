@@ -162,6 +162,17 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     }
     
     /**
+     * Fetch the row with the specified id from the database and assign it to the view
+     *
+     */
+    protected function _assignByPrimaryId()
+    {
+        $row = $this->_getRow($this->_getPrimaryId());
+        
+        $this->view->row = $row;
+    }
+    
+    /**
      * Get the name of the action that takes care of the add/edit stuff
      *
      * @return string
@@ -486,6 +497,15 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     }
     
     /**
+     * Confirm deleting the item
+     *
+     */
+    public function confirmDelete()
+    {
+        $this->_assignByPrimaryId();
+    }
+    
+    /**
      * Delete a model
      */
     public function deleteAction()
@@ -532,9 +552,6 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      */
     public function viewAction()
     {
-        $id = $this->_getPrimaryId();
-        $row = $this->_getRow($id);
-
-        $this->view->row = $row;
+        $this->_assignByPrimaryId();
     }
 }
