@@ -500,7 +500,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      * Confirm deleting the item
      *
      */
-    public function confirmDelete()
+    public function confirmDeleteAction()
     {
         $this->_assignByPrimaryId();
     }
