@@ -51,7 +51,9 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
             'adapter' => 'tmx',
             'data'    => 'locale', // Relative to data directory
             'locale'  => null,
-            'options' => array(),
+            'options' => array(
+                'scan' => Zend_Translate::LOCALE_DIRECTORY
+            ),
 
             'registry' => array(
                 'enabled' => true,
@@ -131,7 +133,7 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
      */
     protected function _parseOptions(array $options)
     {
-        if (isset($options['scan'])) {
+        if (isset($options['scan']) && is_numeric($options['scan'])) {
             $options['scan'] = (int) $options['scan'];
         }
 

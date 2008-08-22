@@ -83,9 +83,9 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
         $translator = $this->getView()->getHelper('translate');
 
         if (isset($secondChunk)) {
-            $output = $translator->translate("%d $largestChunkName, %d $secondChunkName ago", $largestChunk, $secondChunk);
+            $output = $translator->translate("%d $largestChunkName, %d $secondChunkName", $largestChunk, $secondChunk);
         } else {
-            $output = $translator->translate("%d $largestChunkName ago", $largestChunk);
+            $output = $translator->translate("%d $largestChunkName", $largestChunk);
         }
 
         return $output;

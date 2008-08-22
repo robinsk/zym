@@ -36,8 +36,5 @@ set from <default> for the production environment.
     -->
     <default>
         <adapter>gettext</adapter>
-        <options>
-            <scan>1</scan>
-        </options>
     </default>
 </resource>
