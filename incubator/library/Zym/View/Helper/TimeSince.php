@@ -63,20 +63,20 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
                 $chunk = floor($since / $seconds);
             }
 
-        	if ($chunk != 0) {
-        	    $largestChunk        = $chunk;
-        	    $largestChunkName    = ($chunk == 1) ? $name: $name . 's';
-        	    $largestChunkSeconds = $seconds;
-        	} else if (isset($largestChunk)) {
-        	    $chunk = floor(($since - ($largestChunkSeconds * $largestChunk)) / $seconds);
+            if ($chunk != 0  && !isset($largestChunk)) {
+                $largestChunk        = $chunk;
+                $largestChunkName    = ($chunk == 1) ? $name: $name . 's';
+                $largestChunkSeconds = $seconds;
+            } else if (isset($largestChunk)) {
+                $chunk = floor(($since - ($largestChunkSeconds * $largestChunk)) / $seconds);
 
-        	    if ($chunk != 0) {
-        	        $secondChunk     = $chunk;
-        	        $secondChunkName = ($chunk == 1) ? $name: $name . 's';
-        	    }
+                if ($chunk != 0) {
+                    $secondChunk     = $chunk;
+                    $secondChunkName = ($chunk == 1) ? $name : $name . 's';
+                }
 
-        	    break;
-        	}
+                break;
+            }
         }
 
         $output     = '';
