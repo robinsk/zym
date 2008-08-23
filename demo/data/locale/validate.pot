@@ -1,0 +1,125 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Zend Framework\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Geoffrey Tran <spotsec.com>\n"
+"Language-Team: Zym <mailto:zym-framework@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+
+msgid "notAlnum"
+msgstr ""
+
+msgid "stringEmpty"
+msgstr ""
+
+msgid "notAlpha"
+msgstr ""
+
+msgid "notBetween"
+msgstr ""
+
+msgid "notBetweenStrict"
+msgstr ""
+
+msgid "ccnumLength"
+msgstr ""
+
+msgid "ccnumChecksum"
+msgstr ""
+
+msgid "dateNotYYYY-MM-DD"
+msgstr ""
+
+msgid "dateInvalid"
+msgstr ""
+
+msgid "dateFalseFormat"
+msgstr ""
+
+msgid "notDigits"
+msgstr ""
+
+msgid "emailAddressInvalid"
+msgstr ""
+
+msgid "emailAddressInvalidHostname"
+msgstr ""
+
+msgid "emailAddressInvalidMxRecord"
+msgstr ""
+
+msgid "emailAddressDotAtom"
+msgstr ""
+
+msgid "emailAddressQuotedString"
+msgstr ""
+
+msgid "emailAddressInvalidLocalPart"
+msgstr ""
+
+msgid "notFloat"
+msgstr ""
+
+msgid "notGreaterThan"
+msgstr ""
+
+msgid "notHex"
+msgstr ""
+
+msgid "hostnameIpAddressNotAllowed"
+msgstr ""
+
+msgid "hostnameUnknownTld"
+msgstr ""
+
+msgid "hostnameDashCharacter"
+msgstr ""
+
+msgid "hostnameInvalidHostnameSchema"
+msgstr ""
+
+msgid "hostnameUndecipherableTld"
+msgstr ""
+
+msgid "hostnameInvalidHostname"
+msgstr ""
+
+msgid "hostnameInvalidLocalName"
+msgstr ""
+
+msgid "hostnameLocalNameNotAllowed"
+msgstr ""
+
+msgid "notSame"
+msgstr ""
+
+msgid "missingToken"
+msgstr ""
+
+msgid "notInArray"
+msgstr ""
+
+msgid "notInt"
+msgstr ""
+
+msgid "notIpAddress"
+msgstr ""
+
+msgid "notLessThan"
+msgstr ""
+
+msgid "isEmpty"
+msgstr ""
+
+msgid "regexNotMatched"
+msgstr ""
+
+msgid "stringLengthTooShort"
+msgstr ""
+
+msgid "stringLengthTooLong"
+msgstr ""

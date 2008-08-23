@@ -15,7 +15,9 @@
  */
 
 /**
- * Formats a date as the time since that date (e.g., “4 weeks ago”).
+ * Formats a date as the time since that date (e.g., “4 weeks”).
+ *
+ * This is useful for creating "Last updated 5 week and 4 days ago" strings
  *
  * @author     Geoffrey Tran
  * @license    http://www.zym-project.com/license New BSD License
@@ -83,8 +85,8 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
         $translator = $this->getView()->getHelper('translate');
 
         if (isset($secondChunk)) {
-            $output = $translator->translate("%d $largestChunkName, %d $secondChunkName", $largestChunk, $secondChunk);
-        } else {
+            $output = $translator->translate("%d $largestChunkName and %d $secondChunkName", $largestChunk, $secondChunk);
+        } else if (isset($largestChunk)) {
             $output = $translator->translate("%d $largestChunkName", $largestChunk);
         }
 
