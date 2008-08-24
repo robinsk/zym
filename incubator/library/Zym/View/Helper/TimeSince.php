@@ -15,6 +15,11 @@
  */
 
 /**
+ * @see Zym_View_Helper_Abstract
+ */
+require_once 'Zym/View/Helper/Abstract.php';
+
+/**
  * Formats a date as the time since that date (e.g., “4 weeks”).
  *
  * This is useful for creating "Last updated 5 week and 4 days ago" strings
@@ -36,7 +41,7 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
      */
     protected $_dateChucks = array(
         31536000 => 'year',
-        8748000  => 'month',
+        2592000  => 'month',
         604800   => 'week',
         86400    => 'day',
         3600     => 'hour',
@@ -52,6 +57,9 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
      */
     public function timeSince($timestamp, $time = null)
     {
+        $output     = '';
+        $translator = $this->getView()->getHelper('translate');
+
         if ($time === null) {
             $time = time();
         }
@@ -59,16 +67,18 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
         // Seconds since
         $since = $time - $timestamp;
 
-
         foreach ($this->_dateChucks as $seconds => $name) {
             if (!isset($largestChunk)) {
                 $chunk = floor($since / $seconds);
             }
 
-            if ($chunk != 0  && !isset($largestChunk)) {
+            if (isset($chunk) && $chunk != 0  && !isset($largestChunk)) {
                 $largestChunk        = $chunk;
-                $largestChunkName    = ($chunk == 1) ? $name: $name . 's';
+                $largestChunkName    = ($chunk == 1) ? $name : $name . 's';
                 $largestChunkSeconds = $seconds;
+            } else if (isset($chunk) && $chunk == 0 && !isset($largestChunk)) {
+                // Handle if it 0 seconds
+                $output = $translator->translate('less than a second');
             } else if (isset($largestChunk)) {
                 $chunk = floor(($since - ($largestChunkSeconds * $largestChunk)) / $seconds);
 
@@ -81,13 +91,18 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
             }
         }
 
-        $output     = '';
-        $translator = $this->getView()->getHelper('translate');
-
-        if (isset($secondChunk)) {
-            $output = $translator->translate("%d $largestChunkName and %d $secondChunkName", $largestChunk, $secondChunk);
-        } else if (isset($largestChunk)) {
-            $output = $translator->translate("%d $largestChunkName", $largestChunk);
+        if ($translator->getTranslator() === null) {
+            if (isset($secondChunk)) {
+                $output = sprintf("%d $largestChunkName and %d $secondChunkName", $largestChunk, $secondChunk);
+            } else if (isset($largestChunk)) {
+                $output = sprintf("%d $largestChunkName", $largestChunk);
+            }
+        } else {
+            if (isset($secondChunk)) {
+                $output = $translator->translate("%d $largestChunkName and %d $secondChunkName", $largestChunk, $secondChunk);
+            } else if (isset($largestChunk)) {
+                $output = $translator->translate("%d $largestChunkName", $largestChunk);
+            }
         }
 
         return $output;
