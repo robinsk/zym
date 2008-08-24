@@ -20,6 +20,11 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
+ * @see Zend_Translate
+ */
+require_once 'Zend/Translate.php';
+
+/**
  * @see Zym_View
  */
 require_once 'Zym/View.php';
@@ -165,5 +170,23 @@ class Zym_View_Helper_TimeSinceTest extends PHPUnit_Framework_TestCase
     {
         $helper = $this->_helper;
         $this->assertEquals('less than a second', $helper->timeSince(time()));
+    }
+
+    public function testTimeSinceWorksWithTranslate()
+    {
+        $data = array(
+            'less than a second' => 'bar',
+            '%d weeks'            => '%d bar'
+        );
+
+        $translate = new Zend_Translate('array', $data, 'en');
+        $helper    = $this->_helper;
+        Zend_Registry::set('Zend_Translate', $translate);
+
+        $this->assertEquals('bar', $helper->timeSince(time()));
+        $this->assertEquals('2 bar', $helper->timeSince(strtotime('-2 weeks')));
+
+        $registry = Zend_Registry::getInstance();
+        unset($registry['Zend_Translate']);
     }
 }
