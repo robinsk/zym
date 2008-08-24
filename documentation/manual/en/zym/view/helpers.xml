@@ -405,6 +405,76 @@
         </section>
     </section>
     
+    <section xml:id="zym.view.helpers.timesince">
+        <title>TimeSince Helper</title>
+        
+        <para>
+            This helper calculates the time passed from timestamps to generate a 
+            formatted string like "5 days and 4 hours". Applications of this helper
+            are generally seen in "Created 2 weeks ago" or "Last modified 5 minutes ago"
+            type lines.
+        </para>
+        
+        <para>
+            Units supported are years, months, weeks, days, minutes, seconds. String format
+            is the largest possible unit and if possible the unit below it. If a 1 year and 2 weeks
+            have passed then "1 year" is the output; however, if 1 year, 2 months and 5 days have passed then
+            "1 year and 2 months" is returned. If less than a second have passed then "less than a second" is 
+            returned.
+        </para>
+        
+        <para>
+            Output is automatically translated if possible using <code>Zend_View_Helper_Translate</code>.
+            The translation format is '%d months'. An already completed gettext pot file is located
+            on Zym's demo in the data locale folder.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>timeSince($timestamp, $time = null)</para></listitem>
+        </itemizedlist>
+        
+        <example xml:id="zym.view.helpers.timesince.example">
+            <title>Using Zym_View_Helper_TimeSince</title>
+            
+            <programlisting role="php"><xi:include href="helpers/example/timesince.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.view.helpers.timeuntil">
+        <title>TimeUntil Helper</title>
+        
+        <para>
+            This helper calculates the time to an event from timestamps to generate a 
+            formatted string like "5 days and 4 hours". It is similar to the TimeSince helper except applications of this helper
+            are generally seen in "This event will start in 5 days and 4 hours" or "3 weeks before expiration"
+            type lines.
+        </para>
+        
+        <para>
+            Units supported are years, months, weeks, days, minutes, seconds. String format
+            is the largest possible unit and if possible the unit below it. If a 1 year and 2 weeks
+            have passed then "1 year" is the output; however, if 1 year, 2 months and 5 days have passed then
+            "1 year and 2 months" is returned. If less than a second have passed then "less than a second" is 
+            returned.
+        </para>
+        
+        <para>
+            Output is automatically translated if possible using <code>Zend_View_Helper_Translate</code>.
+            The translation format is '%d months'. An already completed gettext pot file is located
+            on Zym's demo in the data locale folder.
+        </para>
+        
+        <itemizedlist>
+            <listitem><para>timeUntil($timestamp, $time = null)</para></listitem>
+        </itemizedlist>
+        
+        <example xml:id="zym.view.helpers.timeuntil.example">
+            <title>Using Zym_View_Helper_TimeUntil</title>
+            
+            <programlisting role="php"><xi:include href="helpers/example/timeuntil.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
     <section xml:id="zym.view.helpers.xmldeclaration">
         <title>XmlDeclaration Helper</title>
         

@@ -68,6 +68,7 @@ class Zym_View_Helper_TimeUntil extends Zym_View_Helper_Abstract
                 }
             }
 
+            // Compute chunks
             if (isset($chunk) && $chunk != 0  && !isset($largestChunk)) {
                 $largestChunk        = $chunk;
                 $largestChunkName    = ($chunk == 1) ? $name : $name . 's';

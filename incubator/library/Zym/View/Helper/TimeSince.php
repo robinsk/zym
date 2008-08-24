@@ -73,6 +73,7 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
                 $chunk = ($since < 0) ? -floor(abs($ratio)) : floor($ratio);
             }
 
+            // Compute chunks
             if (isset($chunk) && $chunk != 0  && !isset($largestChunk)) {
                 $largestChunk        = $chunk;
                 $largestChunkName    = ($chunk == 1) ? $name : $name . 's';
