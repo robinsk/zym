@@ -69,7 +69,8 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
 
         foreach ($this->_dateChucks as $seconds => $name) {
             if (!isset($largestChunk)) {
-                $chunk = floor($since / $seconds);
+                $ratio = $since / $seconds;
+                $chunk = ($since < 0) ? -floor(abs($ratio)) : floor($ratio);
             }
 
             if (isset($chunk) && $chunk != 0  && !isset($largestChunk)) {
@@ -80,7 +81,8 @@ class Zym_View_Helper_TimeSince extends Zym_View_Helper_Abstract
                 // Handle if it 0 seconds
                 $output = $translator->translate('less than a second');
             } else if (isset($largestChunk)) {
-                $chunk = floor(($since - ($largestChunkSeconds * $largestChunk)) / $seconds);
+                $ratio = ($since - ($largestChunkSeconds * $largestChunk)) / $seconds;
+                $chunk = ($since < 0) ? -floor(abs($ratio)) : floor($ratio);
 
                 if ($chunk != 0) {
                     $secondChunk     = $chunk;
