@@ -83,6 +83,8 @@ class Zym_View_Helper_ServerUrl
             $path = $_SERVER['REQUEST_URI'];
         } else if (is_string($requestUri)) {
             $path = $requestUri;
+        } else {
+            $path = '';
         }
 
         // Return url
