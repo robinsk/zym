@@ -43,10 +43,14 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
      */
     protected $_defaultConfig = array(
         Zym_App::ENV_DEFAULT => array(
-            'auto_start' => true,
-            'config'     => array(
+            'auto_start'   => true,
+            'config'       => array(
                 'save_path' => 'session',
                 'name'      => '%s_SID'
+            ),
+            'save_handler' => array(
+                'class_name'       => null,
+                'constructor_args' => null
             )
         )
     );
@@ -68,6 +72,27 @@ class Zym_App_Resource_Session extends Zym_App_Resource_Abstract
 
         // Setup config
         Zend_Session::setOptions($configArray);
+        
+        // Setup save handling?
+        $saveHandlerConfig = $config->get('save_handler');
+        if ($className = $saveHandlerConfig->get('class_name')) {
+            if ($args = $saveHandlerConfig->get('constructor_args')) {
+                if ($args instanceof Zend_Config) {
+                    $args = $args->toArray();
+                } else {
+                    $args = (array) $args;
+                }
+            } else {
+                $args = array();
+            }
+            
+            require_once 'Zend/Loader.php';
+            Zend_Loader::loadClass($className);
+            
+            $saveHandler = new ReflectionClass($className);
+            $saveHandler = $saveHandler->newInstanceArgs($args);
+            Zend_Session::setSaveHandler($saveHandler);
+        }
 
         // Autostart session?
         if ($config->get('auto_start')) {

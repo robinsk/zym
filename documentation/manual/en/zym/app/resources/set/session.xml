@@ -79,6 +79,55 @@
                         eg. "MyProject_SID"
                     </entry>
                 </row>
+                <row>
+                    <entry>save_handler</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Array containing options for setting up session save handler.
+                    </entry>
+                </row>
+                <row>
+                    <entry>save_handler.class_name</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>null/</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        Class name to use as session save handler. An instance 
+                        of this class will be constructed and passed to 
+                        <code>Zend_Session::setSaveHandler()</code>, e.g. 
+                        Zend_Session_SaveHandler_DbTable.
+                    </entry>
+                </row> 
+                <row>
+                    <entry>save_handler.constructor_args</entry>
+                    <entrytbl cols="2">
+                        <tbody>
+                            <row>
+                                <entry>default</entry>
+                                <entry>array()</entry>
+                            </row>
+                        </tbody>
+                    </entrytbl>
+                    <entry>
+                        An array of arguments to pass to the save handler 
+                        constructor. Each key in the array will be added as an 
+                        a constructor takes an array of options, the 
+                        <code>constructor_args</code> array should contain one 
+                        element, which should also be an array.
+                    </entry>
+                </row>
             </tbody>
         </tgroup>
     </table>
