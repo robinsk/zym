@@ -149,12 +149,12 @@ $config = array(
     ),
     array(
         'label' => 'ACL page 2 (member.baz)',
-        'uri' => '#acl-member',
+        'uri' => '#acl-member.baz',
         'resource' => 'member.baz'
     ),
     array(
-        'label' => 'ACL page 3 (admin.something)',
-        'uri' => '#acl-admin',
+        'label' => 'ACL page 3 (admin.foo)',
+        'uri' => '#acl-admin.foo',
         'resource' => 'admin.foo',
         'pages' => array(
             array(
