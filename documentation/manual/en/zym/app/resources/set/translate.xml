@@ -13,7 +13,7 @@
         <programlisting role="xml"> 
 <![CDATA[<adapter>gettext</adapter>
 <options>
-    <scan>1</scan>
+    <scan>directory</scan>
 </options>]]></programlisting>
     </example>
     

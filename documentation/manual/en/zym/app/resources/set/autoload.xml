@@ -36,7 +36,8 @@
                         Class to use as autoloader. It should implement 
                         <link xlink:href="zym.loader.autoload.writingyourown"><classname>Zym_Loader_Autoload_Interface</classname></link>
                         or have an autoload() function.
-                        This key be specified multiple times.
+                        This key can be specified multiple times in xml to create an 
+                        key => array data structure which will register all autoloaders.
                     </entry>
                 </row>
             </tbody>

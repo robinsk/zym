@@ -116,7 +116,7 @@ date.timezone = UTC
                     </entrytbl>
                     <entry>
                         Accepts an array or an include_path string. Path separators (':', ';') do not matter
-                        as they are translated according to the OS.
+                        as they are automatically translated according to the OS by the resource.
                     </entry>
                 </row>
             </tbody>
