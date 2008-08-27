@@ -110,20 +110,13 @@
                     </entry>
                 </row>
                 <row>
-                    <entry><code>role</code></entry>
-                    <entry><code>string</code> | <code>array</code> | <code>null</code></entry>
+                    <entry><code>resource</code></entry>
+                    <entry><code>string</code> | <code>Zend_Acl_Resource_Interface</code> | <code>null</code></entry>
                     <entry><code>null</code></entry>
                     <entry>
-                        ACL role(s) to associate with the page. The intention
-                        is that a user is required to have one of the roles 
-                        associated with the page to be able to display it
-                        in view helpers. Read more in
+                        ACL resource to associate with the page. Read more in
                         <link xlink:href="#zym.view_helpers.navigation.acl">the
-                        section ACL integration in view helpers.</link>. A single
-                        <code>string</code> associated only one role with the page.
-                        An <code>array</code> associates several roles. Using
-                        <code>null</code> nulls out the role, meaning no role
-                        is required to display it. 
+                        section on ACL integration in view helpers.</link>.
                     </entry>
                 </row>
                 <row>

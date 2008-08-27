@@ -94,7 +94,7 @@
                         <page2_3_3>
                             <label>Page 2.3.3</label>
                             <uri>page2/page2_3/page2_3_3</uri>
-                            <role>admin</role>
+                            <resource>admin</resource>
                             <pages>
                                     
                                     <page2_3_3_1>
@@ -106,7 +106,7 @@
                                     <page2_3_3_2>
                                         <label>Page 2.3.3.2</label>
                                         <uri>page2/page2_3/page2_3_3/2</uri>
-                                        <role>guest</role>
+                                        <resource>guest</resource>
                                         <active>1</active>
                                     </page2_3_3_2>
                             
@@ -127,13 +127,13 @@
                 <page3_1>
                     <label>Page 3.1</label>
                     <uri>page3/page3_1</uri>
-                    <role>guest</role>
+                    <resource>guest</resource>
                 </page3_1>
                 
                 <page3_2>
                     <label>Page 3.2</label>
                     <uri>page3/page3_2</uri>
-                    <role>member</role>
+                    <resource>member</resource>
                     <pages>
                     
                         <page3_2_1>
@@ -144,7 +144,7 @@
                         <page3_2_2>
                             <label>Page 3.2.2</label>
                             <uri>page3/page3_2/page3_2_2</uri>
-                            <role>admin</role>
+                            <resource>admin</resource>
                         </page3_2_2>
                         
                     </pages>
@@ -153,7 +153,7 @@
                 <page3_3>
                     <label>Page 3.3</label>
                     <uri>page3/page3_3</uri>
-                    <role>special</role>
+                    <resource>special</resource>
                     <pages>
                     
                         <page3_3_1>
@@ -165,7 +165,7 @@
                         <page3_3_2>
                             <label>Page 3.3.2</label>
                             <uri>page3/page3_3/page3_3_2</uri>
-                            <role>admin</role>
+                            <resource>admin</resource>
                         </page3_3_2>
                         
                     </pages>

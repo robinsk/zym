@@ -34,16 +34,19 @@
     <loc>http://www.example.com/page4</loc>
   </url>
   <url>
-    <loc>http://www.example.com/demo/navigation/#acl-guest</loc>
+    <loc>http://www.example.com/demo/navigation/#acl-guest.foo</loc>
   </url>
   <url>
-    <loc>http://www.example.com/demo/navigation/#acl-bar</loc>
+    <loc>http://www.example.com/demo/navigation/#acl-member.foo</loc>
+  </url>
+  <url>
+    <loc>http://www.example.com/demo/navigation/#acl-member.foo</loc>
+  </url>
+  <url>
+    <loc>http://www.example.com/demo/navigation/#acl-member.foo</loc>
   </url>
   <url>
     <loc>http://www.example.com/demo/navigation/#acl-member</loc>
-  </url>
-  <url>
-    <loc>http://framework.zend.com/</loc>
   </url>
   <url>
     <loc>http://www.zym-project.com/</loc>

@@ -120,39 +120,39 @@ $pages = array(
     array(
         'label' => 'ACL page 1 (guest)',
         'uri' => '#acl-guest',
-        'role' => 'nav-guest',
+        'resource' => 'nav-guest',
         'pages' => array(
             array(
                 'label' => 'ACL page 1.1 (foo)',
                 'uri' => '#acl-foo',
-                'role' => 'nav-foo'
+                'resource' => 'nav-foo'
             ),
             array(
                 'label' => 'ACL page 1.2 (bar)',
                 'uri' => '#acl-bar',
-                'role' => 'nav-bar'
+                'resource' => 'nav-bar'
             ),
             array(
                 'label' => 'ACL page 1.3 (baz)',
                 'uri' => '#acl-baz',
-                'role' => 'nav-baz'
+                'resource' => 'nav-baz'
             ),
             array(
                 'label' => 'ACL page 1.4 (bat)',
                 'uri' => '#acl-bat',
-                'role' => 'nav-bat'
+                'resource' => 'nav-bat'
             )
         )
     ),
     array(
         'label' => 'ACL page 2 (member)',
         'uri' => '#acl-member',
-        'role' => 'nav-member'
+        'resource' => 'nav-member'
     ),
     array(
         'label' => 'ACL page 3 (admin',
         'uri' => '#acl-admin',
-        'role' => 'nav-admin',
+        'resource' => 'nav-admin',
         'pages' => array(
             array(
                 'label' => 'ACL page 3.1 (nothing)',

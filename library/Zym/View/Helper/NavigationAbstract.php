@@ -52,7 +52,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     /**
      * ACL role to use when iterating pages
      * 
-     * @var string|array|null
+     * @var string|Zend_Acl_Role_Interface
      */
     protected $_role;
     
@@ -248,18 +248,19 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     /**
      * Sets ACL role(s) to use when iterating pages
      * 
-     * @param  null|string|array $role   a single role, or an array of roles,
-     *                                   defaults to null, which sets no role
-     * @throws InvalidArgumentException  if $role is not null|string|array
-     * @return Zym_Navigation_Page
+     * @param  null|string|Zend_Acl_Role_Interface $role   [optional] role to set,
+     *                                                     defaults to null
+     * @throws InvalidArgumentException  if $role is not null, string, or
+     *                                   Zend_Acl_Role_Interface
+     * @return Zym_View_Helper_NavigationAbstract
      */
     public function setRole($role = null)
     {
-        if (null === $role || is_string($role) || is_array($role) ||
+        if (null === $role || is_string($role) ||
             $role instanceof Zend_Acl_Role_Interface) {
             $this->_role = $role;
         } else {
-            $msg = '$role must be null|string|array|Zend_Acl_Role_Interface';
+            $msg = '$role must be null|string|Zend_Acl_Role_Interface';
             throw new InvalidArgumentException($msg);
         }
         
@@ -267,17 +268,13 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     }
     
     /**
-     * Returns ACL role(s) to use when iterating pages
+     * Returns ACL role to use when iterating pages
      * 
-     * @return array|null  returns null if no role is set 
+     * @return string|Zend_Acl_Role_Interface|null
      */
     public function getRole()
     {
-        if (null === $this->_role || is_array($this->_role)) {
-            return $this->_role;
-        }
-        
-        return (array) $this->_role;
+        return $this->_role;
     }
     
     /**
@@ -286,6 +283,8 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      * Validates that the role set in helper inherits or is the same as
      * the role(s) found in the page
      * 
+     * @param Zym_Navigation_Page $page  page to check
+     * @param bool $recursive  [optional] whether it should check recursively
      * @return bool
      */
     protected function _acceptAcl(Zym_Navigation_Page $page, $recursive = true)
@@ -293,34 +292,14 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
         // do not accept by default
         $accept = false;
         
-        if (!$helperRole = $this->getRole()) {
-            // don't accept if helper has no role
-            return false;
-        }
-        
-        if (!$pageRole = $page->getRole()) {
-            // accept it if page has no role
-            $accept = true;
-        } else {   
-            // loop all roles
-            foreach ($helperRole as $hRole) {
-                if ($helperRole instanceof Zend_Acl_Role_Interface) {
-                    $helperRole = $helperRole->getRoleId();
-                }
-                foreach ($pageRole as $pRole) {
-                    if ($pageRole instanceof Zend_Acl_Role_Interface) {
-                        $pageRole = $pageRole->getRoleId();
-                    }
-                    if ($hRole == $pRole ||
-                        $this->_acl->inheritsRole($hRole, $pRole)) {
-                        $accept = true;
-                        break;
-                    }
-                }
-                    
-                if ($accept) {
-                    break;
-                }
+        // do not accept if helper has no role
+        if ($role = $this->getRole()) {
+            if ($resource = $page->getResource()) {
+                // determine using helper role and page resource
+                $accept = $this->_acl->isAllowed($role, $resource);
+            } else {
+                // accept if page has no resource
+                $accept = true;
             }
         }
         
@@ -329,7 +308,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
             $parent = $page->getParent();
             if ($parent instanceof Zym_Navigation_Page) {
                 $accept = $this->_acceptAcl($parent, true);
-            }
+            } 
         }
         
         return $accept;
@@ -338,7 +317,8 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     /**
      * Determines whether a page should be accepted when iterating
      *
-     * @param Zym_Navigation_Page $page  page to verify
+     * @param Zym_Navigation_Page $page  page to check
+     * @param bool $recursive  [optional] whether it should check recursively
      */
     protected function _accept(Zym_Navigation_Page $page, $recursive = true)
     {

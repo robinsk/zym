@@ -24,6 +24,7 @@
 require_once 'Zend/Controller/Request/Http.php';
 require_once dirname(__FILE__) . '/NavigationTestAbstract.php';
 require_once 'Zym/View/Helper/Sitemap.php';
+require_once 'Zend/Controller/Front.php';
 
 /**
  * Tests Zym_View_Helper_Sitemap

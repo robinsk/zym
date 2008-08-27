@@ -134,19 +134,13 @@
                 a helper instance with <code>$helper->setAcl($acl)</code>,
                 where <code>$helper</code> refers to an instance of a helper,
                 and <code>$acl</code> is an ACL instance containing roles
-                and possibly resources. The helpers can be assigned one or 
-                several roles to use when iterating pages, by doing 
-                <code>$helper->setRole('member')</code> to set a single role, or 
-                <code>$helper->setRole(array('member', 'foo'))</code> to set
-                several roles. If ACL is used in the helper, the role(s) in the
-                helper must inherit one of the roles registered in a page for
-                the page to be included in a menu/breadcrumb/sitemap.
-            </para>
-            
-            <para>
-                It is also possible to use objects that implement 
-                <classname>Zend_Acl_Role_Interface</classname> instead of strings,
-                or an array of role objects.
+                and possibly resources. The helpers can be assigned a role 
+                to use when iterating pages, by doing 
+                <code>$helper->setRole('member')</code> to set a role id, or 
+                <code>$helper->setRole(new Zend_Acl_Role('member'))</code> to set
+                an instance. If ACL is used in the helper, the role in the
+                helper must have rights for the page's resource to be included
+                in a menu/breadcrumb/sitemap.
             </para>
             
             <para>

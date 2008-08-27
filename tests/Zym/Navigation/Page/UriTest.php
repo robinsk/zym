@@ -84,7 +84,7 @@ class Zym_Navigation_Page_UriTest extends PHPUnit_Framework_TestCase
         $page->setUri('bar');
         $this->assertEquals('bar', $page->getUri());
         
-        $invalids = array(42, '', (object) null);
+        $invalids = array(42, (object) null, -1);
         foreach ($invalids as $invalid) {
             try {
                 $page->setUri($invalid);

@@ -50,8 +50,7 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
     protected function _validate()
     {
         if (!isset($this->_uri)) {
-            require_once 'Zym/Navigation/Exception.php';
-            throw new Zym_Navigation_Exception($msg);
+            $this->_uri = '';
         }
         
         parent::_validate();
@@ -65,9 +64,8 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
      */
     public function setUri($uri)
     {
-        if (!is_string($uri) || !strlen($uri)) {
-            $msg = '$uri must be a string with length > 0';
-            throw new InvalidArgumentException($msg);
+        if (!is_string($uri)) {
+            throw new InvalidArgumentException('$uri must be a string');
         }
         
         $this->_uri = $uri;

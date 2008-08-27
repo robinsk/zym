@@ -51,20 +51,27 @@ Output:
         </ul>
     </li>
     <li>
-        <a href="#acl-guest">ACL page 1 (guest)</a>
+        <a href="#acl-guest.foo">ACL page 1 (guest.foo)</a>
 
         <ul>
             <li>
-                <a href="#acl-bar">ACL page 1.2 (bar)</a>
+                <a href="#acl-member.foo">ACL page 1.1 (member.foo)</a>
+            </li>
+            <li>
+                <a href="#acl-member.foo">ACL page 1.2 (member.foo)</a>
+            </li>
+            <li>
+
+                <a href="#acl-member.foo">ACL page 1.4 (member.foo)</a>
             </li>
         </ul>
     </li>
     <li>
-        <a href="#acl-member">ACL page 2 (member)</a>
-
+        <a href="#acl-member">ACL page 2 (member.baz)</a>
     </li>
     <li>
-        <a href="http://framework.zend.com/">Zend Framework</a>
+
+        <span title="This URI page has no URI set, so a span is generated">No link :o</span>
     </li>
     <li>
         <a href="http://www.zym-project.com/">Zym</a>

@@ -458,7 +458,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'active'   => true,
             'visible'  => false,
         
-            'role'     => 'joker',
+            'resource' => 'joker',
         
             'foo'      => 'bar',
             'meaning'  => 42,
@@ -479,7 +479,6 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         $toArray = $page->toArray();
         
         // tweak options to what we expect toArray() to contain
-        $options['role'] = (array) $options['role'];
         $options['type'] = 'Zym_Navigation_Page_Uri';
         
         // calculate diff between toArray() and $options
@@ -498,7 +497,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         $options['class'] = null;
         $options['title'] = null;
         $options['target'] = null;
-        $options['role'] = null;
+        $options['resource'] = null;
         $options['active'] = false;
         $options['visible'] = true;
         unset($options['foo']);

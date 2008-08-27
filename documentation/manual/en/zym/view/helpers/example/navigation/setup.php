@@ -9,6 +9,8 @@
 $config = array(
     array(
         'label' => 'Page 1',
+        'action' => 'index',
+        'controller' => 'index',
         'id' => 'home-link'
     ),
     array(
@@ -119,41 +121,41 @@ $config = array(
         )
     ),
     array(
-        'label' => 'ACL page 1 (guest)',
-        'uri' => '#acl-guest',
-        'role' => 'nav-guest',
+        'label' => 'ACL page 1 (guest.foo)',
+        'uri' => '#acl-guest.foo',
+        'resource' => 'guest.foo',
         'pages' => array(
             array(
-                'label' => 'ACL page 1.1 (foo)',
-                'uri' => '#acl-foo',
-                'role' => 'nav-foo'
+                'label' => 'ACL page 1.1 (member.foo)',
+                'uri' => '#acl-member.foo',
+                'resource' => 'member.foo'
             ),
             array(
-                'label' => 'ACL page 1.2 (bar)',
-                'uri' => '#acl-bar',
-                'role' => 'nav-bar'
+                'label' => 'ACL page 1.2 (member.foo)',
+                'uri' => '#acl-member.foo',
+                'resource' => 'member.foo'
             ),
             array(
-                'label' => 'ACL page 1.3 (baz)',
-                'uri' => '#acl-baz',
-                'role' => 'nav-baz'
+                'label' => 'ACL page 1.3 (member.bar)',
+                'uri' => '#acl-member.bar',
+                'resource' => 'member.bar'
             ),
             array(
-                'label' => 'ACL page 1.4 (bat)',
-                'uri' => '#acl-bat',
-                'role' => 'nav-bat'
+                'label' => 'ACL page 1.4 (member.foo)',
+                'uri' => '#acl-member.foo',
+                'resource' => 'member.foo'
             )
         )
     ),
     array(
-        'label' => 'ACL page 2 (member)',
+        'label' => 'ACL page 2 (member.baz)',
         'uri' => '#acl-member',
-        'role' => 'nav-member'
+        'resource' => 'member.baz'
     ),
     array(
-        'label' => 'ACL page 3 (admin',
+        'label' => 'ACL page 3 (admin.something)',
         'uri' => '#acl-admin',
-        'role' => 'nav-admin',
+        'resource' => 'admin.foo',
         'pages' => array(
             array(
                 'label' => 'ACL page 3.1 (nothing)',
@@ -162,52 +164,54 @@ $config = array(
         )
     ),
     array(
-        'label' => 'Zend Framework',
-        'route' => 'zf-route'
+        'label' => 'No link :o',
+        'type' => 'uri',
+        'title' => 'This URI page has no URI set, so a span is generated'
     )
 );
 
-/**
- * Create navigation from array
- */
+// Create navigation from array
 $navigation = new Zym_Navigation($config);
 
 // put navigation in registry so it's found by helpers
-Zend_Registry::set('Zym_Navigation', $navigation);
+Zend_Registry::set('Zym_Navigation_Demo', $navigation);
 
-// add a couple of example routes
-$router = Zend_Controller_Front::getInstance()->getRouter();
-
+// add a route to show that zym_navigation
+// can be aware of routes and params
+$front = Zend_Controller_Front::getInstance();
+$router = $front->getRouter();
 $router->addRoute(
     'nav-route-example',
     new Zend_Controller_Router_Route('page2/:format', array(
         'controller' => 'page2', 'action' => 'index')
     )
 );
-$router->addRoute(
-    'zf-route',
-    new Zend_Controller_Router_Route(array(
-        'host' => 'framework.zend.com',
-        'path' => '/')
-    )
-);
 
-// setup an example ACL
+// add some ACL stuff
 $navAcl = new Zend_Acl();
-$navAcl->addRole(new Zend_Acl_Role('nav-guest'));
-$navAcl->addRole(new Zend_Acl_Role('nav-member'), 'nav-guest');
-$navAcl->addRole(new Zend_Acl_Role('nav-admin'), 'nav-member');
-$navAcl->addRole(new Zend_Acl_Role('nav-foo'));
-$navAcl->addRole(new Zend_Acl_Role('nav-bar'));
-$navAcl->addRole(new Zend_Acl_Role('nav-baz'));
-$navAcl->addRole(new Zend_Acl_Role('nav-bat'));
 
-// register the acl in view helpers (this could be done in a cooler way)
-$view = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer')->getView();
-$roles = array('nav-memeber', 'nav-bar');
-$view->breadcrumbs()->setAcl($navAcl);
-$this->breadcrumbs()->setRole($roles);
-$view->menu()->setAcl($navAcl);
-$this->menu()->setRole($roles);
-$view->sitemap()->setAcl($navAcl);
-$this->sitemap()->setRole($roles);
+$navAcl->addRole(new Zend_Acl_Role('guest'));
+$navAcl->addRole(new Zend_Acl_Role('member'), 'guest');
+$navAcl->addRole(new Zend_Acl_Role('admin'), 'member');
+$navAcl->addRole(new Zend_Acl_Role('special'), 'member');
+
+$navAcl->add(new Zend_Acl_Resource('guest.foo'));
+$navAcl->add(new Zend_Acl_Resource('member.foo'));
+$navAcl->add(new Zend_Acl_Resource('member.bar'));
+$navAcl->add(new Zend_Acl_Resource('member.baz'), 'member.foo');
+$navAcl->add(new Zend_Acl_Resource('admin.foo'));
+
+$navAcl->allow('guest', 'guest.foo');
+$navAcl->allow('member', 'member.foo');
+$navAcl->allow('member', 'member.baz');
+$navAcl->allow('admin', null);
+
+Zend_Registry::set('Zym_Navigation_Demo_Acl', $navAcl);
+
+// do the following in the view (for this demo we keep it simple,
+// but this is probably better to do in a plugin or when you set up
+// acl or navigation)
+/*
+$this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
+$this->menu()->setRole('special');
+*/

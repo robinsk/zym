@@ -165,11 +165,23 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
                 Zend_Controller_Action_HelperBroker::getStaticHelper('url');
         }
         
-        return self::$_urlHelper->url(array_merge($this->_params, array(
-            'module' => $this->_module,
-            'controller' => $this->_controller,
-            'action' => $this->_action
-        )), $this->_route, $this->_resetParams);
+        $params = $this->getParams();
+        
+        if ($tempParam = $this->getModule()) {
+            $params['module'] = $tempParam;
+        }
+        
+        if ($tempParam = $this->getController()) {
+            $params['controller'] = $tempParam;
+        }
+        
+        if ($tempParam = $this->getAction()) {
+            $params['action'] = $tempParam;
+        }
+        
+        return self::$_urlHelper->url($params,
+                                      $this->getRoute(),
+                                      $this->getResetParams());
     }
     
     /**

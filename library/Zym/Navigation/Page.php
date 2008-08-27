@@ -84,11 +84,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     protected $_position = null;
     
     /**
-     * ACL role required to see this page
+     * ACL resource assigned to this page
      * 
-     * @var string|array|null
+     * @var string|Zend_Acl_Resource_Interface
      */
-    protected $_role = null;
+    protected $_resource = null;
     
     /**
      * Whether this page should be considered active
@@ -451,19 +451,19 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
     
     /**
-     * Sets ACL role(s) required to view this page
+     * Sets ACL resource assigned to this page
      * 
-     * @param  null|string|array $role   a single role, or an array of roles,
-     *                                   defaults to null, which sets no role
-     * @throws InvalidArgumentException  if $role is not null|string|array
+     * @param  null|string|Zend_Acl_Resource_Interface $resource  resource
+     * @throws InvalidArgumentException  if $resource is invalid type
      * @return Zym_Navigation_Page
      */
-    public function setRole($role = null)
+    public function setResource($resource = null)
     {
-        if (null === $role || is_string($role) || is_array($role)) {
-            $this->_role = $role;
+        if (null === $resource || is_string($resource) || 
+            $resource instanceof Zend_Acl_Role_Interface) {
+            $this->_resource = $resource;
         } else {
-            $msg = '$role must be null|string|array';
+            $msg = '$resource must be null|string|Zend_Acl_Resource_Interface';
             throw new InvalidArgumentException($msg);
         }
         
@@ -471,17 +471,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
     
     /**
-     * Returns ACL role(s) required to view this page
+     * Returns ACL resource assigned to page
      * 
-     * @return array|null  returns null if no role is set 
+     * @return string|Zend_Acl_Resource_Interface|null 
      */
-    public function getRole()
+    public function getResource()
     {
-        if (null === $this->_role || is_array($this->_role)) {
-            return $this->_role;
-        }
-        
-        return (array) $this->_role;
+        return $this->_resource;
     }
     
     /**
@@ -653,7 +649,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 'title'    => $this->getTitle(),
                 'target'   => $this->getTarget(),
                 'position' => $this->getPosition(),
-                'role'     => $this->getRole(),
+                'resource' => $this->getResource(),
                 'active'   => $this->isActive(),
                 'visible'  => $this->isVisible(),
                 'type'     => get_class($this),

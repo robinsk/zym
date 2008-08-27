@@ -311,7 +311,9 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     {
         $href = $page->getHref();
         
-        if ($href{0} == '/') {
+        if (!isset($href{0})) {
+            return '';
+        } elseif ($href{0} == '/') {
             $url = $this->_getServerUrl() . $href;
         } elseif (@preg_match('/^https?:\\/\//m', $href)) {
             $url = $href;
@@ -380,11 +382,14 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
                 continue;
             }
             
+            // get absolute url from page
+            if (!$url = $this->_getUrl($page)) {
+                // skip page if it has no url (rare case)
+                continue;
+            }
+            
             // create url node for this page
             $urlNode = $dom->createElementNS(self::SITEMAP_NS, 'url');
-            
-            // get absolute url from page
-            $url = $this->_getUrl($page);
             $urlSet->appendChild($urlNode);
           
             if ($this->getUseSitemapValidators() &&

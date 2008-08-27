@@ -27,6 +27,7 @@
  */
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Acl.php';
+require_once 'Zend/Acl/Resource.php';
 require_once 'Zend/Acl/Role.php';
 require_once 'Zend/Config/Xml.php';
 require_once 'Zend/Registry.php';
@@ -126,12 +127,23 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
     protected function _getAcl()
     {
         $acl = new Zend_Acl();
+        
         $acl->addRole(new Zend_Acl_Role('guest'));
         $acl->addRole(new Zend_Acl_Role('member'), 'guest');
         $acl->addRole(new Zend_Acl_Role('admin'), 'member');
-        $acl->addRole(new Zend_Acl_Role('special'));
+        $acl->addRole(new Zend_Acl_Role('special'), 'member');
+        
+        $acl->add(new Zend_Acl_Resource('guest_foo'));
+        $acl->add(new Zend_Acl_Resource('member_foo'), 'guest_foo');
+        $acl->add(new Zend_Acl_Resource('admin_foo', 'member_foo'));
+        $acl->add(new Zend_Acl_Resource('special_foo'), 'member_foo');
+        
+        $acl->allow('guest', 'guest_foo');
+        $acl->allow('member', 'member_foo');
+        $acl->allow('admin', 'admin_foo');
+        $acl->allow('special', 'special_foo');
 
-        return array('acl' => $acl, 'role' => array('member', 'special'));
+        return array('acl' => $acl, 'role' => 'special');
     }
     
     /**

@@ -1,10 +1,12 @@
 <?
-$this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
-$this->menu()->setRole(array('nav-member', 'nav-bar'));
-$this->breadcrumbs()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
-$this->breadcrumbs()->setRole(array('nav-member', 'nav-bar'));
-$this->sitemap()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
-$this->sitemap()->setRole(array('nav-member', 'nav-bar'));
+$navAcl = Zend_Registry::get('Zym_Navigation_Demo_Acl');
+
+$this->breadcrumbs()->setAcl($navAcl);
+$this->breadcrumbs()->setRole('special');
+$this->menu()->setAcl($navAcl);
+$this->menu()->setRole('special');
+$this->sitemap()->setAcl($navAcl);
+$this->sitemap()->setRole('special');
 ?>
 <? $this->headTitle('Navigation Demo') ?>
 <? $this->headStyle()->captureStart(); ?>
@@ -348,7 +350,7 @@ echo highlight_string($code, true);
         and whether output should be pretty-formatted.
     </p>
     <? $this->sitemap()->setFormatOutput(true); ?>
-    <div class="example-output"><pre><?= htmlentities($this->sitemap()); ?></pre></div>
+    <div class="example-output"><pre><?= htmlentities($this->sitemap()->toString()); ?></pre></div>
 
     <p>
         This demo app has implemented the sitemap.xml via Default_SitemapController and a route

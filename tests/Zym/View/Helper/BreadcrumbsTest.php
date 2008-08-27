@@ -174,7 +174,7 @@ class Zym_View_Helper_BreadcrumbsTest
      * It should be possible to filter out pages based on ACL roles
      *
      */
-    public function testShouldBeAbleToUseAclRoles()
+    public function testShouldBeAbleToUseAclResourceFromPages()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();

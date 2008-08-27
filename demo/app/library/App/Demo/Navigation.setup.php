@@ -121,41 +121,41 @@ $config = array(
         )
     ),
     array(
-        'label' => 'ACL page 1 (guest)',
-        'uri' => '#acl-guest',
-        'role' => 'nav-guest',
+        'label' => 'ACL page 1 (guest.foo)',
+        'uri' => '#acl-guest.foo',
+        'resource' => 'guest.foo',
         'pages' => array(
             array(
-                'label' => 'ACL page 1.1 (foo)',
-                'uri' => '#acl-foo',
-                'role' => 'nav-foo'
+                'label' => 'ACL page 1.1 (member.foo)',
+                'uri' => '#acl-member.foo',
+                'resource' => 'member.foo'
             ),
             array(
-                'label' => 'ACL page 1.2 (bar)',
-                'uri' => '#acl-bar',
-                'role' => 'nav-bar'
+                'label' => 'ACL page 1.2 (member.foo)',
+                'uri' => '#acl-member.foo',
+                'resource' => 'member.foo'
             ),
             array(
-                'label' => 'ACL page 1.3 (baz)',
-                'uri' => '#acl-baz',
-                'role' => 'nav-baz'
+                'label' => 'ACL page 1.3 (member.bar)',
+                'uri' => '#acl-member.bar',
+                'resource' => 'member.bar'
             ),
             array(
-                'label' => 'ACL page 1.4 (bat)',
-                'uri' => '#acl-bat',
-                'role' => 'nav-bat'
+                'label' => 'ACL page 1.4 (member.foo)',
+                'uri' => '#acl-member.foo',
+                'resource' => 'member.foo'
             )
         )
     ),
     array(
-        'label' => 'ACL page 2 (member)',
+        'label' => 'ACL page 2 (member.baz)',
         'uri' => '#acl-member',
-        'role' => 'nav-member'
+        'resource' => 'member.baz'
     ),
     array(
-        'label' => 'ACL page 3 (admin',
+        'label' => 'ACL page 3 (admin.something)',
         'uri' => '#acl-admin',
-        'role' => 'nav-admin',
+        'resource' => 'admin.foo',
         'pages' => array(
             array(
                 'label' => 'ACL page 3.1 (nothing)',
@@ -164,8 +164,9 @@ $config = array(
         )
     ),
     array(
-        'label' => 'Zend Framework',
-        'route' => 'zf-route'
+        'label' => 'No link :o',
+        'type' => 'uri',
+        'title' => 'This URI page has no URI set, so a span is generated'
     )
 );
 
@@ -185,27 +186,32 @@ $router->addRoute(
         'controller' => 'page2', 'action' => 'index')
     )
 );
-$router->addRoute(
-    'zf-route',
-    new Zend_Controller_Router_Route(array(
-        'host' => 'framework.zend.com',
-        'path' => '/')
-    )
-);
 
 // add some ACL stuff
 $navAcl = new Zend_Acl();
-$navAcl->addRole(new Zend_Acl_Role('nav-guest'));
-$navAcl->addRole(new Zend_Acl_Role('nav-member'), 'nav-guest');
-$navAcl->addRole(new Zend_Acl_Role('nav-admin'), 'nav-member');
-$navAcl->addRole(new Zend_Acl_Role('nav-foo'));
-$navAcl->addRole(new Zend_Acl_Role('nav-bar'));
-$navAcl->addRole(new Zend_Acl_Role('nav-baz'));
-$navAcl->addRole(new Zend_Acl_Role('nav-bat'));
+
+$navAcl->addRole(new Zend_Acl_Role('guest'));
+$navAcl->addRole(new Zend_Acl_Role('member'), 'guest');
+$navAcl->addRole(new Zend_Acl_Role('admin'), 'member');
+$navAcl->addRole(new Zend_Acl_Role('special'), 'member');
+
+$navAcl->add(new Zend_Acl_Resource('guest.foo'));
+$navAcl->add(new Zend_Acl_Resource('member.foo'));
+$navAcl->add(new Zend_Acl_Resource('member.bar'));
+$navAcl->add(new Zend_Acl_Resource('member.baz'), 'member.foo');
+$navAcl->add(new Zend_Acl_Resource('admin.foo'));
+
+$navAcl->allow('guest', 'guest.foo');
+$navAcl->allow('member', 'member.foo');
+$navAcl->allow('member', 'member.baz');
+$navAcl->allow('admin', null);
+
 Zend_Registry::set('Zym_Navigation_Demo_Acl', $navAcl);
 
-// do the following in the view (for this demo we keep it simple)
+// do the following in the view (for this demo we keep it simple,
+// but this is probably better to do in a plugin or when you set up
+// acl or navigation)
 /*
 $this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
-$this->menu()->setRole(array('nav-member', 'nav-bar'));
+$this->menu()->setRole('special');
 */
