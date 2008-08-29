@@ -144,6 +144,7 @@
                             <label>Page 3.2.2</label>
                             <uri>page3/page3_2/page3_2_2</uri>
                             <resource>admin_foo</resource>
+                            <privilege>read</privilege>
                         </page3_2_2>
                         
                     </pages>

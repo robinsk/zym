@@ -131,30 +131,32 @@ $config = array(
                 'resource' => 'member.foo'
             ),
             array(
-                'label' => 'ACL page 1.2 (member.foo)',
-                'uri' => '#acl-member.foo',
-                'resource' => 'member.foo'
-            ),
-            array(
-                'label' => 'ACL page 1.3 (member.bar)',
+                'label' => 'ACL page 1.2 (member.bar)',
                 'uri' => '#acl-member.bar',
                 'resource' => 'member.bar'
             ),
             array(
-                'label' => 'ACL page 1.4 (member.foo)',
-                'uri' => '#acl-member.foo',
-                'resource' => 'member.foo'
+                'label' => 'ACL page 1.3 (member.baz)',
+                'uri' => '#acl-member.baz',
+                'resource' => 'member.baz'
+            ),
+            array(
+                'label' => 'ACL page 1.4 (member.baz + read privilege)',
+                'uri' => '#acl-member.baz+read',
+                'resource' => 'member.baz',
+                'privilege' => 'read'
+            ),
+            array(
+                'label' => 'ACL page 1.5 (member.baz + write privilege)',
+                'uri' => '#acl-member.baz+write',
+                'resource' => 'member.baz',
+                'privilege' => 'write'
             )
         )
     ),
     array(
-        'label' => 'ACL page 2 (member.baz)',
-        'uri' => '#acl-member',
-        'resource' => 'member.baz'
-    ),
-    array(
-        'label' => 'ACL page 3 (admin.something)',
-        'uri' => '#acl-admin',
+        'label' => 'ACL page 3 (admin.foo)',
+        'uri' => '#acl-admin.foo',
         'resource' => 'admin.foo',
         'pages' => array(
             array(
@@ -173,11 +175,10 @@ $config = array(
 // Create navigation from array
 $navigation = new Zym_Navigation($config);
 
-// put navigation in registry so it's found by helpers
-Zend_Registry::set('Zym_Navigation_Demo', $navigation);
+// Put navigation in registry so it's found by helpers
+Zend_Registry::set('Zym_Navigation', $navigation);
 
-// add a route to show that zym_navigation
-// can be aware of routes and params
+// Add a route to show that zym_navigation can be aware of routes and params
 $front = Zend_Controller_Front::getInstance();
 $router = $front->getRouter();
 $router->addRoute(
@@ -187,7 +188,7 @@ $router->addRoute(
     )
 );
 
-// add some ACL stuff
+// Add some ACL stuff to show integration with ACL
 $navAcl = new Zend_Acl();
 
 $navAcl->addRole(new Zend_Acl_Role('guest'));
@@ -197,21 +198,27 @@ $navAcl->addRole(new Zend_Acl_Role('special'), 'member');
 
 $navAcl->add(new Zend_Acl_Resource('guest.foo'));
 $navAcl->add(new Zend_Acl_Resource('member.foo'));
-$navAcl->add(new Zend_Acl_Resource('member.bar'));
-$navAcl->add(new Zend_Acl_Resource('member.baz'), 'member.foo');
+$navAcl->add(new Zend_Acl_Resource('member.bar'), 'member.foo');
+$navAcl->add(new Zend_Acl_Resource('member.baz'));
 $navAcl->add(new Zend_Acl_Resource('admin.foo'));
 
 $navAcl->allow('guest', 'guest.foo');
 $navAcl->allow('member', 'member.foo');
-$navAcl->allow('member', 'member.baz');
+$navAcl->allow('special', 'member.baz', 'read');
 $navAcl->allow('admin', null);
 
-Zend_Registry::set('Zym_Navigation_Demo_Acl', $navAcl);
+Zend_Registry::set('Zym_Navigation_Acl', $navAcl);
 
-// do the following in the view (for this demo we keep it simple,
+// Do the following in the view (for this demo we keep it simple,
 // but this is probably better to do in a plugin or when you set up
-// acl or navigation)
+// ACL or navigation):
 /*
-$this->menu()->setAcl(Zend_Registry::get('Zym_Navigation_Demo_Acl'));
+$navAcl = Zend_Registry::get('Zym_Navigation_Acl');
+
+$this->breadcrumbs()->setAcl($navAcl);
+$this->breadcrumbs()->setRole('special');
+$this->menu()->setAcl($navAcl);
 $this->menu()->setRole('special');
+$this->sitemap()->setAcl($navAcl);
+$this->sitemap()->setRole('special');
 */

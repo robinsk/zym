@@ -144,7 +144,7 @@ class Zym_View_Helper_MenuTest
      * It should be possible to filter out pages based on ACL roles as an array
      *
      */
-    public function testShouldBeAbleToUseAclRolesAsAnArray()
+    public function testShouldBeAbleToUseAcl()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();

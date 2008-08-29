@@ -120,6 +120,16 @@
                     </entry>
                 </row>
                 <row>
+                    <entry><code>privilege</code></entry>
+                    <entry><code>string</code> | <code>null</code></entry>
+                    <entry><code>null</code></entry>
+                    <entry>
+                        ACL privilege to associate with the page. Read more in
+                        <link xlink:href="#zym.view_helpers.navigation.acl">the
+                        section on ACL integration in view helpers.</link>.
+                    </entry>
+                </row>
+                <row>
                     <entry><code>active</code></entry>
                     <entry><code>bool</code></entry>
                     <entry><code>false</code></entry>

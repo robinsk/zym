@@ -139,8 +139,8 @@
                 <code>$helper->setRole('member')</code> to set a role id, or 
                 <code>$helper->setRole(new Zend_Acl_Role('member'))</code> to set
                 an instance. If ACL is used in the helper, the role in the
-                helper must have rights for the page's resource to be included
-                in a menu/breadcrumb/sitemap.
+                helper must have rights for the page's resource and/or privilege
+                to be included in a menu/breadcrumb/sitemap.
             </para>
             
             <para>

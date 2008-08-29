@@ -142,6 +142,7 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
         $acl->allow('member', 'member_foo');
         $acl->allow('admin', 'admin_foo');
         $acl->allow('special', 'special_foo');
+        $acl->allow('special', 'admin_foo', 'read');
 
         return array('acl' => $acl, 'role' => 'special');
     }

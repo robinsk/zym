@@ -294,11 +294,14 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
         
         // do not accept if helper has no role
         if ($role = $this->getRole()) {
-            if ($resource = $page->getResource()) {
-                // determine using helper role and page resource
-                $accept = $this->_acl->isAllowed($role, $resource);
+            $resource = $page->getResource();
+            $privilege = $page->getPrivilege();
+            
+            if ($resource || $privilege) {
+                // determine using helper role and page resource/privilege
+                $accept = $this->_acl->isAllowed($role, $resource, $privilege);
             } else {
-                // accept if page has no resource
+                // accept if page has no resource or privilege
                 $accept = true;
             }
         }

@@ -40,13 +40,10 @@
     <loc>http://www.example.com/demo/navigation/#acl-member.foo</loc>
   </url>
   <url>
-    <loc>http://www.example.com/demo/navigation/#acl-member.foo</loc>
+    <loc>http://www.example.com/demo/navigation/#acl-member.bar</loc>
   </url>
   <url>
-    <loc>http://www.example.com/demo/navigation/#acl-member.foo</loc>
-  </url>
-  <url>
-    <loc>http://www.example.com/demo/navigation/#acl-member</loc>
+    <loc>http://www.example.com/demo/navigation/#acl-member.baz+read</loc>
   </url>
   <url>
     <loc>http://www.zym-project.com/</loc>

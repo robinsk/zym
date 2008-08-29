@@ -459,6 +459,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'visible'  => false,
         
             'resource' => 'joker',
+            'privilege' => null,
         
             'foo'      => 'bar',
             'meaning'  => 42,
@@ -490,7 +491,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         // $toArray should have 2 sub pages
         $this->assertEquals(2, count($toArray['pages']));
         
-        // tweak options to what we expect sub pages 1
+        // tweak options to what we expect sub page 1 to be
         $options['label'] = 'foo.bar';
         $options['position'] = null;
         $options['id'] = null;

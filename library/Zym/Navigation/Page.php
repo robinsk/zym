@@ -91,6 +91,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     protected $_resource = null;
     
     /**
+     * ACL privilege assigned to this page
+     *
+     * @var string
+     */
+    protected $_privilege = null;
+    
+    /**
      * Whether this page should be considered active
      *
      * @var bool
@@ -481,6 +488,26 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
     
     /**
+     * Sets ACL privilege assigned to this page
+     *
+     * @param string|null $privilege  ACL privilege
+     */
+    public function setPrivilege($privilege = null)
+    {
+        $this->_privilege = is_string($privilege) ? $privilege : null;
+    }
+    
+    /**
+     * Returns ACL privilege assigned to this page
+     *
+     * @return string
+     */
+    public function getPrivilege()
+    {
+        return $this->_privilege;
+    }
+    
+    /**
      * Sets whether page should be active or not
      *
      * @param  bool $active  [optional] whether page should be active or not,
@@ -643,17 +670,18 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         return array_merge(
             $this->getCustomProperties(),
             array(
-                'label'    => $this->getlabel(),
-                'id'       => $this->getId(),
-                'class'    => $this->getClass(),
-                'title'    => $this->getTitle(),
-                'target'   => $this->getTarget(),
-                'position' => $this->getPosition(),
-                'resource' => $this->getResource(),
-                'active'   => $this->isActive(),
-                'visible'  => $this->isVisible(),
-                'type'     => get_class($this),
-                'pages'    => parent::toArray()
+                'label'     => $this->getlabel(),
+                'id'        => $this->getId(),
+                'class'     => $this->getClass(),
+                'title'     => $this->getTitle(),
+                'target'    => $this->getTarget(),
+                'position'  => $this->getPosition(),
+                'resource'  => $this->getResource(),
+                'privilege' => $this->getPrivilege(),
+                'active'    => $this->isActive(),
+                'visible'   => $this->isVisible(),
+                'type'      => get_class($this),
+                'pages'     => parent::toArray()
             ));
     }
     

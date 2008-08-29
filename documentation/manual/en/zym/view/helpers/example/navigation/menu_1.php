@@ -58,22 +58,19 @@ Output:
                 <a href="#acl-member.foo">ACL page 1.1 (member.foo)</a>
             </li>
             <li>
-                <a href="#acl-member.foo">ACL page 1.2 (member.foo)</a>
+                <a href="#acl-member.bar">ACL page 1.2 (member.bar)</a>
             </li>
             <li>
 
-                <a href="#acl-member.foo">ACL page 1.4 (member.foo)</a>
+                <a href="#acl-member.baz+read">ACL page 1.4 (member.baz + read privilege)</a>
             </li>
         </ul>
     </li>
     <li>
-        <a href="#acl-member">ACL page 2 (member.baz)</a>
-    </li>
-    <li>
-
         <span title="This URI page has no URI set, so a span is generated">No link :o</span>
     </li>
     <li>
+
         <a href="http://www.zym-project.com/">Zym</a>
     </li>
 </ul>
