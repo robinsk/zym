@@ -254,17 +254,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     public function setOptions(array $options)
     {
         foreach ($options as $key => $value) {
-            //if (is_string($key) && !empty($key) && $value !== null) {
-            if (is_string($key) && !empty($key)) {
-                $method = 'set' . str_replace(' ', '',
-                                    ucfirst(str_replace('_', ' ', $key)));
-                if ($method != 'setOptions' && $method != 'setConfig' &&
-                    method_exists($this, $method)) {
-                    $this->$method($value);
-                } else {
-                    $this->__set($key, $value);
-                }
-            }
+            $this->set($key, $value);
         }
         
         return $this;
@@ -491,10 +481,12 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * Sets ACL privilege assigned to this page
      *
      * @param string|null $privilege  ACL privilege
+     * @return Zym_Navigation_Page
      */
     public function setPrivilege($privilege = null)
     {
         $this->_privilege = is_string($privilege) ? $privilege : null;
+        return $this;
     }
     
     /**
@@ -547,6 +539,19 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
     
     /**
+     * Proxy to isActive()
+     *
+     * @param  bool $recursive  [optional] whether page should be
+     *                          considered active if any child pages
+     *                          are active, defaults to false
+     * @return bool
+     */
+    public function getActive($recursive = false)
+    {
+        return $this->isActive($recursive);
+    }
+    
+    /**
      * Sets whether the page should be visible or not
      *
      * @param  bool $visible  [optional] whether page should be visible or not,
@@ -579,6 +584,90 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         return $this->_visible;
     }
     
+    /**
+     * Proxy to isVisible()
+     * 
+     * Returns a boolean value indicating whether the page is visible
+     *
+     * @param  bool $parentDependent  [optional] whether page should be
+     *                                considered invisible if parent
+     *                                is invisible. defaults to false
+     * @return bool
+     */
+    public function getVisible($parentDependent = false)
+    {
+        return $this->isVisible();
+    }
+    
+    /**
+     * Normalizes a property name
+     *
+     * @param string $property  property name to normalize
+     * @return string
+     */
+    protected function _normalizePropertyName($property)
+    {
+        return str_replace(' ', '', ucfirst(str_replace('_', ' ', $property)));
+    }
+    
+    /**
+     * Sets the given property
+     * 
+     * If the given property is native (id, class, title, etc), the matching
+     * set method will be used. Otherwise, it will be set as a custom property.
+     *
+     * @param string $property  name of property to set
+     * @param mixed  $value     value to set
+     * @return Zym_Navigation_Page
+     * @throws InvalidArgumentException  if property name is invalid
+     */
+    public function set($property, $value)
+    {
+        if (!is_string($property) || empty($property)) {
+            $msg = 'property name must be a non-empty string';
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $method = 'set' . $this->_normalizePropertyName($property);
+        
+        if ($method != 'setOptions' && $method != 'setConfig' &&
+            method_exists($this, $method)) {
+            $this->$method($value);
+        } else {
+            $this->_properties[$property] = $value;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Returns the value of the given property
+     * 
+     * If the given property is native (id, class, title, etc), the matching
+     * get method will be used. Otherwise, it will return the matching custom
+     * property, or null if not found.
+     *
+     * @param string $property  name of property to retrieve
+     * @return mixed
+     */
+    public function get($property)
+    {
+        if (!is_string($property) || empty($property)) {
+            $msg = 'property name must be a non-empty string';
+            throw new InvalidArgumentException($msg);
+        }
+        
+        $method = 'get' . $this->_normalizePropertyName($property);
+        
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        } elseif (isset($this->_properties[$property])) {
+            return $this->_properties[$property];
+        }
+        
+        return null;
+    }
+    
     // Magic overloads:
     
     /**
@@ -591,48 +680,55 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function __set($name, $value)
     {
-        if (!is_string($name) || empty($name)) {
-            $msg = 'property name must be a non-empty string';
-            throw new InvalidArgumentException($msg);
-        }
-        
-        $this->_properties[$name] = $value;
+        $this->set($name, $value);
     }
     
     /**
-     * Returns a custom property, or null if it doesn't exist
+     * Returns a property, or null if it doesn't exist
      *
      * @param  string $name  property name
      * @return mixed
      */
     public function __get($name)
     {
-        if (isset($this->_properties[$name])) {
-            return $this->_properties[$name];
-        }
-        
-        return null;
+        return $this->get($name);
     }
     
     /**
-     * Checks if a custom property is set
+     * Checks if a property is set
+     * 
+     * Returns true if the property is native (id, class, title, etc), and 
+     * true or false if it's a custom property (depending on whether the 
+     * property actually is set).
      *
-     * @param string $name  custom property to check
+     * @param string $name  property name
      * @return bool
      */
     public function __isset($name)
     {
+        $method = 'get' . $this->_normalizePropertyName($name);
+        if (method_exists($this, $method)) {
+            return true;
+        }
+        
         return isset($this->_properties[$name]);
     }
     
     /**
      * Unsets the given custom property
      *
-     * @param string $name  custom property to unset
+     * @param string $name  property name
      * @return void
+     * @throws InvalidArgumentException  if the property is native
      */
     public function __unset($name)
     {
+        $method = 'set' . $this->_normalizePropertyName($name);
+        if (method_exists($this, $method)) {
+            $msg = "Cannot unset native property '$name'";
+            throw new InvalidArgumentException($msg);
+        }
+        
         if (isset($this->_properties[$name])) {
             unset($this->_properties[$name]);
         }

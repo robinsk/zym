@@ -64,9 +64,19 @@ class Zym_View_Helper_SitemapTest
      */
     protected function setUp()
     {
-        $oldServer['SERVER_NAME'] = $_SERVER['SERVER_NAME'];
-        $oldServer['SERVER_PORT'] = $_SERVER['SERVER_PORT'];
-        $oldServer['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
+        date_default_timezone_set('Europe/Berlin');
+        
+        if (isset($_SERVER['SERVER_NAME'])) {
+            $this->_oldServer['SERVER_NAME'] = $_SERVER['SERVER_NAME'];
+        }
+        
+        if (isset($_SERVER['SERVER_PORT'])) {
+            $this->_oldServer['SERVER_PORT'] = $_SERVER['SERVER_PORT'];
+        }
+        
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $this->_oldServer['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
+        }
 
         $_SERVER['SERVER_NAME'] = 'localhost';
         $_SERVER['SERVER_PORT'] = 80;
@@ -98,7 +108,7 @@ class Zym_View_Helper_SitemapTest
         }
         $this->_front->setRouter($this->_oldRouter);
 
-        foreach ($this->_oldServer as $key => $val) {
+        foreach ($this->_oldServer as $key => $value) {
             $_SERVER[$key] = $value;
         }
     }

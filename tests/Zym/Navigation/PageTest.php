@@ -294,23 +294,65 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests setting and getting of custom properties
+     * The magic overloads __set and __get should work with native properties
      *
      */
-    public function testCustomPropertiesShouldWork()
+    public function testMagicOverLoadsShouldSetAndGetNativeProperties()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
-            'uri' => '#',
-            'foo' => 'bar'
+            'uri' => 'foo'
         ));
         
-        $this->assertEquals('bar', $page->foo);
-        $this->assertEquals(false, isset($page->baz));
-        $page->baz = 'bat';
-        $this->assertEquals('bat', $page->baz);
-        $this->assertEquals(true, isset($page->baz));
-        $this->assertEquals(null, $page->leet);
+        $this->assertSame('foo', $page->getUri());
+        $this->assertSame('foo', $page->uri);
+        
+        $page->uri = 'bar';
+        $this->assertSame('bar', $page->getUri());
+        $this->assertSame('bar', $page->uri);
+    }
+    
+    /**
+     * The magic overloads __isset(), __unset() should check native properties
+     *
+     */
+    public function testMagicOverLoadsShouldCheckNativeProperties()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'foo',
+            'uri' => 'foo'
+        ));
+        
+        $this->assertTrue(isset($page->uri));
+        
+        try {
+            unset($page->uri);
+            $this->fail('Should not be possible to unset native properties');
+        } catch (Exception $e) {
+            
+        }
+    }
+    
+    /**
+     * The magic overloads (__set(), __get(), __isset(), __unset()) should
+     * handle all custom properties
+     *
+     */
+    public function testMagicOverLoadsShouldHandleCustomProperties()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'foo',
+            'uri' => 'foo'
+        ));
+        
+        $this->assertFalse(isset($page->category));
+        
+        $page->category = 'music';
+        $this->assertTrue(isset($page->category));
+        $this->assertSame('music', $page->category);
+        
+        unset($page->category);
+        $this->assertFalse(isset($page->category));
     }
     
     /**

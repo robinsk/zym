@@ -609,4 +609,161 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(null, $page2->getParent());
         $this->assertEquals(false, $page1->hasPages());
     }
+    
+    /**
+     * It should be possible to use custom properties in finder methods
+     *
+     */
+    public function testFinderMethodsShouldWorkWithCustomProperties()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findOneBy('page2', 'page2');
+        $this->assertType('Zym_Navigation_Page', $found);
+        $this->assertSame('Page 2', $found->getLabel());
+    }
+    
+    /**
+     * The findOneBy() method should only return one page or null
+     *
+     */
+    public function testFindOneByShouldReturnOnlyOnePage()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findOneBy('id', 'page_2_and_3');
+        $this->assertType('Zym_Navigation_Page', $found);
+    }
+    
+    /**
+     * The findOneBy() method should return null if no matching page is found
+     *
+     */
+    public function testFindOneByShouldReturnNullIfNotFound()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findOneBy('id', 'non-existant');
+        $this->assertNull($found);
+    }
+    
+    /**
+     * The findAllBy() method should return all matching pages
+     *
+     */
+    public function testFindAllByShouldReturnAllMatchingPages()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findAllBy('id', 'page_2_and_3');
+        $this->assertType('array', $found, 'array not returned');
+        $this->assertSame(2, count($found), 'found more/less than 2 pages');
+        $this->assertContainsOnly('Zym_Navigation_Page', $found, false);
+    }
+    
+    /**
+     * The findAllBy() method should return an empty array if no matching pages
+     * are found
+     *
+     */
+    public function testFindAllByShouldReturnEmptyArrayifNotFound()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findAllBy('id', 'non-existant');
+        $this->assertType('array', $found, 'array not returned');
+        $this->assertSame(0, count($found), 'array is not empty');
+    }
+    
+    /**
+     * The findBy() method should default to findOneBy()
+     *
+     */
+    public function testFindByShouldDefaultToFindOneBy()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findBy('id', 'page_2_and_3');
+        $this->assertType('Zym_Navigation_Page', $found);
+    }
+    
+    /**
+     * It should be possible to use methods like findById(), findByClass(),
+     * findOneByLabel(), findAllByClass(), and so on.
+     *
+     */
+    public function testShouldBeAbleToUseMagicFinderMethods()
+    {
+        $nav = $this->_getFindByNavigation();
+        
+        $found = $nav->findById('non-existant');
+        $this->assertNull($found);
+        
+        $found = $nav->findById('page_2_and_3');
+        $this->assertType('Zym_Navigation_Page', $found);
+        
+        $found = $nav->findAllById('page_2_and_3');
+        $this->assertType('array', $found, 'array not returned');
+        $this->assertSame(2, count($found), 'found more/less than 2 pages');
+        $this->assertContainsOnly('Zym_Navigation_Page', $found, false);
+        
+        $found = $nav->findAllByaction('about');;
+        $this->assertSame(2, count($found));
+    }
+    
+    /**
+     * Returns navigation object for the findBy methods
+     *
+     * @return Zym_Navigation
+     */
+    protected function _getFindByNavigation()
+    {
+        // findAllByFoo('bar')         // Page 1, Page 1.1 
+        // findById('page_2_and_3')    // Page 2 
+        // findOneById('page_2_and_3') // Page 2
+        // findAllById('page_2_and_3') // Page 2, Page 3
+        // findAllByAction('about')    // Page 1.3, Page 3
+        return new Zym_Navigation(array(
+            array(
+                'label' => 'Page 1',
+                'uri'   => 'page-1',
+                'foo'   => 'bar',
+                'pages' => array(
+                    array(
+                        'label' => 'Page 1.1',
+                        'uri'   => 'page-1.1',
+                        'foo'   => 'bar',
+                        'title' => 'The given title'
+                    ),
+                    array(
+                        'label' => 'Page 1.2',
+                        'uri'   => 'page-1.2',
+                        'title' => 'The given title'
+                    ),
+                    array(
+                        'type'   => 'uri',
+                        'label'  => 'Page 1.3',
+                        'uri'    => 'page-1.3',
+                        'title'  => 'The given title',
+                        'action' => 'about'
+                    )
+                )
+            ),
+            array(
+                'id'         => 'page_2_and_3',
+                'label'      => 'Page 2',
+                'module'     => 'page2',
+                'controller' => 'index',
+                'action'     => 'page1',
+                'page2'      => 'page2'
+            ),
+            array(
+                'id'         => 'page_2_and_3',
+                'label'      => 'Page 3',
+                'module'     => 'page3',
+                'controller' => 'index',
+                'action'     => 'about'
+            )
+        ));
+    }
 }

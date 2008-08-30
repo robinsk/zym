@@ -288,6 +288,97 @@ abstract class Zym_Navigation_Container
     }
     
     /**
+     * Returns a child page matching $property == $value, or null if not found
+     *
+     * @param string $property  name of property to match against
+     * @param mixed  $value     value to match property against
+     * @return Zym_Navigation_Page|null  matching page or null
+     */
+    public function findOneBy($property, $value)
+    {
+        $iterator = new RecursiveIteratorIterator($this,
+                            RecursiveIteratorIterator::SELF_FIRST);
+        
+        foreach ($iterator as $page) {
+            if ($page->get($property) == $value) {
+                return $page;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Returns all child pages matching $property == $value, or an empty array
+     * if not found
+     *
+     * @param string $property  name of property to match against
+     * @param mixed  $value     value to match property against
+     * @return array  containing only Zym_Navigation_Page elements
+     */
+    public function findAllBy($property, $value)
+    {
+        $found = array();
+        
+        $iterator = new RecursiveIteratorIterator($this,
+                            RecursiveIteratorIterator::SELF_FIRST);
+        
+        foreach ($iterator as $page) {
+            if ($page->get($property) == $value) {
+                $found[] = $page;
+            }
+        }
+        
+        return $found;
+    }
+    
+    /**
+     * Returns page(s) matching $property == $value
+     *
+     * @param string $property  name of property to match against
+     * @param mixed  $value     value to match property against
+     * @param bool   $all       [optional] whether an array of all matching
+     *                          pages should be returned, or only the first.
+     *                          If true, an array will be returned, even if not
+     *                          matching pages are found. If false, null will be
+     *                          returned if no matching page is found. Default
+     *                          is false.
+     */
+    public function findBy($property, $value, $all = false)
+    {
+        if ($all) {
+            return $this->findAllBy($property, $value);
+        } else {
+            return $this->findOneBy($property, $value);
+        }
+    }
+    
+    /**
+     * Magic overload: Proxy calls to finder methods
+     * 
+     * Examples of finder calls:
+     * <code>
+     * // METHOD                    // SAME AS
+     * $nav->findByLabel('foo');    // $nav->findOneBy('label', 'foo');
+     * $nav->findOneByLabel('foo'); // $nav->findOneBy('label', 'foo');
+     * $nav->findAllById('foo');    // $nav->findAllBy('id', 'foo');
+     * </code>
+     *
+     * @param string $method     method name
+     * @param array  $arguments  method arguments
+     * @throws BadMethodCallException  if method does not exist
+     */
+    public function __call($method, $arguments)
+    {
+        if (@preg_match('/(find(?:One|All)?By)(.+)/', $method, $match)) { 
+            return $this->{$match[1]}($match[2], $arguments[0]);
+        }
+        
+        $msg = sprintf('Unknown method %s::%s', get_class($this), $method);
+        throw new BadMethodCallException($msg);
+    }
+    
+    /**
      * Returns an array representation of all pages in container
      *
      * @return array
