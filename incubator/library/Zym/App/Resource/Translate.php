@@ -78,23 +78,14 @@ class Zym_App_Resource_Translate extends Zym_App_Resource_Abstract
         $adapter = $config->get('adapter');
         $data    = $this->_parseDataPath($config->get('data'));
         $options = $this->_parseOptions($config->get('options')->toArray());
-
-        $translate = new Zend_Translate($adapter, $data, null, $options);
-
-        // Weird Zend_Translate issues
-        // We cannot set a locale in the constructor
-        if ($locale = $config->get('locale')) {
-            $translate->getAdapter()->setLocale($locale);
-        } else {
-            /**
-             * @see Zend_Registry
-             */
-            require_once 'Zend/Registry.php';
+        
+        if (!$locale = $config->get('locale')) {
             if (Zend_Registry::isRegistered('Zend_Locale')) {
                 $locale = Zend_Registry::get('Zend_Locale');
-                $translate->getAdapter()->setLocale($locale);
             }
         }
+
+        $translate = new Zend_Translate($adapter, $data, $locale, $options);    
 
         if ((bool) $config->get('registry')->get('enabled')) {
             /**
