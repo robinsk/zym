@@ -357,7 +357,7 @@ class Zym_App_Resource_View extends Zym_App_Resource_Abstract
     protected function _setupViewStreams(Zym_View_Abstract $view, Zend_Config $config)
     {
         // Enable/Disable
-        if ($flag = $config->get('flag') && !empty($flag) && $flag != null) {
+        if ($flag = $config->get('flag')) {
             $view->setStreamFlag((bool) $flag);
         }
 
