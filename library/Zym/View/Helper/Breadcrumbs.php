@@ -197,6 +197,12 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
                           . $this->getSeparator()
                           . $html;
                 }
+                
+                if ($parent == $container) {
+                    // break if at the root of the given container
+                    break;
+                }
+                
                 $found = $parent;
             }
         }
