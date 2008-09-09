@@ -51,7 +51,7 @@ class Zym_App_Resource_Navigation extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        Zym_APP::ENV_DEFAULT => array(
+        Zym_App::ENV_DEFAULT => array(
             'registry_key' => self::DEFAULT_REGISTRY_KEY,
             'pages' => array()
         )

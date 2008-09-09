@@ -67,7 +67,7 @@ class Zym_App_Resource_Db extends Zym_App_Resource_Abstract
             )
         ),
 
-        Zym_APP::ENV_DEFAULT => array(
+        Zym_App::ENV_DEFAULT => array(
             'default_config' => array(
                 'adapter' => 'Mysqli',
 

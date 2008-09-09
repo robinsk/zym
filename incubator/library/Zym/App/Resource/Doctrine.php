@@ -52,7 +52,7 @@ class Zym_App_Resource_Doctrine extends Zym_App_Resource_Abstract
      * @var array
      */
     protected $_defaultConfig = array(
-        Zym_APP::ENV_DEFAULT => array(
+        Zym_App::ENV_DEFAULT => array(
             // all paths are relative to app's home directory
             'path_config' => array(
                 'data_fixtures_path'  =>  'data/doctrine/data/fixtures',
