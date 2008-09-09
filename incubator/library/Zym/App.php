@@ -215,12 +215,7 @@ class Zym_App
      *
      * @var array
      */
-    protected $_scriptPaths = array(
-        'Zym' => array(
-            'dir'    => 'Zym/Application/',
-            'prefix' => 'Zym_App_'
-        )
-    );
+    protected $_scriptPaths = array();
 
     /**
      * Construct
@@ -260,7 +255,7 @@ class Zym_App
      */
     public function setConfig($config, $format = null)
     {
-    	$environment = $this->getEnvironment();
+        $environment = $this->getEnvironment();
 
         if (!$config instanceof Zend_Config) {
             $configObj   = $this->_loadConfig($config, $environment, $format);
@@ -851,7 +846,7 @@ class Zym_App
                 );
             }
 
-            $scriptPaths = $scriptPaths[$ns];
+            $scriptPaths = array($scriptPaths[$ns]);
         }
 
         foreach (array_reverse($scriptPaths) as $info) {
