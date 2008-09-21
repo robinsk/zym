@@ -49,12 +49,10 @@ class Zym_View_Helper_ViewRow
         $xhtml .= '<tbody>';
 
         foreach ($rowData as $key => $value) {
-            if (!$table->isIdentity($key) && ($columns != null && in_array($key, $columns))) {
+            if (!$table->isIdentity($key) && ($columns == null || ($columns != null && in_array($key, $columns)))) {
                 $xhtml .= '<tr>';
-
-                $xhtml .= sprintf('<td><strong>%s</strong></td>', $key);
-                $xhtml .= sprintf('<td>%s</td>', $value);
-
+                $xhtml .= '    <td><strong>' . ucfirst($key) . '</strong></td>';
+                $xhtml .= '    <td>' . $value . '</td>';
                 $xhtml .= '</tr>';
             }
         }
