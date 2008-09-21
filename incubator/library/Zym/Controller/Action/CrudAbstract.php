@@ -370,6 +370,24 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this->_table;
     }
+    
+    /**
+     * Populate the table row with data from the array
+     *
+     * @param Zend_Db_Table_Row_Abstract $row
+     * @param array $data
+     * @return Zend_Db_Table_Row_Abstract
+     */
+    protected function _populateRowData(Zend_Db_Table_Row_Abstract $row, array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (isset($row->$key) && !$table->isIdentity($key)) {
+                $row->$key = $value;
+            }
+        }
+        
+        return $row;
+    }
 
     /**
      * Process the form after it's been succesfully validated
@@ -393,11 +411,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
             }
         }
         
-        foreach ($formValues as $key => $value) {
-            if (isset($row->$key) && !$table->isIdentity($key)) {
-                $row->$key = $value;
-            }
-        }
+        $row = $this->_populateRowData($row, $formValues);
 
         $row->save();
 
