@@ -29,31 +29,37 @@ class Zym_View_Helper_ViewRow
      * Render the Zend_Db_Table_Row_Abstract in a table
      *
      * @param Zend_Db_Table_Row_Abstract $row
+     * @param array $options
      * @return string
      */
-    public function viewRow(Zend_Db_Table_Row_Abstract $row, $header = null, $columns = null)
+    public function viewRow(Zend_Db_Table_Row_Abstract $row, array $options = array())
     {
         $table = $row->getTable();
         $rowData = $row->toArray();
 
-        $xhtml = '<table class="ZVHViewRowTable">';
+        $ucFirst    = isset($options['ucfirst']) ? (bool) $options['ucfirst'] : true;
+        $showEmpty  = isset($options['showEmpty']) ? (bool) $options['showEmpty'] : false;
+        $tableClass = isset($options['class']) ? $options['class'] : 'ZVHViewRowTable';
+        $columns    = isset($options['columns']) ? (array) $options['columns'] : null;
+        
+        $xhtml = '<table class="' . $tableClass . '">';
 
-        if ($header) {
+        if (isset($options['header'])) {
             $xhtml .= '<thead>';
-
-            $xhtml .= sprintf('<tr><td colspan="2">%s</td></tr>', $header);
-
+            $xhtml .= '    <tr><td colspan="2">' . $options['header'] . '</td></tr>';
             $xhtml .= '</thead>';
         }
 
         $xhtml .= '<tbody>';
 
         foreach ($rowData as $key => $value) {
-            if (!$table->isIdentity($key) && ($columns == null || ($columns != null && in_array($key, $columns)))) {
-                $xhtml .= '<tr>';
-                $xhtml .= '    <td><strong>' . ucfirst($key) . '</strong></td>';
-                $xhtml .= '    <td>' . $value . '</td>';
-                $xhtml .= '</tr>';
+            if (!$table->isIdentity($key) &&
+                ($columns == null || ($columns != null && in_array($key, $columns))) &&
+                (!empty($value) || (empty($value) && $showEmpty))) {
+                    $xhtml .= '<tr>';
+                    $xhtml .= '    <td><strong>' . ($ucFirst ? ucfirst($key) : $key) . '</strong></td>';
+                    $xhtml .= '    <td>' . $value . '</td>';
+                    $xhtml .= '</tr>';
             }
         }
 
