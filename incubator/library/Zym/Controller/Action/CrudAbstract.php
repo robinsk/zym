@@ -33,7 +33,7 @@ require_once 'Zend/Db/Table/Abstract.php';
 /**
  * TODO: Make this compatible with MultiPageForm
  * TODO: Add global view scripts
- * 
+ *
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Controller
@@ -59,32 +59,32 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
     /**
      * Browse query
-     * 
+     *
      * @var Zend_Db_Select
      */
     protected $_browseQuery = null;
-    
+
     /**
      * The column by which the results are ordered by, by default
      *
      * @var string
      */
     protected $_defaultOrderColumn = null;
-    
+
     /**
      * The direction in which the results are ordered in, by default
      *
      * @var string
      */
     protected $_defaultOrderDirection = 'ASC';
-    
+
     /**
      * Default page number for pagination
      *
      * @var int
      */
     protected $_defaultPageNumber = 1;
-    
+
     /**
      * Default page limit for pagination
      *
@@ -98,28 +98,28 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
      * @var Zend_Form
      */
     protected $_form = null;
-    
+
     /**
      * Order by key
      *
      * @var string
      */
     protected $_orderByKey = 'by';
-    
+
     /**
      * Order direction key
      *
      * @var string
      */
     protected $_orderKey = 'order';
-    
+
     /**
      * Page parameter
-     * 
+     *
      * @var string
      */
     protected $_pageParam = 'page';
-    
+
     /**
      * Primary ID key
      *
@@ -129,18 +129,18 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
     /**
      * Range parameter
-     * 
+     *
      * @var string
      */
     protected $_rangeParam = 'range';
-    
+
     /**
      * Table instance
      *
      * @var Zym_Db_Table_Abstract
      */
     protected $_table = null;
-    
+
     /**
      * Append the order-by clause to the specified query
      *
@@ -150,17 +150,17 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     {
         $order   = strtoupper($this->_getParam($this->_orderKey, $this->_defaultOrderDirection));
         $orderBy = $this->_getParam($this->_orderByKey, $this->_defaultOrderColumn);
-        
+
         if (in_array($orderBy, $this->_getTable()->info('cols'))) {
             $this->view->order   = $order;
             $this->view->orderBy = $orderBy;
-            
+
             $query->order($orderBy . ' ' . $order);
         }
-        
+
         return $query;
     }
-    
+
     /**
      * Fetch the row with the specified id from the database and assign it to the view
      *
@@ -168,10 +168,10 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected function _assignByPrimaryId()
     {
         $row = $this->_getRow($this->_getPrimaryId());
-        
+
         $this->view->row = $row;
     }
-    
+
     /**
      * Get the name of the action that takes care of the add/edit stuff
      *
@@ -198,7 +198,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this;
     }
-    
+
     /**
      * Get the name of the action that takes care of the browsing
      *
@@ -212,7 +212,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this->_browseAction;
     }
-    
+
     /**
      * Get the select object for the browse action
      *
@@ -222,15 +222,15 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     {
         if (!$this->_browseQuery) {
             $query = $this->_getTable()->select();
-            
+
             $query = $this->_appendOrderByClause($query);
-            
+
             $this->_browseQuery = $query;
         }
-        
-        return $this->_browseQuery; 
+
+        return $this->_browseQuery;
     }
-    
+
     /**
      * Set the select object for the browse action
      *
@@ -240,10 +240,10 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     protected function _setBrowseQuery(Zend_Db_Select $query)
     {
         $this->_browseQuery = $query;
-        
-        return $this; 
+
+        return $this;
     }
-    
+
     /**
      * Get the location to where the form needs to submit for an edited entry
      *
@@ -256,7 +256,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $location;
     }
-    
+
     /**
      * Get the form for this model
      *
@@ -283,7 +283,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this;
     }
-    
+
     /**
      * Check if a special submit button is used and act accordingly.
      * @TODO make this nicer...
@@ -294,11 +294,11 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         switch (true) {
             case array_key_exists('_cancel', $postData);
-                $this->_goto($this->_getBrowseAction());
-                break;
+            $this->_goto($this->_getBrowseAction());
+            break;
         }
     }
-    
+
     /**
      * Get the location to where the form needs to submit for a new entry
      *
@@ -310,7 +310,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
                      'controller' => $this->getRequest()->getControllerName(),
                      'action'     => $this->_getAddEditAction());
     }
-    
+
     /**
      * Get the primary id from the request
      *
@@ -320,7 +320,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     {
         return $this->_getParam($this->_getPrimaryIdKey());
     }
-    
+
     /**
      * Get the column name of the primary id
      *
@@ -336,7 +336,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this->_primaryIdKey;
     }
-    
+
     /**
      * Get the model from the table
      *
@@ -348,7 +348,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
         $table = $this->_getTable();
 
         $row = $table->find((int) $id)
-                     ->current();
+        ->current();
 
         if (!$row) {
             $this->_throwException('The requested row could not be loaded.');
@@ -356,7 +356,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $row;
     }
-    
+
     /**
      * Get the table for this model
      *
@@ -370,7 +370,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this->_table;
     }
-    
+
     /**
      * Process the form after it's been succesfully validated
      *
@@ -381,13 +381,18 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         $formValues = $this->_getForm()->getValues();
 
-        // TODO: Refactor according to Bill's email
-        if (!empty($formValues[$this->_getPrimaryIdKey()])) {
-            $row = $this->_getRow($this->_getPrimaryId());
-        } else {
-            $row = $table->createRow();
-        }
+        $row = $table->createRow();
 
+        $id = (int) $this->_getPrimaryId();
+        
+        if ($id > 0) {
+            $rowset = $table->find($id);
+            
+            if (count($rowset)) {
+                $row = $rowset->current();
+            }
+        }
+        
         foreach ($formValues as $key => $value) {
             if (isset($row->$key) && !$table->isIdentity($key)) {
                 $row->$key = $value;
@@ -411,7 +416,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         return $this;
     }
-    
+
     /**
      * Set the browse action
      *
@@ -440,7 +445,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         throw new Zym_Controller_Action_Exception($message);
     }
-    
+
     /**
      * Add or edit a model
      */
@@ -474,7 +479,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         $this->view->form = $form;
     }
-    
+
     /**
      * Browse through your models
      */
@@ -495,7 +500,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
 
         $this->view->paginator = $paginator;
     }
-    
+
     /**
      * Confirm deleting the item
      *
@@ -504,7 +509,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     {
         $this->_assignByPrimaryId();
     }
-    
+
     /**
      * Delete a model
      */
@@ -516,14 +521,14 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
             $table = $this->_getTable();
 
             $where = $table->getAdapter()
-                           ->quoteInto(sprintf('%s=?', $this->_getPrimaryIdKey()), $id);
+            ->quoteInto(sprintf('%s=?', $this->_getPrimaryIdKey()), $id);
 
             $table->delete($where);
         }
 
         $this->_goto($this->_getBrowseAction());
     }
-    
+
     /**
      * Index action. Forward to the browse action
      */
@@ -531,7 +536,7 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     {
         $this->_forward($this->_getBrowseAction());
     }
-    
+
     /**
      * Allows this to work when setDefaultAction() has been set to something other than 'index'
      *
@@ -540,13 +545,13 @@ abstract class Zym_Controller_Action_CrudAbstract extends Zym_Controller_Action_
     public function init()
     {
         $this->_defaultOrderColumn = $this->_getPrimaryIdKey();
-        
+
         $front = Zend_Controller_Front::getInstance();
         if ($this->getRequest()->getActionName() == $front->getDefaultAction() && $this->getRequest()->getActionName() != 'index') {
             $this->_forward($this->_getBrowseAction());
         }
     }
-    
+
     /**
      * View a model if it exists
      */
