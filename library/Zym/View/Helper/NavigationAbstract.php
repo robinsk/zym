@@ -54,14 +54,14 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      * 
      * @var string|Zend_Acl_Role_Interface
      */
-    protected $_role;
+    protected $_role = null;
     
     /**
      * ACL to use when iterating pages
      * 
      * @var Zend_Acl
      */
-    protected $_acl;
+    protected $_acl = null;
     
     /**
      * Default ACL role to use when iterating pages if not explicitly set
@@ -75,7 +75,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      * 
      * @var Zend_Acl
      */
-    protected static $_defaultAcl;
+    protected static $_defaultAcl = null;
     
     /**
      * Whether translator should be used
@@ -242,7 +242,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      * 
      * @param  Zend_Acl $acl  [optional] ACL object, defaults to null which
      *                        sets no ACL object
-     * @return Zym_View_Helper_Navigation
+     * @return Zym_View_Helper_NavigationAbstract
      */
     public function setAcl(Zend_Acl $acl = null)
     {
@@ -350,6 +350,10 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
         // do not accept by default
         $accept = false;
         
+        if (!$acl = $this->getAcl()) {
+            return $accept;
+        }
+        
         // do not accept if helper has no role
         if ($role = $this->getRole()) {
             $resource = $page->getResource();
@@ -357,7 +361,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
             
             if ($resource || $privilege) {
                 // determine using helper role and page resource/privilege
-                $accept = $this->_acl->isAllowed($role, $resource, $privilege);
+                $accept = $this->getAcl()->isAllowed($role, $resource, $privilege);
             } else {
                 // accept if page has no resource or privilege
                 $accept = true;
@@ -383,18 +387,18 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      */
     protected function _accept(Zym_Navigation_Page $page, $recursive = true)
     {
+        // accept by default
+        $accept = true;
+        
         if (!$page->isVisible($recursive)) {
             // don't accept invisible pages
-            return false;
+            $accept = false;
+        } elseif (!$this->_acceptAcl($page, $recursive)) {
+            // acl is not amused
+            $accept = false;
         }
         
-        if (null !== $this->_acl) {
-            // determine using ACL
-            return $this->_acceptAcl($page, $recursive);
-        }
-        
-        // accept by default
-        return true;
+        return $accept;
     }
     
     /**
