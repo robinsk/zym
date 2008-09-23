@@ -64,6 +64,20 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     protected $_acl;
     
     /**
+     * Default ACL role to use when iterating pages if not explicitly set
+     * 
+     * @var string|Zend_Acl_Role_Interface
+     */
+    protected static $_defaultRole = null;
+    
+    /**
+     * Default ACL to use when iterating pages if not explicitly set
+     * 
+     * @var Zend_Acl
+     */
+    protected static $_defaultAcl;
+    
+    /**
      * Whether translator should be used
      * 
      * @var boolean
@@ -233,15 +247,33 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     public function setAcl(Zend_Acl $acl = null)
     {
         $this->_acl = $acl;
+        return $this;
     }
     
     /**
-     * Returns ACL or null if it isn't set
+     * Sets default ACL to use if another ACL is not explicitly set
+     * 
+     * @param  Zend_Acl $acl  [optional] ACL object, defaults to null which
+     *                        sets no ACL object
+     * @return void
+     */
+    public static function setDefaultAcl(Zend_Acl $acl = null)
+    {
+        self::$_defaultAcl = $acl;
+    }
+    
+    /**
+     * Returns ACL or null if it isn't set using {@link setAcl()} or 
+     * {@link setDefaultAcl()}
      *
      * @return Zend_Acl|null
      */
     public function getAcl()
     {
+        if ($this->_acl === null && self::$_defaultAcl !== null) {
+            return self::$_defaultAcl;
+        }
+        
         return $this->_acl;
     }
     
@@ -268,12 +300,38 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     }
     
     /**
-     * Returns ACL role to use when iterating pages
+     * Sets default ACL role(s) to use when iterating pages if not explicitly
+     * set later with {@link setRole()}
+     * 
+     * @param  null|string|Zend_Acl_Role_Interface $role   [optional] role to set,
+     *                                                     defaults to null
+     * @throws InvalidArgumentException  if $role is not null, string, or
+     *                                   Zend_Acl_Role_Interface
+     * @return Zym_View_Helper_NavigationAbstract
+     */
+    public static function setDefaultRole($role = null)
+    {
+        if (null === $role || is_string($role) ||
+            $role instanceof Zend_Acl_Role_Interface) {
+            self::$_defaultRole = $role;
+        } else {
+            $msg = '$role must be null|string|Zend_Acl_Role_Interface';
+            throw new InvalidArgumentException($msg);
+        }
+    }
+    
+    /**
+     * Returns ACL role to use when iterating pages, or null if it isn't set
+     * using {@link setRole()} or {@link setDefaultRole()}
      * 
      * @return string|Zend_Acl_Role_Interface|null
      */
     public function getRole()
     {
+        if ($this->_role === null && self::$_defaultRole !== null) {
+            return self::$_defaultRole;
+        }
+        
         return $this->_role;
     }
     
