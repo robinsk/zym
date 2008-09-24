@@ -199,6 +199,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     public function setUseTranslator($useTranslator = true)
     {
         $this->_useTranslator = (bool) $useTranslator;
+        return $this;
     }
     
     /**
@@ -307,7 +308,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      *                                                     defaults to null
      * @throws InvalidArgumentException  if $role is not null, string, or
      *                                   Zend_Acl_Role_Interface
-     * @return Zym_View_Helper_NavigationAbstract
+     * @return void
      */
     public static function setDefaultRole($role = null)
     {
@@ -347,12 +348,13 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
      */
     protected function _acceptAcl(Zym_Navigation_Page $page, $recursive = true)
     {
+        if (!$acl = $this->getAcl()) {
+            // no acl registered means don't use acl
+            return true;
+        }
+        
         // do not accept by default
         $accept = false;
-        
-        if (!$acl = $this->getAcl()) {
-            return $accept;
-        }
         
         // do not accept if helper has no role
         if ($role = $this->getRole()) {
