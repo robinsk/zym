@@ -39,4 +39,12 @@ class Zym_Couch_RequestTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Content-Length: 27' . self::CRLF, $rawRequest);
         $this->assertContains('{"my":"data","goes":"here"}' . self::CRLF, $rawRequest);
     }
+    
+    public function testGetters()
+    {
+        $request = new Zym_Couch_Request('/foo/bar', Zym_Couch_Request::GET, 'myDataGoesHere');
+        $this->assertEquals('/foo/bar', $request->getUrl());
+        $this->assertEquals(Zym_Couch_Request::GET, $request->getMethod());
+        $this->assertEquals('myDataGoesHere', $request->getData());
+    }
 }

@@ -62,14 +62,14 @@ class Zym_Couch_Request
      *
      * @var string
      */
-    protected $_url;
+    protected $_url = null;
 
     /**
      * Request data
      *
      * @var string
      */
-    protected $_data;
+    protected $_data = null;
     
     /**
      * Constructor
@@ -99,6 +99,36 @@ class Zym_Couch_Request
 
         $this->_url = $url;
         $this->_data = $data;
+    }
+    
+    /**
+     * Get the url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->_url;
+    }
+    
+    /**
+     * Get the method
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->_method;
+    }
+    
+    /**
+     * Get the request data
+     *
+     * @return string|array
+     */
+    public function getData()
+    {
+        return $this->_data;
     }
 
     /**

@@ -192,6 +192,20 @@ class Zym_Couch_Connection
 
         return $response;
     }
+    
+    /**
+     * Get a DB instance
+     *
+     * @param string $name
+     * @return Zym_Couch_Db
+     */
+    public function getDb($name)
+    {
+        $db = new Zym_Couch_Db($name);
+        $db->setConnection($this);
+        
+        return $db;
+    }
 
     /**
      * Strip forward slashes from the provided string

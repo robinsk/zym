@@ -47,18 +47,16 @@ class Zym_Couch_Db
      *
      * @var string
      */
-    protected $_dbname;
+    protected $_dbName;
 
     /**
      * Constructor
      *
      * @param string $dbname
      */
-    public function __construct($dbname = null)
+    public function __construct($dbname)
     {
-        if (null !== $dbname) {
-            $this->_dbname = trim($dbname, '/');
-        }
+        $this->_dbName = trim($dbname, '/');
     }
 
     /**
@@ -111,21 +109,11 @@ class Zym_Couch_Db
     /**
      * Get the database name
      *
-     * @throws Zym_Couch_Exception
      * @return string
      */
     public function getDbName()
     {
-        if (!$this->_dbname) {
-            /**
-             * @see Zym_Couch_Exception
-             */
-            require_once 'Zym/Couch/Exception.php';
-
-            throw new Zym_Couch_Exception('No database name set.');
-        }
-
-        return $this->_dbname;
+        return $this->_dbName;
     }
 
     /**
@@ -138,7 +126,7 @@ class Zym_Couch_Db
      */
     public function getRequest($url, $method = Zym_Couch_Request::GET, $data = null)
     {
-        $dbPrefix = '/' . $this->_dbname;
+        $dbPrefix = '/' . $this->_dbName;
 
         if (strpos($url, $dbPrefix) !== 0) {
             $url = $dbPrefix . '/' . ltrim($url, '/');
@@ -200,29 +188,43 @@ class Zym_Couch_Db
 
         return $this->_connection->send($request);
     }
+    
+    /**
+     * Get the document count
+     *
+     * @return int
+     */
+    public function getDocumentCount()
+    {
+        $docs = $this->getAllDocs();
+        
+        return $docs['total_rows'];
+    }
 
     /**
      * Get all documents for the current database
      *
-     * @return Zym_Couch_Response
+     * TODO: Return Zym_Couch_Documents
+     * 
+     * @return array
      */
     public function getAllDocs()
     {
         $request = $this->getRequest('/_all_docs');
 
-        return $this->_connection->send($request);
+        return $this->_connection->execute($request);
     }
 
     /**
      * Get item by id
      *
      * @param int|string $id
-     * @return Zym_Couch_Response
+     * @return array
      */
     public function getItem($id)
     {
         $request = $this->getRequest('/' . $id);
 
-        return $this->_connection->send($request);
+        return $this->_connection->execute($request);
     }
 }
