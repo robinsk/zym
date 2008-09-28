@@ -25,11 +25,6 @@ require_once 'Zym/Couch/Response.php';
 require_once 'Zend/Json.php';
 
 /**
- * @see Zend_Date
- */
-require_once 'Zend/Date.php';
-
-/**
  * @author     Jurrien Stutterheim
  * @category   Zym
  * @package    Zym_Couch
@@ -75,14 +70,7 @@ class Zym_Couch_Request
      * @var string
      */
     protected $_data;
-
-    /**
-     * Response message
-     *
-     * @var Zym_Couch_Response
-     */
-    protected $_response;
-
+    
     /**
      * Constructor
      *
@@ -121,28 +109,28 @@ class Zym_Couch_Request
     public function getRawRequest()
     {
         $request = $this->_method . ' ' . $this->_url . ' HTTP/1.0' . self::CRLF;
-
-        $date = new Zend_Date();
-        $request .= 'Date: ' . $date->toString(Zend_Date::RFC_2822);
+        
+        $date = new DateTime();
+        $request .= 'Date: ' . $date->format('r') . self::CRLF;
 
         if ($this->_data) {
             $request .= 'Content-Length: ' . strlen($this->_data) . self::CRLF;
             $request .= 'Content-Type: application/json' . self::CRLF . self::CRLF;
-            $request .= $this->_data . self::CRLF;
-        } else {
-            $request .= self::CRLF;
+            $request .= $this->_data;
         }
+        
+        $request .= self::CRLF;
 
         return $request;
     }
-
+    
     /**
-     * Get the reponse object
+     * Serializes the request to it's raw form
      *
-     * @return Zym_Couch_Response
+     * @return string
      */
-    public function getResponse()
+    public function __toString()
     {
-        return $this->_response;
+        return $this->getRawRequest();
     }
 }

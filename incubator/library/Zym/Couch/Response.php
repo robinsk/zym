@@ -68,8 +68,8 @@ class Zym_Couch_Response
         list($rawHeaders, $this->_body) = explode("\r\n\r\n", $rawResponse);
 
         $rawHeaders = explode("\r\n", $rawHeaders);
-
-        $this->_status = (int) substr(array_shift($rawHeaders), 8, 3);
+        
+        $this->_status = (int) substr(array_shift($rawHeaders), 9, 3);
 
         $headers = array();
 
@@ -106,7 +106,7 @@ class Zym_Couch_Response
             $response[$header] = $value;
         }
 
-        $response['body'] = $this->_body;
+        $response['body'] = $this->getBody(true);
 
         return $response;
     }
@@ -130,13 +130,29 @@ class Zym_Couch_Response
     {
         return $this->_headers;
     }
+    
+    /**
+     * Get a specific header.
+     * Returns null when the header doesn't exist
+     *
+     * @param string $header
+     * @return string|null
+     */
+    public function getHeader($header)
+    {
+        if (isset($this->_headers[$header])) {
+            return $this->_headers[$header];
+        }
+        
+        return null;
+    }
 
     /**
      * Get the response body
      *
      * @return string
      */
-    public function getBody($decode = false)
+    public function getBody($decode = true)
     {
         return $decode ? Zend_Json::decode($this->_body) : $this->_body;
     }

@@ -38,14 +38,14 @@ class Zym_Couch_Connection
      *
      * @var string
      */
-    protected $_host;
+    protected $_host = 'localhost';
 
     /**
      * Port number
      *
      * @var int port
      */
-    protected $_port;
+    protected $_port = 5984;
 
     /**
      * Constructor
@@ -53,10 +53,15 @@ class Zym_Couch_Connection
      * @param string $host
      * @param int port
      */
-    public function __construct($host, $port)
+    public function __construct($host = null, $port = null)
     {
-        $this->_host = $host;
-        $this->_port = $port;
+        if (null !== $host) {
+            $this->_host = $host;
+        }
+        
+        if (null !== $port) {
+            $this->_port = $port;
+        }
     }
 
     /**
