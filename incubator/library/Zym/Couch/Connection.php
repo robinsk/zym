@@ -101,6 +101,19 @@ class Zym_Couch_Connection
 
         return new Zym_Couch_Response($response);
     }
+    
+    /**
+     * Send the request and returns the response body
+     *
+     * @param Zym_Couch_Request $request
+     * @return array|string
+     */
+    public function execute(Zym_Couch_Request $request)
+    {
+        $response = $this->send($request);
+        
+        return $response->getBody(true);
+    }
 
     /**
      * List all databases
@@ -109,7 +122,7 @@ class Zym_Couch_Connection
      */
     public function listAll()
     {
-        return $this->send(new Zym_Couch_Request('/_all_dbs'));
+        return $this->execute(new Zym_Couch_Request('/_all_dbs'));
     }
 
     /**
@@ -125,7 +138,7 @@ class Zym_Couch_Connection
             $message .= $this->_stripSlashes($database) . '/';
         }
 
-        return $this->send(new Zym_Couch_Request($message));
+        return $this->execute(new Zym_Couch_Request($message));
     }
 
     /**
@@ -167,8 +180,8 @@ class Zym_Couch_Connection
         $request = new Zym_Couch_Request($name, Zym_Couch_Request::DELETE);
 
         $response = $this->send($request);
-
-        if ($response->getStatus() == 404) {
+        
+        if ($response->getStatus() == 500) {
             /**
              * @see Zym_Couch_Exception
              */

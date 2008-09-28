@@ -56,8 +56,8 @@ class Zym_Couch_Db
      */
     public function __construct($dbname = null)
     {
-        if ($dbname) {
-            $this->_dbname = $dbname;
+        if (null !== $dbname) {
+            $this->_dbname = trim($dbname, '/');
         }
     }
 
@@ -141,11 +141,7 @@ class Zym_Couch_Db
         $dbPrefix = '/' . $this->_dbname;
 
         if (strpos($url, $dbPrefix) !== 0) {
-            if (strpos($url, '/') === 0) {
-                $url = $dbPrefix . '/' . $url;
-            } else {
-                $url = $dbPrefix . $url;
-            }
+            $url = $dbPrefix . '/' . ltrim($url, '/');
         }
 
         return new Zym_Couch_Request($url, $method, $data);
