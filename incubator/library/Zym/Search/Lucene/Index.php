@@ -146,7 +146,7 @@ class Zym_Search_Lucene_Index
      *
      * @param string $indexPath
      * @param array $params
-     * @return Zend_Search_Lucene_Interface
+     * @return Zym_Search_Lucene_Index
      */
     public static function factory($indexPath = null, array $params = array())
     {
