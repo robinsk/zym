@@ -102,7 +102,7 @@ abstract class Zym_View_Helper_NavigationAbstract extends Zym_View_Helper_Html_A
     {
         $this->getNavigation();
         if (method_exists($this->_container, $method)) {
-            return call_user_func(array($this->_container, $method), $arguments);
+            return call_user_func_array(array($this->_container, $method), $arguments);
         } else {
             $msg = "Method '$method' does not exst in container";
             throw new BadMethodCallException($msg);
