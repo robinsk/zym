@@ -29,7 +29,7 @@ require_once 'Zym/View/Helper/NavigationAbstract.php';
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
- */ 
+ */
 class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
 {
     /**
@@ -38,24 +38,24 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
      * @var string
      */
     protected $_separator = ' &gt; ';
-    
+
     /**
      * Minimum depth required to render breadcrumbs
      *
      * @var int
      */
     protected $_minDepth = 1;
-    
+
     /**
      * Whether last page in breadcrumb should be hyperlinked
      *
      * @var bool
      */
     protected $_linkLast = false;
-    
+
     /**
      * Retrieves helper and optionally sets container to operate on
-     * 
+     *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              operate on
      * @return Zym_View_Helper_Navigation
@@ -65,10 +65,10 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
         if (null !== $container) {
             $this->_container = $container;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Sets breadcrumbs separator
      *
@@ -81,7 +81,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
             $this->_separator = $separator;
         }
     }
-    
+
     /**
      * Returns breadcrumbs separator
      *
@@ -91,7 +91,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
     {
         return $this->_separator;
     }
-    
+
     /**
      * Sets minimum depth required to render breadcrumbs
      *
@@ -102,7 +102,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
     {
         $this->_minDepth = (int)$minDepth;
     }
-    
+
     /**
      * Returns minimum depth required to render breadcrumbs
      *
@@ -112,7 +112,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
     {
         return $this->_minDepth;
     }
-    
+
     /**
      * Sets whether last page in breadcrumb should be hyperlinked
      *
@@ -123,7 +123,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
     {
         $this->_linkLast = (bool)$linkLast;
     }
-    
+
     /**
      * Returns whether last page in breadcrumb should be hyperlinked
      *
@@ -133,7 +133,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
     {
         return $this->_linkLast;
     }
-    
+
     /**
      * Render breadcrumbs for a navigation container
      *
@@ -150,20 +150,20 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
         $indent = (null !== $indent)
                 ? $this->_getWhitespace($indent)
                 : $this->getIndent();
-        
+
         if (null === $container) {
             $container = $this->getNavigation();
         }
-        
+
         // init html
         $html = '';
-        
+
         // stuff to use in the two steps below
         $found = false;
         $depth = -1;
         $iterator = new RecursiveIteratorIterator($container,
             RecursiveIteratorIterator::CHILD_FIRST);
-        
+
         // step 1: find the deepest active page
         foreach ($iterator as $page) {
             if (!$this->_accept($page)) {
@@ -175,7 +175,7 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
                 $depth = $iterator->getDepth();
             }
         }
-        
+
         // step 2: walk back to root
         if ($depth >= $this->_minDepth) {
             // put the current page last
@@ -183,13 +183,13 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
                 $html = $this->getPageAnchor($found);
             } else {
                 $html = $found->getLabel();
-                
+
                 // translate if possible
                 if ($this->_useTranslator && $t = $this->_getTranslator()) {
                     $html = $t->translate($html);
                 }
             }
-            
+
             // loop parents and prepend
             while ($parent = $found->getParent()) {
                 if ($parent instanceof Zym_Navigation_Page) {
@@ -197,22 +197,22 @@ class Zym_View_Helper_Breadcrumbs extends Zym_View_Helper_NavigationAbstract
                           . $this->getSeparator()
                           . $html;
                 }
-                
-                if ($parent == $container) {
+
+                if ($parent === $container) {
                     // break if at the root of the given container
                     break;
                 }
-                
+
                 $found = $parent;
             }
         }
-        
+
         return strlen($html) ? $indent . $html . "\n" : "\n";
     }
-    
+
     /**
      * Renders the registered container
-     * 
+     *
      * @param string|int $indent  [optional]
      * @return string
      */
