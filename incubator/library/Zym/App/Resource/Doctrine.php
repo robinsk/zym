@@ -47,6 +47,13 @@ class Zym_App_Resource_Doctrine extends Zym_App_Resource_Abstract
     );
     
     /**
+     * Charset for connections
+     *
+     * @var string
+     */
+    protected $_charset;
+    
+    /**
      * Default config
      *
      * @var array
@@ -61,6 +68,8 @@ class Zym_App_Resource_Doctrine extends Zym_App_Resource_Abstract
                 'sql_path'            =>  'data/doctrine/data/sql',
                 'yaml_schema_path'    =>  'data/doctrine/schema'
             ),
+            
+            'charset'    => null,
             
             'connection' => array()
         )
@@ -79,10 +88,16 @@ class Zym_App_Resource_Doctrine extends Zym_App_Resource_Abstract
             $this->setPathConfig($config->path_config->toArray());
         }
         
+        if ($charset = $config->get('charset')) {
+            $listener = new Zym_App_Resource_Doctrine_ConnectionListener();
+            $listener->setCharset($charset);
+            Doctrine_Manager::getInstance()->addListener($listener);
+        }
+        
         // determine if config is for a single-db or a multi-db site
         $connections = $config->connection instanceof Zend_Config
                      ? $config->connection->toArray()
-                     : array($onfig->connection);
+                     : (array) $config->connection;
 
         // add connection(s) to doctrine
         foreach ($connections as $name => $connection) {
