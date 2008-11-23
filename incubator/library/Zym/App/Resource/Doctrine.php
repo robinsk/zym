@@ -47,13 +47,6 @@ class Zym_App_Resource_Doctrine extends Zym_App_Resource_Abstract
     );
     
     /**
-     * Charset for connections
-     *
-     * @var string
-     */
-    protected $_charset;
-    
-    /**
      * Default config
      *
      * @var array
