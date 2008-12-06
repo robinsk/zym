@@ -38,6 +38,13 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
      * @var string
      */
     protected $_ulClass = 'navigation';
+    
+    /**
+     * Whether a parent page should be active if a child is active
+     *
+     * @var bool
+     */
+    protected $_parentActive = true;
 
     /**
      * Retrieves helper and optionally sets container to operate on
@@ -118,6 +125,30 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
     {
         return $this->_ulClass;
     }
+    
+    /**
+     * Sets a flag indicating whether a parent page should be rendered as
+     * active if a child page is active
+     *
+     * @param bool $flag
+     * @return Zym_View_Helper_Menu
+     */
+    public function setParentActive($flag)
+    {
+        $this->_parentActive = (bool) $flag;
+        return $this;
+    }
+    
+    /**
+     * Returns a flag indicating whether a parent page should be rendered as
+     * active if a child is active
+     *
+     * @return bool
+     */
+    public function getParentActive()
+    {
+        return $this->_parentActive;
+    }
 
     /**
      * Renders ul list menu for the given container
@@ -149,7 +180,9 @@ class Zym_View_Helper_Menu extends Zym_View_Helper_NavigationAbstract
             }
 
             // create li element for page
-            $liCss = $page->isActive(true) ? ' class="active"' : '';
+            $liCss = $page->isActive($this->getParentActive())
+                   ? ' class="active"'
+                   : '';
             $html .= "$indent    <li$liCss>\n";
 
             // create anchor element
