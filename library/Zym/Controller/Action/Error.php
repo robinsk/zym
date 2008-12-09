@@ -73,11 +73,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
      *
      * @var array
      */
-    private $_errorHandlers = array(
-        Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => 'not-found',
-        Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => 'not-found',
-        Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => 'internal'
-    );
+    private $_errorHandlers = array();
 
     /**
      * Fall back map
@@ -130,6 +126,26 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
         // Setup default fallback
         $defaultModule = $this->getFrontController()->getDefaultModule();
         $this->setFallBack('error', 'error', $defaultModule);
+        
+        // Error Handling map
+        $this->setErrorHandlers(array(
+            Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => array(
+                self::ACTION     => 'not-found',
+                self::CONTROLLER => 'error',
+                self::MODULE     => $defaultModule
+            ),
+            Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION     => array(
+                self::ACTION     => 'not-found',
+                self::CONTROLLER => 'error',
+                self::MODULE     => $defaultModule
+            ),
+
+            Zym_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER         => array(
+                self::ACTION     => 'internal',
+                self::CONTROLLER => 'error',
+                self::MODULE     => $defaultModule
+            )
+        ));
 
         // Call Parent
         parent::__construct($request, $response, $invokeArgs);
@@ -169,7 +185,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
         // Prevent looping to the same place
         if (strcasecmp($fallBack[self::MODULE], $currentModule) === 0 || $fallBack[self::MODULE] === null) {
             $isValidFall = !(strcasecmp($fallBack[self::CONTROLLER], $currentController) === 0
-                            && $fallBack[self::ACTION] == 'error');
+                                && $fallBack[self::ACTION] == 'error');
         } else {
             $isValidFall = true;
         }
@@ -270,7 +286,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
      * @param array $params
      * @return Zym_Controller_Action_Error
      */
-    public function addErrorHandler($type, $action, $controller = null, $module = null, array $params = null)
+    public function addErrorHandler($type, $action, $controller = null, $module = null, array $params = array())
     {
         $this->_errorHandlers[$type] = array(
             self::ACTION     => $action,
@@ -325,7 +341,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
      *
      * @return Zym_Controller_Action_Error
      */
-    public function setFallBack($action, $controller = null, $module = null, array $params = null)
+    public function setFallBack($action, $controller = null, $module = null, array $params = array())
     {
         $this->_fallBack = array(
             self::ACTION     => $action,
