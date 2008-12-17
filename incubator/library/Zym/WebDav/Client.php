@@ -31,7 +31,9 @@ class Zym_WebDav_Client
 {
     const HEADER_DAV = 'DAV';
     const HEADER_DEPTH = 'Depth';
+    
     const DESTINATION = 'Destination';
+    
     const HEADER_IF = 'If';
     const HEADER_LOCK_TOKEN = 'Lock-Token';
     
@@ -238,7 +240,7 @@ class Zym_WebDav_Client
     public function copy($source, $destination, $overwrite = null, $depth = null)
     {
         $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path))
+        $client->setUri($this->getServer() . $this->_cleanPath($source))
                ->setHeaders(array(
                    self::DESTINATION => $this->getServer() . $this->_cleanPath($destination)
                ));
