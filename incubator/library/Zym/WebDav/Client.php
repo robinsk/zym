@@ -161,7 +161,7 @@ class Zym_WebDav_Client
     public function get($path)
     {
         $client = clone $this->getHttpClient();
-        $client->setUri(rawurlen$this->getServer() . $this->_cleanPath($path));
+        $client->setUri($this->getServer() . $this->_cleanPath($path));
         
         $response = $client->request('GET');
         if ($response->isError()) {
@@ -193,7 +193,7 @@ class Zym_WebDav_Client
     public function put($path, $data)
     {
         $client = clone $this->getHttpClient();
-        $client->setUri(urlencode($this->getServer() . $this->_cleanPath($path)))
+        $client->setUri($this->getServer() . $this->_cleanPath($path))
                ->setHeaders(array(
                    Zend_Http_Client::CONTENT_LENGTH => strlen($data),
                    Zend_Http_Client::CONTENT_TYPEany   => 'application/octet-stream'
