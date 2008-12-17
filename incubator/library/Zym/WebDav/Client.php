@@ -269,7 +269,7 @@ class Zym_WebDav_Client
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
         
-        $capabilities = explode(',', $response->getHeader('DAV'));
+        $capabilities = $response->getHeader('DAV');
         return $capabilities;
     }
     
