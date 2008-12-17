@@ -270,7 +270,16 @@ class Zym_WebDav_Client
         }
         
         $capabilities = $response->getHeader('DAV');
-        return $capabilities;
+        $return       = array();
+        foreach ($capabilities as $capability) {
+            if (strpos($capability, ',') !== false) {
+                array_merge($return, explode(',', $capability));
+            } else {
+                $return[] = $capability;
+            }
+        }
+        
+        return $return;
     }
     
     /**
