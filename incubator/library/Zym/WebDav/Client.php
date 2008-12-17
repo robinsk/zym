@@ -118,7 +118,7 @@ class Zym_WebDav_Client
         array_walk($encodedPath, 'rawurlencode');
         $encodedPath = implode('/', $encodedPath);
         
-        $server      = strstr($server, $path, true) . $encodedPath;
+        $server      = strstr($server, $path, true) . '/' . $encodedPath;
         
         $this->_server = rtrim($server, '/\\') . '/';
         
