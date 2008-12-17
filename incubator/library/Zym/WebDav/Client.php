@@ -115,13 +115,17 @@ class Zym_WebDav_Client
     {
         $path        = parse_url($server, PHP_URL_PATH);
         $encodedPath = explode('/', $path);
-        array_walk($encodedPath, 'rawurlencode');
-        $encodedPath = implode('/', $encodedPath);
         
-        $server      = strstr($server, $path, true) . '/' . $encodedPath;
+        foreach($encodedPath as &$item) {
+            $item = rawurlencode($item);
+        }
+        unset($item);
+        
+        $encodedPath = implode('/', $encodedPath);
+
+        $server      = substr($server, 0, strrpos($server, $path)) . '/' . $encodedPath;
         
         $this->_server = rtrim($server, '/\\') . '/';
-        
         return $this;
     }
     
@@ -181,7 +185,7 @@ class Zym_WebDav_Client
     public function getToFile($path, $destination)
     {
         $response = $this->get($path);
-        file_put_contens($destination, $response);
+        file_put_contents($destination, $response);
     }
     
     /**
@@ -329,9 +333,13 @@ class Zym_WebDav_Client
     protected function _cleanPath($path)
     {
         $path = explode('/', $path);
-        array_walk($encodedPath, 'rawurlencode');
-        $path = implode('/', $path);
+        foreach($path as &$item) {
+            $item = rawurlencode($item);
+        }
+        unset($item);
         
+        $path = implode('/', $path);
+
         return ltrim($path, '/\\');
     }
 }
