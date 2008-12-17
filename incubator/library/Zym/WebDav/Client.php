@@ -273,7 +273,7 @@ class Zym_WebDav_Client
         $return       = array();
         foreach ($capabilities as $capability) {
             if (strpos($capability, ',') !== false) {
-                array_merge($return, explode(',', $capability));
+                $return = array_merge($return, explode(',', $capability));
             } else {
                 $return[] = $capability;
             }
