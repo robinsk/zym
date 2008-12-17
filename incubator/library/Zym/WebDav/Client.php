@@ -200,7 +200,7 @@ class Zym_WebDav_Client
         $client->setUri($this->getServer() . $this->_cleanPath($path))
                ->setHeaders(array(
                    Zend_Http_Client::CONTENT_LENGTH => strlen($data),
-                   Zend_Http_Client::CONTENT_TYPEany   => 'application/octet-stream'
+                   Zend_Http_Client::CONTENT_TYPE   => 'application/octet-stream'
                ))
                ->setRawData($data);
         
