@@ -289,7 +289,7 @@ class Zym_WebDav_Client
         
         $capabilities = $response->getHeader('DAV');
         $return       = array();
-        foreach ($capabilities as $capability) {
+        foreach ((array) $capabilities as $capability) {
             if (strpos($capability, ',') !== false) {
                 $return = array_merge($return, explode(',', $capability));
             } else {
