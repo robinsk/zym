@@ -94,8 +94,14 @@ class Zym_WebDav_Client
      *
      * @return Zym_WebDav_Client
      */
-    public function getHttpClient()
+    public function getHttpClient($path = null)
     {
+        if ($path !== null) {
+            $client = clone $this->_httpClient;
+            $client->setUri(rawurlencode($this->getServer() . $this->_cleanPath($path)));
+            return $client;
+        }
+        
         return $this->_httpClient;
     }
     
@@ -107,7 +113,15 @@ class Zym_WebDav_Client
      */
     public function setServer($server)
     {
+        $path        = parse_url($server, PHP_URL_PATH);
+        $encodedPath = explode('/', $path);
+        array_walk($encodedPath, 'rawurlencode');
+        $encodedPath = implode('/', $encodedPath);
+        
+        $server      = strstr($server, $path, true) . $encodedPath;
+        
         $this->_server = rtrim($server, '/\\') . '/';
+        
         return $this;
     }
     
@@ -147,7 +161,7 @@ class Zym_WebDav_Client
     public function get($path)
     {
         $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        $client->setUri(rawurlen$this->getServer() . $this->_cleanPath($path));
         
         $response = $client->request('GET');
         if ($response->isError()) {
@@ -179,7 +193,7 @@ class Zym_WebDav_Client
     public function put($path, $data)
     {
         $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path))
+        $client->setUri(urlencode($this->getServer() . $this->_cleanPath($path)))
                ->setHeaders(array(
                    Zend_Http_Client::CONTENT_LENGTH => strlen($data),
                    Zend_Http_Client::CONTENT_TYPEany   => 'application/octet-stream'
@@ -314,6 +328,10 @@ class Zym_WebDav_Client
      */
     protected function _cleanPath($path)
     {
+        $path = explode('/', $path);
+        array_walk($encodedPath, 'rawurlencode');
+        $path = implode('/', $path);
+        
         return ltrim($path, '/\\');
     }
 }
