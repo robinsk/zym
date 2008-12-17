@@ -31,10 +31,14 @@ class Zym_WebDav_Client
 {
     const HEADER_DAV = 'DAV';
     const HEADER_DEPTH = 'Depth';
-    const HEADER_DESTINATION = 'Destination';
+    const DESTINATION = 'Destination';
     const HEADER_IF = 'If';
     const HEADER_LOCK_TOKEN = 'Lock-Token';
-    const HEADER_OVERWRITE = 'Overwrite';
+    
+    const OVERWRITE   = 'Overwrite';
+    const OVERWRITE_T = 'T';
+    const OVERWRITE_F = 'F';
+    
     const HEADER_STATUS_URI = 'Status-URI';
     
     const DEPTH          = 'Depth';
@@ -68,7 +72,7 @@ class Zym_WebDav_Client
     public function __construct($server, $username = null, $password = null)
     {
         $client = new Zend_Http_Client();
-        $client->setConfig(array('Zym_WebDav_Client'));
+        $client->setConfig(array('useragent' =>  'Zym_WebDav_Client'));
         $client->setAuth($username, $password);
         
         $this->setHttpClient($client);
@@ -223,9 +227,37 @@ class Zym_WebDav_Client
         return $this->put($path, $contents);
     }
     
-    public function copy($source, $destination, $overwrite = false)
+    /**
+     * Copy a resource
+     *
+     * @param string $source
+     * @param string $destination
+     * @param boolean $overwrite
+     * @param string $depth
+     */
+    public function copy($source, $destination, $overwrite = null, $depth = null)
     {
+        $client = clone $this->getHttpClient();
+        $client->setUri($this->getServer() . $this->_cleanPath($path))
+               ->setHeaders(array(
+                   self::DESTINATION => $this->getServer() . $this->_cleanPath($destination)
+               ));
         
+        if ($overwrite !== null) {
+            $overwrite = ($overwrite) ? self::OVERWRITE_T : self::OVERWRITE_F;
+
+            $client->setHeaders(array(self::OVERWRITE => $overwrite));
+        }
+        
+        if ($depth !== null) {
+            $client->setHeaders(array(self::DEPTH => $depth));
+        }
+        
+        $response = $client->request('COPY');
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
     }
     
     public function move($source, $destination, $overwrite = false)
