@@ -149,7 +149,7 @@ class Zym_WebDav_Client
         $client = clone $this->getHttpClient();
         $client->setUri($this->getServer() . $this->_cleanPath($path));
         
-        $response = $client->request('MKCOL');
+        $response = $client->request('GET');
         if ($response->isError()) {
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
