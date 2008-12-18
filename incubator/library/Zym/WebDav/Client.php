@@ -29,24 +29,107 @@ require_once 'Zend/Http/Client.php';
  */
 class Zym_WebDav_Client
 {
-    const HEADER_DAV = 'DAV';
-    const HEADER_DEPTH = 'Depth';
+    /**
+     * DAV header
+     *
+     * @var string
+     */
+    const DAV = 'DAV';
     
+    /**
+     * DAV compatibility 1
+     */
+    const DAV_LEVEL1 = 1;
+    
+    /**
+     * DAV compatibility 2
+     */
+    const DAV_LEVEL2 = 2;
+    
+    /**
+     * DAV compatibility with DeltaV
+     */
+    const DAV_DELTAV = 'deltav';
+    
+    /**
+     * Destination header
+     */
     const DESTINATION = 'Destination';
     
-    const HEADER_IF = 'If';
-    const HEADER_LOCK_TOKEN = 'Lock-Token';
+    /**
+     * Depth header
+     */
+    const DEPTH          = 'Depth';
     
+    /**
+     * Depth 0
+     */
+    const DEPTH_0        = 0;
+    
+    /**
+     * Depth 1
+     */
+    const DEPTH_1        = 1;
+    
+    /**
+     * Depth Infinity
+     */
+    const DEPTH_INFINITY = 'infinity';
+    
+    /**
+     * If Header
+     */
+    const IF = 'If';
+    
+    /**
+     * Lock-Token Header
+     */
+    const LOCK_TOKEN           = 'Lock-Token';
+    
+    /**
+     * Lock Scope Exclusive
+     */
+    const LOCK_SCOPE_EXCLUSIVE = 'exclusive';
+    
+    /**
+     * Lock Scope Shared
+     */
+    const LOCK_SCOPE_SHARED    = 'shared';
+    
+    /**
+     * Lock Type Write
+     */
+    const LOCK_TYPE_WRITE      = 'write';
+    
+    /**
+     * Overwrite Header
+     */
     const OVERWRITE   = 'Overwrite';
+    
+    /**
+     * Overwrite True
+     */
     const OVERWRITE_T = 'T';
+    
+    /**
+     * Overwrite False
+     */
     const OVERWRITE_F = 'F';
     
-    const HEADER_STATUS_URI = 'Status-URI';
+    /**
+     * Status-URI Header
+     */
+    const STATUS_URI = 'Status-URI';
     
-    const DEPTH          = 'Depth';
-    const DEPTH_0        = 0;
-    const DEPTH_1        = 1;
-    const DEPTH_INFINITY = 'infinity';
+    /**
+     * Timeout Header
+     */
+    const TIMEOUT = 'Timeout';
+    
+    /**
+     * Timeout Infinite
+     */
+    const TIMEOUT_INFINITY = 2147483647;
     
     /**
      * WebDav Server
@@ -262,12 +345,45 @@ class Zym_WebDav_Client
         }
     }
     
-    public function move($source, $destination, $overwrite = false)
+    /**
+     * Move a resource
+     *
+     * @param string $source
+     * @param string $destination
+     * @param boolean $overwrite
+     * @param string $depth
+     */
+    public function move($source, $destination, $overwrite = null, $depth = null)
+    {
+        $client = clone $this->getHttpClient();
+        $client->setUri($this->getServer() . $this->_cleanPath($source))
+               ->setHeaders(array(
+                   self::DESTINATION => $this->getServer() . $this->_cleanPath($destination)
+               ));
+        
+        if ($overwrite !== null) {
+            $overwrite = ($overwrite) ? self::OVERWRITE_T : self::OVERWRITE_F;
+
+            $client->setHeaders(array(self::OVERWRITE => $overwrite));
+        }
+        
+        if ($depth !== null) {
+            $client->setHeaders(array(self::DEPTH => $depth));
+        }
+        
+        $response = $client->request('MOVE');
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
+    }
+    
+    public function lock($path, $owner, $scope, $timeout, $depth = null)
     {
         
     }
     
-    public function lock($path, $owner)
+    public function refreshOpaqueLockToken($path, $token, $timeout)
     {
         
     }
