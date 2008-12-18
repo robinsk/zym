@@ -31,8 +31,6 @@ class Zym_WebDav_Client
 {
     /**
      * DAV header
-     *
-     * @var string
      */
     const DAV = 'DAV';
 
@@ -45,11 +43,6 @@ class Zym_WebDav_Client
      * DAV compatibility 2
      */
     const DAV_LEVEL2 = 2;
-
-    /**
-     * DAV compatibility with DeltaV
-     */
-    const DAV_DELTAV = 'deltav';
 
     /**
      * Destination header
@@ -405,6 +398,14 @@ class Zym_WebDav_Client
         }
     }
 
+    /**
+     * Find property
+     *
+     * @param string $path
+     * @param array $properties
+     * @param mixed $depth
+     * @return array
+     */
     public function findProperty($path, array $properties = array(), $depth = null)
     {
         $client = $this->getHttpClient();
@@ -414,16 +415,18 @@ class Zym_WebDav_Client
             $client->setHeaders(array(self::DEPTH => $depth));
         }
 
-        $header = '<?xml version="1.0" encoding="UTF-8"?>'
-                    . '<propfind xmlns:D="DAV:"></propfind>';
-        $xml  = @simplexml_load_string($header);
-        $prop = $xml->addChild('prop', null, 'DAV:');
-        foreach ($properties as $property) {
-            $prop->addChild($property, null, 'DAV:');
+        if (count($properties)) {
+            $header = '<?xml version="1.0" encoding="UTF-8"?>'
+                        . '<propfind xmlns="DAV:"></propfind>';
+            $xml  = @simplexml_load_string($header);
+            $prop = $xml->addChild('prop', null, 'DAV:');
+            foreach ($properties as $property) {
+                $prop->addChild($property, null, 'DAV:');
+            }
+        
+            $client->setRawData($xml->asXML());
         }
         
-        $client->setRawData($xml->asXML());
-
         $response = $client->request('PROPFIND');
 
         if ($response->isError()) {
@@ -431,39 +434,26 @@ class Zym_WebDav_Client
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
         
-        $return = $this->_parsePropFind($reponse->getBody());
+        $return = $this->_parsePropFind($response->getBody());
         
         return $return;
     }
 
-    public function getProperties($path)
+    /**
+     * Get property List
+     *
+     * @param string $path
+     * @param string $depth
+     */
+    public function getPropertyList($path, $depth = null)
     {
         $client = $this->getHttpClient();
         $client->setUri($this->getServer() . $this->_cleanPath($path));
-
-        $header = '<?xml version="1.0" encoding="UTF-8"?>'
-                    . '<propfind xmlns:D="DAV:"></propfind>';
-        $xml = @simplexml_load_string($header);
-        $xml->addChild('allprop', null, 'DAV:');
-        $client->setRawData($xml->asXML());
-
-        $response = $client->request('PROPFIND');
         
-        if ($response->isError()) {
-            require_once 'Zym/WebDav/Client/Exception.php';
-            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        if ($depth !== null) {
+            $client->setHeaders(array(self::DEPTH => $depth));
         }
         
-        $return = $this->_parsePropFind($reponse->getBody());
-        
-        return $return;
-    }
-
-    public function getPropertyList($path)
-    {
-        $client = $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));;
-
         $header = '<?xml version="1.0" encoding="UTF-8"?>'
                     . '<propfind xmlns="DAV:"></propfind>';
         $xml = @simplexml_load_string($header);
@@ -477,12 +467,12 @@ class Zym_WebDav_Client
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
         
-        $return = $this->_parsePropFind($reponse->getBody());
+        $return = $this->_parsePropName($response->getBody());
         
         return $return;
     }
 
-    public function setProperty($path, $name, $namespace = null, $namespaceInfo = null)
+    public function setProperty($path, $name, $value, $namespace = null, $namespaceInfo = null)
     {}
 
     public function removeProperty($path, $name, $namespace = null, $namespaceInfo = null)
@@ -597,33 +587,131 @@ class Zym_WebDav_Client
         }
     }
     
+    /**
+     * Parse propfind request
+     *
+     * @param string $xml
+     * @return array
+     */
     protected function _parsePropFind($xml)
     {
         $xml     = @simplexml_load_string($xml);
         $return  = array();
+        if (!$xml instanceof SimpleXMLElement) {
+            return $return;
+        }
+        
         foreach ($xml->children('DAV:') as $response) {
             $href = (string) urldecode($response->href);
             $return[$href] = array();
 
             foreach ($response->propstat as $propstat) {
-                if ($this->_extractCode($propstat->status) == 200) {
-                    foreach ($propstat->prop as $prop) {
-                        foreach ($prop as $name => $value) {
-                            $return[$href][$name] = (string) $value; 
-                        }
-                    }
-                    
-                    continue;
+                foreach ($propstat->prop as $prop) {
+                    $return[$href] = $this->_toArray($propstat->prop);
                 }
-                
+            }
+        }
+        
+        return $return;
+    }
+    
+    /**
+     * Parse property names from propname request
+     * 
+     * @param string $xml
+     * @return array
+     */
+    protected function _parsePropName($xml)
+    {
+        $xml     = @simplexml_load_string($xml);
+        $return  = array();
+        if (!$xml instanceof SimpleXMLElement) {
+            return $return;
+        }
+        
+        foreach ($xml->children('DAV:') as $response) {
+            $href = (string) urldecode($response->href);
+            $return[$href] = array();
+
+            foreach ($response->propstat as $propstat) {
                 foreach ($propstat->prop as $prop) {
                     foreach ($prop as $name => $value) {
-                        $return[$href][$name] = null; 
+                        $return[$href][] = $name; 
                     }
                 }
             }
         }
         
         return $return;
+    }
+    
+    /**
+     * Returns a string or an associative and possibly multidimensional array from
+     * a SimpleXMLElement.
+     *
+     * @param  SimpleXMLElement $xmlObject Convert a SimpleXMLElement into an array
+     * @return array|string
+     */
+    protected function _toArray(SimpleXMLElement $xmlObject)
+    {
+        $config = array();
+        
+        foreach ($xmlObject->getNamespaces() as $namespace) {
+            // Search for parent node values
+            if (count($xmlObject->attributes()) > 0) {
+                foreach ($xmlObject->attributes() as $key => $value) {
+                    $value = (string) $value;
+
+                    if (array_key_exists($key, $config)) {
+                        if (!is_array($config[$key])) {
+                            $config[$key] = array($config[$key]);
+                        }
+
+                        $config[$key][] = $value;
+                    } else {
+                        $config[$key] = $value;
+                    }
+                }
+            }
+            
+            // Search for children
+            if (count($xmlObject->children($namespace)) > 0) {
+                foreach ($xmlObject->children($namespace) as $key => $value) {
+                    foreach ($value->getNamespaces() as $namespace) {
+                        if (count($value->children($namespace)) > 0) {
+                            $value = $this->_toArray($value);
+                        } else if (count($value->attributes($namespace)) > 0) {
+                            $attributes = $value->attributes($namespace);
+                            if (isset($attributes['value'])) { // leaving it for now
+                                $value = (string) $attributes['value'];
+                            } else {
+                                $value = $this->_toArray($value);
+                            }
+                        } else {
+                            $value = (string) $value;
+                        }
+
+
+                        if (array_key_exists($key, $config)) {
+                            if (!is_array($config[$key]) || !array_key_exists(0, $config[$key])) {
+                                $config[$key] = array($config[$key]);
+                            }
+
+                            $config[$key][] = $value;
+                        } else {
+                            $config[$key] = $value;
+                        }
+                    }
+                }
+            }  
+        }
+        
+        if (count($config) === 0) {
+            // Object has no children nor attributes
+            // attribute: it's a string
+            $config = (string) $xmlObject;
+        }
+
+        return $config;
     }
 }
