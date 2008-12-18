@@ -77,11 +77,6 @@ class Zym_WebDav_Client
     const DEPTH_INFINITY = 'infinity';
     
     /**
-     * If Header
-     */
-    const IF = 'If';
-    
-    /**
      * Lock-Token Header
      */
     const LOCK_TOKEN           = 'Lock-Token';
