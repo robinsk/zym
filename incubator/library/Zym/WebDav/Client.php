@@ -233,7 +233,7 @@ class Zym_WebDav_Client
      *
      * @param string $path
      */
-    public function mkcol($path)
+    public function createCollection($path)
     {
         $client = clone $this->getHttpClient();
         $client->setUri($this->getServer() . $this->_cleanPath($path));
@@ -350,8 +350,8 @@ class Zym_WebDav_Client
      *
      * @param string $source
      * @param string $destination
-     * @param boolean $overwrite
-     * @param string $depth
+     * @param string $overwrite   {@see self::OVERWRITE_T} or {@see self::OVERWRITE_F}
+     * @param string $depth       
      */
     public function move($source, $destination, $overwrite = null, $depth = null)
     {
@@ -393,12 +393,33 @@ class Zym_WebDav_Client
         
     }
     
+    /**
+     * Delete a file or collection
+     *
+     * @param string $path
+     */
     public function delete($path)
     {
+        $client = clone $this->getHttpClient();
+        $client->setUri($this->getServer() . $this->_cleanPath($path));
         
+        $response = $client->request('DELETE');
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
     }
     
-    public function propfind($path, $properties = null, $depth = null)
+    public function findProperty($path, $properties = null, $depth = null, $type = null)
+    {}
+    
+    public function findPropertyByType($path, $type)
+    {}
+    
+    public function setProperty($path, $name, $namespace = null, $namespaceInfo = null)
+    {}
+    
+    public function removeProperty($path, $name, $namespace = null, $namespaceInfo = null)
     {}
     
     /**
