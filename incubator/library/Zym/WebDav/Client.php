@@ -376,9 +376,27 @@ class Zym_WebDav_Client
 
     }
 
-    public function unlock($path, $owner)
+    /**
+     * Unlock a file or collection
+     *
+     * @param string $path
+     * @param string $lockToken
+     * @return boolean
+     */
+    public function unlock($path, $lockToken)
     {
+        $client = clone $this->getHttpClient();
+        $client->setUri($this->getServer() . $this->_cleanPath($source))
+               ->setHeaders(array(
+                   self::LOCK_TOKEN => sprintf('<%s>', $lockToken)
+               ));
 
+        $response = $client->request('UNLOCK');
+        if ($response->isError()) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -472,11 +490,136 @@ class Zym_WebDav_Client
         return $return;
     }
 
-    public function setProperty($path, $name, $value, $namespace = null, $namespaceInfo = null)
-    {}
+    /**
+     * Set property
+     *
+     * @param string $path
+     * @param string $name
+     * @param mixed $value
+     * @param string $namespaceUri
+     */
+    public function setProperty($path, $name, $value, $namespaceUri = null)
+    {
+        $client = $this->getHttpClient();
+        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        
+        if ($depth !== null) {
+            $client->setHeaders(array(self::DEPTH => $depth));
+        }
 
-    public function removeProperty($path, $name, $namespace = null, $namespaceInfo = null)
-    {}
+        if ($namespaceUri === null) {
+            $namespaceUri = 'DAV:';
+        }
+
+        // Create request
+        $dom = new DomDocument('1.0', 'UTF-8');
+        
+        $root = $dom->createElementNS('DAV:', 'D:propertyupdate');
+        $set  = $dom->createElementNS('DAV:', 'D:set');
+        $prop = $dom->createElementNS('DAV', 'D:prop');
+        $item = $dom->createElementNS($namespaceUri, $name, $value);
+        
+        $prop->appendChild($item);
+        $set->appendChild($prop);
+        $root->appendChild($set);
+        $dom->appendChild($root);
+            
+        $client->setRawData($xml);
+
+        $response = $client->request('PROPPATCH');
+                
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
+        
+        // Parse multistatus to ensure success
+        $return = $this->_parsePropPatch($response->getBody());
+        foreach ($return as $href) {
+            foreach ($href as $prop => $propStatus) {
+                if ($prop == $name) {
+                    $statusCode = $this->_extractCode($propStatus);
+
+                    if ($statusCode == 200) {
+                        return;
+                    }
+                    
+                    $statusMessage = $this->_extractMessage($propStatus);
+                    
+                    require_once 'Zym/WebDav/Client/Exception.php';
+                    throw new Zym_WebDav_Client_Exception($statusCode. ' ' . $statusMessage);
+                }
+            }
+        }
+        
+        require_once 'Zym/WebDav/Client/Exception.php';
+        throw new Zym_WebDav_Client_Exception(sprintf('Property "%s" with value "%s" could not be set', $name, $value));
+    }
+    
+    /**
+     * Remove property
+     * 
+     * @param string $path
+     * @param string $name
+     * @param string $namespaceUri
+     */
+    public function removeProperty($path, $name, $namespaceUri = null)
+    {
+        $client = $this->getHttpClient();
+        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        
+        if ($depth !== null) {
+            $client->setHeaders(array(self::DEPTH => $depth));
+        }
+
+        if ($namespaceUri === null) {
+            $namespaceUri = 'DAV:';
+        }
+
+        // Create request
+        $dom = new DomDocument('1.0', 'UTF-8');
+        
+        $root = $dom->createElementNS('DAV:', 'D:propertyupdate');
+        $set  = $dom->createElementNS('DAV:', 'D:remove');
+        $prop = $dom->createElementNS('DAV', 'D:prop');
+        $item = $dom->createElementNS($namespaceUri, $name);
+        
+        $prop->appendChild($item);
+        $set->appendChild($prop);
+        $root->appendChild($set);
+        $dom->appendChild($root);
+            
+        $client->setRawData($xml);
+
+        $response = $client->request('PROPPATCH');
+                
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
+        
+        // Parse multistatus to ensure success
+        $return = $this->_parsePropPatch($response->getBody());
+        foreach ($return as $href) {
+            foreach ($href as $prop => $propStatus) {
+                if ($prop == $name) {
+                    $statusCode = $this->_extractCode($propStatus);
+
+                    if ($statusCode == 200) {
+                        return;
+                    }
+                    
+                    $statusMessage = $this->_extractMessage($propStatus);
+                    
+                    require_once 'Zym/WebDav/Client/Exception.php';
+                    throw new Zym_WebDav_Client_Exception($statusCode. ' ' . $statusMessage);
+                }
+            }
+        }
+        
+        require_once 'Zym/WebDav/Client/Exception.php';
+        throw new Zym_WebDav_Client_Exception(sprintf('Property "%s" with value "%s" could not be removed', $name, $value));
+    }
 
     /**
      * Get Allowed methods
@@ -588,6 +731,23 @@ class Zym_WebDav_Client
     }
     
     /**
+     * Extract the HTTP message from a response
+     *
+     * @param string $response_str
+     * @return string
+     */
+    public static function extractMessage($response)
+    {
+        preg_match("|^HTTP/[\d\.x]+ \d+ ([^\r\n]+)|", $response, $m);
+
+        if (isset($m[1])) {
+            return $m[1];
+        } else {
+            return false;
+        }
+    }
+    
+    /**
      * Parse propfind request
      *
      * @param string $xml
@@ -637,6 +797,35 @@ class Zym_WebDav_Client
                 foreach ($propstat->prop as $prop) {
                     foreach ($prop as $name => $value) {
                         $return[$href][] = $name; 
+                    }
+                }
+            }
+        }
+        
+        return $return;
+    }
+    
+    /**
+     * Parse proppatch request
+     *
+     * @param string $xml
+     * @return array
+     */
+    protected function _parsePropPatch($xml)
+    {
+        $xml     = @simplexml_load_string($xml);
+        $return  = array();
+        if (!$xml instanceof SimpleXMLElement) {
+            return $return;
+        }
+        
+        foreach ($xml->children('DAV:') as $response) {
+            $href = (string) urldecode($response->href);
+            $return[$href] = array();
+
+            foreach ($response->propstat as $propstat) {
+                foreach ($propstat->prop as $prop) {
+                        $return[$href] = array_combine($this->_toArray($propstat->prop), $propstat->status);
                     }
                 }
             }
