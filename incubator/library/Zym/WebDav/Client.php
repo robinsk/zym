@@ -112,12 +112,12 @@ class Zym_WebDav_Client
     /**
      * Timeout Header
      */
-    const TIMEOUT = 'Timeout';
+    const TIMEOUT          = 'Timeout';
 
     /**
      * Timeout Infinite
      */
-    const TIMEOUT_INFINITY = 2147483647;
+    const TIMEOUT_INFINITE = 'Infinite';
 
     /**
      * WebDav Server
@@ -144,6 +144,7 @@ class Zym_WebDav_Client
      */
     public function __construct($server, $username = null, $password = null)
     {
+        // Create default http client
         $client = new Zend_Http_Client();
         $client->setConfig(array('useragent' =>  'Zym_WebDav_Client'));
         $client->setAuth($username, $password);
@@ -169,13 +170,16 @@ class Zym_WebDav_Client
     /**
      * Get Http Client
      *
-     * @return Zym_WebDav_Client
+     * @param string $path
+     * @return Zend_Http_Client
      */
     public function getHttpClient($path = null)
     {
+        // Return with path set
         if ($path !== null) {
-            $client = clone $this->_httpClient;
-            $client->setUri(rawurlencode($this->getServer() . $this->_cleanPath($path)));
+            $client = $this->_httpClient;
+            $client->setUri($this->getServer() . $this->_cleanPath($path));
+
             return $client;
         }
 
@@ -223,8 +227,7 @@ class Zym_WebDav_Client
      */
     public function createCollection($path)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        $client = $this->getHttpClient($path);
 
         $response = $client->request('MKCOL');
         if ($response->isError()) {
@@ -241,8 +244,7 @@ class Zym_WebDav_Client
      */
     public function get($path)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        $client = $this->getHttpClient($path);
 
         $response = $client->request('GET');
         if ($response->isError()) {
@@ -273,9 +275,8 @@ class Zym_WebDav_Client
      */
     public function put($path, $data)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path))
-               ->setHeaders(array(
+        $client =  $this->getHttpClient($path);
+        $client->setHeaders(array(
                    Zend_Http_Client::CONTENT_LENGTH => strlen($data),
                    Zend_Http_Client::CONTENT_TYPE   => 'application/octet-stream'
                ))
@@ -286,6 +287,13 @@ class Zym_WebDav_Client
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
+
+        // Reset obj
+        $client->setHeaders(array(
+               Zend_Http_Client::CONTENT_TYPE   => 'text/xml',
+               Zend_Http_Client::CONTENT_LENGTH => null,
+               ))
+               ->setRawData(null);
     }
 
     /**
@@ -303,25 +311,26 @@ class Zym_WebDav_Client
     /**
      * Copy a resource
      *
-     * @param string $source
-     * @param string $destination
+     * @param string  $source
+     * @param string  $destination
      * @param boolean $overwrite
-     * @param string $depth
+     * @param string  $depth
      */
     public function copy($source, $destination, $overwrite = null, $depth = null)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($source))
-               ->setHeaders(array(
+        $client = $this->getHttpClient($source);
+        $client->setHeaders(array(
                    self::DESTINATION => $this->getServer() . $this->_cleanPath($destination)
                ));
 
+        // Overwrite
         if ($overwrite !== null) {
             $overwrite = ($overwrite) ? self::OVERWRITE_T : self::OVERWRITE_F;
 
             $client->setHeaders(array(self::OVERWRITE => $overwrite));
         }
 
+        // Depth
         if ($depth !== null) {
             $client->setHeaders(array(self::DEPTH => $depth));
         }
@@ -331,6 +340,13 @@ class Zym_WebDav_Client
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
+
+        // Reset
+        $client->setHeaders(array(
+               self::DESTINATION => null,
+               self::OVERWRITE   => null,
+               self::DEPTH       => null
+        ));
     }
 
     /**
@@ -343,18 +359,19 @@ class Zym_WebDav_Client
      */
     public function move($source, $destination, $overwrite = null, $depth = null)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($source))
-               ->setHeaders(array(
+        $client = $this->getHttpClient($source);
+        $client->setHeaders(array(
                    self::DESTINATION => $this->getServer() . $this->_cleanPath($destination)
                ));
 
+        // Overwrite
         if ($overwrite !== null) {
             $overwrite = ($overwrite) ? self::OVERWRITE_T : self::OVERWRITE_F;
 
             $client->setHeaders(array(self::OVERWRITE => $overwrite));
         }
 
+        // Depth
         if ($depth !== null) {
             $client->setHeaders(array(self::DEPTH => $depth));
         }
@@ -364,30 +381,128 @@ class Zym_WebDav_Client
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
+
+        // Reset
+        $client->setHeaders(array(
+               self::DESTINATION => null,
+               self::OVERWRITE   => null,
+               self::DEPTH       => null
+        ));
     }
 
-    public function lock($path, $owner, $scope, $timeout, $depth = null)
+    /**
+     * Lock resource
+     *
+     * @param  string  $path
+     * @param  string  $owner
+     * @param  string  $scope
+     * @param  integer $timeout
+     * @param  string  $depth
+     * @return string  Lock Token
+     */
+    public function lock($path, $owner, $scope, $timeout = null, $depth = null)
     {
+        $client = $this->getHttpClient($path);
 
+        if ($timeout !== null) {
+            $client->setHeaders(array(self::TIMEOUT => 'Second-' . (string) $timeout));
+        }
+
+        if ($depth !== null) {
+            $client->setHeaders(array(self::DEPTH => $depth));
+        }
+
+        // Create request
+        $dom = new DomDocument('1.0', 'UTF-8');
+        $root = $dom->createElementNS('DAV:', 'D:lockinfo');
+
+        // Scope (self::LOCK_SCOPE_*)
+        $lockScope = $dom->createElementNS('DAV:', 'D:lockscope');
+        $lockScope->appendChild($dom->createElementNS('DAV:', 'D:' . $scope));
+        $root->appendChild($lockScope);
+
+        // Lock type
+        $lockType = $dom->createElementNS('DAV', 'D:locktype', self::LOCK_TYPE_WRITE);
+        $root->appendChild($lockType);
+
+        //TODO: currently too lazy to allow array specification of owner
+        $lockOwner = $dom->createElementNS('DAV', 'D:owner', $owner);
+        $root->appendChild($lockOwner);
+
+        $dom->appendChild($root);
+        $client->setRawData($dom->saveXML());
+
+        $response = $client->request('LOCK');
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
+
+        // Parse multistatus to ensure success
+        $return = $this->_parseLock($response->getBody());
+        return $return;
     }
 
-    public function refreshOpaqueLockToken($path, $token, $timeout)
+    /**
+     * Refresh lock token
+     *
+     * @param string  $path
+     * @param string  $token
+     * @param integer $timeout
+     * @return array
+     */
+    public function refreshLockToken($path, $token, $timeout = null)
     {
+        $client = $this->getHttpClient($path);
 
+        if ($timeout !== null) {
+            $client->setHeaders(array(self::TIMEOUT => 'Second-' . (string) $timeout));
+        }
+
+        $client->setHeaders(array('If' => sprintf('(<%s>)', $token)));
+
+        // Create request
+        $dom = new DomDocument('1.0', 'UTF-8');
+        $root = $dom->createElementNS('DAV:', 'D:lockinfo');
+
+        // Scope (self::LOCK_SCOPE_*)
+        $lockScope = $dom->createElementNS('DAV:', 'D:lockscope');
+        $lockScope->appendChild($dom->createElementNS('DAV:', 'D:' . $scope));
+        $root->appendChild($lockScope);
+
+        // Lock type
+        $lockType = $dom->createElementNS('DAV', 'D:locktype', self::LOCK_TYPE_WRITE);
+        $root->appendChild($lockType);
+
+        //TODO: currently too lazy to allow array specification of owner
+        $lockOwner = $dom->createElementNS('DAV', 'D:owner', $owner);
+        $root->appendChild($lockOwner);
+
+        $dom->appendChild($root);
+        $client->setRawData($dom->saveXML());
+
+        $response = $client->request('LOCK');
+        if ($response->isError()) {
+            require_once 'Zym/WebDav/Client/Exception.php';
+            throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
+        }
+
+        // Parse multistatus to ensure success
+        $return = $this->_parseLock($response->getBody());
+        return $return;
     }
 
     /**
      * Unlock a file or collection
      *
-     * @param string $path
-     * @param string $lockToken
+     * @param  string  $path
+     * @param  string  $lockToken
      * @return boolean
      */
     public function unlock($path, $lockToken)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($source))
-               ->setHeaders(array(
+        $client = $this->getHttpClient($path);
+        $client->setHeaders(array(
                    self::LOCK_TOKEN => sprintf('<%s>', $lockToken)
                ));
 
@@ -395,7 +510,12 @@ class Zym_WebDav_Client
         if ($response->isError()) {
             return false;
         }
-        
+
+        // Reset
+        $client->setHeaders(array(
+                   self::LOCK_TOKEN => null
+               ));
+
         return true;
     }
 
@@ -406,8 +526,7 @@ class Zym_WebDav_Client
      */
     public function delete($path)
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        $client = $this->getHttpClient($path);
 
         $response = $client->request('DELETE');
         if ($response->isError()) {
@@ -419,20 +538,21 @@ class Zym_WebDav_Client
     /**
      * Find property
      *
-     * @param string $path
-     * @param array $properties
-     * @param mixed $depth
+     * @param  string $path
+     * @param  array  $properties
+     * @param  mixed  $depth
      * @return array
      */
     public function findProperty($path, array $properties = array(), $depth = null)
     {
-        $client = $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
+        $client = $this->getHttpClient($path);
 
+        // Depth
         if ($depth !== null) {
             $client->setHeaders(array(self::DEPTH => $depth));
         }
 
+        // Properties
         if (count($properties)) {
             $header = '<?xml version="1.0" encoding="UTF-8"?>'
                         . '<propfind xmlns="DAV:"></propfind>';
@@ -441,19 +561,23 @@ class Zym_WebDav_Client
             foreach ($properties as $property) {
                 $prop->addChild($property, null, 'DAV:');
             }
-        
+
             $client->setRawData($xml->asXML());
         }
-        
+
         $response = $client->request('PROPFIND');
 
         if ($response->isError()) {
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
-        
+
         $return = $this->_parsePropFind($response->getBody());
-        
+
+        // Reset
+        $client->setHeaders(array(self::DEPTH => null))
+               ->setRawData(null);
+
         return $return;
     }
 
@@ -465,13 +589,14 @@ class Zym_WebDav_Client
      */
     public function getPropertyList($path, $depth = null)
     {
-        $client = $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
-        
+        $client = $this->getHttpClient($path);
+
+        // Depth
         if ($depth !== null) {
             $client->setHeaders(array(self::DEPTH => $depth));
         }
-        
+
+        // Build Request
         $header = '<?xml version="1.0" encoding="UTF-8"?>'
                     . '<propfind xmlns="DAV:"></propfind>';
         $xml = @simplexml_load_string($header);
@@ -479,14 +604,18 @@ class Zym_WebDav_Client
         $client->setRawData($xml->asXML());
 
         $response = $client->request('PROPFIND');
-                
+
         if ($response->isError()) {
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
-        
+
         $return = $this->_parsePropName($response->getBody());
-        
+
+        // Reset
+        $client->setHeaders(array(self::DEPTH => null))
+               ->setRawData(null);
+
         return $return;
     }
 
@@ -495,14 +624,14 @@ class Zym_WebDav_Client
      *
      * @param string $path
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $namespaceUri
      */
     public function setProperty($path, $name, $value, $namespaceUri = null)
     {
-        $client = $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
-        
+        $client = $this->getHttpClient($path);
+
+        // Depth
         if ($depth !== null) {
             $client->setHeaders(array(self::DEPTH => $depth));
         }
@@ -513,26 +642,30 @@ class Zym_WebDav_Client
 
         // Create request
         $dom = new DomDocument('1.0', 'UTF-8');
-        
+
         $root = $dom->createElementNS('DAV:', 'D:propertyupdate');
         $set  = $dom->createElementNS('DAV:', 'D:set');
         $prop = $dom->createElementNS('DAV', 'D:prop');
         $item = $dom->createElementNS($namespaceUri, $name, $value);
-        
+
         $prop->appendChild($item);
         $set->appendChild($prop);
         $root->appendChild($set);
         $dom->appendChild($root);
-            
+
         $client->setRawData($xml);
 
         $response = $client->request('PROPPATCH');
-                
+
         if ($response->isError()) {
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
-        
+
+        // Reset
+        $client->setHeaders(array(self::DEPTH => null))
+               ->setRawData(null);
+
         // Parse multistatus to ensure success
         $return = $this->_parsePropPatch($response->getBody());
         foreach ($return as $href) {
@@ -543,31 +676,31 @@ class Zym_WebDav_Client
                     if ($statusCode == 200) {
                         return;
                     }
-                    
+
                     $statusMessage = $this->_extractMessage($propStatus);
-                    
+
                     require_once 'Zym/WebDav/Client/Exception.php';
                     throw new Zym_WebDav_Client_Exception($statusCode. ' ' . $statusMessage);
                 }
             }
         }
-        
+
         require_once 'Zym/WebDav/Client/Exception.php';
         throw new Zym_WebDav_Client_Exception(sprintf('Property "%s" with value "%s" could not be set', $name, $value));
     }
-    
+
     /**
      * Remove property
-     * 
+     *
      * @param string $path
      * @param string $name
      * @param string $namespaceUri
      */
     public function removeProperty($path, $name, $namespaceUri = null)
     {
-        $client = $this->getHttpClient();
-        $client->setUri($this->getServer() . $this->_cleanPath($path));
-        
+        $client = $this->getHttpClient($path);
+
+        // Depth
         if ($depth !== null) {
             $client->setHeaders(array(self::DEPTH => $depth));
         }
@@ -578,26 +711,29 @@ class Zym_WebDav_Client
 
         // Create request
         $dom = new DomDocument('1.0', 'UTF-8');
-        
+
         $root = $dom->createElementNS('DAV:', 'D:propertyupdate');
         $set  = $dom->createElementNS('DAV:', 'D:remove');
         $prop = $dom->createElementNS('DAV', 'D:prop');
         $item = $dom->createElementNS($namespaceUri, $name);
-        
+
         $prop->appendChild($item);
         $set->appendChild($prop);
         $root->appendChild($set);
         $dom->appendChild($root);
-            
+
         $client->setRawData($xml);
 
         $response = $client->request('PROPPATCH');
-                
+
         if ($response->isError()) {
             require_once 'Zym/WebDav/Client/Exception.php';
             throw new Zym_WebDav_Client_Exception($response->getStatus() . ' ' . $response->getMessage());
         }
-        
+
+        $client->setHeaders(array(self::DEPTH => null))
+               ->setRawData(null);
+
         // Parse multistatus to ensure success
         $return = $this->_parsePropPatch($response->getBody());
         foreach ($return as $href) {
@@ -608,15 +744,15 @@ class Zym_WebDav_Client
                     if ($statusCode == 200) {
                         return;
                     }
-                    
+
                     $statusMessage = $this->_extractMessage($propStatus);
-                    
+
                     require_once 'Zym/WebDav/Client/Exception.php';
                     throw new Zym_WebDav_Client_Exception($statusCode. ' ' . $statusMessage);
                 }
             }
         }
-        
+
         require_once 'Zym/WebDav/Client/Exception.php';
         throw new Zym_WebDav_Client_Exception(sprintf('Property "%s" with value "%s" could not be removed', $name, $value));
     }
@@ -628,8 +764,7 @@ class Zym_WebDav_Client
      */
     public function getAllowedMethods()
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer());
+        $client = $this->getHttpClient('');
 
         $response = $client->request('OPTIONS');
         if ($response->isError()) {
@@ -648,8 +783,7 @@ class Zym_WebDav_Client
      */
     public function getDavCapabilities()
     {
-        $client = clone $this->getHttpClient();
-        $client->setUri($this->getServer());
+        $client = $this->getHttpClient('');
 
         $response = $client->request('OPTIONS');
         if ($response->isError()) {
@@ -673,7 +807,7 @@ class Zym_WebDav_Client
     /**
      * Return whether method is allowed
      *
-     * @param string $method
+     * @param  string  $method
      * @return boolean
      */
     public function isMethodAllowed($method)
@@ -685,7 +819,7 @@ class Zym_WebDav_Client
     /**
      * Return whether the capability is supported
      *
-     * @param string $capability
+     * @param  string  $capability
      * @return boolean
      */
     public function isCapabilitySupported($capability)
@@ -697,7 +831,7 @@ class Zym_WebDav_Client
     /**
      * Cleans path
      *
-     * @param string $path
+     * @param  string $path
      * @return string
      */
     protected function _cleanPath($path)
@@ -712,12 +846,12 @@ class Zym_WebDav_Client
 
         return ltrim($path, '/\\');
     }
-    
+
     /**
      * Extract the response code from a response string
      *
-     * @param string $response_str
-     * @return int
+     * @param  string  $response_str
+     * @return integer
      */
     protected function _extractCode($response)
     {
@@ -729,14 +863,14 @@ class Zym_WebDav_Client
             return false;
         }
     }
-    
+
     /**
      * Extract the HTTP message from a response
      *
-     * @param string $response_str
+     * @param  string $response_str
      * @return string
      */
-    public static function extractMessage($response)
+    protected function _extractMessage($response)
     {
         preg_match("|^HTTP/[\d\.x]+ \d+ ([^\r\n]+)|", $response, $m);
 
@@ -746,11 +880,11 @@ class Zym_WebDav_Client
             return false;
         }
     }
-    
+
     /**
      * Parse propfind request
      *
-     * @param string $xml
+     * @param  string $xml
      * @return array
      */
     protected function _parsePropFind($xml)
@@ -760,7 +894,7 @@ class Zym_WebDav_Client
         if (!$xml instanceof SimpleXMLElement) {
             return $return;
         }
-        
+
         foreach ($xml->children('DAV:') as $response) {
             $href = (string) urldecode($response->href);
             $return[$href] = array();
@@ -771,14 +905,14 @@ class Zym_WebDav_Client
                 }
             }
         }
-        
+
         return $return;
     }
-    
+
     /**
      * Parse property names from propname request
-     * 
-     * @param string $xml
+     *
+     * @param  string $xml
      * @return array
      */
     protected function _parsePropName($xml)
@@ -788,7 +922,7 @@ class Zym_WebDav_Client
         if (!$xml instanceof SimpleXMLElement) {
             return $return;
         }
-        
+
         foreach ($xml->children('DAV:') as $response) {
             $href = (string) urldecode($response->href);
             $return[$href] = array();
@@ -796,19 +930,19 @@ class Zym_WebDav_Client
             foreach ($response->propstat as $propstat) {
                 foreach ($propstat->prop as $prop) {
                     foreach ($prop as $name => $value) {
-                        $return[$href][] = $name; 
+                        $return[$href][] = $name;
                     }
                 }
             }
         }
-        
+
         return $return;
     }
-    
+
     /**
      * Parse proppatch request
      *
-     * @param string $xml
+     * @param  string $xml
      * @return array
      */
     protected function _parsePropPatch($xml)
@@ -818,22 +952,68 @@ class Zym_WebDav_Client
         if (!$xml instanceof SimpleXMLElement) {
             return $return;
         }
-        
+
         foreach ($xml->children('DAV:') as $response) {
             $href = (string) urldecode($response->href);
             $return[$href] = array();
 
             foreach ($response->propstat as $propstat) {
                 foreach ($propstat->prop as $prop) {
-                        $return[$href] = array_combine($this->_toArray($propstat->prop), $propstat->status);
-                    }
+                    $return[$href] = array_combine($this->_toArray($propstat->prop), $propstat->status);
                 }
             }
         }
-        
+
         return $return;
     }
-    
+
+    /**
+     * Parse lock response
+     *
+     * @param string $xml
+     * @return array
+     */
+    protected function _parseLock($xml)
+    {
+        /*
+        <?xml version="1.0" encoding="utf-8" ?>
+        <D:prop xmlns:D="DAV:">
+            <D:lockdiscovery>
+                <D:activelock>
+                <D:locktype><D:write/></D:locktype>
+                <D:lockscope><D:exclusive/></D:lockscope>
+                <D:depth>Infinity</D:depth>
+                <D:owner>
+                    <D:href>
+                    http://www.ics.uci.edu/~ejw/contact.html
+                    </D:href>
+                </D:owner>
+                <D:timeout>Second-604800</D:timeout>
+                <D:locktoken>
+                    <D:href>
+                    opaquelocktoken:e71d4fae-5dec-22d6-fea5-00a0c91e6be4
+                    </D:href>
+                </D:locktoken>
+                </D:activelock>
+            </D:lockdiscovery>
+        </D:prop>
+        */
+
+        $xml     = @simplexml_load_string($xml);
+        $return  = array();
+        if (!$xml instanceof SimpleXMLElement) {
+            return $return;
+        }
+
+        $return = $this->_toArray($xml);
+        echo $return;
+        if (isset($return['lockdiscovery']['activelock'])) {
+            return $return;
+        }
+
+        return array();
+    }
+
     /**
      * Returns a string or an associative and possibly multidimensional array from
      * a SimpleXMLElement.
@@ -844,7 +1024,7 @@ class Zym_WebDav_Client
     protected function _toArray(SimpleXMLElement $xmlObject)
     {
         $config = array();
-        
+
         foreach ($xmlObject->getNamespaces() as $namespace) {
             // Search for parent node values
             if (count($xmlObject->attributes()) > 0) {
@@ -862,7 +1042,7 @@ class Zym_WebDav_Client
                     }
                 }
             }
-            
+
             // Search for children
             if (count($xmlObject->children($namespace)) > 0) {
                 foreach ($xmlObject->children($namespace) as $key => $value) {
@@ -892,9 +1072,9 @@ class Zym_WebDav_Client
                         }
                     }
                 }
-            }  
+            }
         }
-        
+
         if (count($config) === 0) {
             // Object has no children nor attributes
             // attribute: it's a string
