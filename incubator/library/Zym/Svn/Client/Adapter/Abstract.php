@@ -29,7 +29,7 @@ abstract class Zym_Svn_Client_Adapter_Abstract
     /**
      * Schedules the addition of an item in a working directory
      *
-     * @param string $path
+     * @param string  $path
      * @param boolean $recursive
      * @param boolean $force
      * @return array Added paths
@@ -37,12 +37,12 @@ abstract class Zym_Svn_Client_Adapter_Abstract
     abstract public function add($path, $recursive = true, $force = false);
     
     /**
-     * Returns the contens of a file in a repository
+     * Returns the contents of a file in a repository
      *
-     * @param string $repoUrl
+     * @param string  $target
      * @param integer $revision
      */
-    abstract public function cat($repoUrl, $revision = null);
+    abstract public function getContents($target, $revision = null);
     
     /**
      * Checks out a working copy from the repository
@@ -90,22 +90,22 @@ abstract class Zym_Svn_Client_Adapter_Abstract
     /**
      * Returns the commit log messages of a repository URL
      */
-    abstract public function log($url, $startRevision = null, $endRevision = null, $limit = null, $flags = null);
+    abstract public function getLog($url, $startRevision = null, $endRevision = null, $limit = null, $flags = null);
     
     /**
      * Returns list of directory contents in repository URL
      *
-     * @param string $path
+     * @param string  $path
      * @param integer $revision
      */
-    abstract public function ls($path, $revision = null);
+    abstract public function getList($path, $revision = null);
     
     /**
      * Creates a directory in a working copy or repository
      *
      * @param string $path
      */
-    abstract public function mkdir($path);
+    abstract public function createDirectory($path);
     
     /**
      * Revert changes to the working copy
@@ -135,5 +135,5 @@ abstract class Zym_Svn_Client_Adapter_Abstract
      *
      * @return integer
      */
-    abstract public function version();
+    abstract public function getVersion();
 }
