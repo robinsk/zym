@@ -857,7 +857,7 @@ class Zym_App
             if (class_exists($class, false)) {
                 return $class;
             } else {
-                include_once($dir . $file);
+                @include_once($dir . $file);
 
                 if (class_exists($class, false)) {
                     return $class;
