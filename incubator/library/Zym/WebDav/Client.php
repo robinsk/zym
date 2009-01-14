@@ -440,6 +440,13 @@ class Zym_WebDav_Client
 
         // Parse multistatus to ensure success
         $return = $this->_parseLock($response->getBody());
+
+        // Reset
+        $client->setHeaders(array(
+               self::DEPTH => null
+               ))
+               ->setRawData(null);
+
         return $return;
     }
 
@@ -461,26 +468,6 @@ class Zym_WebDav_Client
 
         $client->setHeaders(array('If' => sprintf('(<%s>)', $token)));
 
-        // Create request
-        $dom = new DomDocument('1.0', 'UTF-8');
-        $root = $dom->createElementNS('DAV:', 'D:lockinfo');
-
-        // Scope (self::LOCK_SCOPE_*)
-        $lockScope = $dom->createElementNS('DAV:', 'D:lockscope');
-        $lockScope->appendChild($dom->createElementNS('DAV:', 'D:' . $scope));
-        $root->appendChild($lockScope);
-
-        // Lock type
-        $lockType = $dom->createElementNS('DAV', 'D:locktype', self::LOCK_TYPE_WRITE);
-        $root->appendChild($lockType);
-
-        //TODO: currently too lazy to allow array specification of owner
-        $lockOwner = $dom->createElementNS('DAV', 'D:owner', $owner);
-        $root->appendChild($lockOwner);
-
-        $dom->appendChild($root);
-        $client->setRawData($dom->saveXML());
-
         $response = $client->request('LOCK');
         if ($response->isError()) {
             require_once 'Zym/WebDav/Client/Exception.php';
@@ -489,6 +476,14 @@ class Zym_WebDav_Client
 
         // Parse multistatus to ensure success
         $return = $this->_parseLock($response->getBody());
+
+        // Reset
+        $client->setHeaders(array(
+                   self::TIMEOUT => null,
+                   'If'          => null
+               ))
+               ->setRawData(null);
+
         return $return;
     }
 
@@ -631,11 +626,6 @@ class Zym_WebDav_Client
     {
         $client = $this->getHttpClient($path);
 
-        // Depth
-        if ($depth !== null) {
-            $client->setHeaders(array(self::DEPTH => $depth));
-        }
-
         if ($namespaceUri === null) {
             $namespaceUri = 'DAV:';
         }
@@ -653,7 +643,7 @@ class Zym_WebDav_Client
         $root->appendChild($set);
         $dom->appendChild($root);
 
-        $client->setRawData($xml);
+        $client->setRawData($dom->saveXML());
 
         $response = $client->request('PROPPATCH');
 
@@ -700,11 +690,6 @@ class Zym_WebDav_Client
     {
         $client = $this->getHttpClient($path);
 
-        // Depth
-        if ($depth !== null) {
-            $client->setHeaders(array(self::DEPTH => $depth));
-        }
-
         if ($namespaceUri === null) {
             $namespaceUri = 'DAV:';
         }
@@ -722,7 +707,7 @@ class Zym_WebDav_Client
         $root->appendChild($set);
         $dom->appendChild($root);
 
-        $client->setRawData($xml);
+        $client->setRawData($dom->saveXML());
 
         $response = $client->request('PROPPATCH');
 
@@ -754,7 +739,7 @@ class Zym_WebDav_Client
         }
 
         require_once 'Zym/WebDav/Client/Exception.php';
-        throw new Zym_WebDav_Client_Exception(sprintf('Property "%s" with value "%s" could not be removed', $name, $value));
+        throw new Zym_WebDav_Client_Exception(sprintf('Property "%s" could not be removed', $name));
     }
 
     /**
