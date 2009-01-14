@@ -114,14 +114,14 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
             $filesize = filesize($file);
             $time     = date('r', filemtime($file));
             $begin    = 0;
-            $end      = $filesize;
+            $end      = $filesize - 1;
             
             if ($httpRange = $request->getServer('HTTP_RANGE')) {
                 if(preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $httpRange, $matches)) {
                     $begin = (int) $matches[1];
                     $end   = (!empty($matches[2])) ? (int) $matches[2] : $filesize;
                     
-                    if ($begin > 0 || $end < $filesize) {
+                    if ($begin > 0 || $end < ()$filesize - 1)) {
                         // Partial Content
                         $response->setHttpResponseCode(206);
                     }
@@ -141,10 +141,11 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
             if ($response->getHttpResponseCode() == 206) {
                 // Handle partial response
                 $pos = $begin;
+                $fp = fopen($file, 'rb');
                 fseek($fp, $begin, 0);
 
-                while(! feof($fp) && $pos < $end && (connection_status() == 0)) { 
-                    print fread($fp, min(1024 * 16, $end - $pos));
+                while(!feof($fp) && $pos < $end && (connection_status() == 0)) { 
+                    print fread($fp, min(1024 * 16, ($end + 1) - $pos));
                     $pos += 1024 * 16;
                 }
             } else {
