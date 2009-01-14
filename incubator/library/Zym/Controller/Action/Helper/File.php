@@ -67,11 +67,8 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
             ini_set('zlib.output_compression', false);
         }
         
-        $response->sendHeaders();
-        
         set_time_limit(0);
-        
-        echo $content;
+        $response->setBody($content);
         
         // Disable layout
         if (Zend_Controller_Action_HelperBroker::hasHelper('Layout')) {
@@ -110,7 +107,7 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
             ini_set('zlib.output_compression', false);
         }
         
-        if ($this->isXSendFile()) {
+        if (self::isXSendFile()) {
             $response->setHeader('X-SendFile', $file, true);
         } else {
             $request  = $this->getRequest();
@@ -121,8 +118,8 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
             
             if ($httpRange = $request->getServer('HTTP_RANGE')) {
                 if(preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $httpRange, $matches)) {
-                    $begin = (int) $matches[0];
-                    $end   = (!empty($matches[1])) ? (int) $matches[1] : $filesize;
+                    $begin = (int) $matches[1];
+                    $end   = (!empty($matches[2])) ? (int) $matches[2] : $filesize;
                     
                     if ($begin > 0 || $end < $filesize) {
                         // Partial Content
@@ -169,13 +166,14 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
     /**
      * Use XSendFile header instead of processing files through PHP
      *
+     * Must have a server that supports the XSendFile header else
+     * you would only be getting a blank page.
+     *
      * @param boolean $flag
-     * @return Zym_Controller_Action_Helper_File
      */
-    public function useXSendFile($flag = true)
+    public static function useXSendFile($flag = true)
     {
-        $this->_useXSendFile = $flag;
-        return $this;
+        self::$_useXSendFile = $flag;
     }
     
     /**
@@ -183,8 +181,8 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
      *
      * @return boolean
      */
-    public function isXSendFile()
+    public static function isXSendFile()
     {
-        return $this->_useXSendFile;
+        return self::$_useXSendFile;
     }
 }
