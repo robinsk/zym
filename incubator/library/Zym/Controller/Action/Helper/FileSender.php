@@ -20,7 +20,7 @@
 require_once 'Zend/Controller/Action/Helper/Abstract.php';
 
 /**
- * File helper
+ * File Sending helper
  *
  * @author     Geoffrey Tran
  * @license    http://www.zym-project.com/license New BSD License
@@ -29,7 +29,7 @@ require_once 'Zend/Controller/Action/Helper/Abstract.php';
  * @subpackage Action_Helper
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
-class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Abstract
+class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Helper_Abstract
 {
     /**
      * Content-Disposition: inline
@@ -128,9 +128,20 @@ class Zym_Controller_Action_Helper_File extends Zend_Controller_Action_Helper_Ab
                 }
             }
             
+            // Only set last-modified time if none have been set
+            foreach ($response->getHeaders() as $key => $header) {
+                if (strcasecmp($header['name'], 'Last-Modified')) {
+                    $lastModifiedExists = true;
+                }
+            }
+            
+            if (!isset($lastModifiedExists)) {
+                $response->setHeader('Last-Modified', $time);
+            }
+
+            // Normal file headers
             $response->setHeader('Content-Length', $end - $begin, true)
                      ->setHeader(sprintf('Content-Range: bytes %s/%s', $begin - $end, $filesize), true)
-                     ->setHeader('Last-Modified', $time, true)
                      ->setHeader('Accept-Ranges', 'bytes', true)
                      ->setHeader('Connection', 'close', true);
                      
