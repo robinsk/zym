@@ -35,12 +35,12 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
      * Content-Disposition: inline
      */
     const CONTENT_DISPOSITION_INLINE     = 'inline';
-    
+
     /**
      * Content-Disposition: attachment
      */
     const CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
-    
+
     /**
      * Use X-SendFile header
      *
@@ -58,23 +58,23 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
     public function send($content, $filename, $type = 'application/octet-stream', $disposition = self::CONTENT_DISPOSITION_ATTACHMENT)
     {
         $response = $this->getRequest();
-        $response->setHeader('Content-Disposition', sprintf('%s, filename="%s"', $disposition, pathinfo($file, PATHINFO_BASENAME)), true)
+        $response->setHeader('Content-Disposition', sprintf('%s, filename="%s"', $disposition, $filename), true)
                  ->setHeader('Content-Type', $type, true)
-                 ->setHeader('Content-Length', strlen($content), true)
-                 
-        // Required for IE, otherwise Content-disposition is ignored 
+                 ->setHeader('Content-Length', strlen($content), true);
+
+        // Required for IE, otherwise Content-disposition is ignored
         if (ini_get('zlib.output_compression')) {
             ini_set('zlib.output_compression', false);
         }
-        
+
         set_time_limit(0);
         $response->setBody($content);
-        
+
         // Disable layout
         if (Zend_Controller_Action_HelperBroker::hasHelper('Layout')) {
             $this->getActionController()->getHelper('Layout')->disableLayout();
         }
-        
+
         // Disable ViewRenderer
         if (Zend_Controller_Action_HelperBroker::hasHelper('ViewRenderer')) {
             $this->getActionController()->getHelper('ViewRenderer')->setNoRender();
@@ -97,44 +97,44 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
             require_once 'Zym/Controller/Action/Helper/Exception.php';
             throw new Zym_Controller_Action_Helper_Exception(sprintf('File helper could not find file "%s"', $file));
         }
-        
+
         $response = $this->getRequest();
         $response->setHeader('Content-Disposition', sprintf('%s, filename="%s"', $disposition, pathinfo($file, PATHINFO_BASENAME)), true)
                  ->setHeader('Content-Type', $type, true);
-                 
-        // Required for IE, otherwise Content-disposition is ignored 
+
+        // Required for IE, otherwise Content-disposition is ignored
         if (ini_get('zlib.output_compression')) {
             ini_set('zlib.output_compression', false);
         }
-        
+
         if (self::isXSendFile()) {
             $response->setHeader('X-SendFile', $file, true);
         } else {
             $request  = $this->getRequest();
             $filesize = filesize($file);
-            $time     = date('r', filemtime($file));
+            $time     = gmdate('D, d M Y H:i:s', filemtime($file)) . ' GMT';
             $begin    = 0;
             $end      = $filesize - 1;
-            
+
             if ($httpRange = $request->getServer('HTTP_RANGE')) {
                 if(preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $httpRange, $matches)) {
                     $begin = (int) $matches[1];
                     $end   = (!empty($matches[2])) ? (int) $matches[2] : $filesize;
-                    
-                    if ($begin > 0 || $end < ()$filesize - 1)) {
+
+                    if ($begin > 0 || $end < ($filesize - 1)) {
                         // Partial Content
                         $response->setHttpResponseCode(206);
                     }
                 }
             }
-            
+
             // Only set last-modified time if none have been set
             foreach ($response->getHeaders() as $key => $header) {
                 if (strcasecmp($header['name'], 'Last-Modified')) {
                     $lastModifiedExists = true;
                 }
             }
-            
+
             if (!isset($lastModifiedExists)) {
                 $response->setHeader('Last-Modified', $time);
             }
@@ -144,18 +144,18 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
                      ->setHeader(sprintf('Content-Range: bytes %s/%s', $begin - $end, $filesize), true)
                      ->setHeader('Accept-Ranges', 'bytes', true)
                      ->setHeader('Connection', 'close', true);
-                     
+
             $response->sendHeaders();
-            
+
             set_time_limit(0);
-            
+
             if ($response->getHttpResponseCode() == 206) {
                 // Handle partial response
                 $pos = $begin;
                 $fp = fopen($file, 'rb');
                 fseek($fp, $begin, 0);
 
-                while(!feof($fp) && $pos < $end && (connection_status() == 0)) { 
+                while(!feof($fp) && $pos < $end && (connection_status() == 0)) {
                     print fread($fp, min(1024 * 16, ($end + 1) - $pos));
                     $pos += 1024 * 16;
                 }
@@ -163,18 +163,18 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
                 readfile($file);
             }
         }
-        
+
         // Disable layout
         if (Zend_Controller_Action_HelperBroker::hasHelper('Layout')) {
             $this->getActionController()->getHelper('Layout')->disableLayout();
         }
-        
+
         // Disable ViewRenderer
         if (Zend_Controller_Action_HelperBroker::hasHelper('ViewRenderer')) {
             $this->getActionController()->getHelper('ViewRenderer')->setNoRender();
         }
     }
-    
+
     /**
      * Use XSendFile header instead of processing files through PHP
      *
@@ -187,7 +187,7 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
     {
         self::$_useXSendFile = $flag;
     }
-    
+
     /**
      * Whether to use x-sendfile
      *
