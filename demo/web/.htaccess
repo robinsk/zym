@@ -28,21 +28,23 @@ Options +FollowSymLinks
 <Files ~ "^\.ht">
 	Order allow,deny
 	Deny from all
-	Allow from localhost
 </Files>
 
 ### PHP settings
-# Register globals
-php_flag register_globals off
+<IfModule mod_php5.c>
+    # Register globals
+    php_flag register_globals off
 
-# Magic quotes
-php_flag magic_quotes_gpc off
+    # Magic quotes
+    php_flag magic_quotes_gpc off
 
-# Session auto starting
-php_flag session.autostart off
+    # Session auto starting
+    php_flag session.autostart off
 
-# Short open tags
-php_flag short_open_tag on
+    # Short open tags
+    php_flag short_open_tag on
+</IfModule>
+
 
 ### Mod rewrite configuration
 <IfModule mod_rewrite.c>
