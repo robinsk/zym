@@ -53,18 +53,14 @@ Options +FollowSymLinks
 
 	# Rewrite base
 	# RewriteBase /
-
-	# Add trailing slash if url does not have it
-	#RewriteCond %{REQUEST_METHOD}    GET
-        #RewriteCond %{REQUEST_FILENAME}  !-f
-	#RewriteCond ${REQUEST_FILENAME}  !-d
-        #RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
-	#RewriteRule ^(.+)$ %{REQUEST_URI}/ [R=301,L] 
 	
-        # Rewrite urls to index.php
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^(.*)$ index.php/$1 [L]
+    # Rewrite urls to index.php
+	RewriteCond %{REQUEST_FILENAME} -f [OR]
+	RewriteCond %{REQUEST_FILENAME} -l [OR]
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteRule ^.*$ - [NC,L]
+	
+	RewriteRule ^(.*)$ index.php/$1 [NC,L]
 </IfModule>
 
 ### Output compression
