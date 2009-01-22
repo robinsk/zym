@@ -126,7 +126,7 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
         // Setup default fallback
         $defaultModule = $this->getFrontController()->getDefaultModule();
         $this->setFallBack('error', 'error', $defaultModule);
-        
+
         // Error Handling map
         $this->setErrorHandlers(array(
             Zym_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER => array(
@@ -256,17 +256,17 @@ abstract class Zym_Controller_Action_Error extends Zym_Controller_Action_Abstrac
 
         // Add them from array
         foreach ($array as $type => $options) {
-            $action     = isset($options[self::ACTION]) && is_array($options)
+            $action     = is_array($options) && isset($options[self::ACTION])
                             ? $options[self::ACTION] : (is_string($options) ? $options : null);
 
-            $controller = isset($options[self::CONTROLLER]) && is_array($options)
+            $controller = is_array($options) && isset($options[self::CONTROLLER])
                             ? $options[self::CONTROLLER] : null;
 
-            $module     = isset($options[self::MODULE]) && is_array($options)
+            $module     = is_array($options) && isset($options[self::MODULE])
                             ? $options[self::MODULE] : null;
 
-            $params     = isset($options[self::PARAMS]) && is_array($options)
-                            ? $options[self::PARAMS] : null;
+            $params     = is_array($options) && isset($options[self::PARAMS])
+                            ? $options[self::PARAMS] : array();
 
             $this->addErrorHandler($type, $action, $controller, $module, $params);
         }
