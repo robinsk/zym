@@ -116,7 +116,9 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
             $begin    = 0;
             $end      = $filesize - 1;
 
-            if ($httpRange = $request->getServer('HTTP_RANGE')) {
+            $httpRange = $request->getServer('HTTP_RANGE');
+            $matches   = null;
+            if ($httpRange) {
                 if(preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $httpRange, $matches)) {
                     $begin = (int) $matches[1];
                     $end   = (!empty($matches[2])) ? (int) $matches[2] : $filesize;
@@ -129,7 +131,7 @@ class Zym_Controller_Action_Helper_FileSender extends Zend_Controller_Action_Hel
             }
 
             // Only set last-modified time if none have been set
-            foreach ($response->getHeaders() as $key => $header) {
+            foreach ($response->getHeaders() as $header) {
                 if (strcasecmp($header['name'], 'Last-Modified')) {
                     $lastModifiedExists = true;
                 }
