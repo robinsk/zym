@@ -7,32 +7,31 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  *
- * @category  Zym
- * @package   Zym_Svn_Client
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
- * @license   http://www.zym-project.com/license New BSD License
+ * @category   Zym
+ * @package    Zym_Svn_Client
+ * @subpackage Adapter
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @license    http://www.zym-project.com/license New BSD License
  */
 
 /**
  * PHP Subversion Client Abstract Adapter
  *
- * @author    Geoffrey Tran
- * @license   http://www.zym-project.com/license New BSD License
- * @category  Zym
- * @package   Zym_Svn_Client
- * @copyright Copyright (c) 2008 Zym. (http://www.zym-project.com/)
+ * @author     Geoffrey Tran
+ * @license    http://www.zym-project.com/license New BSD License
+ * @category   Zym
+ * @package    Zym_Svn_Client
+ * @subpackage Adapter
+ * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  */
 abstract class Zym_Svn_Client_Adapter_Abstract
-{
-    abstract const CLIENT_VERSION;
-    
+{    
     /**
      * Schedules the addition of an item in a working directory
      *
      * @param string  $path
      * @param boolean $recursive
      * @param boolean $force
-     * @return array Added paths
      */
     abstract public function add($path, $recursive = true, $force = false);
     
@@ -41,8 +40,18 @@ abstract class Zym_Svn_Client_Adapter_Abstract
      *
      * @param string  $target
      * @param integer $revision
+     * @return string
      */
     abstract public function getContents($target, $revision = null);
+    
+    /**
+     * Returns the blame annotation
+     *
+     * @param string  $target
+     * @param integer $revision
+     * @return array  Array of Zym_Svn_Client_Blame
+     */
+    abstract public function getBlame($target, $revision = null);
     
     /**
      * Checks out a working copy from the repository
@@ -89,6 +98,13 @@ abstract class Zym_Svn_Client_Adapter_Abstract
     
     /**
      * Returns the commit log messages of a repository URL
+     *
+     * @param string  $url
+     * @param integer $startRevision
+     * @param integer $endRevision
+     * @param integer $limit
+     * @param integer $flags
+     * @return array Array of Zym_Svn_Client_Log
      */
     abstract public function getLog($url, $startRevision = null, $endRevision = null, $limit = null, $flags = null);
     
@@ -97,6 +113,7 @@ abstract class Zym_Svn_Client_Adapter_Abstract
      *
      * @param string  $path
      * @param integer $revision
+     * @return array Array of Zym_Svn_Client_List
      */
     abstract public function getList($path, $revision = null);
     
@@ -110,7 +127,7 @@ abstract class Zym_Svn_Client_Adapter_Abstract
     /**
      * Revert changes to the working copy
      *
-     * @param string $path
+     * @param string  $path
      * @param boolean $recursive
      */
     abstract public function revert($path, $recursive = null);
@@ -129,6 +146,58 @@ abstract class Zym_Svn_Client_Adapter_Abstract
      * @param integer $revision
      */
     abstract public function update($path, $revision = null);
+    
+    /**
+     * Remove property
+     *
+     * @param string $path
+     * @param string $propName
+     */
+    abstract public function deleteProperty($path, $propName);
+    
+    /**
+     * Get property
+     *
+     * @param string  $path
+     * @param string  $propName
+     * @param integer $revision
+     */
+    abstract public function getProperty($path, $propName, $revision = null);
+    
+    /**
+     * Set property
+     *
+     * @param string $path
+     * @param string $propName
+     * @param mixed  $propVal
+     * @return Zym_Svn_Client_Abstract
+     */
+    abstract public function setProperty($path, $propName, $propVal);
+    
+    /**
+     * Get property list
+     *
+     * @param string  $path
+     * @param integer $revision
+     * @return array
+     */
+    abstract public function getPropertyList($path, $revision = null);
+    
+    /**
+     * Set properties
+     *
+     * @param string $path
+     * @param array  $props 
+     */
+    abstract public function setProperties($path, array $props);
+    
+    /**
+     * Get properties
+     *
+     * @param string  $path
+     * @param integer $revision
+     */
+    abstract public function getProperties($path, $revision = null);
     
     /**
      * Get repository version
