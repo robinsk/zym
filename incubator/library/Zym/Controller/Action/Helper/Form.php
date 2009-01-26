@@ -207,7 +207,7 @@ class Zym_Controller_Action_Helper_Form extends Zend_Controller_Action_Helper_Ab
              */
             require_once 'Zym/Controller/Action/Helper/Form/Exception.php';
             throw new Zym_Controller_Action_Helper_Form_Exception(sprintf(
-                'Form action helper could not load form class "%s" at path "%s"', $class, $path
+                'Form action helper could not load form class "%s" at path "%s"', $className, $path
             ));
         }
 
