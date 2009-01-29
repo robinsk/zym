@@ -596,7 +596,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function getVisible($parentDependent = false)
     {
-        return $this->isVisible();
+        return $this->isVisible($parentDependent);
     }
     
     /**
@@ -607,7 +607,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     protected function _normalizePropertyName($property)
     {
-        return str_replace(' ', '', ucfirst(str_replace('_', ' ', $property)));
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
     }
     
     /**
