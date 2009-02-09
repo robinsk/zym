@@ -24,8 +24,19 @@
  */
 class Zym_Svn_Client
 {
-    const NON_RECURSIVE = '';
+    /**
+     * Non Recursive flag
+     */
+    const NON_RECURSIVE    = '';
+
+    /**
+     * Ignore externals flag
+     */
     const IGNORE_EXTERNALS = '';
+    
+    /**
+     * Head revision
+     */
     const REVISION_HEAD = -1;
 
     /**
@@ -48,4 +59,5 @@ class Zym_Svn_Client
         
         return $adapter;
     }
+    
 }
