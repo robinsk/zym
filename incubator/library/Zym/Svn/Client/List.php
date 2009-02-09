@@ -32,7 +32,7 @@ class Zym_Svn_Client_List
     /**
      * Directory
      */
-    const TYPE_DIRECTORY = 'dir'
+    const TYPE_DIRECTORY = 'dir';
     
     /**
      * Properties
