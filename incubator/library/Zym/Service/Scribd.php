@@ -28,7 +28,7 @@ class Zym_Service_Scribd
      * Scribd API address
      *
      */
-    const API_URL = 'http://api.scribd.com/api ';
+    const API_URL = 'http://api.scribd.com/api';
 
     /**
      * Rest client
