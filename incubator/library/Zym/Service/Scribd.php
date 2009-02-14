@@ -58,20 +58,75 @@ class Zym_Service_Scribd
      */
     private $_signRequest = false;
 
+    /**
+     * Document
+     *
+     * @var Zym_Service_Scrib_Document
+     */
+    private $_document;
 
-    public function __construct($apiKey)
+    /**
+     * User
+     *
+     * @var Zym_Service_Scribd_User
+     */
+    private $_user;
+
+    /**
+     * Construct
+     *
+     * @param string $apiKey
+     * @param string $secretKey
+     * @param boolean $useRequestSigning
+     */
+    public function __construct($apiKey, $secretKey = null, $useRequestSigning = null)
     {
         $this->setApiKey($apiKey);
+
+        if ($secretKey !== null) {
+            $this->setSecretKey($key);
+        }
+
+        if ($useRequestSigning !== null) {
+            $this->useSignRequest($useRequestSigning);
+        }
     }
 
+    /**
+     * Set document
+     *
+     * @param Zym_Service_Scribd_Document $doc
+     * @return Zym_Service_Scribd
+     */
     public function setDocument(Zym_Service_Scribd_Document $doc)
     {
+        $doc->setScribdClient($this);
         $this->_document = $doc;
         return $this;
     }
 
-    public function getDocument()
+    /**
+     * Get document
+     *
+     * @return Zym_Service_Scribd_Document
+     */
+    public function getDocument($id = null)
     {
+        if (! $this->_document instanceof Zym_Service_Scribd_Document || $id !== null) {
+            /**
+             * @see Zym_Service_Scribd_Document
+             */
+            require_once 'Zym/Service/Scribd/Document.php';
+
+            if ($id !== null) {
+                $doc = new Zym_Service_Scribd_Document($id);
+            } else {
+                $doc = new Zym_Service_Scribd_Document();
+            }
+
+            $this->setDocument($doc);
+        }
+
         return $this->_document;
     }
 
