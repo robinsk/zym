@@ -97,11 +97,11 @@ class Zym_Service_Scribd_User extends Zym_Service_Scribd_Abstract
             )
         );
 
-        $this->_id         = $response->user_id;
-        $this->_username   = $response->username;
-        $this->_email      = $response->email;
-        $this->_name       = $response->name;
-        $this->_sessionKey = $response->session_key;
+        $this->_id         = (string) $response->user_id;
+        $this->_username   = (string) $response->username;
+        $this->_email      = (string) $response->email;
+        $this->_name       = (string) $response->name;
+        $this->_sessionKey = (string) $response->session_key;
 
         return $this;
     }
@@ -134,11 +134,11 @@ class Zym_Service_Scribd_User extends Zym_Service_Scribd_Abstract
             )
         );
 
-        $this->_id         = $response->user_id;
-        $this->_username   = $response->username;
-        $this->_email      = $response->email;
-        $this->_name       = $response->name;
-        $this->_sessionKey = $response->session_key;
+        $this->_id         = (string) $response->user_id;
+        $this->_username   = (string) $response->username;
+        $this->_email      = (string) $response->email;
+        $this->_name       = (string) $response->name;
+        $this->_sessionKey = (string) $response->session_key;
 
         return $this;
     }
@@ -156,7 +156,8 @@ class Zym_Service_Scribd_User extends Zym_Service_Scribd_Abstract
     {
         $response = $this->_restGet('user.getAutoSigninUrl', array('next_url' => $nextUrl));
 
-        $url = $response->url;
+        $url = (string) $response->url;
+
         return $url;
     }
 

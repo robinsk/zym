@@ -133,7 +133,7 @@ abstract class Zym_Service_Scribd_Abstract
     protected function _restGet($method, array $options, array $defaultOptions = array())
     {
         $options  = $this->_prepareOptions($method, $options, $defaultOptions);
-        $response = $this->getScribdClient()->getRestClient()->restGet('', $options);
+        $response = $this->getScribdClient()->getRestClient()->restGet('api', $options);
 
         if ($response->isError()) {
             $code = $response->extractCode($response->asString());
@@ -141,7 +141,7 @@ abstract class Zym_Service_Scribd_Abstract
             /**
              * @see Zym_Service_Scribd_Exception
              */
-            require_once 'Zym/Serivce/Scribd/Exception.php';
+            require_once 'Zym/Service/Scribd/Exception.php';
             throw new Zym_Service_Scribd_Exception($response->getMessage(), $code);
         }
 
@@ -159,7 +159,7 @@ abstract class Zym_Service_Scribd_Abstract
     protected function _restPost($method, array $options, array $defaultOptions = array())
     {
         $options  = $this->_prepareOptions($method, $options, $defaultOptions);
-        $response = $this->getScribdClient()->getRestClient()->restPost('', $options);
+        $response = $this->getScribdClient()->getRestClient()->restPost('api', $options);
 
         if ($response->isError()) {
             $code = $response->extractCode($response->asString());
@@ -167,7 +167,7 @@ abstract class Zym_Service_Scribd_Abstract
             /**
              * @see Zym_Service_Scribd_Exception
              */
-            require_once 'Zym/Serivce/Scribd/Exception.php';
+            require_once 'Zym/Service/Scribd/Exception.php';
             throw new Zym_Service_Scribd_Exception($response->getMessage(), $code);
         }
 
@@ -187,10 +187,15 @@ abstract class Zym_Service_Scribd_Abstract
         $options  = $this->_prepareOptions($method, $options, $defaultOptions);
 
         $client = Zend_Rest_Client::getHttpClient();
-        $client->setFileUpload($file, $param);
-        $client->setParameterPost((array) $options);
+        $client->setUri($this->getScribdClient()->getRestClient()->getUri());
 
+        $client->setParameterGet($options);
+        $client->setFileUpload($file, $param);
         $response = $client->request('POST');
+
+        echo $client->getLastRequest();
+        echo $client->getLastResponse()->getBody();exit;
+
 
         if ($response->isError()) {
             $code = $response->extractCode($response->asString());
@@ -198,7 +203,7 @@ abstract class Zym_Service_Scribd_Abstract
             /**
              * @see Zym_Service_Scribd_Exception
              */
-            require_once 'Zym/Serivce/Scribd/Exception.php';
+            require_once 'Zym/Service/Scribd/Exception.php';
             throw new Zym_Service_Scribd_Exception($response->getMessage(), $code);
         }
 
@@ -219,6 +224,14 @@ abstract class Zym_Service_Scribd_Abstract
             $this->handleXmlErrors(0, "An error occured while parsing the REST response with simplexml.");
         } else {
             restore_error_handler();
+        }
+
+        if (isset($xml->error['code'])) {
+            /**
+             * @see Zym_Service_Scribd_Exception
+             */
+            require_once 'Zym/Service/Scribd/Exception.php';
+            throw new Zym_Service_Scribd_Exception((string)$xml->error['message'], (int)$xml->error['code']);
         }
 
         return $xml;
