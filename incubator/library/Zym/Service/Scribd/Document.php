@@ -499,61 +499,123 @@ class Zym_Service_Scribd_Document extends Zym_Service_Scribd_Abstract
         return $this->_id;
     }
 
+    /**
+     * Get Access Key
+     *
+     * @return string
+     */
     public function getAccessKey()
     {
         return $this->_accessKey;
     }
 
+    /**
+     * Get Secret Password
+     *
+     * @return string
+     */
     public function getSecretPassword()
     {
         return $this->_secretPassword;
     }
 
+    /**
+     * Get Title
+     *
+     * @return string
+     */
     public function getTitle()
     {
         return $this->_title;
     }
 
+    /**
+     * Get Description
+     *
+     * @return string
+     */
     public function getDescription()
     {
         return $this->_description;
     }
 
+    /**
+     * Get License
+     *
+     * @return string
+     */
     public function getLicense()
     {
         return $this->_license;
     }
 
+    /**
+     * Get Show Ads
+     *
+     * @return string
+     */
     public function getShowAds()
     {
         return $this->_showAds;
     }
 
+    /**
+     * Get Link Back Url
+     *
+     * @return string
+     */
     public function getLinkBackUrl()
     {
         return $this->_linkBackUrl;
     }
 
+    /**
+     * Get Tags
+     *
+     * Comma separated list
+     *
+     * @return string
+     */
     public function getTags()
     {
         return $this->_tags;
     }
 
+    /**
+     * Get Author
+     *
+     * @return string
+     */
     public function getAuthor()
     {
         return $this->_author;
     }
 
+    /**
+     * Get Publisher
+     *
+     * @return string
+     */
     public function getPublisher()
     {
         return $this->_publisher;
     }
 
+    /**
+     * Get When Published
+     *
+     * @return string
+     */
     public function getWhenPublished()
     {
         return $this->_whenPublished;
     }
 
+    /**
+     * Get Edition
+     *
+     * @return string
+     */
     public function getEdition()
     {
         return $this->_edition;
