@@ -26,11 +26,6 @@ require_once 'Zym/View/Helper/Html/Abstract.php';
 require_once 'Zym/Navigation.php';
 
 /**
- * @see Zend_Acl
- */
-require_once 'Zend/Acl.php';
-
-/**
  * Base class for navigation related helpers
  *
  * @category   Zym
