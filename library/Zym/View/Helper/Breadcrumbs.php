@@ -16,7 +16,7 @@
  */
 
 /**
- * @see Zym_View_Helper_Html_Navigation
+ * @see Zym_View_Helper_NavigationAbstract
  */
 require_once 'Zym/View/Helper/NavigationAbstract.php';
 
