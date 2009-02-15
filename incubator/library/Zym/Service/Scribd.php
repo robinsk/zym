@@ -84,7 +84,7 @@ class Zym_Service_Scribd
         $this->setApiKey($apiKey);
 
         if ($secretKey !== null) {
-            $this->setSecretKey($key);
+            $this->setSecretKey($secretKey);
         }
 
         if ($useRequestSigning !== null) {

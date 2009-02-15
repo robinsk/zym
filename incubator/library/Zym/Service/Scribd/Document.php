@@ -622,6 +622,16 @@ class Zym_Service_Scribd_Document extends Zym_Service_Scribd_Abstract
     }
 
     /**
+     * Get Thumbnail Url
+     *
+     * @return string
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->_thumbnailUrl;
+    }
+
+    /**
      * Set From Array
      *
      * @param array $metadata
