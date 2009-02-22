@@ -39,21 +39,18 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
      *
      * @var string
      */
-    protected $_uri = null;
+    private $_uri = null;
     
     /**
-     * Checks if the page is valid (has required properties)
+     * Sets URI to empty string if not already set
      *
      * @return void
-     * @throws Zym_Navigation_Exception  if page is invalid
      */
-    protected function _validate()
+    protected function _init()
     {
         if (!isset($this->_uri)) {
             $this->_uri = '';
         }
-        
-        parent::_validate();
     }
     
     /**

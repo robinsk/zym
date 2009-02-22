@@ -415,7 +415,7 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
             'class' => 'my-class',
             'title' => 'my-title',
             'target' => 'my-target',
-            'position' => 100,
+            'order' => 100,
             'active' => true,
             'visible' => false,
         
@@ -428,10 +428,8 @@ class Zym_Navigation_Page_MvcTest extends PHPUnit_Framework_TestCase
         $toArray = $page->toArray();
         
         $options['reset_params'] = true;
-        $options['route'] = 'default';
+        $options['route'] = null;
         $options['params'] = array();
-        
-        //$this->assertEquals($options, $toArray);
         
         $this->assertEquals(array(),
             array_diff_assoc($options, $page->toArray()));

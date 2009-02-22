@@ -36,6 +36,7 @@ class Zym_Navigation extends Zym_Navigation_Container
      * Creates a new navigation container
      *
      * @param array|Zend_Config $pages  [optional] pages to add
+     * @throws InvalidArgumentException if $pages is invalid
      */
     public function __construct($pages = null)
     {

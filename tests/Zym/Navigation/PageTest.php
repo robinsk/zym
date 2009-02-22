@@ -214,28 +214,28 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests setPosition() and getPosition() with valid and invalid values
+     * Tests setOrder() and getOrder() with valid and invalid values
      *
      */
-    public function testSetAndGetPosition()
+    public function testSetAndGetOrder()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
         
-        $this->assertEquals(null, $page->getPosition());
-        $page->setPosition('1');
-        $this->assertEquals(1, $page->getPosition());
-        $page->setPosition(1337);
-        $this->assertEquals(1337, $page->getPosition());
-        $page->setPosition('-25');
-        $this->assertEquals(-25, $page->getPosition());
+        $this->assertEquals(null, $page->getOrder());
+        $page->setOrder('1');
+        $this->assertEquals(1, $page->getOrder());
+        $page->setOrder(1337);
+        $this->assertEquals(1337, $page->getOrder());
+        $page->setOrder('-25');
+        $this->assertEquals(-25, $page->getOrder());
         
         $invalids = array(3.14, 'e', "\n", '0,4', true, (object) null);
         foreach ($invalids as $invalid) {
             try {
-                $page->setPosition($invalid);
+                $page->setOrder($invalid);
                 $msg = $invalid . ' is invalid, but no ';
                 $msg .= 'InvalidArgumentException was thrown';
                 $this->fail($msg);
@@ -496,7 +496,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'class'    => 'my-class',
             'title'    => 'my-title',
             'target'   => 'my-target',
-            'position' => 100,
+            'order'    => 100,
             'active'   => true,
             'visible'  => false,
         
@@ -535,7 +535,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         
         // tweak options to what we expect sub page 1 to be
         $options['label'] = 'foo.bar';
-        $options['position'] = null;
+        $options['order'] = null;
         $options['id'] = null;
         $options['class'] = null;
         $options['title'] = null;

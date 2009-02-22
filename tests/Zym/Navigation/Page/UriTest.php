@@ -53,23 +53,6 @@ class Zym_Navigation_Page_UriTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests that the constructor requires label
-     *
-     */
-    public function testConstructionRequiresLabel()
-    {
-        try {
-            $page = new Zym_Navigation_Page_Uri(array(
-                'labelz' => 'label',
-                'uri' => '#'
-            ));
-            $this->fail('Should throw exception for missing label');
-        } catch (Zym_Navigation_Exception $e) {
-            
-        }
-    }
-    
-    /**
      * Tests setUri() and getUri() with valid and invalid values
      *
      */

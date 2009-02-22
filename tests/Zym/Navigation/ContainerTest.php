@@ -71,7 +71,7 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'label' => 'Page 2',
                 'uri' => '#',
-                'position' => -1
+                'order' => -1
             ),
             array(
                 'label' => 'Page 3',
@@ -80,7 +80,7 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'label' => 'Page 4',
                 'uri' => '#',
-                'position' => 100
+                'order' => 100
             ),
             array(
                 'label' => 'Page 5',
@@ -164,10 +164,10 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * When setting position for a page, the container order should be updated
+     * When setting order for a page, the container order should be updated
      *
      */
-    public function testSettingPagePositionShouldUpdateContainerOrder()
+    public function testSettingPageOrderShouldUpdateContainerOrder()
     {
         $nav = new Zym_Navigation(array(
             array(
@@ -194,7 +194,7 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals($orderExpected, $order);
         
-        $page3->setPosition(-1);
+        $page3->setOrder(-1);
         
         $order = array();
         $orderExpected = array('Page 3', 'Page 1', 'Page 2');
@@ -382,10 +382,10 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Should be able to remove a page by giving position
+     * Should be able to remove a page by giving order
      *
      */
-    public function testShouldBeAbleToRemovePageByPosition()
+    public function testShouldBeAbleToRemovePageByOrder()
     {
         $nav = new Zym_Navigation(array(
             array(
@@ -395,7 +395,7 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
             array(
                 'label' => 'Page 2',
                 'uri' => '#',
-                'position' => 32
+                'order' => 32
             ),
             array(
                 'label' => 'Page 3',
@@ -526,20 +526,6 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(false, $nav1->hasPages());
         $this->assertEquals(true, $nav2->hasPages());
-    }
-    
-    /**
-     * Should be able to use setParent() with other regular containers
-     *
-     */
-    public function testSetParentShouldWorkWithContainer()
-    {
-        $nav1 = new Zym_Navigation();
-        $nav2 = new Zym_Navigation();
-        
-        $nav2->setParent($nav1);
-        
-        $this->assertEquals($nav1, $nav2->getParent());
     }
     
     /**

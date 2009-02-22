@@ -38,55 +38,48 @@ abstract class Zym_Navigation_Container
      *
      * @var array
      */
-    protected $_pages = array();
+    private $_pages = array();
 
     /**
-     * Order in which to display and iterate pages
+     * An index that contains the order in which to iterate pages
      * 
      * @var array
      */
-    protected $_order = array();
+    private $_index = array();
 
     /**
-     * Whether internal order has been updated
+     * Whether index is dirty and needs to be re-arranged
      * 
      * @var bool
      */
-    protected $_orderUpdated = false;
-    
-    /**
-     * Parent container
-     *
-     * @var Zym_Navigation_Container
-     */
-    protected $_parent = null;
+    private $_dirtyIndex = false;
     
     // Internal methods:
 
     /**
-     * Sort pages according to their given positions
+     * Sorts the page index according to page order
      * 
      * @return void
      */
-    protected function _sort()
+    private function _sort()
     {
-        if ($this->_orderUpdated) {
-            $newOrder = array();
+        if ($this->_dirtyIndex) {
+            $newIndex = array();
             $index = 0;
             
             foreach ($this->_pages as $hash => $page) {
-                $pos = $page->getPosition();
-                if ($pos === null) {
-                    $newOrder[$hash] = $index;
+                $order = $page->getOrder();
+                if ($order === null) {
+                    $newIndex[$hash] = $index;
                     $index++;
                 } else {
-                    $newOrder[$hash] = $pos;
+                    $newIndex[$hash] = $order;
                 }
             }
 
-            asort($newOrder);
-            $this->_order = $newOrder;
-            $this->_orderUpdated = false;
+            asort($newIndex);
+            $this->_index = $newIndex;
+            $this->_dirtyIndex = false;
         }
     }
     
@@ -99,15 +92,19 @@ abstract class Zym_Navigation_Container
      */
     public function notifyOrderUpdated()
     {
-        $this->_orderUpdated = true;
+        $this->_dirtyIndex = true;
     }
     
     /**
      * Adds a page to the container
      * 
+     * This method will inject the container as the given page's parent by
+     * calling {@link Zym_Navigation_Page::setParent()}.
+     * 
      * @param  Zym_Navigation_Page|array|Zend_Config $page  page to add
-     * @return Zym_Navigation_Container
-     * @throws InvalidArgumentException  if invalid page is given
+     * @return Zym_Navigation_Container                     fluent interface,
+     *                                                      returns self
+     * @throws InvalidArgumentException                     if page is invalid
      */
     public function addPage($page)
     {
@@ -119,16 +116,19 @@ abstract class Zym_Navigation_Container
             throw new InvalidArgumentException($msg);
         }
         
-        $id = spl_object_hash($page);
+        $hash = $page->hashCode();
         
-        if (array_key_exists($id, $this->_order)) {
+        if (array_key_exists($hash, $this->_index)) {
+            // page is already in container
             return $this;
         }
         
-        $this->_pages[$id] = $page;
-        $this->_order[$id] = $page->getPosition();
-        $this->_orderUpdated = true;
+        // adds page to container and sets dirty flag
+        $this->_pages[$hash] = $page;
+        $this->_index[$hash] = $page->getOrder();
+        $this->_dirtyIndex = true;
         
+        // inject self as page parent
         $page->setParent($this);
         
         return $this;
@@ -138,7 +138,7 @@ abstract class Zym_Navigation_Container
      * Adds several pages at once
      *
      * @param  array|Zend_Config $pages  pages to add
-     * @return Zym_Navigation_Container
+     * @return Zym_Navigation_Container  fluent interface, returns self
      * @throws InvalidArgumentException  if $pages is not array or Zend_Config
      */
     public function addPages($pages)
@@ -162,8 +162,8 @@ abstract class Zym_Navigation_Container
     /**
      * Sets pages this container should have, clearing existing ones
      *
-     * @param array $pages  pages to set
-     * @return Zym_Navigation_Container
+     * @param  array $pages              pages to set
+     * @return Zym_Navigation_Container  fluent interface, returns self
      */
     public function setPages(array $pages)
     {
@@ -174,26 +174,27 @@ abstract class Zym_Navigation_Container
     /**
      * Removes the given page from the container
      *
-     * @param  int|Zym_Navigation_Page $page  page to remove, either
-     *                                                 position or instance
-     * @return bool  indicating whether the removal was successful
+     * @param  Zym_Navigation_Page|int $page  page to remove, either a page
+     *                                        instance or a specific page order
+     * @return bool                           whether the removal was successful
      */
     public function removePage($page)
     {
-        $this->_sort();
-        
-        if (is_int($page)) {
-            $hash = array_search($page, $this->_order);
-        } elseif ($page instanceof Zym_Navigation_Page) {
-            $hash = spl_object_hash($page);
+        if ($page instanceof Zym_Navigation_Page) {
+            $hash = $page->hashCode();
+        } elseif (is_int($page)) {
+            $this->_sort();
+            if (!$hash = array_search($page, $this->_index)) {
+                return false;
+            }
         } else {
             return false;
         }
         
-        if (isset($this->_order[$hash])) {
-            unset($this->_order[$hash]);
+        if (isset($this->_pages[$hash])) {
             unset($this->_pages[$hash]);
-            $this->_orderUpdated = true;
+            unset($this->_index[$hash]);
+            $this->_dirtyIndex = true;
             return true;
         }
         
@@ -203,27 +204,26 @@ abstract class Zym_Navigation_Container
     /**
      * Removes all pages in container
      *
-     * @return Zym_Navigation_Container_Abstract
+     * @return Zym_Navigation_Container  fluent interface, returns self
      */
     public function removePages()
     {
         $this->_pages = array();
-        $this->_order = array();
+        $this->_index = array();
         return $this;
     }
     
     /**
      * Checks if the container has the given page
      *
-     * @param  Zym_Navigation_Page $page
-     * @param  bool                $recursive [optional] defaults to false
-     * @return bool
+     * @param  Zym_Navigation_Page $page       page to look for
+     * @param  bool                $recursive  [optional] whether to search
+     *                                         recursively. Default is false.
+     * @return bool                            whether page is in container
      */
     public function hasPage(Zym_Navigation_Page $page, $recursive = false)
     {
-        $hash = spl_object_hash($page);
-        
-        if (array_key_exists($hash, $this->_order)) {
+        if (array_key_exists($page->hashCode(), $this->_index)) {
             return true;
         } elseif ($recursive) {
             foreach ($this->_pages as $childPage) {
@@ -239,59 +239,18 @@ abstract class Zym_Navigation_Container
     /**
      * Returns true if container contains any pages
      *
-     * @return bool
+     * @return bool  whether container has any pages
      */
     public function hasPages()
     {
-        return count($this->_order) > 0;
-    }
-    
-    /**
-     * Sets parent container
-     *
-     * @param  Zym_Navigation_Container $parent  [optional] new parent to set,
-     *                                           defaults to null which will set
-     *                                           no parent
-     * @return Zym_Navigation_Page
-     */
-    public function setParent(Zym_Navigation_Container $parent = null)
-    {
-        // return if the given parent already is parent
-        if ($parent === $this->_parent) {
-            return $this;
-        }
-        
-        // remove from old parent if page
-        if (null !== $this->_parent && $this instanceof Zym_Navigation_Page) {
-            $this->_parent->removePage($this);
-        }
-        
-        // set new parent
-        $this->_parent = $parent;
-        
-        // add to parent if page and not already a child
-        if (null !== $this->_parent && $this instanceof Zym_Navigation_Page) {
-            $this->_parent->addPage($this);
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * Returns parent container
-     *
-     * @return Zym_Navigation_Container|null
-     */
-    public function getParent()
-    {
-        return $this->_parent;
+        return count($this->_index) > 0;
     }
     
     /**
      * Returns a child page matching $property == $value, or null if not found
      *
-     * @param string $property  name of property to match against
-     * @param mixed  $value     value to match property against
+     * @param  string $property          name of property to match against
+     * @param  mixed  $value             value to match property against
      * @return Zym_Navigation_Page|null  matching page or null
      */
     public function findOneBy($property, $value)
@@ -310,11 +269,12 @@ abstract class Zym_Navigation_Container
     
     /**
      * Returns all child pages matching $property == $value, or an empty array
-     * if not found
+     * if no pages are found
      *
-     * @param string $property  name of property to match against
-     * @param mixed  $value     value to match property against
-     * @return array  containing only Zym_Navigation_Page elements
+     * @param  string $property  name of property to match against
+     * @param  mixed  $value     value to match property against
+     * @return array             array containing only Zym_Navigation_Page
+     *                           instances
      */
     public function findAllBy($property, $value)
     {
@@ -343,6 +303,7 @@ abstract class Zym_Navigation_Container
      *                          matching pages are found. If false, null will be
      *                          returned if no matching page is found. Default
      *                          is false.
+     * @return Zym_Navigation_Page|null  matching page or null
      */
     public function findBy($property, $value, $all = false)
     {
@@ -361,11 +322,11 @@ abstract class Zym_Navigation_Container
      * // METHOD                    // SAME AS
      * $nav->findByLabel('foo');    // $nav->findOneBy('label', 'foo');
      * $nav->findOneByLabel('foo'); // $nav->findOneBy('label', 'foo');
-     * $nav->findAllById('foo');    // $nav->findAllBy('id', 'foo');
+     * $nav->findAllByClass('foo'); // $nav->findAllBy('class', 'foo');
      * </code>
      *
-     * @param string $method     method name
-     * @param array  $arguments  method arguments
+     * @param  string $method          method name
+     * @param  array  $arguments       method arguments
      * @throws BadMethodCallException  if method does not exist
      */
     public function __call($method, $arguments)
@@ -397,19 +358,21 @@ abstract class Zym_Navigation_Container
     // RecursiveIterator interface:
 
     /**
-     * RecursiveIterator: Returns current page
+     * Returns current page
      * 
-     * @return Zym_Navigation_Page
+     * Implements RecursiveIterator interface.
+     * 
+     * @return Zym_Navigation_Page   current page or null
      * @throws OutOfBoundsException  if the index is invalid
      */
     public function current()
     {
         $this->_sort();
-        current($this->_order);
-        $key = key($this->_order);
+        current($this->_index);
+        $hash = key($this->_index);
         
-        if (isset($this->_pages[$key])) {
-            return $this->_pages[$key];
+        if (isset($this->_pages[$hash])) {
+            return $this->_pages[$hash];
         } else {
             $msg = 'Corruption detected in container; '
                  . 'invalid key found in internal iterator';
@@ -418,53 +381,63 @@ abstract class Zym_Navigation_Container
     }
 
     /**
-     * RecursiveIterator: Returns current page id
+     * Returns hash code of current page
      * 
-     * @return string
+     * Implements RecursiveIterator interface.
+     * 
+     * @return string  hash code of current page
      */
     public function key()
     {
         $this->_sort();
-        return key($this->_order);
+        return key($this->_index);
     }
 
     /**
-     * RecursiveIterator: Move pointer to next page in container
+     * Moves index pointer to next page in the container
+     * 
+     * Implements RecursiveIterator interface.
      * 
      * @return void
      */
     public function next()
     {
         $this->_sort();
-        next($this->_order);
+        next($this->_index);
     }
 
     /**
-     * RecursiveIterator: Moves pointer to beginning of container
+     * Sets index pointer to first page in the container
+     * 
+     * Implements RecursiveIterator interface.
      * 
      * @return void
      */
     public function rewind()
     {
         $this->_sort();
-        reset($this->_order);
+        reset($this->_index);
     }
 
     /**
-     * RecursiveIterator: Determines if container is valid
+     * Checks if container index is valid
+     * 
+     * Implements RecursiveIterator interface.
      * 
      * @return bool
      */
     public function valid()
     {
         $this->_sort();
-        return (current($this->_order) !== false);
+        return current($this->_index) !== false;
     }
     
     /**
-     * RecursiveIterator: Proxy to hasPages()
+     * Proxy to hasPages()
+     * 
+     * Implements RecursiveIterator interface.
      *
-     * @return bool
+     * @return bool  whether container has any pages
      */
     public function hasChildren()
     {
@@ -472,29 +445,34 @@ abstract class Zym_Navigation_Container
     }
     
     /**
-     * RecursiveIterator: Returns pages
+     * Returns the child container.
+     * 
+     * Implements RecursiveIterator interface.
      *
-     * @return Zym_Navigation_Page|null
+     * @return Zym_Navigation_Page|null  
      */
     public function getChildren()
     {
-        $key = key($this->_order);
+        $hash = key($this->_index);
         
-        if (isset($this->_pages[$key])) {
-            return $this->_pages[$key];
+        if (isset($this->_pages[$hash])) {
+            return $this->_pages[$hash];
         }
+        
         return null;
     }
     
     // Countable interface:
 
     /**
-     * Countable: Count of pages that are iterable
+     * Returns number of pages in container
      * 
-     * @return int
+     * Implements Countable interface.
+     * 
+     * @return int  number of pages in the container
      */
     public function count()
     {
-        return count($this->_order);
+        return count($this->_index);
     }
 }
