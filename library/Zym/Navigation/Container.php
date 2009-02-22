@@ -172,6 +172,16 @@ abstract class Zym_Navigation_Container
     }
     
     /**
+     * Returns pages in the container
+     * 
+     * @return array  array og Zym_Navigation_Page instances
+     */
+    public function getPages()
+    {
+        return $this->_pages;
+    }
+    
+    /**
      * Removes the given page from the container
      *
      * @param  Zym_Navigation_Page|int $page  page to remove, either a page

@@ -522,7 +522,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             if ($this->_active) {
                 return true;
             } else {
-                foreach ($this->_pages as $page) {
+                foreach ($this as $page) {
                     if ($page->isActive(true)) {
                         return true;
                     }
