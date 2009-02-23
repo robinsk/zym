@@ -17,11 +17,11 @@
 /**
  * Imports
  * 
- * @see Zym_View_HelperNavigationTestAbstract
+ * @see Zym_View_Helper_Navigation_TestAbstract
  * @see Zym_View_Helper_Menu
  */
-require_once dirname(__FILE__) . '/NavigationTestAbstract.php';
-require_once 'Zym/View/Helper/Menu.php';
+require_once dirname(__FILE__) . '/TestAbstract.php';
+require_once 'Zym/View/Helper/Navigation/Menu.php';
 
 /**
  * Tests Zym_View_Helper_Menu
@@ -33,15 +33,15 @@ require_once 'Zym/View/Helper/Menu.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-class Zym_View_Helper_MenuTest
-    extends Zym_View_Helper_NavigationTestAbstract
+class Zym_View_Helper_Navigation_MenuTest
+    extends Zym_View_Helper_Navigation_TestAbstract
 {
     /**
      * Class name for view helper to test
      *
      * @var string
      */
-    protected $_helperName = 'Zym_View_Helper_Menu';
+    protected $_helperName = 'Zym_View_Helper_Navigation_Menu';
 
     /**
      * View helper
@@ -56,16 +56,16 @@ class Zym_View_Helper_MenuTest
      */
     public function testShouldBeAbleToNullOutNavigation()
     {
-        $old = $this->_helper->getNavigation();
+        $old = $this->_helper->getContainer();
         $oldCount = count($old);
 
         $this->assertGreaterThan(0, $oldCount, 'Empty container before test');
 
-        $this->_helper->setNavigation();
-        $newCount = count($this->_helper->getNavigation());
+        $this->_helper->setContainer();
+        $newCount = count($this->_helper->getContainer());
         $this->assertEquals(0, $newCount);
 
-        $this->_helper->setNavigation($old);
+        $this->_helper->setContainer($old);
     }
 
     /**
@@ -74,16 +74,20 @@ class Zym_View_Helper_MenuTest
      */
     public function testShouldBeAbleToAutoloadNavFromRegistry()
     {
-        $old = null;
+        $oldReg = null;
         if (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
-            $old = Zend_Registry::get(self::REGISTRY_KEY);
+            $oldReg = Zend_Registry::get(self::REGISTRY_KEY);
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
 
-        $expected = file_get_contents($this->_files . '/menu.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $oldContainer = $this->_helper->getContainer();
+        $this->_helper->setContainer(null);
 
-        Zend_Registry::set(self::REGISTRY_KEY, $old);
+        $expected = file_get_contents($this->_files . '/menu.html');
+        $this->assertEquals($expected, $this->_helper->render());
+
+        $this->_helper->setContainer($oldContainer);
+        Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
     }
 
     /**
@@ -98,8 +102,8 @@ class Zym_View_Helper_MenuTest
         $expected1 = file_get_contents($this->_files . '/menu_indent4.html');
         $expected2 = file_get_contents($this->_files . '/menu_indent8.html');
 
-        $this->assertEquals($expected1, $this->_helper->toString(4));
-        $this->assertEquals($expected2, $this->_helper->toString());
+        $this->assertEquals($expected1, $this->_helper->render(null, 4));
+        $this->assertEquals($expected2, $this->_helper->render());
 
         $this->_helper->setIndent($old);
     }
@@ -112,12 +116,12 @@ class Zym_View_Helper_MenuTest
     public function testShouldBePossibleToRenderAnotherNavWithoutInterfering()
     {
         $expected = file_get_contents($this->_files . '/menu.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $expected2 = file_get_contents($this->_files . '/menu2.html');
-        $this->assertEquals($expected2, $this->_helper->renderMenu($this->_nav2));
+        $this->assertEquals($expected2, $this->_helper->render($this->_nav2));
 
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
     }
 
     /**
@@ -134,7 +138,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setRole('member');
 
         $expected = file_get_contents($this->_files . '/menu_acl_string.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
@@ -154,7 +158,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setRole($acl['role']);
 
         $expected = file_get_contents($this->_files . '/menu_acl.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
@@ -174,7 +178,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setRole($acl['acl']->getRole('member'));
 
         $expected = file_get_contents($this->_files . '/menu_acl_role_interface.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
@@ -196,7 +200,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setRole(new Zend_Acl_Role('member'));
 
         $expected = file_get_contents($this->_files . '/menu_acl_role_interface.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
@@ -212,7 +216,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setUlClass('My_Nav');
 
         $expected = file_get_contents($this->_files . '/menu_css.html');
-        $this->assertEquals($expected, $this->_helper->renderMenu($this->_nav2));
+        $this->assertEquals($expected, $this->_helper->render($this->_nav2));
 
         $this->_helper->setUlClass($old);
     }
@@ -227,7 +231,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setTranslator($translator);
 
         $expected = file_get_contents($this->_files . '/menu_translated.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
         
         $this->_helper->setTranslator(null);
     }
@@ -242,7 +246,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setTranslator($translator->getAdapter());
 
         $expected = file_get_contents($this->_files . '/menu_translated.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
         
         $this->_helper->setTranslator(null);
     }
@@ -261,7 +265,7 @@ class Zym_View_Helper_MenuTest
         Zend_Registry::set('Zend_Translate', $translator);
         
         $expected = file_get_contents($this->_files . '/menu_translated.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
         
         $this->_helper->setTranslator(null);
         Zend_Registry::set('Zend_Translate', $oldReg);
@@ -279,7 +283,7 @@ class Zym_View_Helper_MenuTest
         $this->_helper->setUseTranslator(false);
 
         $expected = file_get_contents($this->_files . '/menu.html');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
         
         $this->_helper->setTranslator(null);
     }

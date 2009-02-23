@@ -16,9 +16,9 @@
  */
 
 /**
- * @see Zym_View_Helper_NavigationAbstract
+ * @see Zym_View_Helper_Navigation_Abstract
  */
-require_once 'Zym/View/Helper/NavigationAbstract.php';
+require_once 'Zym/View/Helper/Navigation/Abstract.php';
 
 /**
  * Helper for printing sitemaps
@@ -32,7 +32,8 @@ require_once 'Zym/View/Helper/NavigationAbstract.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */ 
-class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
+class Zym_View_Helper_Navigation_Sitemap
+    extends Zym_View_Helper_Navigation_Abstract
 {
     /**
      * Namespace for the <urlset> tag
@@ -49,11 +50,11 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     const SITEMAP_XSD = 'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd';
     
     /**
-     * Sets maximum depth sitemap should be traversed
+     * The maximum depth that a container should be traversed
      *
      * @var int
      */
-    protected $_maxDepth = null;
+    protected $_maxDepth;
     
     /**
      * Whether XML output should be formatted
@@ -91,7 +92,8 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     protected $_serverUrl;
     
     /**
-     * Retrieves helper and optionally sets container to operate on
+     * View helper entry point:
+     * Retrieves helper and optionally sets container to operate on and options
      * 
      * The options array is an optional associative array of options to set.
      * Each key in the array corresponds to the according set*() method, and
@@ -102,17 +104,18 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
      *                                              operate on
      * @param  array                    $options    [optional] associative
      *                                              array of options to set
-     * @return Zym_View_Helper_Sitemap
+     * @return Zym_View_Helper_Sitemap              fluent interface,
+     *                                              returns self
      */
     public function sitemap(Zym_Navigation_Container $container = null,
                             array $options = array())
     {
         if (null !== $container) {
-            $this->setNavigation($container);
+            $this->setContainer($container);
         }
         
         // set options
-        foreach ($options as $option => $value) {
+        foreach ($options as $key => $value) {
             if (is_string($key) && !empty($key)) {
                 $method = 'set' . str_replace(' ', '',
                                     ucfirst(str_replace('_', ' ', $key)));
@@ -120,32 +123,36 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
                     $this->$method($value);
                 }   
             }
-            
         }
         
         return $this;
     }
     
+    // Accessors:
+    
     /**
-     * Sets maximum depth sitemap should be traversed
+     * Sets the maximum depth that a container should be traversed
      *
-     * @param  int $maxDepth  [optional] maximum level (depth) to traverse,
-     *                        defaults to null, which will set no maximum
-     * @return void
+     * @param  int $maxDepth            [optional] maximum level (depth) to 
+     *                                  traverse. Defaults is null, which will 
+     *                                  set no maximum.
+     * @return Zym_View_Helper_Sitemap  fluent interface, returns self
      */
     public function setMaxDepth($maxDepth = null)
     {
         if (null === $maxDepth) {
             $this->_maxDepth = $maxDepth;
         } else {
-            $this->_maxDepth = (int)$maxDepth;
+            $this->_maxDepth = (int) $maxDepth;
         }
+        
+        return $this;
     }
     
     /**
-     * Returns maximum depth sitemap should be traversed
+     * Returns the maximum depth that a container should be traversed
      *
-     * @return int
+     * @return int  the maximum depth that a container should be traversed
      */
     public function getMaxDepth()
     {
@@ -155,17 +162,20 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     /**
      * Sets whether XML output should be formatted
      *
-     * @param bool $formatOutput  format XML output
+     * @param  bool $formatOutput       [optional] whether output should be
+     *                                  formatted. Default is true.
+     * @return Zym_View_Helper_Sitemap  fluent interface, returns self
      */
-    public function setFormatOutput($formatOutput)
+    public function setFormatOutput($formatOutput = true)
     {
-        $this->_formatOutput = (bool)$formatOutput;
+        $this->_formatOutput = (bool) $formatOutput;
+        return $this;
     }
     
     /**
-     * Returns true if XML output should be formatted 
+     * Returns whether XML output should be formatted 
      *
-     * @return bool
+     * @return bool  whether XML output should be formatted
      */
     public function getFormatOutput()
     {
@@ -175,17 +185,19 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     /**
      * Sets whether the XML declaration should be used in output
      *
-     * @param bool $useXmlDecl  whether XML delcaration should be used
+     * @param  bool $useXmlDecl         whether XML delcaration should be used
+     * @return Zym_View_Helper_Sitemap  fluent interface, returns self
      */
     public function setUseXmlDeclaration($useXmlDecl)
     {
         $this->_useXmlDeclaration = (bool) $useXmlDecl;
+        return $this;
     }
     
     /**
-     * Returns true if the XML declaration should be used in output 
+     * Returns whether the XML declaration should be used in output 
      *
-     * @return bool
+     * @return bool  whether the XML declaration should be used in output
      */
     public function getUseXmlDeclaration()
     {
@@ -195,17 +207,19 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     /**
      * Sets whether sitemap should be validated using Zym_Validate_Sitemap_*
      *
-     * @param bool $useSitemapValidators  whether to use sitemap validators
+     * @param  bool $useSitemapValidators  whether to use sitemap validators
+     * @return Zym_View_Helper_Sitemap     fluent interface, returns self
      */
     public function setUseSitemapValidators($useSitemapValidators)
     {
-        $this->_useSitemapValidators = (bool)$useSitemapValidators;
+        $this->_useSitemapValidators = (bool) $useSitemapValidators;
+        return $this;
     }
     
     /**
-     * Returns true if sitemap should be validated using Zym_Validate_Sitemap_*
+     * Returns whether sitemap should be validated using Zym_Validate_Sitemap_*
      *
-     * @return bool
+     * @return bool  whether sitemap should be validated using validators
      */
     public function getUseSitemapValidators()
     {
@@ -215,11 +229,14 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
     /**
      * Sets whether sitemap should be schema validated when generated
      *
-     * @param bool $schemaValidation  whether sitemap should be schema validated
+     * @param  bool $schemaValidation   whether sitemap should validated using
+     *                                  XSD Schema
+     * @return Zym_View_Helper_Sitemap  fluent interface, returns self
      */
     public function setUseSchemaValidation($schemaValidation)
     {
-        $this->_useSchemaValidation = (bool)$schemaValidation;
+        $this->_useSchemaValidation = (bool) $schemaValidation;
+        return $this;
     }
     
     /**
@@ -237,8 +254,9 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
      * 
      * E.g. http://www.example.com
      *
-     * @param  string $serverUrl  server URL to set (only scheme and host)
-     * @throws Zend_Uri_Exception  if invalid server url
+     * @param  string $serverUrl        server URL to set (only scheme and host)
+     * @throws Zend_Uri_Exception       if invalid server url
+     * @return Zym_View_Helper_Sitemap  fluent interface, returns self
      */
     public function setServerUrl($serverUrl)
     {
@@ -267,14 +285,16 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
             require_once 'Zend/Uri/Exception.php';
             throw new Zend_Uri_Exception("Invalid URI: '$serverUrl'");
         }
+        
+        return $this;
     }
     
     /**
      * Returns server URL
      *
-     * @return string
+     * @return string  server URL
      */
-    protected function _getServerUrl()
+    public function getServerUrl()
     {
         if (!isset($this->_serverUrl)) {
             $this->_serverUrl = $this->getView()->serverUrl();
@@ -283,10 +303,13 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
         return $this->_serverUrl;
     }
     
+    // Helper methods:
+    
     /**
      * Escapes string for XML usage
      *
-     * @param string $string
+     * @param  string $string  string to escape
+     * @return string          escaped string
      */
     protected function _xmlEscape($string)
     {
@@ -301,27 +324,28 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
         }
     }
     
+    // Public methods:
+    
     /**
-     * Returns an absolute URL for the given page
+     * Returns an escaped absolute URL for the given page
      *
      * @param  Zym_Navigation_Page $page  page to get URL from
      * @return string
      */
-    protected function _getUrl(Zym_Navigation_Page $page)
+    public function url(Zym_Navigation_Page $page)
     {
         $href = $page->getHref();
         
         if (!isset($href{0})) {
             return '';
         } elseif ($href{0} == '/') {
-            $url = $this->_getServerUrl() . $href;
+            $url = $this->getServerUrl() . $href;
         } elseif (@preg_match('/^https?:\\/\//m', $href)) {
             $url = $href;
         } else {
-            $url = $this->_getServerUrl()
+            $url = $this->getServerUrl()
                  . rtrim($this->getView()->url(), '/') . '/'
                  . $href;
-            //exit("got url '$url'\n");
         }
 
         return $this->_xmlEscape($url);
@@ -334,23 +358,28 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
      *                                              breadcrumbs from, defaults
      *                                              to what is registered in the
      *                                              helper
-     * @return DOMDocument
-     * @throws DomainException  if schema validation is on and the sitemap
-     *                          is invalid according to the sitemap schema, or
-     *                          of sitemap validators are used and the loc
-     *                          element fails validation
+     * @return DOMDocument                          DOM representation of the
+     *                                              container
+     * @throws Zend_View_Exception                  if schema validation is on 
+     *                                              and the sitemap is invalid 
+     *                                              according to the sitemap 
+     *                                              schema, or if sitemap 
+     *                                              validators are used and the 
+     *                                              loc element fails validation
      */
     public function getDomSitemap(Zym_Navigation_Container $container = null)
     {
         if (null === $container) {
-            $container = $this->getNavigation();
+            $container = $this->getContainer();
         }
         
         // create iterator
         $iterator = new RecursiveIteratorIterator($container,
             RecursiveIteratorIterator::SELF_FIRST);
-        if (is_int($this->_maxDepth)) {
-            $iterator->setMaxDepth($this->_maxDepth);
+        
+        $maxDepth = $this->getMaxDepth();
+        if (is_int($maxDepth)) {
+            $iterator->setMaxDepth($maxDepth);
         }
         
         // check if we should validate using our own validators
@@ -369,21 +398,21 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
         
         // create document
         $dom = new DOMDocument('1.0', 'UTF-8');
-        $dom->formatOutput = $this->_formatOutput;
+        $dom->formatOutput = $this->getFormatOutput();
         
         // ...and urlset (root) element
         $urlSet = $dom->createElementNS(self::SITEMAP_NS, 'urlset');
         $dom->appendChild($urlSet);
         
-        // iterate navigation
+        // iterate container
         foreach ($iterator as $page) {
-            if (!$this->_accept($page)) {
+            if (!$this->accept($page)) {
                 // page is not accepted
                 continue;
             }
             
             // get absolute url from page
-            if (!$url = $this->_getUrl($page)) {
+            if (!$url = $this->url($page)) {
                 // skip page if it has no url (rare case)
                 continue;
             }
@@ -394,8 +423,9 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
           
             if ($this->getUseSitemapValidators() &&
                 !$locValidator->isValid($url)) {
-                $msg = "Invalid sitemap URL: '$url'";
-                throw new DomainException($msg);
+                require_once 'Zend/View/Exception.php';
+                $msg = 'Invalid sitemap URL: "%s"';
+                throw new Zend_View_Exception(sprintf($msg, $url));
             }
             
             // put url in 'loc' element
@@ -404,7 +434,7 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
             
             // add 'lastmod' element if a valid lastmod is set in page
             if (isset($page->lastmod)) {
-                $lastmod = strtotime((string)$page->lastmod);
+                $lastmod = strtotime((string) $page->lastmod);
                 
                 // prevent 1970-01-01...
                 if ($lastmod !== false) {
@@ -448,49 +478,42 @@ class Zym_View_Helper_Sitemap extends Zym_View_Helper_NavigationAbstract
         // validate using schema if specified
         if ($this->getUseSchemaValidation()) {
             if (!@$dom->schemaValidate(self::SITEMAP_XSD)) {
+                require_once 'Zend/View/Exception.php';
                 $msg = 'Sitemap is invalid according to ' . self::SITEMAP_XSD;
-                throw new DomainException($msg);
+                throw new Zend_View_Exception($msg);
             }
         }
         
         return $dom;
     }
     
+    // Zym_View_Helper_Navigation_Abstract:
+
     /**
-     * Renders a sitemap for a navigation container
+     * Renders helper
+     * 
+     * Implements {@link Zym_View_Helper_Navigation_Abstract::render()}.
      *
-     * @param  Zym_Navigation_Container $container  [optional] container to get
-     *                                              sitemap from, defaults
-     *                                              to what is registered in the
-     *                                              helper
-     * @return string
+     * @param  Zym_Navigation_Container $container  [optional] container to
+     *                                              render. Default is to render
+     *                                              the container registered in
+     *                                              the helper.
+     * @param  string|int               $indent     [optional] indentation as
+     *                                              a string or number of 
+     *                                              spaces. Default is null,
+     *                                              which will use the indent
+     *                                              registered in the helper.
+     * @return string                               helper output
      */
-    public function renderSitemap(Zym_Navigation_Container $container = null)
+    public function render(Zym_Navigation_Container $container = null,
+                           $indent = null)
     {
         $dom = $this->getDomSitemap($container);
-        return $this->_useXmlDeclaration ?
+        
+        $xml = $this->getUseXmlDeclaration() ?
                $dom->saveXML() :
-               $dom->saveXML($dom->documentElement) . "\n";
-    }
-    
-    /**
-     * Renders the registered container as an XML Sitemap
-     * 
-     * @param  string|int $indent  [optional] this is ignored
-     * @return string
-     */
-    public function toString($indent = null)
-    {
-        return $this->renderSitemap(null);
-    }
-    
-    /**
-     * Tostring
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString();
+               $dom->saveXML($dom->documentElement);
+        
+        return rtrim($xml, PHP_EOL);
     }
 }

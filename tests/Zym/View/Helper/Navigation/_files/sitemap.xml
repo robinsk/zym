@@ -31,6 +31,15 @@
     <loc>http://localhost/page2/page2_3/page2_3_1</loc>
   </url>
   <url>
+    <loc>http://localhost/page2/page2_3/page2_3_3</loc>
+  </url>
+  <url>
+    <loc>http://localhost/page2/page2_3/page2_3_3/1</loc>
+  </url>
+  <url>
+    <loc>http://localhost/page2/page2_3/page2_3_3/2</loc>
+  </url>
+  <url>
     <loc>http://localhost/page3</loc>
   </url>
   <url>
@@ -47,6 +56,9 @@
   </url>
   <url>
     <loc>http://localhost/page3/page3_3</loc>
+  </url>
+  <url>
+    <loc>http://localhost/page3/page3_3/page3_3_2</loc>
   </url>
   <url>
     <loc>http://www.zym-project.com/</loc>

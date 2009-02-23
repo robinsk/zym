@@ -7,13 +7,8 @@
   </url>
   <url>
     <loc>http://localhost/site2</loc>
-    <lastmod></lastmod>
   </url>
   <url>
     <loc>http://localhost/site3</loc>
-    <changefreq>often</changefreq>
-  </url>
-  <url>
-    <loc>http://w.</loc>
   </url>
 </urlset>

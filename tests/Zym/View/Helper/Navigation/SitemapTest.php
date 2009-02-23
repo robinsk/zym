@@ -18,13 +18,13 @@
  * Imports
  * 
  * @see Zend_Controller_Request_Http
- * @see Zym_View_Helper_NavigationTestAbstract
+ * @see Zym_View_Helper_Navigation_TestAbstract
  * @see Zym_View_Helper_Sitemap
  */
-require_once 'Zend/Controller/Request/Http.php';
-require_once dirname(__FILE__) . '/NavigationTestAbstract.php';
-require_once 'Zym/View/Helper/Sitemap.php';
+require_once dirname(__FILE__) . '/TestAbstract.php';
 require_once 'Zend/Controller/Front.php';
+require_once 'Zend/Controller/Request/Http.php';
+require_once 'Zym/View/Helper/Navigation/Sitemap.php';
 
 /**
  * Tests Zym_View_Helper_Sitemap
@@ -37,7 +37,7 @@ require_once 'Zend/Controller/Front.php';
  * @license    http://www.zym-project.com/license    New BSD License
  */
 class Zym_View_Helper_SitemapTest
-    extends Zym_View_Helper_NavigationTestAbstract
+    extends Zym_View_Helper_Navigation_TestAbstract
 {
     protected $_front;
     protected $_oldRequest;
@@ -49,7 +49,7 @@ class Zym_View_Helper_SitemapTest
      *
      * @var string
      */
-    protected $_helperName = 'Zym_View_Helper_Sitemap';
+    protected $_helperName = 'Zym_View_Helper_Navigation_Sitemap';
 
     /**
      * View helper
@@ -119,16 +119,16 @@ class Zym_View_Helper_SitemapTest
      */
     public function testShouldBeAbleToNullOutNavigation()
     {
-        $old = $this->_helper->getNavigation();
+        $old = $this->_helper->getContainer();
         $oldCount = count($old);
 
         $this->assertGreaterThan(0, $oldCount, 'Empty container before test');
 
-        $this->_helper->setNavigation();
-        $newCount = count($this->_helper->getNavigation());
+        $this->_helper->setContainer();
+        $newCount = count($this->_helper->getContainer());
         $this->assertEquals(0, $newCount);
 
-        $this->_helper->setNavigation($old);
+        $this->_helper->setContainer($old);
     }
 
     /**
@@ -137,16 +137,20 @@ class Zym_View_Helper_SitemapTest
      */
     public function testShouldBeAbleToAutoloadNavFromRegistry()
     {
-        $old = null;
+        $oldReg = null;
         if (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
-            $old = Zend_Registry::get(self::REGISTRY_KEY);
+            $oldReg = Zend_Registry::get(self::REGISTRY_KEY);
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
 
+        $oldContainer = $this->_helper->getContainer();
+        $this->_helper->setContainer(null);
+        
         $expected = file_get_contents($this->_files . '/sitemap.xml');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
-        Zend_Registry::set(self::REGISTRY_KEY, $old);
+        $this->_helper->setContainer($oldContainer);
+        Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
     }
 
     /**
@@ -159,9 +163,9 @@ class Zym_View_Helper_SitemapTest
         $expected = file_get_contents($this->_files . '/sitemap.xml');
 
         $expected2 = file_get_contents($this->_files . '/sitemap2.xml');
-        $this->assertEquals($expected2, $this->_helper->renderSitemap($this->_nav2));
+        $this->assertEquals($expected2, $this->_helper->render($this->_nav2));
 
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
     }
 
     /**
@@ -178,7 +182,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setRole($acl['role']);
 
         $expected = file_get_contents($this->_files . '/sitemap_acl.xml');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
@@ -194,7 +198,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setMaxDepth(0);
 
         $expected = file_get_contents($this->_files . '/sitemap_depth1.xml');
-        $this->assertEquals($expected, $this->_helper->toString());
+        $this->assertEquals($expected, $this->_helper->render());
 
         $this->_helper->setMaxDepth($old);
     }
@@ -209,7 +213,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setUseXmlDeclaration(false);
 
         $expected = file_get_contents($this->_files . '/sitemap2_nodecl.xml');
-        $this->assertEquals($expected, $this->_helper->renderSitemap($this->_nav2));
+        $this->assertEquals($expected, $this->_helper->render($this->_nav2));
 
         $this->_helper->setUseXmlDeclaration($old);
     }
@@ -224,12 +228,12 @@ class Zym_View_Helper_SitemapTest
         $nav->addPage(array('label' => 'Invalid', 'uri' => 'http://w.'));
 
         try {
-            $this->_helper->renderSitemap($nav);
-        } catch (DomainException $e) {
+            $this->_helper->render($nav);
+        } catch (Zend_View_Exception $e) {
             return;
         }
 
-        $this->fail('A DomainException was not thrown on invalid <loc />');
+        $this->fail('A Zend_View_Exception was not thrown on invalid <loc />');
     }
 
     /**
@@ -244,7 +248,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setUseSitemapValidators(false);
 
         $expected2 = file_get_contents($this->_files . '/sitemap2_invalid.xml');
-        $this->assertEquals($expected2, $this->_helper->renderSitemap($nav));
+        $this->assertEquals($expected2, $this->_helper->render($nav));
 
         $this->_helper->setUseSitemapValidators(true);
     }
@@ -263,11 +267,11 @@ class Zym_View_Helper_SitemapTest
         $nav->addPage(array('label' => 'Invalid', 'uri' => 'http://w.'));
 
         try {
-            $this->_helper->renderSitemap($nav);
-        } catch (DomainException $e) {
+            $this->_helper->render($nav);
+        } catch (Zend_View_Exception $e) {
             return;
         }
 
-        $this->fail('A DomainException was not thrown when using Schema validation');
+        $this->fail('A Zend_View_Exception was not thrown when using Schema validation');
     }
 }

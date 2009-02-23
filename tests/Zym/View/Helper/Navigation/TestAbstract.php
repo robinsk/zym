@@ -45,7 +45,8 @@ require_once 'Zym/Navigation.php';
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_TestCase
+abstract class Zym_View_Helper_Navigation_TestAbstract
+    extends PHPUnit_Framework_TestCase
 {
     const REGISTRY_KEY = 'Zym_Navigation';
 
@@ -66,7 +67,7 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
     /**
      * View helper
      *
-     * @var Zym_View_Helper_NavigationAbstract
+     * @var Zym_View_Helper_Navigation_Abstract
      */
     protected $_helper;
 
@@ -91,7 +92,7 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
     protected function setUp()
     {
         // read navigation config
-        $this->_files = dirname(__FILE__) . '/_files/navigation';
+        $this->_files = dirname(__FILE__) . '/_files';
         $config = new Zend_Config_Xml($this->_files . '/navigation.xml');
 
         // create nav structures
@@ -101,13 +102,14 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
         // create view
         $view = new Zend_View();
         $view->addHelperPath('Zym/View/Helper', 'Zym_View_Helper');
+        $view->addHelperPath('Zym/View/Helper/Navigation', 'Zym_View_Helper_Navigation');
 
         // create helper
         $this->_helper = new $this->_helperName();
         $this->_helper->setView($view);
 
         // set nav1 in helper as default
-        $this->_helper->setNavigation($this->_nav1);
+        $this->_helper->setContainer($this->_nav1);
     }
 
     /**
@@ -164,7 +166,6 @@ abstract class Zym_View_Helper_NavigationTestAbstract extends PHPUnit_Framework_
             'Go home'      => 'Gå hjem'
         );
         
-        $t = new Zend_Translate('array', $data, 'nb_NO');
-        return $t;
+        return new Zend_Translate('array', $data, 'nb_NO');
     }
 }
