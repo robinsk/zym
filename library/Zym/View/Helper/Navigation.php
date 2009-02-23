@@ -88,7 +88,7 @@ class Zym_View_Helper_Navigation extends Zym_View_Helper_Navigation_Abstract
      * 
      * // proxy to container and find all pages with 'blog' route:
      * $blogPages = $this->navigation()->findAllByRoute('blog');
-     * </code
+     * </code>
      *
      * @param  string $method          helper name or method name in container
      * @param  array  $arguments       [optional] arguments to pass
