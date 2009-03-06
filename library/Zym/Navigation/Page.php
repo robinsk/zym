@@ -805,6 +805,29 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
     
     /**
+     * Determines whether the page is a descendant of the given container
+     * 
+     * @param  Zym_Navigation_Container $container  container
+     * @return bool                                 true or false
+     */
+    public function isDescendentOf(Zym_Navigation_Container $container)
+    {
+        $intermediate = $this;
+        while ($parent = $intermediate->getParent()) {
+            if ($parent === $container) {
+                return true;
+            }
+            if ($parent instanceof Zym_Navigation_Page) {
+                $intermediate = $parent;
+            } else {
+                break;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Returns an array representation of the page
      *
      * @return array  associative array containing all page properties

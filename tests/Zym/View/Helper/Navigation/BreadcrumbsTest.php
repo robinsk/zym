@@ -138,23 +138,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
     }
 
     /**
-     * It should be possible to set indenting in the helper
-     *
-     */
-    public function testShouldBeAbleToOverrideIndentInToString()
-    {
-        $old = $this->_helper->getIndent();
-        $this->_helper->setIndent(8);
-
-        $expected = "\t<a";
-        $actual = substr($this->_helper->render(null, "\t"), 0, strlen($expected));
-
-        $this->assertEquals($expected, $actual);
-
-        $this->_helper->setIndent($old);
-    }
-
-    /**
      * It should be possible to render another nav structure without
      * interfering with the one registered in the helper
      *

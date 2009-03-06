@@ -9,7 +9,7 @@
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
@@ -21,11 +21,11 @@
 require_once 'Zym/View/Helper/Navigation/Abstract.php';
 
 /**
- * Helper for printing menus as 'ul' HTML elements
+ * Helper for rendering menus from {@link Zym_Navigation}
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
@@ -131,13 +131,11 @@ class Zym_View_Helper_Navigation_Menu
      */
     public function htmlify(Zym_Navigation_Page $page)
     {
-        // get view instance
-        $view = $this->getView();
-        
         // get label and title for translating
         $label = $page->getLabel();
         $title = $page->getTitle();
     
+        // translate label and title?
         if ($this->getUseTranslator() && $t = $this->getTranslator()) {
             if (is_string($label) && !empty($label)) {
                 $label = $t->translate($label);
@@ -147,25 +145,24 @@ class Zym_View_Helper_Navigation_Menu
             }
         }
         
-        // get attribs for anchor element
+        // get attribs for element
         $attribs = array(
             'id'     => $page->getId(),
             'title'  => $title,
             'class'  => $page->getClass()
         );
 
-        $href = $page->getHref();
-
-        if ($href) {
+        // does page have a href?
+        if ($href = $page->getHref()) {
+            $element = 'a';
             $attribs['href'] = $href;
             $attribs['target'] = $page->getTarget();
-            $element = 'a';
         } else {
             $element = 'span';
         }
 
-        return '<' . $element . ' ' . $this->_htmlAttribs($attribs) . '>'
-             . $view->escape($label)
+        return '<' . $element . $this->_htmlAttribs($attribs) . '>'
+             . $this->view->escape($label)
              . '</' . $element . '>';
     }
 
@@ -175,33 +172,40 @@ class Zym_View_Helper_Navigation_Menu
      * Renders a HTML 'ul' for the given $container. If $container is not given,
      * the container registered in the helper will be used.
      *
-     * @param  Zym_Navigation_Container $container  [optional] container to create
-     *                                              menu from
-     * @param  string|int               $indent     [optional] indentation
-     * @param  bool                     $first      [optional] whether this
-     *                                              container should be
-     *                                              considered the first that is
-     *                                              rendered in a series of
-     *                                              chained calls. The ul class
-     *                                              will only be applied to the
-     *                                              first container. Default is
-     *                                              true.
+     * @param  Zym_Navigation_Container $container   [optional] container to
+     *                                               create menu from. Default
+     *                                               is to use the container
+     *                                               retrieved from
+     *                                               {@link getContainer()}.
+     * @param  string|int               $indent      [optional] indentation as
+     *                                               a string or number of 
+     *                                               spaces. Default is null,
+     *                                               which will use the indent
+     *                                               registered in the helper.
+     * @param  bool                     $useUlClass  [optional] whether the 'ul'
+     *                                               class returned by
+     *                                               {@link getUlClass()} should
+     *                                               be applied to the 'ul' that
+     *                                               is rendered by the method.
+     *                                               Default is true.
      * @return string
      */
     public function renderMenu(Zym_Navigation_Container $container = null,
                                $indent = null,
-                               $first = true)
+                               $useUlClass = true)
     {
-        $indent = (null !== $indent)
-                ? $this->_getWhitespace($indent)
-                : $this->getIndent();
-
         if (null === $container) {
             $container = $this->getContainer();
         }
+        
+        // indentation
+        $indent = (null !== $indent)
+                ? $this->_getWhitespace($indent)
+                : $this->getIndent();  
 
         // init html
         $html = '';
+        $recursive = $this->getParentActive();
 
         // iterate container
         foreach ($container as $page) {
@@ -211,34 +215,34 @@ class Zym_View_Helper_Navigation_Menu
             }
 
             // create li element for page
-            $liCss = $page->isActive($this->getParentActive())
+            $liCss = $page->isActive($recursive)
                    ? ' class="active"'
                    : '';
-            $html .= "$indent    <li$liCss>" . PHP_EOL;
+            $html .= "$indent    <li$liCss>" . self::EOL;
 
-            // create html element for page
-            $html .= "$indent        {$this->htmlify($page)}" . PHP_EOL;
+            // create html element for page itself
+            $html .= "$indent        {$this->htmlify($page)}" . self::EOL;
 
             // render sub pages, if any
             if ($page->hasPages()) {
                 $html .= $this->renderMenu($page, "$indent        ", false);
             }
 
-            // end li element
-            $html .= "$indent    </li>" . PHP_EOL;
+            // end li element for page
+            $html .= "$indent    </li>" . self::EOL;
         }
 
         // wrap items in a ul element
         // this is done so an empty list will not be created if
         // every (sub) page is invisible
         if (strlen($html)) {
-            if ($first && strlen($this->_ulClass)) {
-                $ulClass = " class=\"{$this->_ulClass}\"";
+            if ($useUlClass && $css = $this->getUlClass()) {
+                $ulClass = " class=\"$css\"";
             } else {
                 $ulClass = '';
             }
             
-            $html = "$indent<ul$ulClass>\n$html$indent</ul>" . PHP_EOL;
+            $html = "$indent<ul$ulClass>\n$html$indent</ul>" . self::EOL;
         }
 
         return $html;
@@ -263,13 +267,13 @@ class Zym_View_Helper_Navigation_Menu
     {
         if (null === $container) {
             $container = $this->getContainer();
-        }
+        }      
         
-        // stuff to use in the two steps below
+        // stuff to use when finding deepest active page
         $found = false;
         $depth = -1;
         $iterator = new RecursiveIteratorIterator($container,
-            RecursiveIteratorIterator::CHILD_FIRST);
+                RecursiveIteratorIterator::CHILD_FIRST);
         
         // find the deepest active page
         foreach ($iterator as $page) {
@@ -277,19 +281,27 @@ class Zym_View_Helper_Navigation_Menu
                 // page is not accepted
                 continue;
             }
+            
             if ($page->isActive() && $iterator->getDepth() > $depth) {
+                // found an active page at a deeper level than before
                 $found = $page;
                 $depth = $iterator->getDepth();
             }
         }
         
         if ($found) {
-            if (count($found)) {
+            $indent = (null !== $indent)
+                    ? $this->_getWhitespace($indent)
+                    : $this->getIndent();
+              
+            if ($found->hasPages()) {
+                // the found page has children itself; render children
                 return $this->renderMenu($found, $indent, false);
             }
             
             $parent = $found->getParent();
             if ($parent instanceof Zym_Navigation_Page) {
+                // the found page is a leaf node with a parent; render parent
                 return $this->renderMenu($parent, $indent, false);
             }
         }
@@ -297,27 +309,21 @@ class Zym_View_Helper_Navigation_Menu
         return '';
     }
     
-    // Zym_View_Helper_Navigation_Abstract:
+    // Zym_View_Helper_Navigation_Interface:
 
     /**
      * Renders helper
      * 
-     * Implements {@link Zym_View_Helper_Navigation_Abstract::render()}.
+     * Implements {@link Zym_View_Helper_Navigation_Interface::render()}.
      *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              render. Default is to render
      *                                              the container registered in
      *                                              the helper.
-     * @param  string|int               $indent     [optional] indentation as
-     *                                              a string or number of 
-     *                                              spaces. Default is null,
-     *                                              which will use the indent
-     *                                              registered in the helper.
      * @return string                               helper output
      */
-    public function render(Zym_Navigation_Container $container = null,
-                           $indent = null)
+    public function render(Zym_Navigation_Container $container = null)
     {
-        return rtrim($this->renderMenu($container, $indent, true), PHP_EOL);
+        return rtrim($this->renderMenu($container, null, true), self::EOL);
     }
 }

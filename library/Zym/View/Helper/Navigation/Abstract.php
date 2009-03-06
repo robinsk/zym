@@ -9,16 +9,11 @@
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */
-
-/**
- * @see Zym_View_Helper_Html_Abstract
- */
-require_once 'Zym/View/Helper/Html/Abstract.php';
 
 /**
  * @see Zym_Navigation
@@ -26,27 +21,31 @@ require_once 'Zym/View/Helper/Html/Abstract.php';
 require_once 'Zym/Navigation.php';
 
 /**
+ * @see Zym_View_Helper_Navigation_Interface
+ */
+require_once 'Zym/View/Helper/Navigation/Interface.php';
+
+/**
+ * @see Zend_View_Helper_HtmlElement
+ */
+require_once 'Zend/View/Helper/HtmlElement.php';
+
+/**
  * Base class for navigation related helpers
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
  */ 
 abstract class Zym_View_Helper_Navigation_Abstract
-    extends Zend_View_Helper_Abstract
+    extends Zend_View_Helper_HtmlElement
+    implements Zym_View_Helper_Navigation_Interface
 {
     /**
-     * View helper namespace
-     * 
-     * @var string
-     */
-    const NS = 'Zym_View_Helper_Navigation';
-    
-    /**
-     * Container to operate on
+     * Container to operate on by default
      * 
      * @var Zym_Navigation_Container
      */
@@ -88,14 +87,16 @@ abstract class Zym_View_Helper_Navigation_Abstract
     protected $_role;
     
     /**
-     * Default ACL to use when iterating pages if not explicitly set
+     * Default ACL to use when iterating pages if not explicitly set in the
+     * instance by calling {@link setAcl()}
      * 
      * @var Zend_Acl
      */
     protected static $_defaultAcl;
     
     /**
-     * Default ACL role to use when iterating pages if not explicitly set
+     * Default ACL role to use when iterating pages if not explicitly set in the
+     * instance by calling {@link setRole()}
      * 
      * @var string|Zend_Acl_Role_Interface
      */
@@ -104,60 +105,17 @@ abstract class Zym_View_Helper_Navigation_Abstract
     // Accessors:
     
     /**
-     * Sets the view object
+     * Sets navigation container the helper operates on by default
      * 
-     * Overrides {@link Zend_View_Abstract::setView()}
-     *
-     * @param  Zend_View_Abstract $view     view instance
-     * @return Zend_View_Helper_Navigation  fluent interface, returns self
-     * @throws Zend_View_Exception          if view is not an instance of
-     *                                      Zend_View_Abstract
-     */
-    public function setView(Zend_View_Interface $view)
-    {
-        if (!$view instanceof Zend_View_Abstract) {
-            $msg = '%s requires an instance of Zend_View_Abstract';
-            require_once 'Zend/View/Exception.php';
-            throw new Zend_View_Exception(sprintf($msg, __CLASS__));
-        }
-        
-        $this->view = $view;
-        return $this;
-    }
-    
-    /**
-     * Returns view object with helper path injected
-     * 
-     * @return Zend_View_Abstract   view instance
-     * @throws Zend_View_Exception  if view registered in helper is not an 
-     *                              instance of Zend_View_Abstract
-     */
-    public function getView()
-    {
-        $view = $this->view;
-        
-        if (!$view instanceof Zend_View_Abstract) {
-            $msg = '%s requires an instance of Zend_View_Abstract';
-            require_once 'Zend/View/Exception.php';
-            throw new Zend_View_Exception(sprintf($msg, __CLASS__));
-        }
-        
-        if (!$view->getPluginLoader('helper')->getPaths(self::NS)) {
-            $view->addHelperPath(str_replace('_', '/', self::NS), self::NS);
-        }
-        
-        return $view;
-    }
-    
-    /**
-     * Sets navigation container to operate on
+     * Implements {@link Zym_View_Helper_Navigation_Interface::setContainer()}.
      *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              operate on. Default is
      *                                              null, meaning container will
      *                                              be reset.
-     * @return Zym_View_Helper_Navigation           fluent interface, returns
-     *                                              self
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
      */
     public function setContainer(Zym_Navigation_Container $container = null)
     {
@@ -166,7 +124,17 @@ abstract class Zym_View_Helper_Navigation_Abstract
     }
     
     /**
-     * Returns navigation container
+     * Returns the navigation container helper operates on by default
+     * 
+     * Implements {@link Zym_View_Helper_Navigation_Interface::getContainer()}.
+     * 
+     * If a helper is not explicitly set in this helper instance by calling
+     * {@link setContainer()} or by passing it through the helper entry point,
+     * this method will look in {@link Zend_Registry} for a container by using
+     * the key 'Zym_Navigation'.
+     * 
+     * If no container is set, and nothing is found in Zend_Registry, a new
+     * container will be instantiated and stored in the helper.
      *
      * @return Zym_Navigation_Container  navigation container
      */
@@ -190,13 +158,13 @@ abstract class Zym_View_Helper_Navigation_Abstract
     }
 
     /**
-     * Set the indentation string for __toString() serialization,
-     * optionally, if a number is passed, it will be the number of spaces
+     * Set the indentation string for using in {@link render()}, optionally a 
+     * number of spaces to indent with
      *
-     * @param  string|int $indent                   indentation string or number
-     *                                              of spaces
-     * @return Zym_View_Helper_Navigation_Abstract  fluent interface, returns
-     *                                              self
+     * @param  string|int $indent  indentation string or number of spaces
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
      */
     public function setIndent($indent)
     {
@@ -205,7 +173,7 @@ abstract class Zym_View_Helper_Navigation_Abstract
     }
 
     /**
-     * Retrieve indentation
+     * Returns indentation
      *
      * @return string
      */
@@ -217,14 +185,13 @@ abstract class Zym_View_Helper_Navigation_Abstract
     /**
      * Sets translator to use in helper
      * 
-     * @param  mixed $translator                    [optional] translator.
-     *                                              Expects an object of type
-     *                                              Zend_Translate_Adapter
-     *                                              or Zend_Translate, or null.
-     *                                              Default is null, which sets
-     *                                              no translator.
-     * @return Zym_View_Helper_Navigation_Abstract  fluent interface, returns
-     *                                              self
+     * @param  mixed $translator  [optional] translator. Expects an object of 
+     *                            type {@link Zend_Translate_Adapter} or 
+     *                            {@link Zend_Translate}, or null. Default is 
+     *                            null, which sets no translator.
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
      */
     public function setTranslator($translator = null)
     {
@@ -258,9 +225,11 @@ abstract class Zym_View_Helper_Navigation_Abstract
     /**
      * Sets whether translator should be used
      * 
-     * @param  bool $useTranslator         [optional] wheter translator should
-     *                                     be used. Default is true.
-     * @return Zym_View_Helper_Navigation  fluent interface, returns self
+     * @param  bool $useTranslator  [optional] wheter translator should be used.
+     *                              Default is true.
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
      */
     public function setUseTranslator($useTranslator = true)
     {
@@ -281,10 +250,11 @@ abstract class Zym_View_Helper_Navigation_Abstract
     /**
      * Sets ACL to use when iterating pages
      * 
-     * @param  Zend_Acl $acl               [optional] ACL object. Default is 
-     *                                     null, which means ACL will not be
-     *                                     used.
-     * @return Zym_View_Helper_Navigation  fluent interface, returns self
+     * @param  Zend_Acl $acl  [optional] ACL object. Default is null, which 
+     *                                   means ACL will not be used.
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
      */
     public function setAcl(Zend_Acl $acl = null)
     {
@@ -310,17 +280,15 @@ abstract class Zym_View_Helper_Navigation_Abstract
     /**
      * Sets ACL role(s) to use when iterating pages
      * 
-     * @param  mixed $role                          [optional] role to set.
-     *                                              Expects a string, an
-     *                                              instance of type
-     *                                              Zend_Acl_Role_Interface, or
-     *                                              null. Default is null, which
-     *                                              will set no role.
-     * @throws InvalidArgumentException             if $role is a string, 
-     *                                              a Zend_Acl_Role_Interface,
-     *                                              or null
-     * @return Zym_View_Helper_Navigation_Abstract  fluent interface, returns
-     *                                              self
+     * @param  mixed $role          [optional] role to set. Expects a string, an
+     *                              instance of type
+     *                              {@link Zend_Acl_Role_Interface}, or null.
+     *                              Default is null, which will set no role.
+     * @throws Zend_View_Exception  if $role is a not string, a 
+     *                              {@link Zend_Acl_Role_Interface}, or null
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
      */
     public function setRole($role = null)
     {
@@ -328,8 +296,11 @@ abstract class Zym_View_Helper_Navigation_Abstract
             $role instanceof Zend_Acl_Role_Interface) {
             $this->_role = $role;
         } else {
-            $msg = '$role must be null|string|Zend_Acl_Role_Interface';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zend/View/Exception.php';
+            throw new Zend_View_Exception(sprintf(
+                    '$role must be a string, null, or an instance of ' .
+                            'Zend_Acl_Role_Interface; %s given',
+                    gettype($role)));
         }
         
         return $this;
@@ -353,33 +324,37 @@ abstract class Zym_View_Helper_Navigation_Abstract
     // Magic overloads:
     
     /**
-     * Magic overload: Proxy to the navigation container
+     * Magic overload: Proxy calls to the navigation container
      *
-     * @param  string $method          method name in container
-     * @param  array  $arguments       [optional] arguments to pass
-     * @return mixed                   returns what the container returns
-     * @throws BadMethodCallException  if method does not exist in container
+     * @param  string $method            method name in container
+     * @param  array  $arguments         [optional] arguments to pass
+     * @return mixed                     returns what the container returns
+     * @throws Zym_Navigation_Exception  if method does not exist in container
      */
     public function __call($method, array $arguments = array())
     {
-        $container = $this->getContainer();
-        
-        if (method_exists($container, $method)) {
-            return call_user_func_array(array($container, $method), $arguments);
-        } else {
-            $msg = "Method '$method' does not exst in container";
-            throw new BadMethodCallException($msg);
-        }
+        return call_user_func_array(
+                array($this->getContainer(), $method),
+                $arguments);
     }
     
     /**
-     * Magic overload: Render helper
+     * Magic overload: Proxy to {@link render()}.
+     * 
+     * This method will trigger an E_USER_ERROR if rendering the helper causes
+     * an exception to be thrown.
      * 
      * @return string
      */
     public function __toString()
     {
-        return $this->render();
+        try {
+            return $this->render();
+        } catch (Exception $e) {
+            $msg = get_class($e) . ': ' . $e->getMessage();
+            trigger_error($msg, E_USER_ERROR);
+            return '';
+        }
     }
     
     // Public methods:
@@ -402,9 +377,6 @@ abstract class Zym_View_Helper_Navigation_Abstract
      */
     public function htmlify(Zym_Navigation_Page $page)
     {
-        // get view instance
-        $view = $this->getView();
-        
         // get label and title for translating
         $label = $page->getLabel();
         $title = $page->getTitle();
@@ -427,8 +399,8 @@ abstract class Zym_View_Helper_Navigation_Abstract
             'target' => $page->getTarget()
         );
         
-        return '<a ' . $this->_htmlAttribs($attribs) . '>'
-             . $view->escape($label)
+        return '<a' . $this->_htmlAttribs($attribs) . '>'
+             . $this->view->escape($label)
              . '</a>';
     }
     
@@ -436,6 +408,16 @@ abstract class Zym_View_Helper_Navigation_Abstract
     
     /**
      * Determines whether a page should be accepted when iterating
+     * 
+     * Rules:
+     * - If a page is not visible, it is not accepted
+     * - If helper has no ACL, page is accepted
+     * - If helper has ACL, but no role, page is not accepted
+     * - If helper has ACL and role:
+     *  - Page is accepted if it has no resource or privilege
+     *  - Page is accepted if ACL allows page's resource or privilege
+     * - If page is accepted by the rules above and $recursive is true, the page
+     *   will not be accepted if it is the descendant of a non-accepted page.
      *
      * @param  Zym_Navigation_Page $page       page to check
      * @param  bool                $recursive  [optional] if true, page will not
@@ -507,35 +489,7 @@ abstract class Zym_View_Helper_Navigation_Abstract
         return $accept;
     }
     
-    // Helper methods:
-
-    /**
-     * Converts an associative array to a string of tag attributes.
-     *
-     * @param  array $attribs  associative array of attribs to convert
-     * @return string          $attribs formatted as a HTML attrib string
-     */
-    protected function _htmlAttribs(array $attribs)
-    {
-        $view = $this->getView();
-        $html = '';
-        
-        foreach ($attribs as $key => $val) {
-            $key = $view->escape((string) $key);
-
-            if (is_array($val)) {
-                $val = implode(' ', $val);
-            } else if ($val === null) {
-                continue;
-            }
-
-            $val = $view->escape($val);
-
-            $html .= " $key=\"$val\"";
-        }
-
-        return substr($html, 1);
-    }
+    // Util methods:
 
     /**
      * Retrieve whitespace representation of $indent
@@ -550,6 +504,42 @@ abstract class Zym_View_Helper_Navigation_Abstract
         }
 
         return (string) $indent;
+    }
+
+    /**
+     * Converts an associative array to a string of tag attributes.
+     * 
+     * Overloads {@link Zend_View_Helper_HtmlElement::_htmlAttribs()}.
+     *
+     * @param  array $attribs  an array where each key-value pair is converted 
+     *                         to an attribute name and value
+     * @return string          an attribute string
+     */
+    protected function _htmlAttribs($attribs)
+    {
+        foreach ($attribs as $key => $value) {
+            if ($value === null || (is_string($value) && !strlen($value))) {
+                unset($attribs[$key]);
+            }
+        }
+        
+        return parent::_htmlAttribs($attribs);
+    }
+
+    /**
+     * Normalize an ID
+     * 
+     * Overrides {@link Zend_View_Helper_HtmlElement::_normalizeId()}.
+     * 
+     * @param  string $value 
+     * @return string
+     */
+    protected function _normalizeId($value)
+    {
+        $prefix = get_class($this);
+        $prefix = strtolower(trim(substr($prefix, strrpos($prefix, '_')), '_'));
+        
+        return $prefix . '-' . $value;
     }
     
     // Static methods:
@@ -572,9 +562,10 @@ abstract class Zym_View_Helper_Navigation_Abstract
      * 
      * @param  midex $role               [optional] role to set. Expects null,
      *                                   string, or an instance of
-     *                                   Zend_Acl_Role_Interface. Default is
-     *                                   null, which sets no default role.
-     * @throws InvalidArgumentException  if role is invalid
+     *                                   {@link Zend_Acl_Role_Interface}.
+     *                                   Default is null, which sets no default
+     *                                   role.
+     * @throws Zend_View_Exception       if role is invalid
      * @return void
      */
     public static function setDefaultRole($role = null)
@@ -584,27 +575,9 @@ abstract class Zym_View_Helper_Navigation_Abstract
             $role instanceof Zend_Acl_Role_Interface) {
             self::$_defaultRole = $role;
         } else {
-            $msg = '$role must be null|string|Zend_Acl_Role_Interface';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zend/View/Exception.php';
+            throw new Zend_View_Exception(
+                    '$role must be null|string|Zend_Acl_Role_Interface');
         }
     }
-    
-    // Abstract methods:
-
-    /**
-     * Renders helper
-     *
-     * @param  Zym_Navigation_Container $container  [optional] container to
-     *                                              render. Default is to render
-     *                                              the container registered in
-     *                                              the helper.
-     * @param  string|int               $indent     [optional] indentation as
-     *                                              a string or number of 
-     *                                              spaces. Default is null,
-     *                                              which will use the indent
-     *                                              registered in the helper.
-     * @return string                               helper output
-     */
-    abstract public function render(Zym_Navigation_Container $container = null,
-                                    $indent = null);
 }

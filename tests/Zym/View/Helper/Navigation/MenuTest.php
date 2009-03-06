@@ -94,16 +94,18 @@ class Zym_View_Helper_Navigation_MenuTest
      * It should be possible to set indenting in the helper
      *
      */
-    public function testShouldBeAbleToBothSetIndentAndOverrideItInToString()
+    public function testShouldBeAbleToBothSetIndentAndOverrideInRenderMenu()
     {
         $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
 
         $expected1 = file_get_contents($this->_files . '/menu_indent4.html');
         $expected2 = file_get_contents($this->_files . '/menu_indent8.html');
+        $actual1 = rtrim($this->_helper->renderMenu(null, 4), PHP_EOL);
+        $actual2 = rtrim($this->_helper->renderMenu(), PHP_EOL);
 
-        $this->assertEquals($expected1, $this->_helper->render(null, 4));
-        $this->assertEquals($expected2, $this->_helper->render());
+        $this->assertEquals($expected1, $actual1);
+        $this->assertEquals($expected2, $actual2);
 
         $this->_helper->setIndent($old);
     }

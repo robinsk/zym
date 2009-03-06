@@ -136,54 +136,6 @@ class Zym_View_Helper_Navigation_NavigationTest
     }
     
     /**
-     * The helper should automatically inject the correct helper path for
-     * navigation helpers
-     * 
-     */
-    public function testGetViewShouldInjectHelperPath()
-    {
-        // setup
-        $view = new Zend_View();
-        $view->addHelperPath('Zym/View/Helper', 'Zym_View_Helper');
-        $ns = Zym_View_Helper_Navigation_Abstract::NS;
-        $ns .= '_';
-        
-        // sanity check
-        $this->assertArrayNotHasKey($ns, $view->getHelperPaths());
-        
-        // setup
-        $oldView = $this->_helper->getView();
-        $this->_helper->setView($view);
-        
-        // test
-        $this->assertArrayHasKey($ns, $this->_helper->getView()->getHelperPaths());
-        
-        // teardown
-        $this->_helper->setView($oldView);
-    }
-    
-    public function testSettingAnInvalidProxyShouldThrowAnException()
-    {
-        // setup
-        $oldProxy = $this->_helper->getDefaultProxy();
-        
-        // test
-        try {
-            $this->_helper->setDefaultProxy('sdfkugrkjasdfs');
-            $failed = true;
-        } catch (Zend_View_Exception $e) {
-            $failed = false;
-        }
-        
-        // teardown
-        $this->_helper->setDefaultProxy($oldProxy);
-        
-        if ($failed) {
-            $this->fail('Setting an invalid proxy should throw Zend_View_Exception');
-        }
-    }
-    
-    /**
      * It should be possible to specify another default proxy
      * 
      */
@@ -206,31 +158,5 @@ class Zym_View_Helper_Navigation_NavigationTest
         // teardown
         $this->_helper->setContainer($oldContainer);
         $this->_helper->setDefaultProxy($oldProxy);
-    }
-    
-    /**
-     * It should be possible to specify which proxies to allow
-     * 
-     */
-    public function testShouldBeAbleToSpecifyProxies()
-    {
-        // setup
-        $oldProxies = $this->_helper->getProxies();
-        $this->_helper->setProxies(array('breadcrumbs'));
-        
-        // test
-        try {
-            $helper = $this->_helper->menu();
-            $failed = true;
-        } catch (BadMethodCallException $e) {
-            $failed = false;
-        }
-        
-        // teardown
-        $this->_helper->setProxies($oldProxies);
-        
-        if ($failed) {
-            $this->fail('Setting an invalid proxy should throw Zend_View_Exception');
-        }
     }
 }

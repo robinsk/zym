@@ -9,7 +9,7 @@
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
@@ -27,7 +27,7 @@ require_once 'Zym/View/Helper/Navigation/Abstract.php';
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
@@ -71,18 +71,18 @@ class Zym_View_Helper_Navigation_Sitemap
     protected $_useXmlDeclaration = true;
     
     /**
-     * Whether sitemap should be schema validated when generated
-     *
-     * @var bool
-     */
-    protected $_useSchemaValidation = false;
-    
-    /**
      * Whether sitemap should be validated using Zym_Validate_Sitemap_*
      *
      * @var bool
      */
     protected $_useSitemapValidators = true;
+    
+    /**
+     * Whether sitemap should be schema validated when generated
+     *
+     * @var bool
+     */
+    protected $_useSchemaValidation = false;
     
     /**
      * Server url
@@ -93,36 +93,17 @@ class Zym_View_Helper_Navigation_Sitemap
     
     /**
      * View helper entry point:
-     * Retrieves helper and optionally sets container to operate on and options
-     * 
-     * The options array is an optional associative array of options to set.
-     * Each key in the array corresponds to the according set*() method, and
-     * each word is separated by underscores, e.g. the option 'format_output'
-     * corresponds to setFormatOutput().
+     * Retrieves helper and optionally sets container to operate on
      * 
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              operate on
-     * @param  array                    $options    [optional] associative
-     *                                              array of options to set
      * @return Zym_View_Helper_Sitemap              fluent interface,
      *                                              returns self
      */
-    public function sitemap(Zym_Navigation_Container $container = null,
-                            array $options = array())
+    public function sitemap(Zym_Navigation_Container $container = null)
     {
         if (null !== $container) {
             $this->setContainer($container);
-        }
-        
-        // set options
-        foreach ($options as $key => $value) {
-            if (is_string($key) && !empty($key)) {
-                $method = 'set' . str_replace(' ', '',
-                                    ucfirst(str_replace('_', ' ', $key)));
-                if (method_exists($this, $method)) {
-                    $this->$method($value);
-                }   
-            }
         }
         
         return $this;
@@ -255,24 +236,11 @@ class Zym_View_Helper_Navigation_Sitemap
      * E.g. http://www.example.com
      *
      * @param  string $serverUrl        server URL to set (only scheme and host)
-     * @throws Zend_Uri_Exception       if invalid server url
+     * @throws Zend_Uri_Exception       if invalid server URL
      * @return Zym_View_Helper_Sitemap  fluent interface, returns self
      */
     public function setServerUrl($serverUrl)
     {
-        $uri = explode(':', $serverUrl, 2);
-        $scheme = strtolower($uri[0]);
-        
-        switch ($scheme) {
-            case 'http':
-            case 'https':
-                break;
-            default:
-                require_once 'Zend/Uri/Exception.php';
-                throw new Zend_Uri_Exception("Invalid scheme: '$scheme'");
-        }
-
-        // TODO: rewrite to use Zend_Uri_Http directly when possible
         require_once 'Zend/Uri.php';
         $uri = Zend_Uri::factory($serverUrl);
         $uri->setFragment('');
@@ -283,7 +251,9 @@ class Zym_View_Helper_Navigation_Sitemap
             $this->_serverUrl = $uri->getUri();
         } else {
             require_once 'Zend/Uri/Exception.php';
-            throw new Zend_Uri_Exception("Invalid URI: '$serverUrl'");
+            throw new Zend_Uri_Exception(sprintf(
+                    'Invalid server URL: "%s"',
+                    $serverUrl));
         }
         
         return $this;
@@ -297,7 +267,7 @@ class Zym_View_Helper_Navigation_Sitemap
     public function getServerUrl()
     {
         if (!isset($this->_serverUrl)) {
-            $this->_serverUrl = $this->getView()->serverUrl();
+            $this->_serverUrl = $this->view->serverUrl();
         }
         
         return $this->_serverUrl;
@@ -313,9 +283,9 @@ class Zym_View_Helper_Navigation_Sitemap
      */
     protected function _xmlEscape($string)
     {
-        // Do not encode existing HTML entities
-        // From PHP 5.2.3 this functionality is built-in, otherwise use a regex
+        // TODO: remove check when minimum PHP version is >= 5.2.3
         if (version_compare(PHP_VERSION, '5.2.3', '>=')) {
+            // do not encode existing HTML entities
             return htmlspecialchars($string, ENT_QUOTES, 'UTF-8', false);
         } else {
             $string = preg_replace('/&(?!(?:#\d++|[a-z]++);)/ui', '&amp;', $string);
@@ -344,7 +314,7 @@ class Zym_View_Helper_Navigation_Sitemap
             $url = $href;
         } else {
             $url = $this->getServerUrl()
-                 . rtrim($this->getView()->url(), '/') . '/'
+                 . rtrim($this->view->url(), '/') . '/'
                  . $href;
         }
 
@@ -425,7 +395,9 @@ class Zym_View_Helper_Navigation_Sitemap
                 !$locValidator->isValid($url)) {
                 require_once 'Zend/View/Exception.php';
                 $msg = 'Invalid sitemap URL: "%s"';
-                throw new Zend_View_Exception(sprintf($msg, $url));
+                throw new Zend_View_Exception(sprintf(
+                        'Encountered an invalid URL for Sitemap XML: "%s"',
+                        $url));
             }
             
             // put url in 'loc' element
@@ -479,34 +451,28 @@ class Zym_View_Helper_Navigation_Sitemap
         if ($this->getUseSchemaValidation()) {
             if (!@$dom->schemaValidate(self::SITEMAP_XSD)) {
                 require_once 'Zend/View/Exception.php';
-                $msg = 'Sitemap is invalid according to ' . self::SITEMAP_XSD;
-                throw new Zend_View_Exception($msg);
+                throw new Zend_View_Exception(sprintf(
+                        'Sitemap is invalid according to XML Schema at "%s"',
+                        self::SITEMAP_XSD));
             }
         }
         
         return $dom;
     }
     
-    // Zym_View_Helper_Navigation_Abstract:
+    // Zym_View_Helper_Navigation_Interface:
 
     /**
      * Renders helper
      * 
-     * Implements {@link Zym_View_Helper_Navigation_Abstract::render()}.
+     * Implements {@link Zym_View_Helper_Navigation_Interface::render()}.
      *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              render. Default is to render
      *                                              the container registered in
      *                                              the helper.
-     * @param  string|int               $indent     [optional] indentation as
-     *                                              a string or number of 
-     *                                              spaces. Default is null,
-     *                                              which will use the indent
-     *                                              registered in the helper.
-     * @return string                               helper output
      */
-    public function render(Zym_Navigation_Container $container = null,
-                           $indent = null)
+    public function render(Zym_Navigation_Container $container = null)
     {
         $dom = $this->getDomSitemap($container);
         

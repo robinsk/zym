@@ -9,7 +9,7 @@
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
@@ -25,7 +25,7 @@ require_once 'Zym/View/Helper/Navigation/Abstract.php';
  *
  * @category   Zym
  * @package    Zym_View
- * @subpackage Helper
+ * @subpackage Helper_Navigation
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
@@ -151,36 +151,23 @@ class Zym_View_Helper_Navigation_Breadcrumbs
         return $this->_linkLast;
     }
     
-    // Zym_View_Helper_Navigation_Abstract:
+    // Zym_View_Helper_Navigation_Interface:
 
     /**
      * Renders helper
      * 
-     * Implements {@link Zym_View_Helper_Navigation_Abstract::render()}.
+     * Implements {@link Zym_View_Helper_Navigation_Interface::render()}.
      *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              render. Default is to render
      *                                              the container registered in
      *                                              the helper.
-     * @param  string|int               $indent     [optional] indentation as
-     *                                              a string or number of 
-     *                                              spaces. Default is null,
-     *                                              which will use the indent
-     *                                              registered in the helper.
-     * @return string                               helper output
      */
-    public function render(Zym_Navigation_Container $container = null,
-                           $indent = null)
+    public function render(Zym_Navigation_Container $container = null)
     {
-        $indent = (null !== $indent)
-                ? $this->_getWhitespace($indent)
-                : $this->getIndent();
-
         if (null === $container) {
             $container = $this->getContainer();
         }
-        
-        $view = $this->getView();
 
         // init html
         $html = '';
@@ -189,7 +176,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
         $found = false;
         $depth = -1;
         $iterator = new RecursiveIteratorIterator($container,
-            RecursiveIteratorIterator::CHILD_FIRST);
+                RecursiveIteratorIterator::CHILD_FIRST);
 
         // step 1: find the deepest active page
         foreach ($iterator as $page) {
@@ -199,15 +186,16 @@ class Zym_View_Helper_Navigation_Breadcrumbs
             }
             
             if ($page->isActive() && $iterator->getDepth() > $depth) {
+                // found an active page at a deeper level than before
                 $found = $page;
                 $depth = $iterator->getDepth();
             }
         }
 
         // step 2: walk back to root
-        if ($depth >= $this->_minDepth) {
+        if ($depth >= $this->getMinDepth()) {
             // put the current page last
-            if ($this->_linkLast) {
+            if ($this->getLinkLast()) {
                 $html = $this->htmlify($found);
             } else {
                 $html = $found->getLabel();
@@ -218,7 +206,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
                 }
             }
 
-            // loop parents and prepend
+            // loop parents and prepend crumb for each
             while ($parent = $found->getParent()) {
                 if ($parent instanceof Zym_Navigation_Page) {
                     $html = $this->htmlify($parent)
@@ -235,6 +223,6 @@ class Zym_View_Helper_Navigation_Breadcrumbs
             }
         }
 
-        return strlen($html) ? $indent . $html : '';
+        return strlen($html) ? $this->getIndent() . $html : '';
     }
 }
