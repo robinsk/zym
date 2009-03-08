@@ -16,7 +16,7 @@
 
 /**
  * Imports
- * 
+ *
  * @see Zym_View_Helper_Navigation_TestAbstract
  * @see Zym_View_Helper_Menu
  */
@@ -24,7 +24,7 @@ require_once dirname(__FILE__) . '/TestAbstract.php';
 require_once 'Zym/View/Helper/Navigation/Menu.php';
 
 /**
- * Tests Zym_View_Helper_Menu
+ * Tests Zym_View_Helper_Navigation_Menu
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
@@ -50,11 +50,7 @@ class Zym_View_Helper_Navigation_MenuTest
      */
     protected $_helper;
 
-    /**
-     * It should be possible to null out the nav structure in the helper
-     *
-     */
-    public function testShouldBeAbleToNullOutNavigation()
+    public function testNullingOutContainerInHelper()
     {
         $old = $this->_helper->getContainer();
         $oldCount = count($old);
@@ -68,11 +64,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->_helper->setContainer($old);
     }
 
-    /**
-     * It should be possible to autoload the nav structure from Zend_Registry
-     *
-     */
-    public function testShouldBeAbleToAutoloadNavFromRegistry()
+    public function testAutoloadingContainerFromRegistry()
     {
         $oldReg = null;
         if (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
@@ -90,11 +82,7 @@ class Zym_View_Helper_Navigation_MenuTest
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
     }
 
-    /**
-     * It should be possible to set indenting in the helper
-     *
-     */
-    public function testShouldBeAbleToBothSetIndentAndOverrideInRenderMenu()
+    public function testSetIndentAndOverrideInRenderMenu()
     {
         $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
@@ -110,12 +98,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->_helper->setIndent($old);
     }
 
-    /**
-     * It should be possible to render another nav structure without
-     * interfering with the one registered in the helper
-     *
-     */
-    public function testShouldBePossibleToRenderAnotherNavWithoutInterfering()
+    public function testRenderAnotherContainerWithoutInterfering()
     {
         $expected = file_get_contents($this->_files . '/menu.html');
         $this->assertEquals($expected, $this->_helper->render());
@@ -126,11 +109,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->assertEquals($expected, $this->_helper->render());
     }
 
-    /**
-     * It should be possible to filter out pages based on ACL roles as a string
-     *
-     */
-    public function testShouldBeAbleToUseAclRolesAsString()
+    public function testUseAclRoleAsString()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -146,11 +125,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->_helper->setRole($oldRole);
     }
 
-    /**
-     * It should be possible to filter out pages based on ACL roles as an array
-     *
-     */
-    public function testShouldBeAbleToUseAcl()
+    public function testFilterOutPagesBasedOnAcl()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -166,11 +141,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->_helper->setRole($oldRole);
     }
 
-    /**
-     * It should be possible to filter out pages based on ACL roles
-     *
-     */
-    public function testShouldBeAbleToUseAnActualAclRoleFromAclObject()
+    public function testUseAnActualAclRoleFromAclObject()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -186,13 +157,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->_helper->setRole($oldRole);
     }
 
-    /**
-     * It should be possible to filter out pages based on ACL roles that are
-     * constructed directly when setting in the helper, without fetching it
-     * from the existing ACL
-     *
-     */
-    public function testShouldBeAbleToUseConstructedAclRolesNotFromAclObject()
+    public function testUseConstructedAclRolesNotFromAclObject()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -208,11 +173,7 @@ class Zym_View_Helper_Navigation_MenuTest
         $this->_helper->setRole($oldRole);
     }
 
-    /**
-     * It should be possible to set CSS class for the UL element
-     *
-     */
-    public function testShouldBePossibleToSetUlCssClass()
+    public function testSetUlCssClass()
     {
         $old = $this->_helper->getUlClass();
         $this->_helper->setUlClass('My_Nav');
@@ -222,63 +183,46 @@ class Zym_View_Helper_Navigation_MenuTest
 
         $this->_helper->setUlClass($old);
     }
-    
-    /**
-     * It should be possible to explicitly set a Zend_Translate translator to use
-     *
-     */
-    public function testShouldBeAbleToSetTranslatorAndUseIt()
+
+    public function testTranslationUsingZendTranslate()
     {
         $translator = $this->_getTranslator();
         $this->_helper->setTranslator($translator);
 
         $expected = file_get_contents($this->_files . '/menu_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
     }
-    
-    /**
-     * It should be possible to explicitly set a Zend_Translate_Adapter to use
-     *
-     */
-    public function testShouldBeAbleToSetTranslateAdapterAndUseIt()
+
+    public function testTranslationUsingZendTranslateAdapter()
     {
         $translator = $this->_getTranslator();
         $this->_helper->setTranslator($translator->getAdapter());
 
         $expected = file_get_contents($this->_files . '/menu_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
     }
-    
-    /**
-     * The helper should be able to retrieve a translator from Zend_Registry
-     *
-     */
-    public function testShouldBeAbleToGetTranslatorFromRegistryAndUseIt()
+
+    public function testTranslationUsingTranslatorFromRegistry()
     {
         $oldReg = Zend_Registry::isRegistered('Zend_Translate')
                 ? Zend_Registry::get('Zend_Translate')
                 : null;
-        
-        $translator = $this->_getTranslator();  
+
+        $translator = $this->_getTranslator();
         Zend_Registry::set('Zend_Translate', $translator);
-        
+
         $expected = file_get_contents($this->_files . '/menu_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
         Zend_Registry::set('Zend_Translate', $oldReg);
     }
-    
-    /**
-     * It should be possible to disable translation even if the helper has a
-     * translator
-     *
-     */
-    public function testShouldBeAbleToDisableTranslation()
+
+    public function testDisablingTranslation()
     {
         $translator = $this->_getTranslator();
         $this->_helper->setTranslator($translator);
@@ -286,7 +230,7 @@ class Zym_View_Helper_Navigation_MenuTest
 
         $expected = file_get_contents($this->_files . '/menu.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
     }
 }

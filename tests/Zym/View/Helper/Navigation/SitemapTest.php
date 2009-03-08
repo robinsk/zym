@@ -16,7 +16,7 @@
 
 /**
  * Imports
- * 
+ *
  * @see Zend_Controller_Request_Http
  * @see Zym_View_Helper_Navigation_TestAbstract
  * @see Zym_View_Helper_Sitemap
@@ -27,7 +27,7 @@ require_once 'Zend/Controller/Request/Http.php';
 require_once 'Zym/View/Helper/Navigation/Sitemap.php';
 
 /**
- * Tests Zym_View_Helper_Sitemap
+ * Tests Zym_View_Helper_Navigation_Sitemap
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
@@ -58,22 +58,18 @@ class Zym_View_Helper_SitemapTest
      */
     protected $_helper;
 
-    /**
-     * Prepares the environment before running a test.
-     *
-     */
     protected function setUp()
     {
         date_default_timezone_set('Europe/Berlin');
-        
+
         if (isset($_SERVER['SERVER_NAME'])) {
             $this->_oldServer['SERVER_NAME'] = $_SERVER['SERVER_NAME'];
         }
-        
+
         if (isset($_SERVER['SERVER_PORT'])) {
             $this->_oldServer['SERVER_PORT'] = $_SERVER['SERVER_PORT'];
         }
-        
+
         if (isset($_SERVER['REQUEST_URI'])) {
             $this->_oldServer['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
         }
@@ -95,10 +91,6 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setFormatOutput(true);
     }
 
-    /**
-     * Cleans up the environment after running a test
-     *
-     */
     protected function tearDown()
     {
         if (null !== $this->_oldRequest) {
@@ -113,11 +105,7 @@ class Zym_View_Helper_SitemapTest
         }
     }
 
-    /**
-     * It should be possible to null out the nav structure in the helper
-     *
-     */
-    public function testShouldBeAbleToNullOutNavigation()
+    public function testNullingOutNavigation()
     {
         $old = $this->_helper->getContainer();
         $oldCount = count($old);
@@ -131,11 +119,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setContainer($old);
     }
 
-    /**
-     * It should be possible to autoload the nav structure from Zend_Registry
-     *
-     */
-    public function testShouldBeAbleToAutoloadNavFromRegistry()
+    public function testAutoloadContainerFromRegistry()
     {
         $oldReg = null;
         if (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
@@ -145,7 +129,7 @@ class Zym_View_Helper_SitemapTest
 
         $oldContainer = $this->_helper->getContainer();
         $this->_helper->setContainer(null);
-        
+
         $expected = file_get_contents($this->_files . '/sitemap.xml');
         $this->assertEquals($expected, $this->_helper->render());
 
@@ -153,12 +137,7 @@ class Zym_View_Helper_SitemapTest
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
     }
 
-    /**
-     * It should be possible to render another nav structure without
-     * interfering with the one registered in the helper
-     *
-     */
-    public function testShouldBePossibleToRenderAnotherNavWithoutInterfering()
+    public function testRenderAnotherContainerWithoutInterfering()
     {
         $expected = file_get_contents($this->_files . '/sitemap.xml');
 
@@ -168,11 +147,7 @@ class Zym_View_Helper_SitemapTest
         $this->assertEquals($expected, $this->_helper->render());
     }
 
-    /**
-     * It should be possible to filter out pages based on ACL roles
-     *
-     */
-    public function testShouldBeAbleToUseAclRoles()
+    public function testUseAclRoles()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -188,11 +163,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setRole($oldRole);
     }
 
-    /**
-     * It should be possible to specify max depth to render sitemap
-     *
-     */
-    public function testShouldBeAbletoSetMaxDepth()
+    public function testSettingMaxDepth()
     {
         $old = $this->_helper->getMaxDepth();
         $this->_helper->setMaxDepth(0);
@@ -203,11 +174,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setMaxDepth($old);
     }
 
-    /**
-     * It should be possible to not print the XML declaration
-     *
-     */
-    public function testShouldBeAbleToDropXmlDeclaration()
+    public function testDropXmlDeclaration()
     {
         $old = $this->_helper->getUseXmlDeclaration();
         $this->_helper->setUseXmlDeclaration(false);
@@ -218,11 +185,7 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setUseXmlDeclaration($old);
     }
 
-    /**
-     * An exception should be thrown when the loc is invalid
-     *
-     */
-    public function testShouldThrowExceptionOnInvalidLoc()
+    public function testThrowExceptionOnInvalidLoc()
     {
         $nav = clone $this->_nav2;
         $nav->addPage(array('label' => 'Invalid', 'uri' => 'http://w.'));
@@ -236,12 +199,7 @@ class Zym_View_Helper_SitemapTest
         $this->fail('A Zend_View_Exception was not thrown on invalid <loc />');
     }
 
-    /**
-     * An exception should not be thrown when the loc is invalid and
-     * sitemap validators are disabled
-     *
-     */
-    public function testShouldBeAbleToDisableValidators()
+    public function testDisablingValidators()
     {
         $nav = clone $this->_nav2;
         $nav->addPage(array('label' => 'Invalid', 'uri' => 'http://w.'));
@@ -253,14 +211,10 @@ class Zym_View_Helper_SitemapTest
         $this->_helper->setUseSitemapValidators(true);
     }
 
-    /**
-     * It should be possible to perform schema validation on the
-     * generated sitemap
-     *
-     */
-    //public function testShouldBeAbleToUseSchemaValidation()
-    public function jokeShouldBeAbleToUseSchemaValidation()
+    public function testUseSchemaValidation()
     {
+        $this->markTestSkipped('Skipped because it fetched XSD from internet');
+        return;
         $nav = clone $this->_nav2;
         $this->_helper->setUseSitemapValidators(false);
         $this->_helper->setUseSchemaValidation(true);

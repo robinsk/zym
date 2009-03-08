@@ -16,7 +16,7 @@
 
 /**
  * Imports
- * 
+ *
  * @see Zym_View_Helper_Navigation_TestAbstract
  * @see Zym_View_Helper_Breadcrumbs
  */
@@ -24,7 +24,7 @@ require_once dirname(__FILE__) . '/TestAbstract.php';
 require_once 'Zym/View/Helper/Navigation/Breadcrumbs.php';
 
 /**
- * Tests Zym_View_Helper_Breadcrumbs
+ * Tests Zym_View_Helper_Navigation_Breadcrumbs
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
@@ -50,11 +50,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
      */
     protected $_helper;
 
-    /**
-     * It should be possible to null out the nav structure in the helper
-     *
-     */
-    public function testShouldBeAbleToNullOutNavigation()
+    public function testNullOutContainer()
     {
         $old = $this->_helper->getContainer();
         $oldCount = count($old);
@@ -68,11 +64,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         $this->_helper->setContainer($old);
     }
 
-    /**
-     * It should be possible to autoload the nav structure from Zend_Registry
-     *
-     */
-    public function testShouldBeAbleToAutoloadNavFromRegistry()
+    public function testAutoloadContainerFromRegistry()
     {
         $oldReg = null;
         if (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
@@ -82,7 +74,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $oldContainer = $this->_helper->getContainer();
         $this->_helper->setContainer(null);
-        
+
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->render());
 
@@ -90,11 +82,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
     }
 
-    /**
-     * It should be possible to set a custom separator to use between breadcrumbs
-     *
-     */
-    public function testShouldBeAbleToSetSeparator()
+    public function testSetSeparator()
     {
         $old = $this->_helper->getSeparator();
         $this->_helper->setSeparator('foo');
@@ -105,11 +93,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         $this->_helper->setSeparator($old);
     }
 
-    /**
-     * It should be possible to link the last element in the breadcrumb
-     *
-     */
-    public function testShouldBeAbleToLinkLastElement()
+    public function testLinkLastElement()
     {
         $old = $this->_helper->getLinkLast();
         $this->_helper->setLinkLast(true);
@@ -120,11 +104,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         $this->_helper->setLinkLast($old);
     }
 
-    /**
-     * It should be possible to set indenting in the helper
-     *
-     */
-    public function testShouldBeAbleToSetIndent()
+    public function testSetIndent()
     {
         $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
@@ -137,12 +117,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         $this->_helper->setIndent($old);
     }
 
-    /**
-     * It should be possible to render another nav structure without
-     * interfering with the one registered in the helper
-     *
-     */
-    public function testShouldBePossibleToRenderAnotherNavWithoutInterfering()
+    public function testRenderAnotherContainerWithoutInterfering()
     {
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->render());
@@ -157,11 +132,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         $this->_helper->setMinDepth($oldMin);
     }
 
-    /**
-     * It should be possible to filter out pages based on ACL roles
-     *
-     */
-    public function testShouldBeAbleToUseAclResourceFromPages()
+    public function testUseAclResourceFromPages()
     {
         $oldAcl = $this->_helper->getAcl();
         $oldRole = $this->_helper->getRole();
@@ -176,63 +147,46 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         $this->_helper->setAcl($oldAcl);
         $this->_helper->setRole($oldRole);
     }
-    
-    /**
-     * It should be possible to explicitly set a Zend_Translate translator to use
-     *
-     */
-    public function testShouldBeAbleToSetTranslatorAndUseIt()
+
+    public function testTranslationUsingZendTranslate()
     {
         $translator = $this->_getTranslator();
         $this->_helper->setTranslator($translator);
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
     }
-    
-    /**
-     * It should be possible to explicitly set a Zend_Translate_Adapter to use
-     *
-     */
-    public function testShouldBeAbleToSetTranslateAdapterAndUseIt()
+
+    public function testTranslationUsingZendTranslateAdapter()
     {
         $translator = $this->_getTranslator();
         $this->_helper->setTranslator($translator->getAdapter());
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
     }
-    
-    /**
-     * The helper should be able to retrieve a translator from Zend_Registry
-     *
-     */
-    public function testShouldBeAbleToGetTranslatorFromRegistryAndUseIt()
+
+    public function testTranslationFromTranslatorInRegistry()
     {
         $oldReg = Zend_Registry::isRegistered('Zend_Translate')
                 ? Zend_Registry::get('Zend_Translate')
                 : null;
-        
-        $translator = $this->_getTranslator();  
+
+        $translator = $this->_getTranslator();
         Zend_Registry::set('Zend_Translate', $translator);
-        
+
         $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
         Zend_Registry::set('Zend_Translate', $oldReg);
     }
-    
-    /**
-     * It should be possible to disable translation even if the helper has a
-     * translator
-     *
-     */
-    public function testShouldBeAbleToDisableTranslation()
+
+    public function testDisablingTranslation()
     {
         $translator = $this->_getTranslator();
         $this->_helper->setTranslator($translator);
@@ -240,7 +194,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->render());
-        
+
         $this->_helper->setTranslator(null);
     }
 }

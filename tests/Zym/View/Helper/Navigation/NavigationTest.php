@@ -16,7 +16,7 @@
 
 /**
  * Imports
- * 
+ *
  * @see Zym_View_Helper_Navigation_TestAbstract
  * @see Zym_View_Helper_Breadcrumbs
  */
@@ -24,7 +24,7 @@ require_once dirname(__FILE__) . '/TestAbstract.php';
 require_once 'Zym/View/Helper/Navigation.php';
 
 /**
- * Tests Zym_View_Helper_Breadcrumbs
+ * Tests Zym_View_Helper_Navigation
  *
  * @author     Robin Skoglund
  * @category   Zym_Tests
@@ -50,10 +50,6 @@ class Zym_View_Helper_Navigation_NavigationTest
      */
     protected $_helper;
 
-    /**
-     * The helper should proxy to the menu helper by default
-     *
-     */
     public function testShouldProxyToMenuHelperByDeafult()
     {
         $oldReg = null;
@@ -71,51 +67,42 @@ class Zym_View_Helper_Navigation_NavigationTest
         $this->_helper->setContainer($oldContainer);
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
     }
-    
-    /**
-     * The navigation helper should inject its container to proxied helpers
-     * 
-     */
-    public function testShouldBeAbleToInjectContainer()
+
+    public function testInjectingContainer()
     {
         // setup
         $oldContainer = $this->_helper->getContainer();
         $this->_helper->setInjectContainer(false);
         $this->_helper->menu()->setContainer(null);
         $this->_helper->breadcrumbs()->setContainer(null);
-        
+
         // sanity check
         $msg = 'Corruption: Proxied helper should not have a container';
         $this->assertEquals(false, $this->_helper->menu()->hasContainer(), $msg);
         $this->assertEquals(false, $this->_helper->breadcrumbs()->hasContainer(), $msg);
-        
+
         // setup
         $this->_helper->setInjectContainer();
         $this->_helper->setContainer($this->_nav2);
-        
+
         // test 1
         $msg = 'Fail: The render method does not inject container by default';
         $expected = file_get_contents($this->_files . '/menu2.html');
         $this->assertEquals($expected, $this->_helper->render(), $msg);
-        
+
         // setup
         $this->_helper->setContainer($this->_nav1);
-        
+
         // test 2
         $msg = 'Fail: The __call method does not inject container by default';
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->breadcrumbs()->render(), $msg);
-        
+
         // teardown
         $this->_helper->setContainer($oldContainer);
     }
-    
-    /**
-     * It should be possible to disable container injection in the navigation
-     * helper
-     * 
-     */
-    public function testShouldBeAbleToDisableContainerInjection()
+
+    public function testDisablingContainerInjection()
     {
         // setup
         $oldInject = $this->_helper->getInjectContainer();
@@ -124,37 +111,33 @@ class Zym_View_Helper_Navigation_NavigationTest
         $this->_helper->setContainer($this->_nav2);
         $this->_helper->menu()->setContainer(null);
         $this->_helper->breadcrumbs()->setContainer(null);
-        
+
         // test
         $expected = '';
         $this->assertEquals($expected, $this->_helper->render());
         $this->assertEquals($expected, $this->_helper->breadcrumbs()->render());
-        
+
         // teardown
         $this->_helper->setInjectContainer($oldInject);
         $this->_helper->setContainer($oldContainer);
     }
-    
-    /**
-     * It should be possible to specify another default proxy
-     * 
-     */
-    public function testShouldBeAbleToSetDefaultProxy()
+
+    public function testSpecifyingDefaultProxy()
     {
         // setup
         $oldContainer = $this->_helper->getContainer();
         $oldProxy = $this->_helper->getDefaultProxy();
-        
+
         // test
         $this->_helper->setDefaultProxy('breadcrumbs');
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->render($this->_nav1));
-        
+
         // test
         $this->_helper->setDefaultProxy('menu');
         $expected = file_get_contents($this->_files . '/menu.html');
         $this->assertEquals($expected, $this->_helper->render($this->_nav1));
-        
+
         // teardown
         $this->_helper->setContainer($oldContainer);
         $this->_helper->setDefaultProxy($oldProxy);
