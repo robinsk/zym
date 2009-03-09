@@ -70,6 +70,24 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     private $_target;
 
     /**
+     * Forward links to other pages
+     *
+     * @link http://www.w3.org/TR/html4/struct/links.html#h-12.3.1
+     *
+     * @var array
+     */
+    private $_rel = array();
+
+    /**
+     * Reverse links to other pages
+     *
+     * @link http://www.w3.org/TR/html4/struct/links.html#h-12.3.1
+     *
+     * @var array
+     */
+    private $_rev = array();
+
+    /**
      * Page order used by parent container
      *
      * @var int|null
@@ -416,6 +434,112 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     public function getTarget()
     {
         return $this->_target;
+    }
+
+    /**
+     * Sets the page's forward links to other pages
+     *
+     * This method expects an associative array of forward links to other pages,
+     * where each element's key is the name of the relation (e.g. alternate,
+     * prev, next, help, etc), and the value is a mixed value that could somehow
+     * be considered a page.
+     *
+     * @param  array|Zend_Config $relations  [optional] an associative array of
+     *                                       forward links to other pages
+     * @return Zym_Navigation_Page           fluent interface, returns self
+     */
+    public function setRel($relations = null)
+    {
+        $this->_rel = array();
+
+        if (null !== $relations) {
+            if ($relations instanceof Zend_Config) {
+                $relations = $relations->toArray();
+            }
+
+            if (!is_array($relations)) {
+                require_once 'Zym/Navigation/Exception.php';
+                throw new Zym_Navigation_Exception(
+                        'Invalid argument: $relations must be an ' .
+                        'array or an instance of Zend_Config');
+            }
+
+            foreach ($relations as $name => $relation) {
+                if (is_string($name)) {
+                    $this->_rel[$name] = $relation;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the page's forward links to other pages
+     *
+     * This method returns an associative array of forward links to other pages,
+     * where each element's key is the name of the relation (e.g. alternate,
+     * prev, next, help, etc), and the value is a mixed value that could somehow
+     * be considered a page.
+     *
+     * @return array  an associative array of forward links to other page
+     */
+    public function getRel()
+    {
+        return $this->_rel;
+    }
+
+    /**
+     * Sets the page's reverse links to other pages
+     *
+     * This method expects an associative array of reverse links to other pages,
+     * where each element's key is the name of the relation (e.g. alternate,
+     * prev, next, help, etc), and the value is a mixed value that could somehow
+     * be considered a page.
+     *
+     * @param  array|Zend_Config $relations  [optional] an associative array of
+     *                                       reverse links to other pages
+     * @return Zym_Navigation_Page           fluent interface, returns self
+     */
+    public function setRev($relations = null)
+    {
+        $this->_rev = array();
+
+        if (null !== $relations) {
+            if ($relations instanceof Zend_Config) {
+                $relations = $relations->toArray();
+            }
+
+            if (!is_array($relations)) {
+                require_once 'Zym/Navigation/Exception.php';
+                throw new Zym_Navigation_Exception(
+                        'Invalid argument: $relations must be an ' .
+                        'array or an instance of Zend_Config');
+            }
+
+            foreach ($relations as $name => $relation) {
+                if (is_string($name)) {
+                    $this->_rev[$name] = $relation;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the page's reverse links to other pages
+     *
+     * This method returns an associative array of forward links to other pages,
+     * where each element's key is the name of the relation (e.g. alternate,
+     * prev, next, help, etc), and the value is a mixed value that could somehow
+     * be considered a page.
+     *
+     * @return array  an associative array of forward links to other page
+     */
+    public function getRev()
+    {
+        return $this->_rev;
     }
 
     /**
@@ -876,6 +1000,8 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 'class'     => $this->getClass(),
                 'title'     => $this->getTitle(),
                 'target'    => $this->getTarget(),
+                'rel'       => $this->getRel(),
+                'rev'       => $this->getRev(),
                 'order'     => $this->getOrder(),
                 'resource'  => $this->getResource(),
                 'privilege' => $this->getPrivilege(),
