@@ -394,7 +394,6 @@ class Zym_View_Helper_Navigation_Sitemap
             if ($this->getUseSitemapValidators() &&
                 !$locValidator->isValid($url)) {
                 require_once 'Zend/View/Exception.php';
-                $msg = 'Invalid sitemap URL: "%s"';
                 throw new Zend_View_Exception(sprintf(
                         'Encountered an invalid URL for Sitemap XML: "%s"',
                         $url));

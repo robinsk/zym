@@ -54,7 +54,7 @@ class Zym_View_Helper_SitemapTest
     /**
      * View helper
      *
-     * @var Zym_View_Helper_Sitemap
+     * @var Zym_View_Helper_Navigation_Sitemap
      */
     protected $_helper;
 

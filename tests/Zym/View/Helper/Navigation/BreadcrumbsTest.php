@@ -46,7 +46,7 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
     /**
      * View helper
      *
-     * @var Zym_View_Helper_Breadcrumbs
+     * @var Zym_View_Helper_Navigation_Breadcrumbs
      */
     protected $_helper;
 

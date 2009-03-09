@@ -104,7 +104,7 @@ abstract class Zym_Navigation_Container
      * @param  Zym_Navigation_Page|array|Zend_Config $page  page to add
      * @return Zym_Navigation_Container                     fluent interface,
      *                                                      returns self
-     * @throws InvalidArgumentException                     if page is invalid
+     * @throws Zym_Navigation_Exception                     if page is invalid
      */
     public function addPage($page)
     {
@@ -112,8 +112,10 @@ abstract class Zym_Navigation_Container
             require_once 'Zym/Navigation/Page.php';
             $page = Zym_Navigation_Page::factory($page);
         } elseif (!$page instanceof Zym_Navigation_Page) {
-            $msg = '$page must be Zym_Navigation_Page|array|Zend_Config';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $page must be an instance of ' .
+                    'Zym_Navigation_Page or Zend_Config, or an array');
         }
 
         $hash = $page->hashCode();
@@ -139,7 +141,7 @@ abstract class Zym_Navigation_Container
      *
      * @param  array|Zend_Config $pages  pages to add
      * @return Zym_Navigation_Container  fluent interface, returns self
-     * @throws InvalidArgumentException  if $pages is not array or Zend_Config
+     * @throws Zym_Navigation_Exception  if $pages is not array or Zend_Config
      */
     public function addPages($pages)
     {
@@ -148,8 +150,10 @@ abstract class Zym_Navigation_Container
         }
 
         if (!is_array($pages)) {
-            $msg = '$pages must be an array or a Zend_Config object';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $pages must be an array or an ' .
+                    'instance of Zend_Config');
         }
 
         foreach ($pages as $page) {
@@ -335,9 +339,9 @@ abstract class Zym_Navigation_Container
      * $nav->findAllByClass('foo'); // $nav->findAllBy('class', 'foo');
      * </code>
      *
-     * @param  string $method          method name
-     * @param  array  $arguments       method arguments
-     * @throws BadMethodCallException  if method does not exist
+     * @param  string $method            method name
+     * @param  array  $arguments         method arguments
+     * @throws Zym_Navigation_Exception  if method does not exist
      */
     public function __call($method, $arguments)
     {
@@ -345,8 +349,11 @@ abstract class Zym_Navigation_Container
             return $this->{$match[1]}($match[2], $arguments[0]);
         }
 
-        $msg = sprintf('Unknown method %s::%s', get_class($this), $method);
-        throw new BadMethodCallException($msg);
+        require_once 'Zym/Navigation/Exception.php';
+        throw new Zym_Navigation_Exception(sprintf(
+                'Bad method call: Unknown method %s::%s',
+                get_class($this),
+                $method));
     }
 
     /**
@@ -372,8 +379,8 @@ abstract class Zym_Navigation_Container
      *
      * Implements RecursiveIterator interface.
      *
-     * @return Zym_Navigation_Page   current page or null
-     * @throws OutOfBoundsException  if the index is invalid
+     * @return Zym_Navigation_Page       current page or null
+     * @throws Zym_Navigation_Exception  if the index is invalid
      */
     public function current()
     {
@@ -384,9 +391,10 @@ abstract class Zym_Navigation_Container
         if (isset($this->_pages[$hash])) {
             return $this->_pages[$hash];
         } else {
-            $msg = 'Corruption detected in container; '
-                 . 'invalid key found in internal iterator';
-            throw new OutOfBoundsException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Corruption detected in container; ' .
+                    'invalid key found in internal iterator');
         }
     }
 

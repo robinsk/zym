@@ -46,7 +46,7 @@ class Zym_View_Helper_Navigation_MenuTest
     /**
      * View helper
      *
-     * @var Zym_View_Helper_Menu
+     * @var Zym_View_Helper_Navigation_Menu
      */
     protected $_helper;
 

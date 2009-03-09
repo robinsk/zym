@@ -62,7 +62,9 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
     public function setUri($uri)
     {
         if (!is_string($uri)) {
-            throw new InvalidArgumentException('$uri must be a string');
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $uri must be a string');
         }
 
         $this->_uri = $uri;

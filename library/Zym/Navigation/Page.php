@@ -21,13 +21,6 @@
 require_once 'Zym/Navigation/Container.php';
 
 /**
- * Used in the factory method
- *
- * @see Zend_Loader
- */
-require_once 'Zend/Loader.php';
-
-/**
  * Zym_Navigation_Page
  *
  * Base class for Zym_Navigation_Page pages.
@@ -130,14 +123,31 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     /**
      * Factory for Zym_Navigation_Page classes
      *
+     * A specific type to construct can be specified by specifying the key
+     * 'type' in $options. If type is 'uri' or 'mvc', the type will be resolved
+     * to Zym_Navigation_Page_Uri or Zym_Navigation_Page_Mvc. Any other value
+     * for 'type' will be considered the full name of the class to construct.
+     * A valid custom page class must extend Zym_Navigation_Page.
+     *
+     * If 'type' is not given, the type of page to construct will be determined
+     * by the following rules:
+     * - If $options contains either of the keys 'action', 'controller',
+     *   'module', or 'route', a Zym_Navigation_Page_Mvc page will be created.
+     * - If $options contains the key 'uri', a Zym_Navigation_Page_Uri page
+     *   will be created.
+     *
      * @param  array|Zend_Config $options  options used for creating page
      * @return Zym_Navigation_Page         a page instance
-     * @throws InvalidArgumentException    if $options is not array/Zend_Config
-     * @throws InvalidArgumentException    if 'type' is given, and the specified
-     *                                     type does not extend this class
+     * @throws Zym_Navigation_Exception    if $options is not array/Zend_Config
      * @throws Zend_Exception              if 'type' is specified and
      *                                     Zend_Loader is unable to load the
      *                                     class
+     * @throws Zym_Navigation_Exception    if something goes wrong during
+     *                                     instantiation of the page
+     * @throws Zym_Navigation_Exception    if 'type' is given, and the specified
+     *                                     type does not extend this class
+     * @throws Zym_Navigation_Exception    if unable to determine which class
+     *                                     to instantiate
      */
     public static function factory($options)
     {
@@ -146,8 +156,9 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         }
 
         if (!is_array($options)) {
-            $msg = '$options must be an array or Zend_Config';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                'Invalid argument: $options must be an array or Zend_Config');
         }
 
         if (isset($options['type'])) {
@@ -162,25 +173,36 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                         break;
                 }
 
-                @Zend_Loader::loadClass($type);
+                require_once 'Zend/Loader.php';
+                Zend_Loader::loadClass($type);
 
                 $page = new $type($options);
                 if (!$page instanceof Zym_Navigation_Page) {
-                    $msg = "$type does not extend Zym_Navigation_Page";
-                    throw new InvalidArgumentException($msg);
+                    require_once 'Zym/Navigation/Exception.php';
+                    throw new Zym_Navigation_Exception(sprintf(
+                            'Invalid argument: Detected type "%s", which ' .
+                            'is not an instance of Zym_Navigation_Page',
+                            $type));
                 }
                 return $page;
             }
         }
 
-        if (isset($options['uri']) && !isset($options['action']) &&
-            !isset($options['controller']) && !isset($options['module'])) {
+        $hasUri = isset($options['uri']);
+        $hasMvc = isset($options['action']) || isset($options['controller']) ||
+                  isset($options['module']) || isset($options['route']);
+
+        if ($hasMvc) {
+            require_once 'Zym/Navigation/Page/Mvc.php';
+            return new Zym_Navigation_Page_Mvc($options);
+        } elseif ($hasUri) {
             require_once 'Zym/Navigation/Page/Uri.php';
             return new Zym_Navigation_Page_Uri($options);
+        } else {
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                'Invalid argument: Unable to determine class to instantiate');
         }
-
-        require_once 'Zym/Navigation/Page/Mvc.php';
-        return new Zym_Navigation_Page_Mvc($options);
     }
 
     /**
@@ -251,13 +273,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *
      * @param  string $label             new page label
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if empty/no string is given
+     * @throws Zym_Navigation_Exception  if empty/no string is given
      */
     public function setLabel($label)
     {
-        if (!is_string($label) || strlen($label) < 1) {
-            $msg = '$label must be string with at least 1 character';
-            throw new InvalidArgumentException($msg);
+        if (null !== $label && !is_string($label)) {
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $label must be a string or null');
         }
 
         $this->_label = $label;
@@ -280,13 +303,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @param  string|null $id           [optional] id to set. Default is null,
      *                                   which sets no id.
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if not given string or null
+     * @throws Zym_Navigation_Exception  if not given string or null
      */
     public function setId($id = null)
     {
         if (null !== $id && !is_string($id) && !is_numeric($id)) {
-            $msg = '$id must be a string, number or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $id must be a string, number or null');
         }
 
         $this->_id = null === $id ? $id : (string) $id;
@@ -310,13 +334,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @param  string|null $class        [optional] CSS class to set. Default
      *                                   is null, which sets no CSS class.
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if not given string or null
+     * @throws Zym_Navigation_Exception  if not given string or null
      */
     public function setClass($class = null)
     {
         if (null !== $class && !is_string($class)) {
-            $msg = '$class must be a string or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $class must be a string or null');
         }
 
         $this->_class = $class;
@@ -339,13 +364,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @param  string $title             [optional] page title. Default is null,
      *                                   which sets no title.
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if not given string or null
+     * @throws Zym_Navigation_Exception  if not given string or null
      */
     public function setTitle($title = null)
     {
         if (null !== $title && !is_string($title)) {
-            $msg = '$title must be a non-empty string';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $title must be a non-empty string');
         }
 
         $this->_title = $title;
@@ -368,13 +394,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @param  string|null $target       [optional] target to set. Default is
      *                                   null, which sets no target.
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if target is not string or null
+     * @throws Zym_Navigation_Exception  if target is not string or null
      */
     public function setTarget($target = null)
     {
         if (null !== $target && !is_string($target)) {
-            $msg = '$target must be a string or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $target must be a string or null');
         }
 
         $this->_target = $target;
@@ -398,7 +425,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *                                   Default is null, which sets no specific
      *                                   order.
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if order is not integer or null
+     * @throws Zym_Navigation_Exception  if order is not integer or null
      */
     public function setOrder($order = null)
     {
@@ -410,9 +437,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         }
 
         if (null !== $order && !is_int($order)) {
-            $msg = '$order must be an integer or null, '
-                 . 'or a string that casts to an integer';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $order must be an integer or null, ' .
+                    'or a string that casts to an integer');
         }
 
         $this->_order = $order;
@@ -443,7 +471,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *                                                       page. Default is
      *                                                       null, which sets no
      *                                                       resource.
-     * @throws InvalidArgumentException                      if $resource if
+     * @throws Zym_Navigation_Exception                      if $resource if
      *                                                       invalid
      * @return Zym_Navigation_Page                           fluent interface,
      *                                                       returns self
@@ -454,8 +482,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $resource instanceof Zend_Acl_Role_Interface) {
             $this->_resource = $resource;
         } else {
-            $msg = '$resource must be null|string|Zend_Acl_Resource_Interface';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $resource must be null, a string, ' .
+                    ' or an instance of Zend_Acl_Resource_Interface');
         }
 
         return $this;
@@ -645,13 +675,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @param  string $property          property name
      * @param  mixed  $value             value to set
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if property name is invalid
+     * @throws Zym_Navigation_Exception  if property name is invalid
      */
     public function set($property, $value)
     {
         if (!is_string($property) || empty($property)) {
-            $msg = 'property name must be a non-empty string';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $property must be a non-empty string');
         }
 
         $method = 'set' . self::_normalizePropertyName($property);
@@ -675,13 +706,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *
      * @param  string $property          property name
      * @return mixed                     the property's value or null
-     * @throws InvalidArgumentException  if property name is invalid
+     * @throws Zym_Navigation_Exception  if property name is invalid
      */
     public function get($property)
     {
         if (!is_string($property) || empty($property)) {
-            $msg = 'property name must be a non-empty string';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $property must be a non-empty string');
         }
 
         $method = 'get' . self::_normalizePropertyName($property);
@@ -761,8 +793,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         $method = 'set' . self::_normalizePropertyName($name);
         if (method_exists($this, $method)) {
-            $msg = "Cannot unset native properties ('$name')";
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(sprintf(
+                    'Unsetting native property "%s" is not allowed',
+                    $name));
         }
 
         if (isset($this->_properties[$name])) {

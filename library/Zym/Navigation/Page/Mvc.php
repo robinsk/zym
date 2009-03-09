@@ -215,13 +215,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @param  string $action            action name
      * @return Zym_Navigation_Page_Mvc   fluent interface, returns self
-     * @throws InvalidArgumentException  if invalid $action is given
+     * @throws Zym_Navigation_Exception  if invalid $action is given
      */
     public function setAction($action)
     {
         if (null !== $action && !is_string($action)) {
-            $msg = '$action must be a string or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $action must be a string or null');
         }
 
         $this->_action = $action;
