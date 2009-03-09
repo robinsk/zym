@@ -39,7 +39,7 @@ class Zym_View_Helper_Navigation_Menu
      * @var string
      */
     protected $_ulClass = 'navigation';
-    
+
     /**
      * Whether a parent page should be active if a child is active
      *
@@ -64,7 +64,7 @@ class Zym_View_Helper_Navigation_Menu
 
         return $this;
     }
-    
+
     // Accessors:
 
     /**
@@ -91,7 +91,7 @@ class Zym_View_Helper_Navigation_Menu
     {
         return $this->_ulClass;
     }
-    
+
     /**
      * Sets a flag indicating whether a parent page should be rendered as
      * active if a child page is active
@@ -105,7 +105,7 @@ class Zym_View_Helper_Navigation_Menu
         $this->_parentActive = (bool) $flag;
         return $this;
     }
-    
+
     /**
      * Returns a flag indicating whether a parent page should be rendered as
      * active if a child is active
@@ -117,13 +117,13 @@ class Zym_View_Helper_Navigation_Menu
     {
         return $this->_parentActive;
     }
-    
+
     // Public methods:
-    
+
     /**
      * Returns an HTML string containing an 'a' element for the given page if
      * the page's href is not empty, and a 'span' element if it is empty
-     * 
+     *
      * Overrides {@link Zym_View_Helper_Navigation_Abstract::htmlify()}.
      *
      * @param  Zym_Navigation_Page $page  page to generate HTML for
@@ -134,7 +134,7 @@ class Zym_View_Helper_Navigation_Menu
         // get label and title for translating
         $label = $page->getLabel();
         $title = $page->getTitle();
-    
+
         // translate label and title?
         if ($this->getUseTranslator() && $t = $this->getTranslator()) {
             if (is_string($label) && !empty($label)) {
@@ -144,7 +144,7 @@ class Zym_View_Helper_Navigation_Menu
                 $title = $t->translate($title);
             }
         }
-        
+
         // get attribs for element
         $attribs = array(
             'id'     => $page->getId(),
@@ -168,7 +168,7 @@ class Zym_View_Helper_Navigation_Menu
 
     /**
      * Renders helper
-     * 
+     *
      * Renders a HTML 'ul' for the given $container. If $container is not given,
      * the container registered in the helper will be used.
      *
@@ -178,7 +178,7 @@ class Zym_View_Helper_Navigation_Menu
      *                                               retrieved from
      *                                               {@link getContainer()}.
      * @param  string|int               $indent      [optional] indentation as
-     *                                               a string or number of 
+     *                                               a string or number of
      *                                               spaces. Default is null,
      *                                               which will use the indent
      *                                               registered in the helper.
@@ -197,11 +197,11 @@ class Zym_View_Helper_Navigation_Menu
         if (null === $container) {
             $container = $this->getContainer();
         }
-        
+
         // indentation
         $indent = (null !== $indent)
                 ? $this->_getWhitespace($indent)
-                : $this->getIndent();  
+                : $this->getIndent();
 
         // init html
         $html = '';
@@ -241,7 +241,7 @@ class Zym_View_Helper_Navigation_Menu
             } else {
                 $ulClass = '';
             }
-            
+
             $html = "$indent<ul$ulClass>\n$html$indent</ul>" . self::EOL;
         }
 
@@ -256,7 +256,7 @@ class Zym_View_Helper_Navigation_Menu
      *                                              the container registered in
      *                                              the helper.
      * @param  string|int               $indent     [optional] indentation as
-     *                                              a string or number of 
+     *                                              a string or number of
      *                                              spaces. Default is null,
      *                                              which will use the indent
      *                                              registered in the helper.
@@ -267,53 +267,53 @@ class Zym_View_Helper_Navigation_Menu
     {
         if (null === $container) {
             $container = $this->getContainer();
-        }      
-        
+        }
+
         // stuff to use when finding deepest active page
         $found = false;
         $depth = -1;
         $iterator = new RecursiveIteratorIterator($container,
                 RecursiveIteratorIterator::CHILD_FIRST);
-        
+
         // find the deepest active page
         foreach ($iterator as $page) {
             if (!$this->accept($page)) {
                 // page is not accepted
                 continue;
             }
-            
+
             if ($page->isActive() && $iterator->getDepth() > $depth) {
                 // found an active page at a deeper level than before
                 $found = $page;
                 $depth = $iterator->getDepth();
             }
         }
-        
+
         if ($found) {
             $indent = (null !== $indent)
                     ? $this->_getWhitespace($indent)
                     : $this->getIndent();
-              
+
             if ($found->hasPages()) {
                 // the found page has children itself; render children
                 return $this->renderMenu($found, $indent, false);
             }
-            
+
             $parent = $found->getParent();
             if ($parent instanceof Zym_Navigation_Page) {
                 // the found page is a leaf node with a parent; render parent
                 return $this->renderMenu($parent, $indent, false);
             }
         }
-        
+
         return '';
     }
-    
+
     // Zym_View_Helper_Navigation_Interface:
 
     /**
      * Renders helper
-     * 
+     *
      * Implements {@link Zym_View_Helper_Navigation_Interface::render()}.
      *
      * @param  Zym_Navigation_Container $container  [optional] container to

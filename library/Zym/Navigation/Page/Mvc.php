@@ -27,17 +27,17 @@ require_once 'Zend/Controller/Action/HelperBroker.php';
 
 /**
  * Used to check if page is active
- * 
+ *
  * @see Zend_Controller_Front
  */
 require_once 'Zend/Controller/Front.php';
 
 /**
  * Zym_Navigation_Page_Mvc
- * 
+ *
  * Represents a page that is defined using module, controller, action, route
- * name and route params to assemble the href  
- * 
+ * name and route params to assemble the href
+ *
  * @author     Robin Skoglund
  * @category   Zym
  * @package    Zym_Navigation
@@ -53,21 +53,21 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * @var string
      */
     private $_action;
-    
+
     /**
      * Controller name to use when assembling URL
      *
      * @var string
      */
     private $_controller;
-    
+
     /**
      * Module name to use when assembling URL
      *
      * @var string
      */
     private $_module;
-    
+
     /**
      * Params to use when assembling URL
      *
@@ -75,7 +75,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * @var array
      */
     private $_params = array();
-    
+
     /**
      * Route name to use when assembling URL
      *
@@ -83,7 +83,7 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * @var string
      */
     private $_route;
-    
+
     /**
      * Whether params should be reset when assembling URL
      *
@@ -91,18 +91,18 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * @var bool
      */
     private $_resetParams = true;
-    
+
     /**
      * Cached href
-     * 
+     *
      * The use of this variable minimizes execution time when getHref() is
      * called more than once during the lifetime of a request. If a property
      * is updated, the cache is invalidated.
-     * 
+     *
      * @var string
      */
     private $_hrefCache;
-    
+
     /**
      * Action helper for assembling URLs
      *
@@ -110,16 +110,16 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      * @var Zend_Controller_Action_Helper_Url
      */
     private static $_urlHelper = null;
-    
+
     // Accessors:
-    
+
     /**
      * Returns whether page should be considered active or not
-     * 
-     * This method will compare the page properties against the request object 
+     *
+     * This method will compare the page properties against the request object
      * that is found in the front controller.
      *
-     * @param  bool $recursive  [optional] whether page should be considered 
+     * @param  bool $recursive  [optional] whether page should be considered
      *                          active if any child pages are active. Default is
      *                          false.
      * @return bool             whether page should be considered active or not
@@ -127,35 +127,35 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     public function isActive($recursive = false)
     {
         $active = parent::isActive(false);
-        
+
         if (!$active) {
             $front = Zend_Controller_Front::getInstance();
             $reqParams = $front->getRequest()->getParams();
-            
+
             if (!array_key_exists('module', $reqParams)) {
                 $reqParams['module'] = $front->getDefaultModule();
             }
 
             $myParams = $this->_params;
-            
+
             if (null !== $this->_module) {
                 $myParams['module'] = $this->_module;
             } else {
                 $myParams['module'] = $front->getDefaultModule();
             }
-            
+
             if (null !== $this->_controller) {
                 $myParams['controller'] = $this->_controller;
             } else {
                 $myParams['controller'] = $front->getDefaultControllerName();
             }
-            
+
             if (null !== $this->_action) {
                 $myParams['action'] = $this->_action;
             } else {
                 $myParams['action'] = $front->getDefaultAction();
             }
-            
+
             if (count(array_intersect_assoc($reqParams, $myParams)) ==
                 count($myParams)) {
                 $this->setActive(true);
@@ -164,13 +164,13 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
         } elseif ($recursive) {
             $active = parent::isActive(true);
         }
-        
+
         return $active;
     }
-    
+
     /**
      * Returns href for this page
-     * 
+     *
      * This method uses {@link Zend_Controller_Action_Helper_Url} to assemble
      * the href based on the page's properties.
      *
@@ -181,36 +181,36 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
         if ($this->_hrefCache) {
             return $this->_hrefCache;
         }
-        
+
         if (null === self::$_urlHelper) {
             self::$_urlHelper =
                 Zend_Controller_Action_HelperBroker::getStaticHelper('Url');
         }
-        
+
         $params = $this->getParams();
-        
+
         if ($param = $this->getModule()) {
             $params['module'] = $param;
         }
-        
+
         if ($param = $this->getController()) {
             $params['controller'] = $param;
         }
-        
+
         if ($param = $this->getAction()) {
             $params['action'] = $param;
         }
-        
+
         $url = self::$_urlHelper->url($params,
                                       $this->getRoute(),
                                       $this->getResetParams());
-        
+
         return $this->_hrefCache = $url;
     }
-    
+
     /**
      * Sets action name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @param  string $action            action name
@@ -223,15 +223,15 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             $msg = '$action must be a string or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_action = $action;
         $this->_hrefCache = null;
         return $this;
     }
-    
+
     /**
      * Returns action name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @return string|null  action name
@@ -240,10 +240,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         return $this->_action;
     }
-    
+
     /**
      * Sets controller name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @param  string|null $controller   controller name
@@ -256,15 +256,15 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             $msg = '$controller must be a string or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_controller = $controller;
         $this->_hrefCache = null;
         return $this;
     }
-    
+
     /**
      * Returns controller name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @return string|null  controller name or null
@@ -273,10 +273,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         return $this->_controller;
     }
-    
+
     /**
      * Sets module name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @param  string|null $module       module name
@@ -289,15 +289,15 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             $msg = '$module must be a string or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_module = $module;
         $this->_hrefCache = null;
         return $this;
     }
-    
+
     /**
      * Returns module name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @return string|null  module name or null
@@ -306,10 +306,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         return $this->_module;
     }
-    
+
     /**
      * Sets params to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @param array|null $params         [optional] page params. Default is null
@@ -324,14 +324,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             // TODO: do this more intelligently?
             $this->_params = $params;
         }
-        
+
         $this->_hrefCache = null;
         return $this;
     }
-    
+
     /**
      * Returns params to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @return array  page params
@@ -340,10 +340,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         return $this->_params;
     }
-    
+
     /**
      * Sets route name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @param  string $route             route name to use when assembling URL
@@ -356,15 +356,15 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
             $msg = '$route must be a non-empty string or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_route = $route;
         $this->_hrefCache = null;
         return $this;
     }
-    
+
     /**
      * Returns route name to use when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @return string  route name
@@ -373,10 +373,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         return $this->_route;
     }
-    
+
     /**
      * Sets whether params should be reset when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @param bool $resetParams          whether params should be reset when
@@ -389,10 +389,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
         $this->_hrefCache = null;
         return $this;
     }
-    
+
     /**
      * Returns whether params should be reset when assembling URL
-     * 
+     *
      * @see getHref()
      *
      * @return bool  whether params should be reset when assembling URL
@@ -401,10 +401,10 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         return $this->_resetParams;
     }
-    
+
     /**
      * Sets action helper for assembling URLs
-     * 
+     *
      * @see getHref()
      *
      * @param  Zend_Controller_Action_Helper_Url $uh  URL helper
@@ -414,9 +414,9 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
     {
         self::$_urlHelper = $uh;
     }
-    
+
     // Public methods:
-    
+
     /**
      * Returns an array representation of the page
      *
@@ -433,6 +433,6 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
                 'params'       => $this->getParams(),
                 'route'        => $this->getRoute(),
                 'reset_params' => $this->getResetParams()
-            )); 
+            ));
     }
 }

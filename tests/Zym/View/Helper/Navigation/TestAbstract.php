@@ -16,7 +16,7 @@
 
 /**
  * Imports
- * 
+ *
  * @see Zend_Acl
  * @see Zend_Acl_Role
  * @see Zend_Config_Xml
@@ -129,17 +129,17 @@ abstract class Zym_View_Helper_Navigation_TestAbstract
     protected function _getAcl()
     {
         $acl = new Zend_Acl();
-        
+
         $acl->addRole(new Zend_Acl_Role('guest'));
         $acl->addRole(new Zend_Acl_Role('member'), 'guest');
         $acl->addRole(new Zend_Acl_Role('admin'), 'member');
         $acl->addRole(new Zend_Acl_Role('special'), 'member');
-        
+
         $acl->add(new Zend_Acl_Resource('guest_foo'));
         $acl->add(new Zend_Acl_Resource('member_foo'), 'guest_foo');
         $acl->add(new Zend_Acl_Resource('admin_foo', 'member_foo'));
         $acl->add(new Zend_Acl_Resource('special_foo'), 'member_foo');
-        
+
         $acl->allow('guest', 'guest_foo');
         $acl->allow('member', 'member_foo');
         $acl->allow('admin', 'admin_foo');
@@ -148,10 +148,10 @@ abstract class Zym_View_Helper_Navigation_TestAbstract
 
         return array('acl' => $acl, 'role' => 'special');
     }
-    
+
     /**
      * Returns translator
-     * 
+     *
      * @return Zend_Translate
      */
     protected function _getTranslator()
@@ -165,7 +165,7 @@ abstract class Zym_View_Helper_Navigation_TestAbstract
             'Home'         => 'Hjem',
             'Go home'      => 'Gå hjem'
         );
-        
+
         return new Zend_Translate('array', $data, 'nb_NO');
     }
 }

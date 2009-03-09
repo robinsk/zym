@@ -71,7 +71,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
 
         return $this;
     }
-    
+
     // Accessors:
 
     /**
@@ -86,7 +86,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
         if (is_string($separator)) {
             $this->_separator = $separator;
         }
-        
+
         return $this;
     }
 
@@ -119,7 +119,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
      * Returns minimum depth of active page that is required to render
      * breadcrumbs
      *
-     * @return int minimum depth of active page that is required to render 
+     * @return int minimum depth of active page that is required to render
      *         breadcrumbs
      */
     public function getMinDepth()
@@ -150,12 +150,12 @@ class Zym_View_Helper_Navigation_Breadcrumbs
     {
         return $this->_linkLast;
     }
-    
+
     // Zym_View_Helper_Navigation_Interface:
 
     /**
      * Renders helper
-     * 
+     *
      * Implements {@link Zym_View_Helper_Navigation_Interface::render()}.
      *
      * @param  Zym_Navigation_Container $container  [optional] container to
@@ -184,7 +184,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
                 // page is not accepted
                 continue;
             }
-            
+
             if ($page->isActive() && $iterator->getDepth() > $depth) {
                 // found an active page at a deeper level than before
                 $found = $page;
@@ -213,7 +213,7 @@ class Zym_View_Helper_Navigation_Breadcrumbs
                           . $this->getSeparator()
                           . $html;
                 }
-               
+
                 if ($parent === $container) {
                     // break if at the root of the given container
                     break;

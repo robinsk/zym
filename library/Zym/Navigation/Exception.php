@@ -30,5 +30,5 @@ require_once 'Zym/Exception.php';
  */
 class Zym_Navigation_Exception extends Zym_Exception
 {
-    
+
 }

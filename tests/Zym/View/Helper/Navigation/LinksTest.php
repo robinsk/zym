@@ -381,19 +381,4 @@ class Zym_View_Helper_Navigation_LinksTest
         $found = $this->_helper->findSubsection($active);
         $this->assertNull($found);
     }
-
-    public function testAddingAndFindingCustomRelations()
-    {
-        $this->_helper->addCustomRelation('up');
-        $active = $this->_helper->findOneByLabel('Page 2');
-        $active->up = 'http://www.example.com/';
-
-        $expected = array('up' => array('http://www.example.com/'));
-        $actual = $this->_helper->findCustomRelations($active);
-        $actual['up'][0] = $actual['up'][0]->getHref();
-        unset($active->up);
-        $this->_helper->removeCustomRelation('up');
-
-        $this->assertEquals($expected, $actual);
-    }
 }

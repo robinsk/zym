@@ -24,15 +24,15 @@
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
- */ 
+ */
 interface Zym_View_Helper_Navigation_Interface
 {
     /**
      * Sets navigation container the helper should operate on by default
      *
      * @param  Zym_Navigation_Container $container          [optional] container
-     *                                                      to operate on. 
-     *                                                      Default is null, 
+     *                                                      to operate on.
+     *                                                      Default is null,
      *                                                      which indicates that
      *                                                      the container should
      *                                                      be reset.
@@ -40,7 +40,7 @@ interface Zym_View_Helper_Navigation_Interface
      *                                                      returns self
      */
     public function setContainer(Zym_Navigation_Container $container = null);
-    
+
     /**
      * Returns the navigation container helper operates on by default
      *

@@ -21,7 +21,7 @@
 require_once 'Zym/View/Helper/Navigation/Abstract.php';
 
 /**
- * Base class for navigation related helpers with proxies to helpers in 
+ * Base class for navigation related helpers with proxies to helpers in
  *
  * @category   Zym
  * @package    Zym_View
@@ -29,44 +29,44 @@ require_once 'Zym/View/Helper/Navigation/Abstract.php';
  * @author     Robin Skoglund
  * @copyright  Copyright (c) 2008 Zym. (http://www.zym-project.com/)
  * @license    http://www.zym-project.com/license    New BSD License
- */ 
+ */
 class Zym_View_Helper_Navigation
     extends Zym_View_Helper_Navigation_Abstract
 {
     /**
      * View helper namespace
-     * 
+     *
      * @var string
      */
     const NS = 'Zym_View_Helper_Navigation';
-    
+
     /**
      * Plugin loader for navigational view helpers
-     * 
+     *
      * @var Zend_Loader_PluginLoader_Interface
      */
     protected $_loader;
-    
+
     /**
      * Default proxy to use in {@link render()}
-     * 
+     *
      * @var string
      */
     protected $_defaultProxy = 'menu';
-    
+
     /**
      * Whether container should be injected when proxying
-     * 
+     *
      * @var bool
      */
     protected $_injectContainer = true;
-    
+
     /**
      * Helper entry point
-     * 
+     *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              operate on
-     * @return Zym_View_Helper_Navigation           fluent interface, returns 
+     * @return Zym_View_Helper_Navigation           fluent interface, returns
      *                                              self
      */
     public function navigation(Zym_Navigation_Container $container = null)
@@ -74,21 +74,21 @@ class Zym_View_Helper_Navigation
         if (null !== $container) {
             $this->setContainer($container);
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Magic overload: Proxy to other navigation helpers or the container
-     * 
+     *
      * Examples of usage from a view script or layout:
      * <code>
      * // proxy to Menu helper and render container:
      * echo $this->navigation()->menu();
-     * 
+     *
      * // proxy to Breadcrumbs helper and set indentation:
      * $this->navigation()->breadcrumbs()->setIndent(8);
-     * 
+     *
      * // proxy to container and find all pages with 'blog' route:
      * $blogPages = $this->navigation()->findAllByRoute('blog');
      * </code>
@@ -97,7 +97,7 @@ class Zym_View_Helper_Navigation
      * @param  array  $arguments       [optional] arguments to pass
      * @return mixed                   returns what the proxy returns
      * @throws Zend_View_Exception     if proxying to a helper, and the helper
-     *                                 is not an instance of 
+     *                                 is not an instance of
      *                                 Zym_View_Helper_Navigation_Abstract
      * @throws BadMethodCallException  if method does not exist in container
      */
@@ -111,25 +111,25 @@ class Zym_View_Helper_Navigation
                 reset($arguments) === false) {
                 $helper->setContainer($this->getContainer());
             }
-            
+
             return call_user_func_array(array($helper, $method), $arguments);
         }
-        
+
         // default behaviour: proxy call to container
         return parent::__call($method, $arguments);
     }
-    
+
     /**
      * Returns the helper matching $proxy
-     * 
+     *
      * The helper must implement the interface
      * {@link Zym_View_Helper_Navigaiton_NavigationHelper}.
-     * 
+     *
      * @param string $proxy                                 proxy name
      * @param bool   $strict                                [optional] whether
-     *                                                      an exception should 
-     *                                                      be thrown if helper 
-     *                                                      cannot be found. 
+     *                                                      an exception should
+     *                                                      be thrown if helper
+     *                                                      cannot be found.
      *                                                      Default is true.
      * @return Zym_View_Helper_Navigation_NavigationHelper  helper instance
      * @throws Zend_Loader_PluginLoader_Exception           if $strict is true
@@ -147,7 +147,7 @@ class Zym_View_Helper_Navigation
                     str_replace('_', '/', self::NS),
                     self::NS);
         }
-        
+
         if ($strict) {
             $helper = $this->view->getHelper($proxy);
         } else {
@@ -157,7 +157,7 @@ class Zym_View_Helper_Navigation
                 return null;
             }
         }
-        
+
         if (!$helper instanceof Zym_View_Helper_Navigation_Interface) {
             if ($strict) {
                 require_once 'Zend/View/Exception.php';
@@ -166,18 +166,18 @@ class Zym_View_Helper_Navigation
                         'Zym_View_Helper_Navigation_Interface',
                         get_class($helper)));
             }
-            
+
             $helper = null;
         }
-        
+
         return $helper;
     }
-    
+
     // Accessors:
-    
+
     /**
      * Sets the plugin loader that is used for loading navigational helpers
-     * 
+     *
      * @param Zend_Loader_PluginLoader_Interface $loader  plugin loader
      * @return Zym_View_Helper_Navigation                 fluent interface,
      *                                                    returns self
@@ -187,10 +187,10 @@ class Zym_View_Helper_Navigation
         $this->_loader = $loader;
         return $this;
     }
-    
+
     /**
      * Returns the plugin loader that is used for loading navigational helpers
-     *  
+     *
      * @return Zend_Loader_PluginLoader_Interface  plugin loader that is used
      *                                             for loading navigational
      *                                             helpers
@@ -205,16 +205,16 @@ class Zym_View_Helper_Navigation
             $this->_loader = new Zend_Loader_PluginLoader();
             $this->_loader->addPrefixPath(self::NS,
                                           str_replace('_', '/', self::NS));
-            
+
         }
-        
+
         return $this->_loader;
     }
-    
+
     /**
      * Sets the default proxy to use in {@link render()}
-     * 
-     * @param  string $proxy               default proxy 
+     *
+     * @param  string $proxy               default proxy
      * @return Zym_View_Helper_Navigation  fluent interface, returns self
      */
     public function setDefaultProxy($proxy)
@@ -222,21 +222,21 @@ class Zym_View_Helper_Navigation
         $this->_defaultProxy = (string) $proxy;
         return $this;
     }
-    
+
     /**
      * Returns the default proxy to use in {@link render()}
-     * 
+     *
      * @return string
      */
     public function getDefaultProxy()
     {
         return $this->_defaultProxy;
     }
-    
+
     /**
      * Sets whether container should be injected when proxying
-     * 
-     * @param bool $injectContainer        [optional] whether container should 
+     *
+     * @param bool $injectContainer        [optional] whether container should
      *                                     be injected when proxying. Default
      *                                     is true.
      * @return Zym_View_Helper_Navigation  fluent interface, returns self
@@ -245,17 +245,17 @@ class Zym_View_Helper_Navigation
     {
         $this->_injectContainer = (bool) $injectContainer;
     }
-    
+
     /**
      * Returns whether container should be injected when proxying
-     * 
+     *
      * @return bool  whether container should be injected when proxying
      */
     public function getInjectContainer()
     {
         return $this->_injectContainer;
     }
-    
+
     // Zym_View_Helper_Navigation_Abstract:
 
     /**
@@ -274,14 +274,14 @@ class Zym_View_Helper_Navigation
     public function render(Zym_Navigation_Container $container = null)
     {
         $helper = $this->findHelper($this->getDefaultProxy());
-        
+
         // inject container?
         if ($this->getInjectContainer() &&
             !$helper->hasContainer() &&
             null === $container) {
             $container = $this->getContainer();
         }
-        
+
         return $helper->render($container);
     }
 }

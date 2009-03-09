@@ -22,9 +22,9 @@ require_once 'Zym/Navigation/Page.php';
 
 /**
  * Zym_Navigation_Page_Uri
- * 
- * Represents a page that is defined by specifying a URI.  
- * 
+ *
+ * Represents a page that is defined by specifying a URI.
+ *
  * @author     Robin Skoglund
  * @category   Zym
  * @package    Zym_Navigation
@@ -40,7 +40,7 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
      * @var string
      */
     private $_uri = null;
-    
+
     /**
      * Sets URI to empty string if not already set
      *
@@ -52,7 +52,7 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
             $this->_uri = '';
         }
     }
-    
+
     /**
      * Sets page URI
      *
@@ -64,10 +64,10 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
         if (!is_string($uri)) {
             throw new InvalidArgumentException('$uri must be a string');
         }
-        
+
         $this->_uri = $uri;
     }
-    
+
     /**
      * Returns URI
      *
@@ -77,7 +77,7 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
     {
         return $this->_uri;
     }
-    
+
     /**
      * Returns href for this page
      *
@@ -87,9 +87,9 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
     {
         return $this->getUri();
     }
-    
+
     // Public methods:
-    
+
     /**
      * Returns an array representation of the page
      *
@@ -101,6 +101,6 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
             parent::toArray(),
             array(
                 'uri' => $this->getUri()
-            )); 
+            ));
     }
 }

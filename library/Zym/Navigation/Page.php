@@ -22,16 +22,16 @@ require_once 'Zym/Navigation/Container.php';
 
 /**
  * Used in the factory method
- * 
+ *
  * @see Zend_Loader
  */
 require_once 'Zend/Loader.php';
 
 /**
  * Zym_Navigation_Page
- * 
+ *
  * Base class for Zym_Navigation_Page pages.
- * 
+ *
  * @author     Robin Skoglund
  * @category   Zym
  * @package    Zym_Navigation
@@ -47,96 +47,96 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @var string|null
      */
     private $_label;
-    
+
     /**
      * Page id
      *
      * @var string|null
      */
     private $_id;
-    
+
     /**
      * Style class for this page (CSS)
      *
      * @var string|null
      */
     private $_class;
-    
+
     /**
      * A more descriptive title for this page
      *
      * @var string|null
      */
     private $_title;
-    
+
     /**
      * This page's target
      *
      * @var string|null
      */
     private $_target;
-    
+
     /**
      * Page order used by parent container
      *
      * @var int|null
      */
     private $_order;
-    
+
     /**
      * ACL resource associated with this page
-     * 
+     *
      * @var string|Zend_Acl_Resource_Interface|null
      */
     private $_resource;
-    
+
     /**
      * ACL privilege associated with this page
      *
      * @var string|null
      */
     private $_privilege;
-    
+
     /**
      * Whether this page should be considered active
      *
      * @var bool
      */
     private $_active = false;
-    
+
     /**
      * Whether this page should be considered visible
      *
      * @var bool
      */
     private $_visible = true;
-    
+
     /**
      * Parent container
      *
      * @var Zym_Navigation_Container|null
      */
     private $_parent;
-    
+
     /**
      * Custom page properties, used by __set(), __get() and __isset()
      *
      * @var array
      */
     private $_properties = array();
-    
+
     // Initialization:
-    
+
     /**
      * Factory for Zym_Navigation_Page classes
      *
-     * @param  array|Zend_Config $options  options used for creating page  
+     * @param  array|Zend_Config $options  options used for creating page
      * @return Zym_Navigation_Page         a page instance
      * @throws InvalidArgumentException    if $options is not array/Zend_Config
      * @throws InvalidArgumentException    if 'type' is given, and the specified
      *                                     type does not extend this class
-     * @throws Zend_Exception              if 'type' is specified and 
-     *                                     Zend_Loader is unable to load the 
+     * @throws Zend_Exception              if 'type' is specified and
+     *                                     Zend_Loader is unable to load the
      *                                     class
      */
     public static function factory($options)
@@ -144,12 +144,12 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         if ($options instanceof Zend_Config) {
             $options = $options->toArray();
         }
-        
+
         if (!is_array($options)) {
             $msg = '$options must be an array or Zend_Config';
             throw new InvalidArgumentException($msg);
         }
-        
+
         if (isset($options['type'])) {
             $type = $options['type'];
             if (is_string($type) && !empty($type)) {
@@ -161,9 +161,9 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                         $type = 'Zym_Navigation_Page_Uri';
                         break;
                 }
-                
+
                 @Zend_Loader::loadClass($type);
-                
+
                 $page = new $type($options);
                 if (!$page instanceof Zym_Navigation_Page) {
                     $msg = "$type does not extend Zym_Navigation_Page";
@@ -172,17 +172,17 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 return $page;
             }
         }
-        
+
         if (isset($options['uri']) && !isset($options['action']) &&
             !isset($options['controller']) && !isset($options['module'])) {
             require_once 'Zym/Navigation/Page/Uri.php';
             return new Zym_Navigation_Page_Uri($options);
         }
-        
+
         require_once 'Zym/Navigation/Page/Mvc.php';
         return new Zym_Navigation_Page_Mvc($options);
     }
-    
+
     /**
      * Final page constructor
      *
@@ -190,18 +190,18 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *                                     null, which should set defaults.
      * @throws InvalidArgumentException    if invalid options are given
      */
-    public final function __construct($options = null)
+    public  function __construct($options = null)
     {
         if (is_array($options)) {
             $this->setOptions($options);
         } elseif ($options instanceof Zend_Config) {
             $this->setConfig($config);
         }
-        
+
         // do custom initialization
         $this->_init();
     }
-    
+
     /**
      * Initializes page (used by subclasses)
      *
@@ -210,7 +210,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     protected function _init()
     {
     }
-    
+
     /**
      * Sets page properties using a Zend_Config object
      *
@@ -222,10 +222,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->setOptions($config->toArray());
     }
-    
+
     /**
      * Sets page properties using options from an associative array
-     * 
+     *
      * Each key in the array corresponds to the according set*() method, and
      * each word is separated by underscores, e.g. the option 'target'
      * corresponds to setTarget(), and the option 'reset_params' corresponds to
@@ -240,18 +240,18 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         foreach ($options as $key => $value) {
             $this->set($key, $value);
         }
-        
+
         return $this;
     }
-    
+
     // Accessors:
-    
+
     /**
      * Sets page label
      *
      * @param  string $label             new page label
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if empty/no string is given 
+     * @throws InvalidArgumentException  if empty/no string is given
      */
     public function setLabel($label)
     {
@@ -259,11 +259,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = '$label must be string with at least 1 character';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_label = $label;
         return $this;
     }
-    
+
     /**
      * Returns page label
      *
@@ -273,7 +273,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_label;
     }
-    
+
     /**
      * Sets page id
      *
@@ -288,12 +288,12 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = '$id must be a string, number or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_id = null === $id ? $id : (string) $id;
-        
+
         return $this;
     }
-    
+
     /**
      * Returns page id
      *
@@ -303,7 +303,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_id;
     }
-    
+
     /**
      * Sets page CSS class
      *
@@ -318,11 +318,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = '$class must be a string or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_class = $class;
         return $this;
     }
-    
+
     /**
      * Returns page class (CSS)
      *
@@ -332,7 +332,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_class;
     }
-    
+
     /**
      * Sets page title
      *
@@ -347,11 +347,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = '$title must be a non-empty string';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_title = $title;
         return $this;
     }
-    
+
     /**
      * Returns page title
      *
@@ -361,7 +361,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_title;
     }
-    
+
     /**
      * Sets page target
      *
@@ -376,11 +376,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = '$target must be a string or null';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_target = $target;
         return $this;
     }
-    
+
     /**
      * Returns page target
      *
@@ -390,7 +390,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_target;
     }
-    
+
     /**
      * Sets page order to use in parent container
      *
@@ -408,23 +408,23 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 $order = $temp;
             }
         }
-        
+
         if (null !== $order && !is_int($order)) {
             $msg = '$order must be an integer or null, '
                  . 'or a string that casts to an integer';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $this->_order = $order;
-        
+
         // notify parent, if any
         if (isset($this->_parent)) {
             $this->_parent->notifyOrderUpdated();
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Returns page order used in parent container
      *
@@ -434,48 +434,48 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_order;
     }
-    
+
     /**
      * Sets ACL resource assoicated with this page
-     * 
+     *
      * @param  string|Zend_Acl_Resource_Interface $resource  [optional] resource
      *                                                       to associate with
      *                                                       page. Default is
      *                                                       null, which sets no
      *                                                       resource.
-     * @throws InvalidArgumentException                      if $resource if 
+     * @throws InvalidArgumentException                      if $resource if
      *                                                       invalid
      * @return Zym_Navigation_Page                           fluent interface,
      *                                                       returns self
      */
     public function setResource($resource = null)
     {
-        if (null === $resource || is_string($resource) || 
+        if (null === $resource || is_string($resource) ||
             $resource instanceof Zend_Acl_Role_Interface) {
             $this->_resource = $resource;
         } else {
             $msg = '$resource must be null|string|Zend_Acl_Resource_Interface';
             throw new InvalidArgumentException($msg);
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Returns ACL resource assoicated with this page
-     * 
+     *
      * @return string|Zend_Acl_Resource_Interface|null  ACL resource or null
      */
     public function getResource()
     {
         return $this->_resource;
     }
-    
+
     /**
      * Sets ACL privilege associated with this page
      *
      * @param  string|null $privilege  [optional] ACL privilege to associate
-     *                                 with this page. Default is null, which 
+     *                                 with this page. Default is null, which
      *                                 sets no privilege.
      * @return Zym_Navigation_Page     fluent interface, returns self
      */
@@ -484,7 +484,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         $this->_privilege = is_string($privilege) ? $privilege : null;
         return $this;
     }
-    
+
     /**
      * Returns ACL privilege assigned to this page
      *
@@ -494,7 +494,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_privilege;
     }
-    
+
     /**
      * Sets whether page should be considered active or not
      *
@@ -504,14 +504,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function setActive($active = true)
     {
-        $this->_active = (bool) $active; 
+        $this->_active = (bool) $active;
         return $this;
     }
-    
+
     /**
      * Returns whether page should be considered active or not
      *
-     * @param  bool $recursive  [optional] whether page should be considered 
+     * @param  bool $recursive  [optional] whether page should be considered
      *                          active if any child pages are active. Default is
      *                          false.
      * @return bool             whether page should be considered active
@@ -533,11 +533,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             return $this->_active;
         }
     }
-    
+
     /**
      * Proxy to isActive()
      *
-     * @param  bool $recursive  [optional] whether page should be considered 
+     * @param  bool $recursive  [optional] whether page should be considered
      *                          active if any child pages are active. Default
      *                          is false.
      * @return bool             whether page should be considered active
@@ -546,7 +546,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->isActive($recursive);
     }
-    
+
     /**
      * Sets whether the page should be visible or not
      *
@@ -559,11 +559,11 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         $this->_visible = (bool) $visible;
         return $this;
     }
-    
+
     /**
      * Returns a boolean value indicating whether the page is visible
      *
-     * @param  bool $recursive  [optional] whether page should be considered 
+     * @param  bool $recursive  [optional] whether page should be considered
      *                          invisible if parent is invisible. Default is
      *                          false.
      * @return bool             whether page should be considered visible
@@ -576,16 +576,16 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 return false;
             }
         }
-        
+
         return $this->_visible;
     }
-    
+
     /**
      * Proxy to isVisible()
-     * 
+     *
      * Returns a boolean value indicating whether the page is visible
      *
-     * @param  bool $recursive  [optional] whether page should be considered 
+     * @param  bool $recursive  [optional] whether page should be considered
      *                          invisible if parent is invisible. Default is
      *                          false.
      * @return bool             whether page should be considered visible
@@ -594,7 +594,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->isVisible($recursive);
     }
-    
+
     /**
      * Sets parent container
      *
@@ -609,23 +609,23 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         if ($parent === $this->_parent) {
             return $this;
         }
-        
+
         // remove from old parent
         if (null !== $this->_parent) {
             $this->_parent->removePage($this);
         }
-        
+
         // set new parent
         $this->_parent = $parent;
-        
+
         // add to parent if page and not already a child
         if (null !== $this->_parent && !$this->_parent->hasPage($this, false)) {
             $this->_parent->addPage($this);
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Returns parent container
      *
@@ -635,10 +635,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_parent;
     }
-    
+
     /**
      * Sets the given property
-     * 
+     *
      * If the given property is native (id, class, title, etc), the matching
      * set method will be used. Otherwise, it will be set as a custom property.
      *
@@ -653,22 +653,22 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = 'property name must be a non-empty string';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $method = 'set' . self::_normalizePropertyName($property);
-        
+
         if ($method != 'setOptions' && $method != 'setConfig' &&
             method_exists($this, $method)) {
             $this->$method($value);
         } else {
             $this->_properties[$property] = $value;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Returns the value of the given property
-     * 
+     *
      * If the given property is native (id, class, title, etc), the matching
      * get method will be used. Otherwise, it will return the matching custom
      * property, or null if not found.
@@ -683,23 +683,23 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = 'property name must be a non-empty string';
             throw new InvalidArgumentException($msg);
         }
-        
+
         $method = 'get' . self::_normalizePropertyName($property);
-        
+
         if (method_exists($this, $method)) {
             return $this->$method();
         } elseif (isset($this->_properties[$property])) {
             return $this->_properties[$property];
         }
-        
+
         return null;
     }
-    
+
     // Magic overloads:
-    
+
     /**
      * Sets a custom property
-     * 
+     *
      * Magic overload for enabling <code>$page->propname = $value</code>.
      *
      * @param  string $name              property name
@@ -711,10 +711,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         $this->set($name, $value);
     }
-    
+
     /**
      * Returns a property, or null if it doesn't exist
-     * 
+     *
      * Magic overload for enabling <code>$page->propname</code>.
      *
      * @param  string $name              property name
@@ -725,14 +725,14 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->get($name);
     }
-    
+
     /**
      * Checks if a property is set
-     * 
+     *
      * Magic overload for enabling <code>isset($page->propname)</code>.
-     * 
-     * Returns true if the property is native (id, class, title, etc), and 
-     * true or false if it's a custom property (depending on whether the 
+     *
+     * Returns true if the property is native (id, class, title, etc), and
+     * true or false if it's a custom property (depending on whether the
      * property actually is set).
      *
      * @param  string $name  property name
@@ -744,13 +744,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
         if (method_exists($this, $method)) {
             return true;
         }
-        
+
         return isset($this->_properties[$name]);
     }
-    
+
     /**
      * Unsets the given custom property
-     * 
+     *
      * Magic overload for enabling <code>unset($page->propname)</code>.
      *
      * @param  string $name              property name
@@ -764,15 +764,15 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
             $msg = "Cannot unset native properties ('$name')";
             throw new InvalidArgumentException($msg);
         }
-        
+
         if (isset($this->_properties[$name])) {
             unset($this->_properties[$name]);
         }
     }
-    
+
     /**
      * Returns page label
-     * 
+     *
      * Magic overload for enabling <code>echo $page</code>.
      *
      * @return string  page label
@@ -781,9 +781,9 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_label;
     }
-    
+
     // Public methods:
-    
+
     /**
      * Returns custom properties as an array
      *
@@ -793,20 +793,20 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return $this->_properties;
     }
-    
+
     /**
      * Returns a hash code value for the page
-     * 
+     *
      * @return string  a hash code value for this page
      */
     public final function hashCode()
     {
         return spl_object_hash($this);
     }
-    
+
     /**
      * Determines whether the page is a descendant of the given container
-     * 
+     *
      * @param  Zym_Navigation_Container $container  container
      * @return bool                                 true or false
      */
@@ -823,10 +823,10 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 break;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Returns an array representation of the page
      *
@@ -851,9 +851,9 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 'pages'     => parent::toArray()
             ));
     }
-    
+
     // Private methods:
-    
+
     /**
      * Normalizes a property name
      *
@@ -864,9 +864,9 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
     }
-    
+
     // Abstract methods:
-    
+
     /**
      * Returns href for this page
      *
