@@ -269,41 +269,24 @@ class Zym_View_Helper_Navigation_Menu
             $container = $this->getContainer();
         }
 
-        // stuff to use when finding deepest active page
-        $found = false;
-        $depth = -1;
-        $iterator = new RecursiveIteratorIterator($container,
-                RecursiveIteratorIterator::CHILD_FIRST);
-
-        // find the deepest active page
-        foreach ($iterator as $page) {
-            if (!$this->accept($page)) {
-                // page is not accepted
-                continue;
-            }
-
-            if ($page->isActive() && $iterator->getDepth() > $depth) {
-                // found an active page at a deeper level than before
-                $found = $page;
-                $depth = $iterator->getDepth();
-            }
+        // find deepest active page
+        if (!$active = $this->findActive($container)) {
+            return '';
         }
 
-        if ($found) {
-            $indent = (null !== $indent)
-                    ? $this->_getWhitespace($indent)
-                    : $this->getIndent();
+        $indent = (null !== $indent)
+                ? $this->_getWhitespace($indent)
+                : $this->getIndent();
 
-            if ($found->hasPages()) {
-                // the found page has children itself; render children
-                return $this->renderMenu($found, $indent, false);
-            }
+        if ($active['page']->hasPages()) {
+            // the found page has children itself; render children
+            return $this->renderMenu($active['page'], $indent, false);
+        }
 
-            $parent = $found->getParent();
-            if ($parent instanceof Zym_Navigation_Page) {
-                // the found page is a leaf node with a parent; render parent
-                return $this->renderMenu($parent, $indent, false);
-            }
+        $parent = $active['page']->getParent();
+        if ($parent instanceof Zym_Navigation_Page) {
+            // the found page is a leaf node with a parent; render parent
+            return $this->renderMenu($parent, $indent, false);
         }
 
         return '';

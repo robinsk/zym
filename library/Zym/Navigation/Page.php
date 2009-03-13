@@ -192,7 +192,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
                 }
 
                 require_once 'Zend/Loader.php';
-                Zend_Loader::loadClass($type);
+                @Zend_Loader::loadClass($type);
 
                 $page = new $type($options);
                 if (!$page instanceof Zym_Navigation_Page) {
@@ -482,10 +482,20 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * prev, next, help, etc), and the value is a mixed value that could somehow
      * be considered a page.
      *
-     * @return array  an associative array of forward links to other page
+     * @param  string $relation  [optional] name of relation to return. If not
+     *                           given, all relations will be returned.
+     * @return array             an array of relations. If $relation is not
+     *                           specified, all relations will be returned in
+     *                           an associative array.
      */
-    public function getRel()
+    public function getRel($relation = null)
     {
+        if (null !== $relation) {
+            return isset($this->_rel[$relation]) ?
+                   $this->_rel[$relation] :
+                   null;
+        }
+
         return $this->_rel;
     }
 
@@ -535,10 +545,20 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * prev, next, help, etc), and the value is a mixed value that could somehow
      * be considered a page.
      *
-     * @return array  an associative array of forward links to other page
+     * @param  string $relation  [optional] name of relation to return. If not
+     *                           given, all relations will be returned.
+     * @return array             an array of relations. If $relation is not
+     *                           specified, all relations will be returned in
+     *                           an associative array.
      */
-    public function getRev()
+    public function getRev($relation = null)
     {
+        if (null !== $relation) {
+            return isset($this->_rev[$relation]) ?
+                   $this->_rev[$relation] :
+                   null;
+        }
+
         return $this->_rev;
     }
 
@@ -943,6 +963,88 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     // Public methods:
 
     /**
+     * Adds a forward relation to the page
+     *
+     * @param  string $relation     relation name (e.g. alternate, glossary,
+     *                              canonical, etc)
+     * @param  mixed  $value        value to set for relation
+     * @return Zym_Navigation_Page  fluent interface, returns self
+     */
+    public function addRel($relation, $value)
+    {
+        if (is_string($relation)) {
+            $this->_rel[$relation] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * Adds a reverse relation to the page
+     *
+     * @param  string $relation     relation name (e.g. alternate, glossary,
+     *                              canonical, etc)
+     * @param  mixed  $value        value to set for relation
+     * @return Zym_Navigation_Page  fluent interface, returns self
+     */
+    public function addRev($relation, $value)
+    {
+        if (is_string($relation)) {
+            $this->_rev[$relation] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * Removes a forward relation from the page
+     *
+     * @param  string $relation     name of relation to remove
+     * @return Zym_Navigation_Page  fluent interface, returns self
+     */
+    public function removeRel($relation)
+    {
+        if (isset($this->_rel[$relation])) {
+            unset($this->_rel[$relation]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Removes a reverse relation from the page
+     *
+     * @param  string $relation     name of relation to remove
+     * @return Zym_Navigation_Page  fluent interface, returns self
+     */
+    public function removeRev($relation)
+    {
+        if (isset($this->_rev[$relation])) {
+            unset($this->_rev[$relation]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns an array containing the defined forward relations
+     *
+     * @return array  defined forward relations
+     */
+    public function getDefinedRel()
+    {
+        return array_keys($this->_rel);
+    }
+
+    /**
+     * Returns an array containing the defined reverse relations
+     *
+     * @return array  defined reverse relations
+     */
+    public function getDefinedRev()
+    {
+        return array_keys($this->_rev);
+    }
+
+    /**
      * Returns custom properties as an array
      *
      * @return array  an array containing custom properties
@@ -960,29 +1062,6 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     public final function hashCode()
     {
         return spl_object_hash($this);
-    }
-
-    /**
-     * Determines whether the page is a descendant of the given container
-     *
-     * @param  Zym_Navigation_Container $container  container
-     * @return bool                                 true or false
-     */
-    public function isDescendentOf(Zym_Navigation_Container $container)
-    {
-        $intermediate = $this;
-        while ($parent = $intermediate->getParent()) {
-            if ($parent === $container) {
-                return true;
-            }
-            if ($parent instanceof Zym_Navigation_Page) {
-                $intermediate = $parent;
-            } else {
-                break;
-            }
-        }
-
-        return false;
     }
 
     /**

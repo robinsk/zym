@@ -25,7 +25,7 @@ require_once 'Zym/Navigation/Page/Uri.php';
 
 /**
  * Tests the class Zym_Navigation_Page_Uri
- * 
+ *
  * @author    Robin Skoglund
  * @category  Zym_Tests
  * @package   Zym_Navigation
@@ -34,48 +34,26 @@ require_once 'Zym/Navigation/Page/Uri.php';
  */
 class Zym_Navigation_Page_UriTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Prepares the environment before running a test.
-     * 
-     */
-    protected function setUp()
-    {
-        
-    }
-    
-    /**
-     * Tear down the environment after running a test
-     *
-     */
-    protected function tearDown()
-    {
-        
-    }
-    
-    /**
-     * Tests setUri() and getUri() with valid and invalid values
-     *
-     */
     public function testSetAndGetUri()
     {
         $page = new Zym_Navigation_Page_Uri(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals('#', $page->getUri());
         $page->setUri('bar');
         $this->assertEquals('bar', $page->getUri());
-        
+
         $invalids = array(42, (object) null, -1);
         foreach ($invalids as $invalid) {
             try {
                 $page->setUri($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }

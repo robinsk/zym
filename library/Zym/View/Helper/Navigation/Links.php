@@ -34,9 +34,8 @@ class Zym_View_Helper_Navigation_Links
     extends Zym_View_Helper_Navigation_Abstract
 {
     /**#@+
-     * Render constants
+     * Constants used for specifying which link types to find and render
      *
-     * @see setRenderFlag()
      * @var int
      */
     const RENDER_ALTERNATE  = 0x0001;
@@ -59,7 +58,7 @@ class Zym_View_Helper_Navigation_Links
     /**#@+**/
 
     /**
-     * Native W3C relations
+     * Maps render constants to W3C link types
      *
      * @var array
      */
@@ -91,13 +90,6 @@ class Zym_View_Helper_Navigation_Links
     protected $_renderFlag = self::RENDER_ALL;
 
     /**
-     * Custom relations to find and render
-     *
-     * @var array
-     */
-    protected $_customRelations = array();
-
-    /**
      * Root container
      *
      * Used for preventing finder methods to traverse above the container given
@@ -106,13 +98,6 @@ class Zym_View_Helper_Navigation_Links
      * @var Zym_Navigation_Container
      */
     protected $_root;
-
-    /**
-     * Local cache for storing various function results
-     *
-     * @var array
-     */
-    private $_cache = array();
 
     /**
      * View helper entry point:
@@ -130,6 +115,32 @@ class Zym_View_Helper_Navigation_Links
         }
 
         return $this;
+    }
+
+    /**
+     * Magic overload: Proxy calls to {@link findRelation()} or container
+     *
+     * Examples of finder calls:
+     * <code>
+     * // METHOD                  // SAME AS
+     * $h->findRelNext($page);    // $h->findRelation($page, 'rel', 'next')
+     * $h->findRevSection($page); // $h->findRelation($page, 'rev', 'section');
+     * $h->findRelFoo($page);     // $h->findRelation($page, 'rel', 'foo');
+     * </code>
+     *
+     * @param  string $method            method name
+     * @param  array  $arguments         method arguments
+     * @throws Zym_Navigation_Exception  if method does not exist in container
+     */
+    public function __call($method, array $arguments = array())
+    {
+        if (@preg_match('/find(Rel|Rev)(.+)/', $method, $match)) {
+            return $this->findRelation($arguments[0],
+                                       strtolower($match[1]),
+                                       strtolower($match[2]));
+        }
+
+        return parent::__call($method, $arguments);
     }
 
     // Accessors:
@@ -151,15 +162,15 @@ class Zym_View_Helper_Navigation_Links
      *         Zym_View_Helper_Navigation_Links:RENDER_SECTION;
      * $helper->setRenderFlag($flag);
      *
-     * // render only relations added with {@link addCustomRelation()}
+     * // render only relations that are not native W3C relations
      * $helper->setRenderFlag(Zym_View_Helper_Navigation_Links:RENDER_CUSTOM);
      *
      * // render all relations (default)
      * $helper->setRenderFlag(Zym_View_Helper_Navigation_Links:RENDER_ALL);
      * </code>
      *
-     * Note that custom relations can also be rendered directly using one of;
-     * {@link renderLink()}, {@link renderRel()}, or {@link renderRev()}.
+     * Note that custom relations can also be rendered directly using the
+     * {@link renderLink()} method.
      *
      * @param  int $renderFlag                   render flag
      * @return Zym_View_Helper_Navigation_Links  fluent interface, returns self
@@ -180,104 +191,151 @@ class Zym_View_Helper_Navigation_Links
         return $this->_renderFlag;
     }
 
-    /**
-     * Sets custom relations to find and render
-     *
-     * @param  array $relations                  custom relations to find
-     * @return Zym_View_Helper_Navigation_Links  fluent interface, returns self
-     */
-    public function setCustomRelations(array $relations = array())
-    {
-        $newCustomRelations = array();
-        foreach ($relations as $relation) {
-            if (is_string($relation)) {
-                $newCustomRelations[] = $relation;
-            }
-        }
-        $this->_customRelations = $newCustomRelations;
-
-        return $this;
-    }
-
-    /**
-     * Returns custom relations to find and render
-     *
-     * @return array  custom relations to find and render
-     */
-    public function getCustomRelations()
-    {
-        return $this->_customRelations;
-    }
-
     // Finder methods:
 
     /**
-     * Finds the deepest active page in a container that is not hidden, or null
-     * if such a page doesn't exist
+     * Finds all relations (forward and reverse) for the given $page
      *
-     * @param  Zym_Navigation_Container $container  container to search
-     * @return Zym_Navigation_Page|null             deepest active page or null
+     * The form of the returned array:
+     * <code>
+     * // $page denotes an instance of Zym_Navigation_Page
+     * $returned = array(
+     *     'rel' => array(
+     *         'alternate' => array($page, $page, $page),
+     *         'start'     => array($page),
+     *         'next'      => array($page),
+     *         'prev'      => array($page),
+     *         'canonical' => array($page)
+     *     ),
+     *     'rev' => array(
+     *         'section'   => array($page)
+     *     )
+     * );
+     * </code>
+     *
+     * @param  Zym_Navigation_Page $page  page to find links for
+     * @return array                      related pages
      */
-    public function findActive(Zym_Navigation_Container $container)
+    public function findAllRelations(Zym_Navigation_Page $page,
+                                     $flag = null)
+    {
+        if (!is_int($flag)) {
+            $flag = self::RENDER_ALL;
+        }
+
+        $result = array('rel' => array(), 'rev' => array());
+        $native = array_values(self::$_RELATIONS);
+
+        foreach (array_keys($result) as $rel) {
+            $meth = 'getDefined' . ucfirst($rel);
+            $types = array_merge($native, array_diff($page->$meth(), $native));
+
+            foreach ($types as $type) {
+                if (!$relFlag = array_search($type, self::$_RELATIONS)) {
+                    $relFlag = self::RENDER_CUSTOM;
+                }
+                if (!($flag & $relFlag)) {
+                    continue;
+                }
+                if ($found = $this->findRelation($page, $rel, $type)) {
+                    if (!is_array($found)) {
+                        $found = array($found);
+                    }
+                    $result[$rel][$type] = $found;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public $debug = false;
+
+    /**
+     * Finds relations of the given $rel=$type from $page
+     *
+     * This method will first look for relations in the page instance, then
+     * by searching the root container if nothing was found in the page.
+     *
+     * @param  Zym_Navigation_Page $page       page to find relations for
+     * @param  string              $rel        relation, "rel" or "rev"
+     * @param  string              $type       link type, e.g. 'start', 'next'
+     * @return Zym_Navigaiton_Page|array|null  page(s), or null if not found
+     * @throws Zend_View_Exception             if $rel is not "rel" or "rev"
+     */
+    public function findRelation(Zym_Navigation_Page $page, $rel, $type)
+    {
+        if (!in_array($rel, array('rel', 'rev'))) {
+            require_once 'Zend/View/Exception.php';
+            throw new Zend_View_Exception(sprintf(
+                'Invalid argument: $rel must be "rel" or "rev"; "%s" given',
+                $rel));
+        }
+
+        if (!$result = $this->_findFromProperty($page, $rel, $type)) {
+            $result = $this->_findFromSearch($page, $rel, $type);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Finds relations of given $type for $page by checking if the
+     * relation is specified as a property of $page
+     *
+     * @param  Zym_Navigation_Page $page       page to find relations for
+     * @param  string              $rel        relation, 'rel' or 'rev'
+     * @param  string              $type       link type, e.g. 'start', 'next'
+     * @return Zym_Navigation_Page|array|null  page(s), or null if not found
+     */
+    protected function _findFromProperty(Zym_Navigation_Page $page, $rel, $type)
+    {
+        $method = 'get' . ucfirst($rel);
+        if ($result = $page->$method($type)) {
+            if ($result = $this->_convertToPages($result)) {
+                if (!is_array($result)) {
+                    $result = array($result);
+                }
+
+                foreach ($result as $key => $page) {
+                    if (!$this->accept($page)) {
+                        unset($result[$key]);
+                    }
+                }
+
+                return count($result) == 1 ? $result[0] : $result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Finds relations of given $rel=$type for $page by using the helper to
+     * search for the relation in the root container
+     *
+     * @param  Zym_Navigation_Page $page  page to find relations for
+     * @param  string              $rel   relation, 'rel' or 'rev'
+     * @param  string              $type  link type, e.g. 'start', 'next', etc
+     * @return array|null                 array of pages, or null if not found
+     */
+    protected function _findFromSearch(Zym_Navigation_Page $page, $rel, $type)
     {
         $found = null;
-        $depth = -1;
-        $iterator = new RecursiveIteratorIterator($container,
-                RecursiveIteratorIterator::CHILD_FIRST);
 
-        // find the deepest active page
-        foreach ($iterator as $page) {
-            if (!$this->accept($page)) {
-                // page is not accepted
-                continue;
-            }
-
-            if ($page->isActive() && $iterator->getDepth() > $depth) {
-                // found an active page at a deeper level than before
-                $found = $page;
-                $depth = $iterator->getDepth();
-            }
+        $method = 'search' . ucfirst($rel) . ucfirst($type);
+        if (method_exists($this, $method)) {
+            $found = $this->$method($page);
         }
 
         return $found;
     }
 
-    /**
-     * Finds the 'alternate' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Designates substitute versions for the document in which the link occurs.
-     * When used together with the lang attribute, it implies a translated
-     * version of the document. When used together with the media attribute, it
-     * implies a version designed for a different medium (or media).
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findAlternate(Zym_Navigation_Page $page)
-    {
-        return $this->findRelationFromPage($page, 'alternate');
-    }
+    // Search methods:
 
     /**
-     * Finds the 'stylesheet' relations for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to an external style sheet. See the section on
-     * {@link http://www.w3.org/TR/html4/present/styles.html#style-external
-     * external style sheets} for details. This is used together with the link
-     * type "Alternate" for user-selectable alternate style sheets.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findStylesheet(Zym_Navigation_Page $page)
-    {
-        return $this->findRelationFromPage($page, 'stylesheet');
-    }
-
-    /**
-     * Finds the 'start' relation for the given $page
+     * Searches the root container for the forward 'start' relation of the given
+     * $page
      *
      * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
      * Refers to the first document in a collection of documents. This link type
@@ -285,68 +343,249 @@ class Zym_View_Helper_Navigation_Links
      * starting point of the collection.
      *
      * @param  Zym_Navigation_Page $page  page to find relation for
-     * @return Zym_Navigation_Page|null   page(s) or null
+     * @return Zym_Navigation_Page|null   page or null
      */
-    public function findStart(Zym_Navigation_Page $page)
+    public function searchRelStart(Zym_Navigation_Page $page)
     {
-        if ($found = $this->_cacheLookup($page, 'start')) {
-            return $found;
-        } elseif ($found = $this->findRelationFromPage($page, 'start')) {
-            // found; make sure it's a single page
-            if (is_array($found)) {
-                $found = current($found);
-            }
-        } else {
-            $found = $this->_findRoot($page);
-            if (!$found instanceof Zym_Navigation_Page) {
-                $found->rewind();
-                $found = $found->current();
-            }
-
-            if ($found === $page || !$this->accept($found)) {
-                $found = null;
-            }
+        $found = $this->_findRoot($page);
+        if (!$found instanceof Zym_Navigation_Page) {
+            $found->rewind();
+            $found = $found->current();
         }
 
-        $this->_cacheStore($page, 'start', $found);
+        if ($found === $page || !$this->accept($found)) {
+            $found = null;
+        }
 
         return $found;
     }
 
     /**
-     * Finds the 'next' relation for the given $page
+     * Searches the root container for the forward 'next' relation of the given
+     * $page
      *
      * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
      * Refers to the next document in a linear sequence of documents. User
      * agents may choose to preload the "next" document, to reduce the perceived
      * load time.
      *
+     * @param  Zym_Navigation_Page $page  page to find relation for
+     * @return Zym_Navigation_Page|null   page(s) or null
+     */
+    public function searchRelNext(Zym_Navigation_Page $page)
+    {
+        $found = null;
+        $break = false;
+        $iterator = new RecursiveIteratorIterator($this->_findRoot($page),
+                RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $intermediate) {
+            if ($intermediate === $page) {
+                // current page; break at next accepted page
+                $break = true;
+                continue;
+            }
+
+            if ($break && $this->accept($intermediate)) {
+                $found = $intermediate;
+                break;
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * Searches the root container for the forward 'prev' relation of the given
+     * $page
+     *
+     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
+     * Refers to the previous document in an ordered series of documents. Some
+     * user agents also support the synonym "Previous".
+     *
+     * @param  Zym_Navigation_Page $page  page to find relation for
+     * @return Zym_Navigation_Page|null   page or null
+     */
+    public function searchRelPrev(Zym_Navigation_Page $page)
+    {
+        $found = null;
+        $prev = null;
+        $iterator = new RecursiveIteratorIterator(
+                $this->_findRoot($page),
+                RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $intermediate) {
+            if (!$this->accept($intermediate)) {
+                continue;
+            }
+            if ($intermediate === $page) {
+                $found = $prev;
+                break;
+            }
+
+            $prev = $intermediate;
+        }
+
+        return $found;
+    }
+
+    /**
+     * Searches the root container for forward 'chapter' relations of the given
+     * $page
+     *
+     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
+     * Refers to a document serving as a chapter in a collection of documents.
+     *
      * @param  Zym_Navigation_Page $page       page to find relation for
      * @return Zym_Navigation_Page|array|null  page(s) or null
      */
-    public function findNext(Zym_Navigation_Page $page)
+    public function searchRelChapter(Zym_Navigation_Page $page)
     {
-        if (!$found = $this->findRelationFromPage($page, 'next')) {
-            if ($page->hasPages()) {
-                $page->rewind();
-                $found = $page->current();
-            } elseif ($parent = $page->getParent()) {
-                // nothing found in page itself; traverse
-                $break = false;
-                $iterator = new RecursiveIteratorIterator(
-                        $this->_findRoot($page),
-                        RecursiveIteratorIterator::SELF_FIRST);
-                foreach ($iterator as $intermediate) {
-                    if (!$this->accept($intermediate)) {
-                        continue;
-                    }
-                    if ($intermediate === $page) {
-                        $break = true;
-                        continue;
-                    }
+        $found = array();
 
-                    if ($break) {
-                        $found = $intermediate;
+        // find first level of pages
+        $root = $this->_findRoot($page);
+
+        // find start page(s)
+        $start = $this->findRelation($page, 'rel', 'start');
+        if (!is_array($start)) {
+            $start = array($start);
+        }
+
+        foreach ($root as $chapter) {
+            // exclude self and start page from chapters
+            if ($chapter !== $page &&
+                !in_array($chapter, $start) &&
+                $this->accept($chapter)) {
+                $found[] = $chapter;
+            }
+        }
+
+        switch (count($found)) {
+            case 0:
+                return null;
+            case 1:
+                return $found[0];
+            default:
+                return $found;
+        }
+    }
+
+    /**
+     * Searches the root container for forward 'section' relations of the given
+     * $page
+     *
+     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
+     * Refers to a document serving as a section in a collection of documents.
+     *
+     * @param  Zym_Navigation_Page $page       page to find relation for
+     * @return Zym_Navigation_Page|array|null  page(s) or null
+     */
+    public function searchRelSection(Zym_Navigation_Page $page)
+    {
+        $found = array();
+
+        // check if given page has pages and is a chapter page
+        if ($page->hasPages() && $this->_findRoot($page)->hasPage($page)) {
+            foreach ($page as $section) {
+                if ($this->accept($section)) {
+                    $found[] = $section;
+                }
+            }
+        }
+
+        switch (count($found)) {
+            case 0:
+                return null;
+            case 1:
+                return $found[0];
+            default:
+                return $found;
+        }
+    }
+
+    /**
+     * Searches the root container for forward 'subsection' relations of the
+     * given $page
+     *
+     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
+     * Refers to a document serving as a subsection in a collection of
+     * documents.
+     *
+     * @param  Zym_Navigation_Page $page       page to find relation for
+     * @return Zym_Navigation_Page|array|null  page(s) or null
+     */
+    public function searchRelSubsection(Zym_Navigation_Page $page)
+    {
+        $found = array();
+
+        if ($page->hasPages()) {
+            // given page has child pages, loop chapters
+            foreach ($this->_findRoot($page) as $chapter) {
+                // is page a section?
+                if ($chapter->hasPage($page)) {
+                    foreach ($page as $subsection) {
+                        if ($this->accept($subsection)) {
+                            $found[] = $subsection;
+                        }
+                    }
+                }
+            }
+        }
+
+        switch (count($found)) {
+            case 0:
+                return null;
+            case 1:
+                return $found[0];
+            default:
+                return $found;
+        }
+    }
+
+    /**
+     * Searches the root container for the reverse 'section' relation of the
+     * given $page
+     *
+     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
+     * Refers to a document serving as a section in a collection of documents.
+     *
+     * @param  Zym_Navigation_Page $page  page to find relation for
+     * @return Zym_Navigation_Page|null   page(s) or null
+     */
+    public function searchRevSection(Zym_Navigation_Page $page)
+    {
+        $found = null;
+
+        if ($parent = $page->getParent()) {
+            if ($parent instanceof Zym_Navigation_Page &&
+                $this->_findRoot($page)->hasPage($parent)) {
+                $found = $parent;
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * Searches the root container for the reverse 'section' relation of the
+     * given $page
+     *
+     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
+     * Refers to a document serving as a subsection in a collection of
+     * documents.
+     *
+     * @param  Zym_Navigation_Page $page  page to find relation for
+     * @return Zym_Navigation_Page|null   page(s) or null
+     */
+    public function searchRevSubsection(Zym_Navigation_Page $page)
+    {
+        $found = null;
+
+        if ($parent = $page->getParent()) {
+            if ($parent instanceof Zym_Navigation_Page) {
+                $root = $this->_findRoot($page);
+                foreach ($root as $chapter) {
+                    if ($chapter->hasPage($parent)) {
+                        $found = $parent;
                         break;
                     }
                 }
@@ -356,385 +595,32 @@ class Zym_View_Helper_Navigation_Links
         return $found;
     }
 
-    /**
-     * Finds the 'prev' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to the previous document in an ordered series of documents. Some
-     * user agents also support the synonym "Previous".
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findPrev(Zym_Navigation_Page $page)
-    {
-        if (!$found = $this->findRelationFromPage($page, 'prev')) {
-            // nothing found in page itself; traverse
-            $prev = null;
-            $iterator = new RecursiveIteratorIterator(
-                    $this->_findRoot($page),
-                    RecursiveIteratorIterator::SELF_FIRST);
-            foreach ($iterator as $intermediate) {
-                if (!$this->accept($intermediate)) {
-                    continue;
-                }
-                if ($intermediate === $page) {
-                    $found = $prev;
-                    break;
-                }
-
-                $prev = $intermediate;
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'contents' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document serving as a table of contents. Some user agents
-     * also support the synonym ToC (from "Table of Contents").
-     *
-     * @param  Zym_Navigation_Page $page  page to find relation for
-     * @return Zym_Navigation_Page|null   page(s) or null
-     */
-    public function findContents(Zym_Navigation_Page $page)
-    {
-        if ($found = $this->findRelationFromPage($page, 'contents')) {
-            // make sure only one page is returned
-            if (is_array($found)) {
-                $found = current($found);
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'index' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document providing an index for the current document.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findIndex(Zym_Navigation_Page $page)
-    {
-        if ($found = $this->findRelationFromPage($page, 'index')) {
-            // make sure only one page is returned
-            if (is_array($found)) {
-                $found = current($found);
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'glossary' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document providing a glossary of terms that pertain to the
-     * current document.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findGlossary(Zym_Navigation_Page $page)
-    {
-        if ($found = $this->findRelationFromPage($page, 'glossary')) {
-            // make sure only one page is returned
-            if (is_array($found)) {
-                $found = current($found);
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'copyright' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a copyright statement for the current document.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findCopyright(Zym_Navigation_Page $page)
-    {
-        if ($found = $this->findRelationFromPage($page, 'copyright')) {
-            // make sure only one page is returned
-            if (is_array($found)) {
-                $found = current($found);
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'chapter' relations for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document serving as a chapter in a collection of documents.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findChapter(Zym_Navigation_Page $page)
-    {
-        if ($found = $this->_cacheLookup($page, 'chapter')) {
-            return $found;
-        } elseif (!$found = $this->findRelationFromPage($page, 'chapter')) {
-            // nothing found in page itself; find first level of pages
-            $found = array();
-            $root = $this->_findRoot($page);
-            $start = $this->findStart($page);
-
-            foreach ($root as $chapter) {
-                // exclude self and start page from chapters
-                if ($chapter !== $page &&
-                    $chapter !== $start &&
-                    $this->accept($chapter)) {
-                    $found[] = $chapter;
-                }
-            }
-        }
-
-        $this->_cacheStore($page, 'chapter', $found);
-
-        return $found;
-    }
-
-    /**
-     * Finds the section relations for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document serving as a section in a collection of documents.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findSection(Zym_Navigation_Page $page)
-    {
-        if (!$found = $this->findRelationFromPage($page, 'section')) {
-            // nothing found in page properties, check if it has pages
-            if ($page->hasPages()) {
-                if ($this->_findRoot($page)->hasPage($page)) {
-                    $found = array();
-                    foreach ($page as $section) {
-                        $found[] = $section;
-                    }
-                }
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'subsection' relations for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document serving as a subsection in a collection of
-     * documents.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findSubsection(Zym_Navigation_Page $page)
-    {
-        if (!$found = $this->findRelationFromPage($page, 'subsection')) {
-            // nothing found in page properties; check if it has pages
-            if ($page->hasPages()) {
-                // given page has child pages, find chapters
-                $chapters = $this->findChapter($page);
-                if (!is_array($chapters)) {
-                    $chapters = array($chapters);
-                }
-                foreach ($chapters as $chapter) {
-                    // is page as section?
-                    if ($chapter->hasPage($page)) {
-                        $found = array();
-                        foreach ($page as $section) {
-                            $found[] = $section;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Finds the 'appendix' relations for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document serving as an appendix in a collection of documents.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findAppendix(Zym_Navigation_Page $page)
-    {
-        return $this->findRelationFromPage($page, 'appendix');
-    }
-
-    /**
-     * Finds the 'help' relations for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a document offering help (more information, links to other
-     * sources information, etc.)
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findHelp(Zym_Navigation_Page $page)
-    {
-        return $this->findRelationFromPage($page, 'help');
-    }
-
-    /**
-     * Finds the 'bookmark' relation for the given $page
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Refers to a bookmark. A bookmark is a link to a key entry point within an
-     * extended document. The title attribute may be used, for example, to label
-     * the bookmark. Note that several bookmarks may be defined in each
-     * document.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return Zym_Navigation_Page|array|null  page(s) or null
-     */
-    public function findBookmark(Zym_Navigation_Page $page)
-    {
-        return $this->findRelationFromPage($page, 'bookmark');
-    }
-
-    /**
-     * Finds the custom relations for the given $page
-     *
-     * Custom relations to search for are added using
-     * {@link addCustomRelation()} or {@link setCustomRelations()}.
-     *
-     * From {@link http://www.w3.org/TR/html4/types.html#type-links}:
-     * Authors may wish to define additional link types not described in this
-     * specification. If they do so, they should use a profile to cite the
-     * conventions used to define the link types. Please see the profile
-     * attribute of the HEAD element for more details.
-     *
-     * @param  Zym_Navigation_Page $page       page to find relation for
-     * @return array                           found relatations. Each key in
-     *                                         the array corresponds to a
-     *                                         relation, and each value is an
-     *                                         array of the found pages for
-     *                                         the relation
-     */
-    public function findCustomRelations(Zym_Navigation_Page $page)
-    {
-        $relations = array();
-
-        foreach ($this->getCustomRelations() as $relation) {
-            if ($found = $this->findRelationFromPage($page, $relation)) {
-                if (is_array($found)) {
-                    $relations[$relation] = $found;
-                } else {
-                    $relations[$relation] = array($found);
-                }
-            }
-        }
-
-        return $relations;
-    }
-
     // Util methods:
 
     /**
-     * Adds a custom relation to find and render
+     * Converts a $mixed value to an array of pages
      *
-     * @param  string $relation                  custom relation
-     * @return Zym_View_Helper_Navigation_Links  fluent interface, returns self
-     */
-    public function addCustomRelation($relation)
-    {
-        if (is_string($relation) &&
-            !in_array($relation, $this->_customRelations)) {
-            $this->_customRelations[] = $relation;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes a custom relation from finding and rendering
-     *
-     * @param  string $relation                  custom relation
-     * @return Zym_View_Helper_Navigation_Links  fluent interface, returns self
-     */
-    public function removeCustomRelation($relation)
-    {
-        if ($key = array_search($relation, $this->_customRelations)) {
-            unset($this->_customRelations[$key]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Finds relations of type $relation from the property called $relation
-     * of the given $page
-     *
-     * @param  Zym_Navigation_Page $page              page to search
-     * @param  string              $relation          property to search
-     * @return Zym_Navigation_Page|string|array|null  page(s) or null
-     */
-    public function findRelationFromPage(Zym_Navigation_Page $page, $relation)
-    {
-        // check if page has the given relation as a property
-        if ($found = $page->get($relation)) {
-            // extract page(s) from the property
-            if ($found = $this->_extractPages($found)) {
-                if (is_array($found)) {
-                    foreach ($found as $key => $page) {
-                        if (!$this->accept($page)) {
-                            unset($found[$key]);
-                        }
-                    }
-                } elseif (!$this->accept($found)) {
-                    $found = null;
-                }
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Extracts page(s) from a mixed value
-     *
-     * @param mixed $mixed                     mixed value to get a page from
-     * @param bool  $recursive                 whether $value should be looped
+     * @param  mixed $mixed                    mixed value to get page(s) from
+     * @param  bool  $recursive                whether $value should be looped
      *                                         if it is an array or a config
-     * @return Zym_Navigation_Page|array|null  page(s) or null
+     * @return Zym_Navigation_Page|array|null  empty if unable to convert
      */
-    protected function _extractPages($mixed, $recursive = true)
+    protected function _convertToPages($mixed, $recursive = true)
     {
         if (is_object($mixed)) {
             if ($mixed instanceof Zym_Navigation_Page) {
                 // value is a page instance; return directly
                 return $mixed;
             } elseif ($mixed instanceof Zym_Navigation_Container) {
-                // value is a container; return pages directly
-                return $mixed->getPages();
+                // value is a container; return pages in it
+                $pages = array();
+                foreach ($mixed as $page) {
+                    $pages[] = $page;
+                }
+                return $pages;
             } elseif ($mixed instanceof Zend_Config) {
                 // convert config object to array and extract
-                return $this->_extractPages($mixed->toArray(), $recursive);
+                return $this->_convertToPages($mixed->toArray(), $recursive);
             }
         } elseif (is_string($mixed)) {
             // value is a string; make an URI page
@@ -742,12 +628,12 @@ class Zym_View_Helper_Navigation_Links
                 'type' => 'uri',
                 'uri'  => $mixed
             ));
-        } elseif (is_array($mixed)) {
+        } elseif (is_array($mixed) && !empty($mixed)) {
             if ($recursive && is_numeric(key($mixed))) {
                 // first key is numeric; assume several pages
                 $pages = array();
                 foreach ($mixed as $value) {
-                    if ($value = $this->_extractPages($value, false)) {
+                    if ($value = $this->_convertToPages($value, false)) {
                         $pages[] = $value;
                     }
                 }
@@ -777,7 +663,7 @@ class Zym_View_Helper_Navigation_Links
      * @param  Zym_Navigaiton_Page $page  page to find root for
      * @return Zym_Navigation_Container   the root container of the given page
      */
-    private function _findRoot(Zym_Navigation_Page $page)
+    protected function _findRoot(Zym_Navigation_Page $page)
     {
         if ($this->_root) {
             return $this->_root;
@@ -795,45 +681,6 @@ class Zym_View_Helper_Navigation_Links
         }
 
         return $root;
-    }
-
-    /**
-     * Returns the cached result for the given $relation of the given $page
-     *
-     * @param  Zym_Navigation_Page $page      page
-     * @param  string              $relation  relation name
-     * @return mixed                          cached result or null
-     */
-    private function _cacheLookup($page, $relation)
-    {
-        $hash = $page->hashCode();
-
-        if (array_key_exists($hash, $this->_cache)) {
-            if (array_key_exists($relation, $this->_cache[$hash])) {
-                return $this->_cache[$hash][$relation];
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Stores $result of $page $relation in local cache
-     *
-     * @param  Zym_Navigation_Page $page      page
-     * @param  string              $relation  relation name
-     * @param  mixed               $result    result
-     * @return void
-     */
-    private function _cacheStore($page, $relation, $result)
-    {
-        $hash = $page->hashCode();
-
-        if (!array_key_exists($hash, $this->_cache)) {
-            $this->_cache[$hash] = array();
-        }
-
-        $this->_cache[$hash][$relation] = $result;
     }
 
     // Render methods:
@@ -897,46 +744,21 @@ class Zym_View_Helper_Navigation_Links
             $container = $this->getContainer();
         }
 
-        if (!$active = $this->findActive($container)) {
+        if ($active = $this->findActive($container)) {
+            $active = $active['page'];
+        } else {
             // no active page
             return '';
         }
 
-        // store root to make sure finder methods don't traverse above it
-        $this->_root = $container;
-
         $output = '';
         $indent = $this->getIndent();
-        $renderFlag = $this->getRenderFlag();
+        $this->_root = $container;
 
-        // render native relations
-        foreach (self::$_RELATIONS as $relationFlag => $relation) {
-            // find and render this relation?
-            if (!($relationFlag & $renderFlag)) {
-                continue;
-            }
-
-            // method name to call for finding relations
-            $finderMethod = 'find' . ucfirst($relation);
-
-            // find relations to active page
-            if ($found = $this->$finderMethod($active)) {
-                if (!is_array($found)) {
-                    $found = array($found);
-                }
-                foreach ($found as $page) {
-                    if ($r = $this->renderLink($page, 'rel', $relation)) {
-                        $output .= $indent . $r . self::EOL;
-                    }
-                }
-            }
-        }
-
-        // render custom relations?
-        if ($renderFlag & self::RENDER_CUSTOM) {
-            $found = $this->findCustomRelations($active);
-            foreach ($found as $relation => $relations) {
-                foreach ($relations as $page) {
+        $result = $this->findAllRelations($active, $this->getRenderFlag());
+        foreach ($result as $attrib => $types) {
+            foreach ($types as $relation => $pages) {
+                foreach ($pages as $page) {
                     if ($r = $this->renderLink($page, $attrib, $relation)) {
                         $output .= $indent . $r . self::EOL;
                     }
@@ -944,7 +766,6 @@ class Zym_View_Helper_Navigation_Links
             }
         }
 
-        // unset root
         $this->_root = null;
 
         // return output (trim last newline by spec)

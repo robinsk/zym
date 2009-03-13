@@ -360,6 +360,39 @@ abstract class Zym_View_Helper_Navigation_Abstract
     // Public methods:
 
     /**
+     * Finds the deepest active page in the given container
+     *
+     * @param  Zym_Navigation_Container $container  container to search
+     * @return array                                an associative array with
+     *                                              the values 'depth' and
+     *                                              'page', or an empty array
+     *                                              if not found
+     */
+    public function findActive(Zym_Navigation_Container $container)
+    {
+        $found = array();
+        $depth = -1;
+        $iterator = new RecursiveIteratorIterator($container,
+                RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($iterator as $page) {
+            if (!$this->accept($page)) {
+                // page is not accepted
+                continue;
+            }
+
+            if ($page->isActive() && $iterator->getDepth() > $depth) {
+                // found an active page at a deeper level than before
+                $depth = $iterator->getDepth();
+                $found['page'] = $page;
+                $found['depth'] = $depth;
+            }
+        }
+
+        return $found;
+    }
+
+    /**
      * Checks if the helper has a container
      *
      * @return bool  whether the helper has a container or not

@@ -30,7 +30,7 @@ require_once 'Zend/Config.php';
 
 /**
  * Tests the class Zym_Navigation_Container
- * 
+ *
  * @author    Robin Skoglund
  * @category  Zym_Tests
  * @package   Zym_Navigation
@@ -41,26 +41,22 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Prepares the environment before running a test.
-     * 
+     *
      */
     protected function setUp()
     {
-        
+
     }
-    
+
     /**
      * Tear down the environment after running a test
      *
      */
     protected function tearDown()
     {
-        
+
     }
-    
-    /**
-     * Iterating a container should be done in the order specified by pages
-     *
-     */
+
     public function testIteratorShouldBeOrderAware()
     {
         $nav = new Zym_Navigation(array(
@@ -87,19 +83,15 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
-        $order = array();
+
         $expected = array('Page 2', 'Page 1', 'Page 3', 'Page 5', 'Page 4');
+        $actual = array();
         foreach ($nav as $page) {
-            $order[] = $page->getLabel();
+            $actual[] = $page->getLabel();
         }
-        $this->assertEquals($expected, $order);
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Iterating a container should be done in the order specified by pages
-     *
-     */
+
     public function testRecursiveIteration()
     {
         $nav = new Zym_Navigation(array(
@@ -142,8 +134,8 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
-        $order = array();
+
+        $actual = array();
         $expected = array(
             'Page 1',
             'Page 1.1',
@@ -154,19 +146,15 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
             'Page 2.1',
             'Page 3'
         );
-        
+
         $iterator = new RecursiveIteratorIterator($nav,
             RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $page) {
-            $order[] = $page->getLabel();
+            $actual[] = $page->getLabel();
         }
-        $this->assertEquals($expected, $order);
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * When setting order for a page, the container order should be updated
-     *
-     */
+
     public function testSettingPageOrderShouldUpdateContainerOrder()
     {
         $nav = new Zym_Navigation(array(
@@ -179,90 +167,81 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
+
         $page3 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 3',
             'uri' => '#'
         ));
-        
+
         $nav->addPage($page3);
-        
-        $order = array();
-        $orderExpected = array('Page 1', 'Page 2', 'Page 3');
+
+
+        $expected = array(
+            'before' => array('Page 1', 'Page 2', 'Page 3'),
+            'after'  => array('Page 3', 'Page 1', 'Page 2')
+        );
+
+        $actual = array(
+            'before' => array(),
+            'after'  => array()
+        );
+
         foreach ($nav as $page) {
-            $order[] = $page->getLabel();
+            $actual['before'][] = $page->getLabel();
         }
-        $this->assertEquals($orderExpected, $order);
-        
+
         $page3->setOrder(-1);
-        
-        $order = array();
-        $orderExpected = array('Page 3', 'Page 1', 'Page 2');
+
         foreach ($nav as $page) {
-            $order[] = $page->getLabel();
+            $actual['after'][] = $page->getLabel();
         }
-        $this->assertEquals($orderExpected, $order);
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Should be able to add a page using an array
-     *
-     */
+
     public function testAddPageShouldWorkWithArray()
     {
         $pageOptions = array(
             'label' => 'From array',
             'uri' => '#array'
         );
-        
+
         $nav = new Zym_Navigation();
         $nav->addPage($pageOptions);
-        
+
         $this->assertEquals(1, count($nav));
     }
-    
-    /**
-     * Should be able to add a page using a Zend_Config object 
-     *
-     */
+
     public function testAddPageShouldWorkWithConfig()
     {
         $pageOptions = array(
             'label' => 'From config',
             'uri' => '#config'
         );
-        
+
         $pageOptions = new Zend_Config($pageOptions);
-        
+
         $nav = new Zym_Navigation();
         $nav->addPage($pageOptions);
-        
+
         $this->assertEquals(1, count($nav));
     }
-    
-    /**
-     * Should be able to add an actual page instance to a container
-     *
-     */
+
     public function testAddPageShouldWorkWithPageInstance()
     {
         $pageOptions = array(
             'label' => 'From array 1',
             'uri' => '#array'
         );
-        
+
         $nav = new Zym_Navigation(array($pageOptions));
-        
+
         $page = Zym_Navigation_Page::factory($pageOptions);
         $nav->addPage($page);
-        
+
         $this->assertEquals(2, count($nav));
     }
-    
-    /**
-     * Should be able to add several pages from an array
-     *
-     */
+
     public function testAddPagesShouldWorkWithArray()
     {
         $nav = new Zym_Navigation();
@@ -277,14 +256,11 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'controller' => 'index'
             )
         ));
-        
-        $this->assertEquals(2, count($nav));
+
+        $this->assertEquals(2, count($nav),
+                            'Expected 2 pages, found ' . count($nav));
     }
-    
-    /**
-     * Should be able to add several pages from a Zend_Config object
-     *
-     */
+
     public function testAddPagesShouldWorkWithConfig()
     {
         $nav = new Zym_Navigation();
@@ -299,15 +275,11 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'controller' => 'index'
             )
         )));
-        
-        $this->assertEquals(2, count($nav));
+
+        $this->assertEquals(2, count($nav),
+                            'Expected 2 pages, found ' . count($nav));
     }
-    
-    /**
-     * Should be able to add several pages where each page may be an array,
-     * a Zend_Config object or a page instance
-     *
-     */
+
     public function testAddPagesShouldWorkWithMixedArray()
     {
         $nav = new Zym_Navigation();
@@ -326,15 +298,12 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             ))
         )));
-        
-        $this->assertEquals(3, count($nav));
+
+        $this->assertEquals(3, count($nav),
+                            'Expected 3 pages, found ' . count($nav));
     }
-    
-    /**
-     * Tests removing pages
-     *
-     */
-    public function testShouldBeAbleToRemovePages()
+
+    public function testRemovingAllPages()
     {
         $nav = new Zym_Navigation();
         $nav->addPages(array(
@@ -347,17 +316,14 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
+
         $nav->removePages();
-        
-        $this->assertEquals(0, count($nav));
+
+        $this->assertEquals(0, count($nav),
+                            'Expected 0 pages, found ' . count($nav));
     }
-    
-    /**
-     * Tests (re)setting pages
-     *
-     */
-    public function testShouldBeAbleToSetPages()
+
+    public function testSettingPages()
     {
         $nav = new Zym_Navigation();
         $nav->addPages(array(
@@ -370,22 +336,19 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
+
         $nav->setPages(array(
             array(
                 'label' => 'Page 3',
                 'uri' => '#'
             )
         ));
-        
-        $this->assertEquals(1, count($nav));
+
+        $this->assertEquals(1, count($nav),
+                            'Expected 1 page, found ' . count($nav));
     }
-    
-    /**
-     * Should be able to remove a page by giving order
-     *
-     */
-    public function testShouldBeAbleToRemovePageByOrder()
+
+    public function testRemovingPageByOrder()
     {
         $nav = new Zym_Navigation(array(
             array(
@@ -406,24 +369,29 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
-        $this->assertEquals(true, $nav->removePage(0));
-        $this->assertEquals(true, $nav->removePage(32));
-        $this->assertEquals(true, $nav->removePage(0));
-        $this->assertEquals(false, $nav->removePage(1000));
-        
-        if ($nav->count() != 1) {
-            $this->fail(4 - $nav->count() . ' pages removed, expected 3');
-        } elseif ($nav->current()->getLabel() != 'Page 4') {
-            $this->fail('Removed page that should not be removed');
-        }
+
+        $expected = array(
+            'remove0'      => true,
+            'remove32'     => true,
+            'remove0again' => true,
+            'remove1000'   => false,
+            'count'        => 1,
+            'current'      => 'Page 4'
+        );
+
+        $actual = array(
+            'remove0'      => $nav->removePage(0),
+            'remove32'     => $nav->removePage(32),
+            'remove0again' => $nav->removePage(0),
+            'remove1000'   => $nav->removePage(1000),
+            'count'        => $nav->count(),
+            'current'      => $nav->current()->getLabel()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Should be able to remove a page by giving an instance
-     *
-     */
-    public function testShouldBeAbleToRemovePageByInstance()
+
+    public function testRemovingPageByInstance()
     {
         $nav = new Zym_Navigation(array(
             array(
@@ -435,86 +403,104 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
                 'uri' => '#'
             )
         ));
-        
+
         $page3 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 3',
             'uri' => '#'
         ));
-        
-        $page4 = Zym_Navigation_Page::factory(array(
-            'label' => 'Page 4',
+
+        $nav->addPage($page3);
+
+        $this->assertEquals(true, $nav->removePage($page3));
+    }
+
+    public function testRemovingPageByInstanceShouldReturnFalseIfPageIsNotInContainer()
+    {
+        $nav = new Zym_Navigation(array(
+            array(
+                'label' => 'Page 1',
+                'uri' => '#'
+            ),
+            array(
+                'label' => 'Page 2',
+                'uri' => '#'
+            )
+        ));
+
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'Page lol',
             'uri' => '#'
         ));
-        
-        $nav->addPage($page3);
-        
-        $this->assertEquals(true, $nav->removePage($page3));
-        $this->assertEquals(false, $nav->removePage($page4));
+
+        $this->assertEquals(false, $nav->removePage($page));
     }
-    
-    /**
-     * Should be able to search a container for a specific page
-     *
-     */
+
     public function testHasPage()
     {
         $page0 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 0',
             'uri' => '#'
         ));
-        
+
         $page1 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1',
             'uri' => '#'
         ));
-        
+
         $page1_1 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1.1',
             'uri' => '#'
         ));
-        
+
         $page1_2 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1.2',
             'uri' => '#'
         ));
-        
+
         $page1_2_1 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1.2.1',
             'uri' => '#'
         ));
-        
+
         $page1_3 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1.3',
             'uri' => '#'
         ));
-        
+
         $page2 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 2',
             'uri' => '#'
         ));
-        
+
         $page3 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 3',
             'uri' => '#'
         ));
-        
+
         $nav = new Zym_Navigation(array($page1, $page2, $page3));
-        
+
         $page1->addPage($page1_1);
         $page1->addPage($page1_2);
         $page1_2->addPage($page1_2_1);
         $page1->addPage($page1_3);
-        
-        $this->assertEquals(false, $nav->hasPage($page0));
-        $this->assertEquals(true, $nav->hasPage($page2));
-        $this->assertEquals(false, $nav->hasPage($page1_1));
-        $this->assertEquals(true, $nav->hasPage($page1_1, true));
+
+        $expected = array(
+            'haspage0'            => false,
+            'haspage2'            => true,
+            'haspage1_1'          => false,
+            'haspage1_1recursive' => true
+        );
+
+        $actual = array(
+            'haspage0'            => $nav->hasPage($page0),
+            'haspage2'            => $nav->hasPage($page2),
+            'haspage1_1'          => $nav->hasPage($page1_1),
+            'haspage1_1recursive' => $nav->hasPage($page1_1, true)
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Tests the method Zym_Navigation_Container::hasPages()
-     *
-     */
+
     public function testHasPages()
     {
         $nav1 = new Zym_Navigation();
@@ -523,189 +509,158 @@ class Zym_Navigation_ContainerTest extends PHPUnit_Framework_TestCase
             'label' => 'Page 1',
             'uri' => '#'
         ));
-        
-        $this->assertEquals(false, $nav1->hasPages());
-        $this->assertEquals(true, $nav2->hasPages());
+
+        $expected = array(
+            'empty' => false,
+            'notempty' => true
+        );
+
+        $actual = array(
+            'empty' => $nav1->hasPages(),
+            'notempty' => $nav2->hasPages()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Should be able to use setParent() with page instances
-     *
-     */
+
     public function testSetParentShouldWorkWithPage()
     {
         $page1 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1',
             'uri' => '#'
         ));
-        
+
         $page2 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 2',
             'uri' => '#'
         ));
-        
+
         $page2->setParent($page1);
-        
-        $this->assertEquals($page1, $page2->getParent());
-        $this->assertEquals(true, $page1->hasPages());
+
+        $expected = array(
+            'parent' => 'Page 1',
+            'hasPages' => true
+        );
+
+        $actual = array(
+            'parent' => $page2->getParent()->getLabel(),
+            'hasPages' => $page1->hasPages()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Should be able to null out parent
-     *
-     */
+
     public function testSetParentShouldWorkWithNull()
     {
         $page1 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1',
             'uri' => '#'
         ));
-        
+
         $page2 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 2',
             'uri' => '#'
         ));
-        
+
         $page2->setParent($page1);
         $page2->setParent(null);
-        
+
         $this->assertEquals(null, $page2->getParent());
     }
-    
-    /**
-     * When setting new parent for page that already has a parent, it should
-     * be removed from the old parent
-     *
-     */
+
     public function testSetParentShouldRemoveFromOldParentPage()
     {
         $page1 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 1',
             'uri' => '#'
         ));
-        
+
         $page2 = Zym_Navigation_Page::factory(array(
             'label' => 'Page 2',
             'uri' => '#'
         ));
-        
+
         $page2->setParent($page1);
         $page2->setParent(null);
-        
-        $this->assertEquals(null, $page2->getParent());
-        $this->assertEquals(false, $page1->hasPages());
+
+        $expected = array(
+            'parent' => null,
+            'haspages' => false
+        );
+
+        $actual = array(
+            'parent' => $page2->getParent(),
+            'haspages' => $page2->hasPages()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * It should be possible to use custom properties in finder methods
-     *
-     */
+
     public function testFinderMethodsShouldWorkWithCustomProperties()
     {
         $nav = $this->_getFindByNavigation();
-        
+
         $found = $nav->findOneBy('page2', 'page2');
-        $this->assertType('Zym_Navigation_Page', $found);
-        $this->assertSame('Page 2', $found->getLabel());
+        $this->assertEquals('Page 2', $found->getLabel());
     }
-    
-    /**
-     * The findOneBy() method should only return one page or null
-     *
-     */
+
     public function testFindOneByShouldReturnOnlyOnePage()
     {
         $nav = $this->_getFindByNavigation();
-        
+
         $found = $nav->findOneBy('id', 'page_2_and_3');
         $this->assertType('Zym_Navigation_Page', $found);
     }
-    
-    /**
-     * The findOneBy() method should return null if no matching page is found
-     *
-     */
+
     public function testFindOneByShouldReturnNullIfNotFound()
     {
         $nav = $this->_getFindByNavigation();
-        
+
         $found = $nav->findOneBy('id', 'non-existant');
         $this->assertNull($found);
     }
-    
-    /**
-     * The findAllBy() method should return all matching pages
-     *
-     */
+
     public function testFindAllByShouldReturnAllMatchingPages()
     {
         $nav = $this->_getFindByNavigation();
-        
+
         $found = $nav->findAllBy('id', 'page_2_and_3');
-        $this->assertType('array', $found, 'array not returned');
-        $this->assertSame(2, count($found), 'found more/less than 2 pages');
-        $this->assertContainsOnly('Zym_Navigation_Page', $found, false);
+
+        $expected = array(
+            'type' => 'array',
+            'count' => 2
+        );
+
+        $actual = array(
+            'type' => gettype($found),
+            'count' => count($found)
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * The findAllBy() method should return an empty array if no matching pages
-     * are found
-     *
-     */
+
     public function testFindAllByShouldReturnEmptyArrayifNotFound()
     {
         $nav = $this->_getFindByNavigation();
-        
         $found = $nav->findAllBy('id', 'non-existant');
-        $this->assertType('array', $found, 'array not returned');
-        $this->assertSame(0, count($found), 'array is not empty');
+
+        $expected = array('type' => 'array', 'count' => 0);
+        $actual = array('type' => gettype($found), 'count' => count($found));
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * The findBy() method should default to findOneBy()
-     *
-     */
+
     public function testFindByShouldDefaultToFindOneBy()
     {
         $nav = $this->_getFindByNavigation();
-        
+
         $found = $nav->findBy('id', 'page_2_and_3');
         $this->assertType('Zym_Navigation_Page', $found);
     }
-    
-    /**
-     * It should be possible to use methods like findById(), findByClass(),
-     * findOneByLabel(), findAllByClass(), and so on.
-     *
-     */
-    public function testShouldBeAbleToUseMagicFinderMethods()
-    {
-        $nav = $this->_getFindByNavigation();
-        
-        $found = $nav->findById('non-existant');
-        $this->assertNull($found);
-        
-        $found = $nav->findById('page_2_and_3');
-        $this->assertType('Zym_Navigation_Page', $found);
-        
-        $found = $nav->findAllById('page_2_and_3');
-        $this->assertType('array', $found, 'array not returned');
-        $this->assertSame(2, count($found), 'found more/less than 2 pages');
-        $this->assertContainsOnly('Zym_Navigation_Page', $found, false);
-        
-        $found = $nav->findAllByaction('about');;
-        $this->assertSame(2, count($found));
-    }
-    
-    /**
-     * Returns navigation object for the findBy methods
-     *
-     * @return Zym_Navigation
-     */
+
     protected function _getFindByNavigation()
     {
-        // findAllByFoo('bar')         // Page 1, Page 1.1 
-        // findById('page_2_and_3')    // Page 2 
+        // findAllByFoo('bar')         // Page 1, Page 1.1
+        // findById('page_2_and_3')    // Page 2
         // findOneById('page_2_and_3') // Page 2
         // findAllById('page_2_and_3') // Page 2, Page 3
         // findAllByAction('about')    // Page 1.3, Page 3

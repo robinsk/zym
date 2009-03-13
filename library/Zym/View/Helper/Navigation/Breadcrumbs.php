@@ -169,32 +169,18 @@ class Zym_View_Helper_Navigation_Breadcrumbs
             $container = $this->getContainer();
         }
 
+        if (!$active = $this->findActive($container)) {
+            return '';
+        }
+
         // init html
         $html = '';
 
-        // stuff to use in the two steps below
-        $found = false;
-        $depth = -1;
-        $iterator = new RecursiveIteratorIterator($container,
-                RecursiveIteratorIterator::CHILD_FIRST);
-
-        // step 1: find the deepest active page
-        foreach ($iterator as $page) {
-            if (!$this->accept($page)) {
-                // page is not accepted
-                continue;
-            }
-
-            if ($page->isActive() && $iterator->getDepth() > $depth) {
-                // found an active page at a deeper level than before
-                $found = $page;
-                $depth = $iterator->getDepth();
-            }
-        }
-
         // step 2: walk back to root
-        if ($depth >= $this->getMinDepth()) {
-            // put the current page last
+        if ($active['depth'] >= $this->getMinDepth()) {
+            $found = $active['page'];
+
+            // put the actve page last
             if ($this->getLinkLast()) {
                 $html = $this->htmlify($found);
             } else {

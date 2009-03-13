@@ -36,71 +36,58 @@ require_once 'Zym/Navigation/Page.php';
  */
 class Zym_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Contains include path before starting test
-     *
-     * @var string
-     */
     protected $_oldIncludePath;
-    
-    /**
-     * Prepares the environment before running a test
-     * 
-     */
+
     protected function setUp()
     {
         // store old include path
         $this->_oldIncludePath = get_include_path();
-        
+
         // add _files dir to include path
         $addToPath = dirname(__FILE__) . '/_files';
         set_include_path($addToPath . PATH_SEPARATOR . $this->_oldIncludePath);
     }
 
-    /**
-     * Cleans up the environment after running a test
-     * 
-     */
     protected function tearDown()
     {
         // reset include path
         set_include_path($this->_oldIncludePath);
     }
-    
-    /**
-     * Factory should detect an MVC page from the options 'action'
-     * and 'controller'
-     *
-     */
-    public function testShouldDetectMvcPage()
+
+    public function testDetectMvcPage()
     {
-        $page = Zym_Navigation_Page::factory(array(
-            'label' => 'MVC Page',
-            'action' => 'index',
-            'controller' => 'index'
-        ));
-        
-        $this->assertType('Zym_Navigation_Page_Mvc', $page);
+        $pages = array(
+            Zym_Navigation_Page::factory(array(
+                'label' => 'MVC Page',
+                'action' => 'index'
+            )),
+            Zym_Navigation_Page::factory(array(
+                'label' => 'MVC Page',
+                'controller' => 'index'
+            )),
+            Zym_Navigation_Page::factory(array(
+                'label' => 'MVC Page',
+                'module' => 'index'
+            )),
+            Zym_Navigation_Page::factory(array(
+                'label' => 'MVC Page',
+                'route' => 'home'
+            ))
+        );
+
+        $this->assertContainsOnly('Zym_Navigation_Page_Mvc', $pages);
     }
-    
-    /**
-     * Factory should detect an URI page from the 'uri' option
-     *
-     */
-    public function testShouldDetectUriPage()
+
+    public function testDetectUriPage()
     {
         $page = Zym_Navigation_Page::factory(array(
-            'label' => 'MVC Page',
+            'label' => 'URI Page',
             'uri' => '#'
         ));
-        
+
         $this->assertType('Zym_Navigation_Page_Uri', $page);
     }
-    
-    /**
-     * When detecting type, MVC pages should have precedence
-     *
-     */
+
     public function testMvcShouldHaveDetectionPrecedence()
     {
         $page = Zym_Navigation_Page::factory(array(
@@ -109,15 +96,11 @@ class Zym_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
             'controller' => 'index',
             'uri' => '#'
         ));
-        
+
         $this->assertType('Zym_Navigation_Page_Mvc', $page);
     }
-    
-    /**
-     * Factory should support short 'type' options for mvc and uri
-     *
-     */
-    public function testShouldSupportShortTypes()
+
+    public function testSupportsMvcShorthand()
     {
         $mvcPage = Zym_Navigation_Page::factory(array(
             'type' => 'mvc',
@@ -125,86 +108,72 @@ class Zym_Navigation_PageFactoryTest extends PHPUnit_Framework_TestCase
             'action' => 'index',
             'controller' => 'index'
         ));
-        
+
         $this->assertType('Zym_Navigation_Page_Mvc', $mvcPage);
-        
+    }
+
+    public function testSupportsUriShorthand()
+    {
         $uriPage = Zym_Navigation_Page::factory(array(
             'type' => 'uri',
             'label' => 'URI Page',
             'uri' => 'http://www.example.com/'
         ));
-        
+
         $this->assertType('Zym_Navigation_Page_Uri', $uriPage);
     }
-    
-    /**
-     * The page factory should support custom pages types
-     *
-     */
-    public function testShouldSupportCustomPageTypes()
+
+    public function testSupportsCustomPageTypes()
     {
-        $pageConfig = array(
+        $page = Zym_Navigation_Page::factory(array(
             'type' => 'My_Page',
             'label' => 'My Custom Page'
-        );
-        
-        $page = Zym_Navigation_Page::factory($pageConfig);
-        
-        return $this->assertEquals('#', $page->getHref());
+        ));
+
+        return $this->assertType('My_Page', $page);
     }
-    
-    /**
-     * The page factory should not work with page types that don't extend
-     * Zym_Navigation_Page
-     *
-     */
+
     public function testShouldFailForInvalidType()
     {
-        $pageConfig = array(
-            'type' => 'My_InvalidPage',
-            'label' => 'My Invalid Page'
-        );
-        
         try {
-            $page = Zym_Navigation_Page::factory($pageConfig);
-        } catch(InvalidArgumentException $e) {
+            $page = Zym_Navigation_Page::factory(array(
+                'type' => 'My_InvalidPage',
+                'label' => 'My Invalid Page'
+            ));
+        } catch(Zym_Navigation_Exception $e) {
             return;
         }
-        
+
         $this->fail('An exception has not been thrown for invalid page type');
     }
-    
-    /**
-     * The page factory should not require anything more than a label
-     *
-     */
-    public function testShouldOnlyRequireLabel()
-    {
-        $pageConfig = array(
-            'label' => 'My Invalid Page'
-        );
-        
-        $page = Zym_Navigation_Page::factory($pageConfig);
-    }
-    
-    /**
-     * The page factory should not work with page types that don't exist
-     *
-     */
+
     public function testShouldFailForNonExistantType()
     {
         $pageConfig = array(
             'type' => 'My_NonExistant_Page',
             'label' => 'My non-existant Page'
         );
-        
+
         try {
             $page = Zym_Navigation_Page::factory($pageConfig);
         } catch(Zend_Exception $e) {
             return;
         }
-        
+
         $msg = 'A Zend_Exception has not been thrown for non-existant class';
         $this->fail($msg);
+    }
+
+    public function testShouldFailIfUnableToDetermineType()
+    {
+        try {
+            $page = Zym_Navigation_Page::factory(array(
+                'label' => 'My Invalid Page'
+            ));
+        } catch(Zym_Navigation_Exception $e) {
+            return;
+        }
+
+        $this->fail('An exception has not been thrown for invalid page type');
     }
 }

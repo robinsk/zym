@@ -249,13 +249,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @param  string|null $controller   controller name
      * @return Zym_Navigation_Page_Mvc   fluent interface, returns self
-     * @throws InvalidArgumentException  if invalid controller name is given
+     * @throws Zym_Navigation_Exception  if invalid controller name is given
      */
     public function setController($controller)
     {
         if (null !== $controller && !is_string($controller)) {
-            $msg = '$controller must be a string or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $controller must be a string or null');
         }
 
         $this->_controller = $controller;
@@ -282,13 +283,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @param  string|null $module       module name
      * @return Zym_Navigation_Page_Mvc   fluent interface, returns self
-     * @throws InvalidArgumentException  if invalid module name is given
+     * @throws Zym_Navigation_Exception  if invalid module name is given
      */
     public function setModule($module)
     {
         if (null !== $module && !is_string($module)) {
-            $msg = '$module must be a string or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: $module must be a string or null');
         }
 
         $this->_module = $module;
@@ -349,13 +351,14 @@ class Zym_Navigation_Page_Mvc extends Zym_Navigation_Page
      *
      * @param  string $route             route name to use when assembling URL
      * @return Zym_Navigation_Page_Mvc   fluent interface, returns self
-     * @throws InvalidArgumentException  if invalid $route is given
+     * @throws Zym_Navigation_Exception  if invalid $route is given
      */
     public function setRoute($route)
     {
         if (null !== $route && (!is_string($route) || strlen($route) < 1)) {
-            $msg = '$route must be a non-empty string or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                 'Invalid argument: $route must be a non-empty string or null');
         }
 
         $this->_route = $route;

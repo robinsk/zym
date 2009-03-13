@@ -30,7 +30,7 @@ require_once 'Zend/Config.php';
 
 /**
  * Tests the class Zym_Navigation_Page
- * 
+ *
  * @author    Robin Skoglund
  * @category  Zym_Tests
  * @package   Zym_Navigation
@@ -41,13 +41,13 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Prepares the environment before running a test.
-     * 
+     *
      */
     protected function setUp()
     {
-        
+
     }
-    
+
     /**
      * Tear down the environment after running a test
      *
@@ -56,68 +56,56 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
     {
         // setConfig, setOptions
     }
-    
-    /**
-     * Tests setLabel() and getLabel() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetLabel()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals('foo', $page->getLabel());
         $page->setLabel('bar');
         $this->assertEquals('bar', $page->getLabel());
-        
-        $invalids = array(42, '', (object) null);
+
+        $invalids = array(42, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setLabel($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }
-    
-    /**
-     * Tests setId() and getId() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetId()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals(null, $page->getId());
-        
+
         $page->setId('bar');
         $this->assertEquals('bar', $page->getId());
-        
+
         $invalids = array(true, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setId($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }
-    
-    /**
-     * Tests that the 'id' property can be an integer
-     *
-     */
+
     public function testIdCouldBeAnInteger()
     {
         $page = Zym_Navigation_Page::factory(array(
@@ -125,105 +113,179 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'uri' => '#',
             'id' => 10
         ));
-        
+
         $this->assertEquals(10, $page->getId());
     }
-    
-    /**
-     * Tests setClass() and getClass() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetClass()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals(null, $page->getClass());
         $page->setClass('bar');
         $this->assertEquals('bar', $page->getClass());
-        
+
         $invalids = array(42, true, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setClass($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }
-    
-    /**
-     * Tests setTitle() and getTitle() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetTitle()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals(null, $page->getTitle());
         $page->setTitle('bar');
         $this->assertEquals('bar', $page->getTitle());
-        
+
         $invalids = array(42, true, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setTitle($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }
-    
-    /**
-     * Tests setTarget() and getTarget() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetTarget()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals(null, $page->getTarget());
         $page->setTarget('bar');
         $this->assertEquals('bar', $page->getTarget());
-        
+
         $invalids = array(42, true, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setTarget($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }
-    
-    /**
-     * Tests setOrder() and getOrder() with valid and invalid values
-     *
-     */
+
+    public function testConstructingWithRelationsInArray()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'bar',
+            'uri'   => '#',
+            'rel'   => array(
+                'prev' => 'foo',
+                'next' => 'baz'
+            ),
+            'rev'   => array(
+                'alternate' => 'bat'
+            )
+        ));
+
+        $expected = array(
+            'rel'   => array(
+                'prev' => 'foo',
+                'next' => 'baz'
+            ),
+            'rev'   => array(
+                'alternate' => 'bat'
+            )
+        );
+
+        $actual = array(
+            'rel' => $page->getRel(),
+            'rev' => $page->getRev()
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testConstructingWithRelationsInConfig()
+    {
+        $page = Zym_Navigation_Page::factory(new Zend_Config(array(
+            'label' => 'bar',
+            'uri'   => '#',
+            'rel'   => array(
+                'prev' => 'foo',
+                'next' => 'baz'
+            ),
+            'rev'   => array(
+                'alternate' => 'bat'
+            )
+        )));
+
+        $expected = array(
+            'rel'   => array(
+                'prev' => 'foo',
+                'next' => 'baz'
+            ),
+            'rev'   => array(
+                'alternate' => 'bat'
+            )
+        );
+
+        $actual = array(
+            'rel' => $page->getRel(),
+            'rev' => $page->getRev()
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testGettingSpecificRelations()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'bar',
+            'uri'   => '#',
+            'rel'   => array(
+                'prev' => 'foo',
+                'next' => 'baz'
+            ),
+            'rev'   => array(
+                'next' => 'foo'
+            )
+        ));
+
+        $expected = array(
+            'foo', 'foo'
+        );
+
+        $actual = array(
+            $page->getRel('prev'),
+            $page->getRev('next')
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testSetAndGetOrder()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals(null, $page->getOrder());
         $page->setOrder('1');
         $this->assertEquals(1, $page->getOrder());
@@ -231,149 +293,119 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1337, $page->getOrder());
         $page->setOrder('-25');
         $this->assertEquals(-25, $page->getOrder());
-        
+
         $invalids = array(3.14, 'e', "\n", '0,4', true, (object) null);
         foreach ($invalids as $invalid) {
             try {
                 $page->setOrder($invalid);
                 $msg = $invalid . ' is invalid, but no ';
-                $msg .= 'InvalidArgumentException was thrown';
+                $msg .= 'Zym_Navigation_Exception was thrown';
                 $this->fail($msg);
-            } catch (InvalidArgumentException $e) {
-                
+            } catch (Zym_Navigation_Exception $e) {
+
             }
         }
     }
-    
-    /**
-     * Tests setActive() and isActive() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetActive()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $valids = array(true, 1, '1', 3.14, 'true', 'yes');
         foreach ($valids as $valid) {
             $page->setActive($valid);
             $this->assertEquals(true, $page->isActive());
         }
-        
+
         $invalids = array(false, 0, '0', 0.0, array());
         foreach ($invalids as $invalid) {
             $page->setActive($invalid);
             $this->assertEquals(false, $page->isActive());
         }
     }
-    
-    /**
-     * Tests setVisible() and isVisible() with valid and invalid values
-     *
-     */
+
     public function testSetAndGetVisible()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $valids = array(true, 1, '1', 3.14, 'true', 'yes');
         foreach ($valids as $valid) {
             $page->setVisible($valid);
             $this->assertEquals(true, $page->isVisible());
         }
-        
+
         $invalids = array(false, 0, '0', 0.0, array());
         foreach ($invalids as $invalid) {
             $page->setVisible($invalid);
             $this->assertEquals(false, $page->isVisible());
         }
     }
-    
-    /**
-     * The magic overloads __set and __get should work with native properties
-     *
-     */
+
     public function testMagicOverLoadsShouldSetAndGetNativeProperties()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => 'foo'
         ));
-        
+
         $this->assertSame('foo', $page->getUri());
         $this->assertSame('foo', $page->uri);
-        
+
         $page->uri = 'bar';
         $this->assertSame('bar', $page->getUri());
         $this->assertSame('bar', $page->uri);
     }
-    
-    /**
-     * The magic overloads __isset(), __unset() should check native properties
-     *
-     */
+
     public function testMagicOverLoadsShouldCheckNativeProperties()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => 'foo'
         ));
-        
+
         $this->assertTrue(isset($page->uri));
-        
+
         try {
             unset($page->uri);
             $this->fail('Should not be possible to unset native properties');
-        } catch (Exception $e) {
-            
+        } catch (Zym_Navigation_Exception $e) {
+
         }
     }
-    
-    /**
-     * The magic overloads (__set(), __get(), __isset(), __unset()) should
-     * handle all custom properties
-     *
-     */
+
     public function testMagicOverLoadsShouldHandleCustomProperties()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => 'foo'
         ));
-        
+
         $this->assertFalse(isset($page->category));
-        
+
         $page->category = 'music';
         $this->assertTrue(isset($page->category));
         $this->assertSame('music', $page->category);
-        
+
         unset($page->category);
         $this->assertFalse(isset($page->category));
     }
-    
-    /**
-     * Tests the magic __toString() method
-     *
-     */
+
     public function testMagicToStringMethodShouldReturnLabel()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $this->assertEquals('foo', (string) $page);
     }
-    
-    /**
-     * Tests that the setOptions() method translates options correctly
-     * to their according accessor methods 
-     *
-     */
+
     public function testSetOptionsShouldTranslateToAccessor()
     {
         $page = Zym_Navigation_Page::factory(array(
@@ -381,7 +413,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'action' => 'index',
             'controller' => 'index'
         ));
-        
+
         $options = array(
             'label' => 'bar',
             'action' => 'baz',
@@ -390,21 +422,30 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'reset_params' => false,
             'id' => 'foo-test'
         );
-        
+
         $page->setOptions($options);
-        
-        $this->assertEquals('bar', $page->getLabel());
-        $this->assertEquals('baz', $page->getAction());
-        $this->assertEquals('bat', $page->getController());
-        $this->assertEquals('test', $page->getModule());
-        $this->assertEquals(false, $page->getResetParams());
-        $this->assertEquals('foo-test', $page->getId());
+
+        $expected = array(
+            'label'       => 'bar',
+            'action'      => 'baz',
+            'controller'  => 'bat',
+            'module'      => 'test',
+            'resetParams' => false,
+            'id'          => 'foo-test'
+        );
+
+        $actual = array(
+            'label'       => $page->getLabel(),
+            'action'      => $page->getAction(),
+            'controller'  => $page->getController(),
+            'module'      => $page->getModule(),
+            'resetParams' => $page->getResetParams(),
+            'id'          => $page->getId()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Tests the setConfig() method 
-     *
-     */
+
     public function testSetConfig()
     {
         $page = Zym_Navigation_Page::factory(array(
@@ -412,7 +453,7 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'action' => 'index',
             'controller' => 'index'
         ));
-        
+
         $options = array(
             'label' => 'bar',
             'action' => 'baz',
@@ -421,44 +462,100 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'reset_params' => false,
             'id' => 'foo-test'
         );
-        
+
         $page->setConfig(new Zend_Config($options));
-        
-        $this->assertEquals('bar', $page->getLabel());
-        $this->assertEquals('baz', $page->getAction());
-        $this->assertEquals('bat', $page->getController());
-        $this->assertEquals('test', $page->getModule());
-        $this->assertEquals(false, $page->getResetParams());
-        $this->assertEquals('foo-test', $page->getId());
+
+        $expected = array(
+            'label'       => 'bar',
+            'action'      => 'baz',
+            'controller'  => 'bat',
+            'module'      => 'test',
+            'resetParams' => false,
+            'id'          => 'foo-test'
+        );
+
+        $actual = array(
+            'label'       => $page->getLabel(),
+            'action'      => $page->getAction(),
+            'controller'  => $page->getController(),
+            'module'      => $page->getModule(),
+            'resetParams' => $page->getResetParams(),
+            'id'          => $page->getId()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
-    
-    /**
-     * Tests that the setOptions() method sets custom properties
-     * if no accessor is found 
-     *
-     */
+
     public function testSetOptionsShouldSetCustomProperties()
     {
         $page = Zym_Navigation_Page::factory(array(
             'label' => 'foo',
             'uri' => '#'
         ));
-        
+
         $options = array(
             'test' => 'test',
             'meaning' => 42
         );
-        
+
         $page->setOptions($options);
-        
-        $this->assertEquals('test', $page->test);
-        $this->assertEquals(42, $page->meaning);
+
+        $actual = array(
+            'test' => $page->test,
+            'meaning' => $page->meaning
+        );
+
+        $this->assertEquals($options, $actual);
     }
-    
-    /**
-     * Tests the getCustomProperties() method
-     *
-     */
+
+    public function testAddingRelations()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'page',
+            'uri'   => '#'
+        ));
+
+        $page->addRel('alternate', 'foo');
+        $page->addRev('alternate', 'bar');
+
+        $expected = array(
+            'rel' => array('alternate' => 'foo'),
+            'rev' => array('alternate' => 'bar')
+        );
+
+        $actual = array(
+            'rel' => $page->getRel(),
+            'rev' => $page->getRev()
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testRemovingRelations()
+    {
+        $page = Zym_Navigation_Page::factory(array(
+            'label' => 'page',
+            'uri'   => '#'
+        ));
+
+        $page->addRel('alternate', 'foo');
+        $page->addRev('alternate', 'bar');
+        $page->removeRel('alternate');
+        $page->removeRev('alternate');
+
+        $expected = array(
+            'rel' => array(),
+            'rev' => array()
+        );
+
+        $actual = array(
+            'rel' => $page->getRel(),
+            'rev' => $page->getRev()
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testGetCustomProperties()
     {
         $page = Zym_Navigation_Page::factory(array(
@@ -466,27 +563,23 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'uri' => '#',
             'baz' => 'bat'
         ));
-        
+
         $options = array(
             'test' => 'test',
             'meaning' => 42
         );
-        
+
         $page->setOptions($options);
-        
+
         $expected = array(
             'baz' => 'bat',
             'test' => 'test',
             'meaning' => 42
         );
-        
+
         $this->assertEquals($expected, $page->getCustomProperties());
     }
-    
-    /**
-     * Tests the toArray() method
-     *
-     */
+
     public function testToArrayMethod()
     {
         $options = array(
@@ -496,16 +589,18 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
             'class'    => 'my-class',
             'title'    => 'my-title',
             'target'   => 'my-target',
+            'rel'      => array(),
+            'rev'      => array(),
             'order'    => 100,
             'active'   => true,
             'visible'  => false,
-        
+
             'resource' => 'joker',
             'privilege' => null,
-        
+
             'foo'      => 'bar',
             'meaning'  => 42,
-        
+
             'pages'    => array(
                 array(
                     'label' => 'foo.bar',
@@ -517,22 +612,22 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        
+
         $page = Zym_Navigation_Page::factory($options);
         $toArray = $page->toArray();
-        
+
         // tweak options to what we expect toArray() to contain
         $options['type'] = 'Zym_Navigation_Page_Uri';
-        
+
         // calculate diff between toArray() and $options
         $diff = array_diff_assoc($toArray, $options);
-        
+
         // should be no diff
         $this->assertEquals(array(), $diff);
-        
+
         // $toArray should have 2 sub pages
         $this->assertEquals(2, count($toArray['pages']));
-        
+
         // tweak options to what we expect sub page 1 to be
         $options['label'] = 'foo.bar';
         $options['order'] = null;
@@ -545,14 +640,14 @@ class Zym_Navigation_PageTest extends PHPUnit_Framework_TestCase
         $options['visible'] = true;
         unset($options['foo']);
         unset($options['meaning']);
-        
+
         // assert that there is no diff from what we expect
         $subPageOneDiff = array_diff_assoc($toArray['pages'][0], $options);
         $this->assertEquals(array(), $subPageOneDiff);
-        
+
         // tweak options to what we expect sub page 2 to be
         $options['label'] = 'foo.baz';
-        
+
         // assert that there is no diff from what we expect
         $subPageTwoDiff = array_diff_assoc($toArray['pages'][1], $options);
         $this->assertEquals(array(), $subPageTwoDiff);
