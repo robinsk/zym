@@ -344,9 +344,7 @@ class Zym_View_Helper_Navigation_LinksTest
     public function testDoNotFindSectionsWhenActivePageIsASection()
     {
         $active = $this->_helper->findOneByLabel('Page 2.2');
-        $this->_helper->debug = true;
         $found = $this->_helper->findRelSection($active);
-        $this->_helper->debug = false;
         $this->assertNull($found);
     }
 

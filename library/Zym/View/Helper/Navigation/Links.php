@@ -249,8 +249,6 @@ class Zym_View_Helper_Navigation_Links
         return $result;
     }
 
-    public $debug = false;
-
     /**
      * Finds relations of the given $rel=$type from $page
      *
