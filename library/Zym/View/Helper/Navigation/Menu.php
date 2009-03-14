@@ -48,6 +48,13 @@ class Zym_View_Helper_Navigation_Menu
     protected $_parentActive = true;
 
     /**
+     * Partial view script to use for rendering menu
+     *
+     * @var string|array
+     */
+    protected $_partial = null;
+
+    /**
      * View helper entry point:
      * Retrieves helper and optionally sets container to operate on
      *
@@ -116,6 +123,36 @@ class Zym_View_Helper_Navigation_Menu
     public function getParentActive()
     {
         return $this->_parentActive;
+    }
+
+    /**
+     * Sets which partial view script to use for rendering menu
+     *
+     * @param  string|array $partial            partial view script or null. If
+     *                                          an array is given, it is
+     *                                          expected to contain two values;
+     *                                          the partial view script to use,
+     *                                          and the module where the script
+     *                                          can be found.
+     * @return Zym_View_Helper_Navigation_Menu  fluent interface, returns self
+     */
+    public function setPartial($partial)
+    {
+        if (null === $partial || is_string($partial) || is_array($partial)) {
+            $this->_partial = $partial;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns partial view script to use for rendering menu
+     *
+     * @return string|array|null
+     */
+    public function getPartial()
+    {
+        return $this->_partial;
     }
 
     // Public methods:
@@ -292,12 +329,77 @@ class Zym_View_Helper_Navigation_Menu
         return '';
     }
 
+    /**
+     * Renders the given $container by invoking the partial view helper
+     *
+     * The container will simply be passed on as a model to the view script
+     * as-is, and will be available in the partial script as 'container', e.g.
+     * <code>echo 'Number of pages: ', count($this->container);</code>.
+     *
+     * @param  Zym_Navigation_Container $container  [optional] container to
+     *                                              pass to view script. Default
+     *                                              is to use the container
+     *                                              registered in the helper.
+     * @param  string|array             $partial    [optional] partial view
+     *                                              script to use. Default is to
+     *                                              use the partial registered
+     *                                              in the helper. If an array
+     *                                              is given, it is expected to
+     *                                              contain two values; the
+     *                                              partial view script to use,
+     *                                              and the module where the
+     *                                              script can be found.
+     * @return string                               helper output
+     */
+    public function renderPartial(Zym_Navigation_Container $container = null,
+                                  $partial = null)
+    {
+        if (null === $container) {
+            $container = $this->getContainer();
+        }
+
+        if (null === $partial) {
+            $partial = $this->getPartial();
+        }
+
+        if (empty($partial)) {
+            require_once 'Zend/View/Exception.php';
+            throw new Zend_View_Exception(
+                    'Unable to render menu: No partial view script provided');
+        }
+
+        $model = array(
+            'container' => $container
+        );
+
+        if (is_array($partial)) {
+            if (count($partial) != 2) {
+                require_once 'Zend/View/Exception.php';
+                throw new Zend_View_Exception(
+                        'Unable to render menu: A view partial supplied as ' .
+                        'an array must contain two values: partial view ' .
+                        'script and module where script can be found');
+            }
+
+            return $this->view->partial($partial[0], $partial[1], $model);
+        }
+
+        return $this->view->partial($partial, null, $model);
+    }
+
     // Zym_View_Helper_Navigation_Interface:
 
     /**
-     * Renders helper
+     * Renders menu
      *
      * Implements {@link Zym_View_Helper_Navigation_Interface::render()}.
+     *
+     * If a partial view is registered in the helper, the menu will be rendered
+     * using the given partial script. If no partial is registered, the menu
+     * will be rendered as an 'ul' element by the helper's internal method.
+     *
+     * @see renderPartial()
+     * @see renderMenu()
      *
      * @param  Zym_Navigation_Container $container  [optional] container to
      *                                              render. Default is to render
@@ -307,6 +409,10 @@ class Zym_View_Helper_Navigation_Menu
      */
     public function render(Zym_Navigation_Container $container = null)
     {
-        return rtrim($this->renderMenu($container, null, true), self::EOL);
+        if ($partial = $this->getPartial()) {
+            return $this->renderPartial($container, $partial);
+        } else {
+            return rtrim($this->renderMenu($container, null, true), self::EOL);
+        }
     }
 }

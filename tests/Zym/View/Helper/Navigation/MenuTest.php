@@ -233,4 +233,46 @@ class Zym_View_Helper_Navigation_MenuTest
 
         $this->_helper->setTranslator(null);
     }
+
+    public function testRenderingPartial()
+    {
+        $this->_helper->setPartial('menu.phtml');
+
+        $expected = file_get_contents($this->_files . '/menu_partial.html');
+        $actual = $this->_helper->render();
+
+        $this->_helper->setPartial(null);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testRenderingPartialBySpecifyingAnArrayAsPartial()
+    {
+        $this->_helper->setPartial(array('menu.phtml', 'default'));
+
+        $expected = file_get_contents($this->_files . '/menu_partial.html');
+        $actual = $this->_helper->render();
+
+        $this->_helper->setPartial(null);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testRenderingPartialShouldFailOnInvalidPartialArray()
+    {
+        $this->_helper->setPartial(array('menu.phtml'));
+
+        try {
+            $this->_helper->render();
+            $fail = true;
+        } catch (Zend_View_Exception $e) {
+            $fail = false;
+        }
+
+        $this->_helper->setPartial(null);
+
+        if ($fail) {
+            $this->fail('$partial was invalid, but no Zend_View_Exception was thrown');
+        }
+    }
 }

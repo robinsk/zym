@@ -29,6 +29,7 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'Zend/Acl.php';
 require_once 'Zend/Acl/Resource.php';
 require_once 'Zend/Acl/Role.php';
+require_once 'Zend/Controller/Front.php';
 require_once 'Zend/Config/Xml.php';
 require_once 'Zend/Registry.php';
 require_once 'Zend/Translate.php';
@@ -85,14 +86,18 @@ abstract class Zym_View_Helper_Navigation_TestAbstract
      */
     protected $_nav2;
 
+    private $_oldControllerDir;
+
     /**
      * Prepares the environment before running a test
      *
      */
     protected function setUp()
     {
+        $cwd = dirname(__FILE__);
+
         // read navigation config
-        $this->_files = dirname(__FILE__) . '/_files';
+        $this->_files = $cwd . '/_files';
         $config = new Zend_Config_Xml($this->_files . '/navigation.xml');
 
         // create nav structures
@@ -100,9 +105,16 @@ abstract class Zym_View_Helper_Navigation_TestAbstract
         $this->_nav2 = new Zym_Navigation($config->get('nav_test2'));
 
         // create view
+        // TODO: remove zym path when refactoring to zend namespace
         $view = new Zend_View();
         $view->addHelperPath('Zym/View/Helper', 'Zym_View_Helper');
         $view->addHelperPath('Zym/View/Helper/Navigation', 'Zym_View_Helper_Navigation');
+        $view->setScriptPath($cwd . '/_files/views');
+
+        // setup front
+        $front = Zend_Controller_Front::getInstance();
+        $this->_oldControllerDir = $front->getControllerDirectory('test');
+        $front->setControllerDirectory($cwd . '/_files/controllers');
 
         // create helper
         $this->_helper = new $this->_helperName();
@@ -118,7 +130,13 @@ abstract class Zym_View_Helper_Navigation_TestAbstract
      */
     protected function tearDown()
     {
+        $front = Zend_Controller_Front::getInstance();
 
+        if ($this->_oldControllerDir) {
+            $front->setControllerDirectory($this->_oldControllerDir, 'test');
+        } else {
+            $front->removeControllerDirectory('test');
+        }
     }
 
     /**
