@@ -57,10 +57,6 @@ class Zym_NavigationTest extends PHPUnit_Framework_TestCase
 
     }
 
-    /**
-     * Should be able to construct Zym_Navigation with an array
-     *
-     */
     public function testShouldConstructWithArray()
     {
         $pages = array(
@@ -80,12 +76,6 @@ class Zym_NavigationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $nav->count());
     }
 
-    /**
-     * Should not be able to construct Zym_Navigation using a 1-dimensional
-     * array (e.g. a single page that's not in an array in the array given
-     * to the constructor)
-     *
-     */
     public function testShouldFailForOneDimArray()
     {
         $page = array(
@@ -102,10 +92,6 @@ class Zym_NavigationTest extends PHPUnit_Framework_TestCase
         $this->fail('An exception has not been thrown');
     }
 
-    /**
-     * Should be able to construct Zym_Navigation with a Zend_Config object
-     *
-     */
     public function testShouldConstructWithConfig()
     {
         $pages = array(
@@ -127,39 +113,31 @@ class Zym_NavigationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $nav->count());
     }
 
-    /**
-     * Should be able to construct an empty Zym_Navigation object
-     *
-     */
     public function testShouldConstructWithNothing()
     {
         $nav = new Zym_Navigation();
         $this->assertEquals(0, $nav->count());
     }
 
-    /**
-     * Should not be able to construct with invalid arguments
-     *
-     */
     public function testShouldNotConstructWithInvalidArguments()
     {
         $caught = 0;
 
         try {
             $nav = new Zym_Navigation((object) null);
-        } catch(InvalidArgumentException $e1) {
+        } catch(Zym_Navigation_Exception $e1) {
             $caught++;
         }
 
         try {
             $nav = new Zym_Navigation(2);
-        } catch(InvalidArgumentException $e2) {
+        } catch(Zym_Navigation_Exception $e2) {
             $caught++;
         }
 
         try {
             $nav = new Zym_Navigation('foo');
-        } catch(InvalidArgumentException $e2) {
+        } catch(Zym_Navigation_Exception $e2) {
             $caught++;
         }
 

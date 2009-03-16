@@ -224,13 +224,13 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
     }
 
     /**
-     * Final page constructor
+     * Page constructor
      *
      * @param  array|Zend_Config $options  [optional] page options. Default is
      *                                     null, which should set defaults.
-     * @throws InvalidArgumentException    if invalid options are given
+     * @throws Zym_Navigation_Exception    if invalid options are given
      */
-    public  function __construct($options = null)
+    public function __construct($options = null)
     {
         if (is_array($options)) {
             $this->setOptions($options);
@@ -256,7 +256,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *
      * @param  Zend_Config $config       config object to get properties from
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if invalid options are given
+     * @throws Zym_Navigation_Exception  if invalid options are given
      */
     public function setConfig(Zend_Config $config)
     {
@@ -273,7 +273,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *
      * @param  array $options            associative array of options to set
      * @return Zym_Navigation_Page       fluent interface, returns self
-     * @throws InvalidArgumentException  if invalid options are given
+     * @throws Zym_Navigation_Exception  if invalid options are given
      */
     public function setOptions(array $options)
     {
@@ -881,7 +881,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      * @param  string $name              property name
      * @param  mixed  $value             value to set
      * @return void
-     * @throws InvalidArgumentException  if property name is invalid
+     * @throws Zym_Navigation_Exception  if property name is invalid
      */
     public function __set($name, $value)
     {
@@ -895,7 +895,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *
      * @param  string $name              property name
      * @return mixed                     property value or null
-     * @throws InvalidArgumentException  if property name is invalid
+     * @throws Zym_Navigation_Exception  if property name is invalid
      */
     public function __get($name)
     {
@@ -931,7 +931,7 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      *
      * @param  string $name              property name
      * @return void
-     * @throws InvalidArgumentException  if the property is native
+     * @throws Zym_Navigation_Exception  if the property is native
      */
     public function __unset($name)
     {

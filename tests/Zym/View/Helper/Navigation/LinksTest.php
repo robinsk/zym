@@ -70,7 +70,6 @@ class Zym_View_Helper_Navigation_LinksTest
         $active = $this->_helper->findOneByLabel('Page 2');
         $active->addRel('example', 'http://www.example.com/');
         $found = $this->_helper->findRelation($active, 'rel', 'example');
-        $active->removeRel('example');
 
         $expected = array(
             'type'  => 'Zym_Navigation_Page_Uri',
@@ -95,7 +94,6 @@ class Zym_View_Helper_Navigation_LinksTest
             'label' => 'An example page'
         )));
         $found = $this->_helper->findRelExample($active);
-        $active->removeRel('example');
 
         $expected = array(
             'type'  => 'Zym_Navigation_Page_Uri',
@@ -120,7 +118,6 @@ class Zym_View_Helper_Navigation_LinksTest
             'label' => 'An example page'
         ));
         $found = $this->_helper->findRelExample($active);
-        $active->removeRel('example');
 
         $expected = array(
             'type'  => 'Zym_Navigation_Page_Uri',
@@ -145,7 +142,6 @@ class Zym_View_Helper_Navigation_LinksTest
             'label' => 'An example page'
         )));
         $found = $this->_helper->findRelExample($active);
-        $active->removeRel('example');
 
         $expected = array(
             'type'  => 'Zym_Navigation_Page_Uri',
@@ -178,7 +174,6 @@ class Zym_View_Helper_Navigation_LinksTest
         ));
 
         $found = $this->_helper->findRelAlternate($active);
-        $active->removeRel('alternate');
 
         $expected = array('type' => 'array', 'count' => 2);
         $actual = array('type' => gettype($found), 'count' => count($found));
@@ -201,7 +196,6 @@ class Zym_View_Helper_Navigation_LinksTest
         )));
 
         $found = $this->_helper->findRelAlternate($active);
-        $active->removeRel('alternate');
 
         $expected = array('type' => 'array', 'count' => 2);
         $actual = array('type' => gettype($found), 'count' => count($found));
@@ -443,12 +437,7 @@ class Zym_View_Helper_Navigation_LinksTest
             } else {
                 $actual[$type] = $found->getLabel();
             }
-
-            $active->removeRel($type);
         }
-
-        $this->_helper->setAcl(null);
-        $this->_helper->setRole(null);
 
         $this->assertEquals($expected, $actual);
     }
@@ -464,14 +453,14 @@ class Zym_View_Helper_Navigation_LinksTest
         $this->_helper->setRole($acl->getRole('member'));
 
         $oldContainer = $this->_helper->getContainer();
-        $newContainer = clone $oldContainer;
+        $container = $this->_helper->getContainer();
         $iterator = new RecursiveIteratorIterator(
-            $newContainer,
+            $container,
             RecursiveIteratorIterator::SELF_FIRST);
         foreach ($iterator as $page) {
             $page->resource = 'protected';
         }
-        $this->_helper->setContainer($newContainer);
+        $this->_helper->setContainer($container);
 
         $active = $this->_helper->findOneByLabel('Home');
         $search = array(
@@ -500,10 +489,6 @@ class Zym_View_Helper_Navigation_LinksTest
                 $actual[$type] = $found->getLabel();
             }
         }
-
-        $this->_helper->setAcl(null);
-        $this->_helper->setRole(null);
-        $this->_helper->setContainer($oldContainer);
 
         $this->assertEquals($expected, $actual);
     }
@@ -559,12 +544,6 @@ class Zym_View_Helper_Navigation_LinksTest
             }
         }
 
-        // remove relations from active page
-        foreach ($expectedRelations as $type => $discard) {
-            $active->removeRel($type);
-            $active->removeRev($type);
-        }
-
         $this->assertEquals($expected, $actual);
     }
 
@@ -591,8 +570,6 @@ class Zym_View_Helper_Navigation_LinksTest
 
     public function testSingleRenderFlags()
     {
-        // get/set state
-        $oldFlag = $this->_helper->getRenderFlag();
         $active = $this->_helper->findOneByLabel('Home');
         $active->active = true;
 
@@ -622,17 +599,11 @@ class Zym_View_Helper_Navigation_LinksTest
             $active->removeRev($type);
         }
 
-        // restore state
-        $active->active = false;
-        $this->_helper->setRenderFlag($oldFlag);
-
         $this->assertEquals($expected, $actual);
     }
 
     public function testRenderFlagBitwiseOr()
     {
-        // get/set state
-        $oldFlag = $this->_helper->getRenderFlag();
         $newFlag = Zym_View_Helper_Navigation_Links::RENDER_NEXT |
                    Zym_View_Helper_Navigation_Links::RENDER_PREV;
         $this->_helper->setRenderFlag($newFlag);
@@ -644,22 +615,12 @@ class Zym_View_Helper_Navigation_LinksTest
                   . '<link rel="prev" href="page1" title="Page 1">';
         $actual = $this->_helper->render();
 
-        // restore state
-        $this->_helper->setRenderFlag($oldFlag);
-        $active->active = false;
-
         $this->assertEquals($expected, $actual);
     }
 
     public function testIndenting()
     {
-        // store state
-        $oldFlag = $this->_helper->getRenderFlag();
-        $oldIndent = $this->_helper->getIndent();
-
         $active = $this->_helper->findOneByLabel('Page 1.1');
-
-        // set new state
         $newFlag = Zym_View_Helper_Navigation_Links::RENDER_NEXT |
                    Zym_View_Helper_Navigation_Links::RENDER_PREV;
         $this->_helper->setRenderFlag($newFlag);
@@ -670,11 +631,6 @@ class Zym_View_Helper_Navigation_LinksTest
         $expected = '  <link rel="next" href="page2" title="Page 2">' . PHP_EOL
                   . '  <link rel="prev" href="page1" title="Page 1">';
         $actual = $this->_helper->render();
-
-        // restore state
-        $this->_helper->setRenderFlag($oldFlag);
-        $this->_helper->setIndent($oldIndent);
-        $active->active = false;
 
         $this->assertEquals($expected, $actual);
     }

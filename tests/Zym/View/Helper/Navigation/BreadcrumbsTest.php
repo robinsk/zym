@@ -72,80 +72,72 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
 
-        $oldContainer = $this->_helper->getContainer();
         $this->_helper->setContainer(null);
 
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
-        $this->assertEquals($expected, $this->_helper->render());
+        $actual = $this->_helper->render();
 
-        $this->_helper->setContainer($oldContainer);
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSetSeparator()
     {
-        $old = $this->_helper->getSeparator();
         $this->_helper->setSeparator('foo');
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_sep.html');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setSeparator($old);
     }
 
     public function testLinkLastElement()
     {
-        $old = $this->_helper->getLinkLast();
         $this->_helper->setLinkLast(true);
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_linklast.html');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setLinkLast($old);
     }
 
     public function testSetIndent()
     {
-        $old = $this->_helper->getIndent();
         $this->_helper->setIndent(8);
 
         $expected = '        <a';
         $actual = substr($this->_helper->render(), 0, strlen($expected));
 
         $this->assertEquals($expected, $actual);
-
-        $this->_helper->setIndent($old);
     }
 
-    public function testRenderAnotherContainerWithoutInterfering()
+    public function testRenderSuppliedContainerWithoutInterfering()
     {
-        $expected = file_get_contents($this->_files . '/breadcrumbs.html');
-        $this->assertEquals($expected, $this->_helper->render());
-
-        $oldMin = $this->_helper->getMinDepth();
         $this->_helper->setMinDepth(0);
 
-        $this->assertEquals("Site 2", $this->_helper->render($this->_nav2));
+        $rendered1 = file_get_contents($this->_files . '/breadcrumbs.html');
+        $rendered2 = 'Site 2';
 
-        $this->assertEquals($expected, $this->_helper->render());
+        $expected = array(
+            'registered'       => $rendered1,
+            'supplied'         => $rendered2,
+            'registered_again' => $rendered1
+        );
 
-        $this->_helper->setMinDepth($oldMin);
+        $actual = array(
+            'registered'       => $this->_helper->render(),
+            'supplied'         => $this->_helper->render($this->_nav2),
+            'registered_again' => $this->_helper->render()
+        );
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function testUseAclResourceFromPages()
     {
-        $oldAcl = $this->_helper->getAcl();
-        $oldRole = $this->_helper->getRole();
-
         $acl = $this->_getAcl();
         $this->_helper->setAcl($acl['acl']);
         $this->_helper->setRole($acl['role']);
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_acl.html');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setAcl($oldAcl);
-        $this->_helper->setRole($oldRole);
     }
 
     public function testTranslationUsingZendTranslate()
@@ -155,8 +147,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setTranslator(null);
     }
 
     public function testTranslationUsingZendTranslateAdapter()
@@ -166,8 +156,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setTranslator(null);
     }
 
     public function testTranslationFromTranslatorInRegistry()
@@ -180,10 +168,11 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         Zend_Registry::set('Zend_Translate', $translator);
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_translated.html');
-        $this->assertEquals($expected, $this->_helper->render());
+        $actual = $this->_helper->render();
 
-        $this->_helper->setTranslator(null);
         Zend_Registry::set('Zend_Translate', $oldReg);
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function testDisablingTranslation()
@@ -194,8 +183,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $expected = file_get_contents($this->_files . '/breadcrumbs.html');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setTranslator(null);
     }
 
     public function testRenderingPartial()
@@ -204,8 +191,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_partial.html');
         $actual = $this->_helper->render();
-
-        $this->_helper->setPartial(null);
 
         $this->assertEquals($expected, $actual);
     }
@@ -216,8 +201,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
 
         $expected = file_get_contents($this->_files . '/breadcrumbs_partial.html');
         $actual = $this->_helper->render();
-
-        $this->_helper->setPartial(null);
 
         $this->assertEquals($expected, $actual);
     }
@@ -232,8 +215,6 @@ class Zym_View_Helper_Navigation_BreadcrumbsTest
         } catch (Zend_View_Exception $e) {
             $fail = false;
         }
-
-        $this->_helper->setPartial(null);
 
         if ($fail) {
             $this->fail('$partial was invalid, but no Zend_View_Exception was thrown');

@@ -66,13 +66,6 @@ abstract class Zym_View_Helper_Navigation_Abstract
     protected $_translator;
 
     /**
-     * Whether translator should be used for page labels and titles
-     *
-     * @var bool
-     */
-    protected $_useTranslator = true;
-
-    /**
      * ACL to use when iterating pages
      *
      * @var Zend_Acl
@@ -85,6 +78,20 @@ abstract class Zym_View_Helper_Navigation_Abstract
      * @var string|Zend_Acl_Role_Interface
      */
     protected $_role;
+
+    /**
+     * Whether translator should be used for page labels and titles
+     *
+     * @var bool
+     */
+    protected $_useTranslator = true;
+
+    /**
+     * Whether ACL should be used for filtering out pages
+     *
+     * @var bool
+     */
+    protected $_useAcl = true;
 
     /**
      * Default ACL to use when iterating pages if not explicitly set in the
@@ -223,31 +230,6 @@ abstract class Zym_View_Helper_Navigation_Abstract
     }
 
     /**
-     * Sets whether translator should be used
-     *
-     * @param  bool $useTranslator  [optional] wheter translator should be used.
-     *                              Default is true.
-     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
-     *                                                           interface,
-     *                                                           returns self
-     */
-    public function setUseTranslator($useTranslator = true)
-    {
-        $this->_useTranslator = (bool) $useTranslator;
-        return $this;
-    }
-
-    /**
-     * Returns whether translator should be used
-     *
-     * @return bool  whether translator should be used
-     */
-    public function getUseTranslator()
-    {
-        return $this->_useTranslator;
-    }
-
-    /**
      * Sets ACL to use when iterating pages
      *
      * @param  Zend_Acl $acl  [optional] ACL object. Default is null, which
@@ -319,6 +301,56 @@ abstract class Zym_View_Helper_Navigation_Abstract
         }
 
         return $this->_role;
+    }
+
+    /**
+     * Sets whether ACL should be used
+     *
+     * @param  bool $useAcl                          [optional] whether ACL
+     *                                               should be used. Default is
+     *                                               true.
+     * @return Zym_View_Helper_Navigation_Interface  fluent interface, returns
+     *                                               self
+     */
+    public function setUseAcl($useAcl = true)
+    {
+        $this->_useAcl = (bool) $useAcl;
+        return $this;
+    }
+
+    /**
+     * Returns whether ACL should be used
+     *
+     * @return bool  whether ACL should be used
+     */
+    public function getUseAcl()
+    {
+        return $this->_useAcl;
+    }
+
+    /**
+     * Sets whether translator should be used
+     *
+     * @param  bool $useTranslator  [optional] wheter translator should be used.
+     *                              Default is true.
+     * @return Zym_View_Helper_Navigation_BasicNavigationHelper  fluent
+     *                                                           interface,
+     *                                                           returns self
+     */
+    public function setUseTranslator($useTranslator = true)
+    {
+        $this->_useTranslator = (bool) $useTranslator;
+        return $this;
+    }
+
+    /**
+     * Returns whether translator should be used
+     *
+     * @return bool  whether translator should be used
+     */
+    public function getUseTranslator()
+    {
+        return $this->_useTranslator;
     }
 
     // Magic overloads:
@@ -395,11 +427,49 @@ abstract class Zym_View_Helper_Navigation_Abstract
     /**
      * Checks if the helper has a container
      *
+     * Implements {@link Zym_View_Helper_Navigation_Interface::hasContainer()}.
+     *
      * @return bool  whether the helper has a container or not
      */
     public function hasContainer()
     {
         return null !== $this->_container;
+    }
+
+    /**
+     * Checks if the helper has an ACL instance
+     *
+     * Implements {@link Zym_View_Helper_Navigation_Interface::hasAcl()}.
+     *
+     * @return bool  whether the helper has a an ACL instance or not
+     */
+    public function hasAcl()
+    {
+        return null !== $this->_acl;
+    }
+
+    /**
+     * Checks if the helper has an ACL role
+     *
+     * Implements {@link Zym_View_Helper_Navigation_Interface::hasRole()}.
+     *
+     * @return bool  whether the helper has a an ACL role or not
+     */
+    public function hasRole()
+    {
+        return null !== $this->_role;
+    }
+
+    /**
+     * Checks if the helper has a translator
+     *
+     * Implements {@link Zym_View_Helper_Navigation_Interface::hasTranslator()}.
+     *
+     * @return bool  whether the helper has a translator or not
+     */
+    public function hasTranslator()
+    {
+        return null !== $this->_translator;
     }
 
     /**
@@ -467,7 +537,7 @@ abstract class Zym_View_Helper_Navigation_Abstract
         if (!$page->isVisible(false)) {
             // don't accept invisible pages
             $accept = false;
-        } elseif (!$this->_acceptAcl($page)) {
+        } elseif ($this->getUseAcl() && !$this->_acceptAcl($page)) {
             // acl is not amused
             $accept = false;
         }

@@ -37,37 +37,27 @@ class Zym_Navigation_Page_Uri extends Zym_Navigation_Page
     /**
      * Page URI
      *
-     * @var string
+     * @var string|null
      */
     private $_uri = null;
 
     /**
-     * Sets URI to empty string if not already set
-     *
-     * @return void
-     */
-    protected function _init()
-    {
-        if (!isset($this->_uri)) {
-            $this->_uri = '';
-        }
-    }
-
-    /**
      * Sets page URI
      *
-     * @param  string $uri page URI, must be at least one character
-     * @throws InvalidArgumentException  if $uri is invalid
+     * @param  string $uri               page URI, must a string or null
+     * @return Zym_Navigation_Page_Uri   fluent interface, returns self
+     * @throws Zym_Navigation_Exception  if $uri is invalid
      */
     public function setUri($uri)
     {
-        if (!is_string($uri)) {
+        if (null !== $uri && !is_string($uri)) {
             require_once 'Zym/Navigation/Exception.php';
             throw new Zym_Navigation_Exception(
-                    'Invalid argument: $uri must be a string');
+                    'Invalid argument: $uri must be a string or null');
         }
 
         $this->_uri = $uri;
+        return $this;
     }
 
     /**

@@ -107,16 +107,8 @@ class Zym_View_Helper_SitemapTest
 
     public function testNullingOutNavigation()
     {
-        $old = $this->_helper->getContainer();
-        $oldCount = count($old);
-
-        $this->assertGreaterThan(0, $oldCount, 'Empty container before test');
-
         $this->_helper->setContainer();
-        $newCount = count($this->_helper->getContainer());
-        $this->assertEquals(0, $newCount);
-
-        $this->_helper->setContainer($old);
+        $this->assertEquals(0, count($this->_helper->getContainer()));
     }
 
     public function testAutoloadContainerFromRegistry()
@@ -127,51 +119,50 @@ class Zym_View_Helper_SitemapTest
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
 
-        $oldContainer = $this->_helper->getContainer();
         $this->_helper->setContainer(null);
 
         $expected = file_get_contents($this->_files . '/sitemap.xml');
-        $this->assertEquals($expected, $this->_helper->render());
+        $actual = $this->_helper->render();
 
-        $this->_helper->setContainer($oldContainer);
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
+
+        $this->assertEquals($expected, $expected);
     }
 
-    public function testRenderAnotherContainerWithoutInterfering()
+    public function testRenderSuppliedContainerWithoutInterfering()
     {
-        $expected = file_get_contents($this->_files . '/sitemap.xml');
+        $rendered1 = file_get_contents($this->_files . '/sitemap.xml');
+        $rendered2 = file_get_contents($this->_files . '/sitemap2.xml');
+        $expected = array(
+            'registered'       => $rendered1,
+            'supplied'         => $rendered2,
+            'registered_again' => $rendered1
+        );
+        $actual = array(
+            'registered'       => $this->_helper->render(),
+            'supplied'         => $this->_helper->render($this->_nav2),
+            'registered_again' => $this->_helper->render()
+        );
 
-        $expected2 = file_get_contents($this->_files . '/sitemap2.xml');
-        $this->assertEquals($expected2, $this->_helper->render($this->_nav2));
-
-        $this->assertEquals($expected, $this->_helper->render());
+        $this->assertEquals($expected, $actual);
     }
 
     public function testUseAclRoles()
     {
-        $oldAcl = $this->_helper->getAcl();
-        $oldRole = $this->_helper->getRole();
-
         $acl = $this->_getAcl();
         $this->_helper->setAcl($acl['acl']);
         $this->_helper->setRole($acl['role']);
 
         $expected = file_get_contents($this->_files . '/sitemap_acl.xml');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setAcl($oldAcl);
-        $this->_helper->setRole($oldRole);
     }
 
     public function testSettingMaxDepth()
     {
-        $old = $this->_helper->getMaxDepth();
         $this->_helper->setMaxDepth(0);
 
         $expected = file_get_contents($this->_files . '/sitemap_depth1.xml');
         $this->assertEquals($expected, $this->_helper->render());
-
-        $this->_helper->setMaxDepth($old);
     }
 
     public function testDropXmlDeclaration()
@@ -193,6 +184,11 @@ class Zym_View_Helper_SitemapTest
         try {
             $this->_helper->render($nav);
         } catch (Zend_View_Exception $e) {
+            $expected = sprintf(
+                    'Encountered an invalid URL for Sitemap XML: "%s"',
+                    'http://w.');
+            $actual = $e->getMessage();
+            $this->assertEquals($expected, $actual);
             return;
         }
 
@@ -207,13 +203,11 @@ class Zym_View_Helper_SitemapTest
 
         $expected2 = file_get_contents($this->_files . '/sitemap2_invalid.xml');
         $this->assertEquals($expected2, $this->_helper->render($nav));
-
-        $this->_helper->setUseSitemapValidators(true);
     }
 
     public function testUseSchemaValidation()
     {
-        $this->markTestSkipped('Skipped because it fetched XSD from internet');
+        $this->markTestSkipped('Skipped because it fetches XSD from web');
         return;
         $nav = clone $this->_nav2;
         $this->_helper->setUseSitemapValidators(false);
@@ -223,6 +217,11 @@ class Zym_View_Helper_SitemapTest
         try {
             $this->_helper->render($nav);
         } catch (Zend_View_Exception $e) {
+            $expected = sprintf(
+                    'Sitemap is invalid according to XML Schema at "%s"',
+                    Zym_View_Helper_Navigation_Sitemap::SITEMAP_XSD);
+            $actual = $e->getMessage();
+            $this->assertEquals($expected, $actual);
             return;
         }
 

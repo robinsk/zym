@@ -21,9 +21,9 @@ require_once 'Zym/Navigation/Container.php';
 
 /**
  * Zym_Navigation
- * 
- * Class for managing a hierarchical structure of Zym_Navigation_Page pages.  
- * 
+ *
+ * Class for managing a hierarchical structure of Zym_Navigation_Page pages.
+ *
  * @author     Robin Skoglund
  * @category   Zym
  * @package    Zym_Navigation
@@ -35,16 +35,18 @@ class Zym_Navigation extends Zym_Navigation_Container
     /**
      * Creates a new navigation container
      *
-     * @param array|Zend_Config $pages  [optional] pages to add
-     * @throws InvalidArgumentException if $pages is invalid
+     * @param array|Zend_Config $pages   [optional] pages to add
+     * @throws Zym_Navigation_Exception  if $pages is invalid
      */
     public function __construct($pages = null)
     {
         if (is_array($pages) || $pages instanceof Zend_Config) {
             $this->addPages($pages);
         } elseif (null !== $pages) {
-            $msg = '$pages must be an array, Zend_Config or null';
-            throw new InvalidArgumentException($msg);
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                    'Invalid argument: pages must be an array, an ' .
+                    'instance of Zend_Config, or null');
         }
     }
 }

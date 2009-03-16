@@ -52,94 +52,133 @@ class Zym_View_Helper_Navigation_NavigationTest
 
     public function testShouldProxyToMenuHelperByDeafult()
     {
+        // setup
         $oldReg = null;
         if (Zend_Registry::isRegistered(self::REGISTRY_KEY)) {
             $oldReg = Zend_Registry::get(self::REGISTRY_KEY);
         }
         Zend_Registry::set(self::REGISTRY_KEY, $this->_nav1);
-
-        $oldContainer = $this->_helper->getContainer();
         $this->_helper->setContainer(null);
 
+        // result
         $expected = file_get_contents($this->_files . '/menu.html');
-        $this->assertEquals($expected, $this->_helper->render());
+        $actual = $this->_helper->render();
 
-        $this->_helper->setContainer($oldContainer);
+        // teardown
         Zend_Registry::set(self::REGISTRY_KEY, $oldReg);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHasContainer()
+    {
+        $oldContainer = $this->_helper->getContainer();
+        $this->_helper->setContainer(null);
+        $this->assertFalse($this->_helper->hasContainer());
+        $this->_helper->setContainer($oldContainer);
     }
 
     public function testInjectingContainer()
     {
         // setup
-        $oldContainer = $this->_helper->getContainer();
-        $this->_helper->setInjectContainer(false);
-        $this->_helper->menu()->setContainer(null);
-        $this->_helper->breadcrumbs()->setContainer(null);
-
-        // sanity check
-        $msg = 'Corruption: Proxied helper should not have a container';
-        $this->assertEquals(false, $this->_helper->menu()->hasContainer(), $msg);
-        $this->assertEquals(false, $this->_helper->breadcrumbs()->hasContainer(), $msg);
-
-        // setup
-        $this->_helper->setInjectContainer();
         $this->_helper->setContainer($this->_nav2);
+        $expected = array(
+            'menu' => file_get_contents($this->_files . '/menu2.html'),
+            'breadcrumbs' => file_get_contents($this->_files . '/breadcrumbs.html')
+        );
+        $actual = array();
 
-        // test 1
-        $msg = 'Fail: The render method does not inject container by default';
-        $expected = file_get_contents($this->_files . '/menu2.html');
-        $this->assertEquals($expected, $this->_helper->render(), $msg);
-
-        // setup
+        // result
+        $actual['menu'] = $this->_helper->render();
         $this->_helper->setContainer($this->_nav1);
+        $actual['breadcrumbs'] = $this->_helper->breadcrumbs()->render();
 
-        // test 2
-        $msg = 'Fail: The __call method does not inject container by default';
-        $expected = file_get_contents($this->_files . '/breadcrumbs.html');
-        $this->assertEquals($expected, $this->_helper->breadcrumbs()->render(), $msg);
-
-        // teardown
-        $this->_helper->setContainer($oldContainer);
+        $this->assertEquals($expected, $actual);
     }
 
     public function testDisablingContainerInjection()
     {
         // setup
-        $oldInject = $this->_helper->getInjectContainer();
-        $oldContainer = $this->_helper->getContainer();
         $this->_helper->setInjectContainer(false);
         $this->_helper->setContainer($this->_nav2);
         $this->_helper->menu()->setContainer(null);
         $this->_helper->breadcrumbs()->setContainer(null);
 
-        // test
-        $expected = '';
-        $this->assertEquals($expected, $this->_helper->render());
-        $this->assertEquals($expected, $this->_helper->breadcrumbs()->render());
+        // result
+        $expected = array(
+            'menu'        => '',
+            'breadcrumbs' => ''
+        );
+        $actual = array(
+            'menu'        => $this->_helper->render(),
+            'breadcrumbs' => $this->_helper->breadcrumbs()->render()
+        );
 
-        // teardown
-        $this->_helper->setInjectContainer($oldInject);
-        $this->_helper->setContainer($oldContainer);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testInjectingAcl()
+    {
+        // setup
+        $acl = $this->_getAcl();
+        $this->_helper->setAcl($acl['acl']);
+        $this->_helper->setRole($acl['role']);
+
+        $expected = file_get_contents($this->_files . '/menu_acl.html');
+        $actual = $this->_helper->render();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testDisablingAclInjection()
+    {
+        // setup
+        $acl = $this->_getAcl();
+        $this->_helper->setAcl($acl['acl']);
+        $this->_helper->setRole($acl['role']);
+        $this->_helper->setInjectAcl(false);
+
+        $expected = file_get_contents($this->_files . '/menu.html');
+        $actual = $this->_helper->render();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testInjectingTranslator()
+    {
+        $this->_helper->setTranslator($this->_getTranslator());
+
+        $expected = file_get_contents($this->_files . '/menu_translated.html');
+        $actual = $this->_helper->render();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testDisablingTranslatorInjection()
+    {
+        $this->_helper->setTranslator($this->_getTranslator());
+        $this->_helper->setInjectTranslator(false);
+
+        $expected = file_get_contents($this->_files . '/menu.html');
+        $actual = $this->_helper->render();
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSpecifyingDefaultProxy()
     {
-        // setup
-        $oldContainer = $this->_helper->getContainer();
-        $oldProxy = $this->_helper->getDefaultProxy();
+        $expected = array(
+            'breadcrumbs' => file_get_contents($this->_files . '/breadcrumbs.html'),
+            'menu' => file_get_contents($this->_files . '/menu.html')
+        );
+        $actual = array();
 
-        // test
+        // result
         $this->_helper->setDefaultProxy('breadcrumbs');
-        $expected = file_get_contents($this->_files . '/breadcrumbs.html');
-        $this->assertEquals($expected, $this->_helper->render($this->_nav1));
-
-        // test
+        $actual['breadcrumbs'] = $this->_helper->render($this->_nav1);
         $this->_helper->setDefaultProxy('menu');
-        $expected = file_get_contents($this->_files . '/menu.html');
-        $this->assertEquals($expected, $this->_helper->render($this->_nav1));
+        $actual['menu'] = $this->_helper->render($this->_nav1);
 
-        // teardown
-        $this->_helper->setContainer($oldContainer);
-        $this->_helper->setDefaultProxy($oldProxy);
+        $this->assertEquals($expected, $actual);
     }
 }
