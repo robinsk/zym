@@ -1,6 +1,6 @@
 <?php
 
-$page = new Zym_Navigation_Page_Mvc(array('label' => 'Lorem ipsum'));
+$page = new Zym_Navigation_Page_Mvc();
 $page->foo = 'bar';
 $page->meaning = 42;
 

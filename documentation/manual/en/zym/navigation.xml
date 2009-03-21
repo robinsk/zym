@@ -5,5 +5,5 @@
     
     <xi:include href="navigation/introduction.xml" />
     <xi:include href="navigation/pages.xml" />
-    <xi:include href="navigation/creating.xml" />
+    <xi:include href="navigation/containers.xml" />
 </chapter>

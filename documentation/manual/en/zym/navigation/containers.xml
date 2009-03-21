@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en" xml:id="zym.navigation.containers" version="5.0">
+    <title>Containers</title>
+    
+    <para>
+        Containers have methods for adding, retrieving, deleting and
+        iterating pages. Containers implement the 
+        <link xlink:href="http://php.net/spl">SPL</link> interaces 
+        <classname>RecursiveIterator</classname> and 
+        <classname>Countable</classname>, meaning that they can 
+        be iterated using the SPL 
+        <classname>RecursiveIteratorIterator</classname> class.
+    </para>
+    
+    <section xml:id="zym.navigation.containers.creating">
+        <title>Creating containers</title>
+        
+        <para>
+            <classname>Zym_Navigation_Container</classname> is
+            abstract, and can not be instantiated directly. Use 
+            <classname>Zym_Navigation</classname> if you want to
+            instantiate a container.
+        </para>
+        
+        <para>
+            <classname>Zym_Navigation</classname> can be constructed 
+            entirely empty, or be given an array or a 
+            <classname>Zend_Config</classname> object with pages to put in the 
+            container. Each page in the given array/config will eventually be
+            passed to the <code>addPage()</code> method of the container class,
+            which means that each element in the array/config can be an array or
+            a config object, or a <classname>Zym_Navigation_Page</classname> 
+            instance.
+        </para>
+        
+        <example xml:id="zym.navigation.containers.creating.examplearray">
+            <title>Creating a container using an array</title>
+            
+            <programlisting role="php"><xi:include href="example/array.php" parse="text" /></programlisting>
+        </example>
+        
+        <example xml:id="zym.navigation.containers.creating.example.config">
+            <title>Creating a container using a config object</title>
+            
+            <programlisting role="php"><xi:include href="example/config.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.navigation.containers.adding">
+        <title>Adding pages</title>
+        
+        <para>
+            Adding pages to a container can be done with the methods
+            <code>addPage()</code>, <code>addPages()</code>, or 
+            <code>setPages()</code>. See examples below for explanation. 
+        </para>
+
+        <example xml:id="zym.navigation.containers.adding.example">
+            <title>Adding pages to a container</title>
+            
+            <programlisting role="php"><xi:include href="example/adding.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.navigation.containers.removing">
+        <title>Removing pages</title>
+        
+        <para>
+            Removing pages can be done with <code>removePage()</code> or
+            <code>removePages()</code>.  The first method accepts a an instance
+            of a page, or an integer. The integer corresponds to the 
+            <code>order</code> a page has. The latter method will remove all 
+            pages in the container.
+        </para>
+
+        <example xml:id="zym.navigation.containers.removing.example">
+            <title>Removing pages from a container</title>
+            
+            <programlisting role="php"><xi:include href="example/removing.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.navigation.containers.finding">
+        <title>Finding pages</title>
+                
+	    <para>
+	        Containers have finder methods for retrieving pages.
+	        They are <code>findOneBy($property, $value)</code>,
+	        <code>findAllBy($property, $value)</code>, and
+	        <code>findBy($property, $value, $all = false)</code>.
+	        Those methods will recursively search the container for
+	        pages matching the given <code>$page->$property == $value</code>.
+	        The first method, <code>findOneBy()</code>, will return a
+	        single page matching the property with the given value, or
+	        null if it cannot be found. The second method will return
+	        all pages with a property matching the given value. The third
+	        method will call one of the two former methods depending on the
+	        <code>$all</code> flag.
+	    </para>
+	    
+	    <para>
+	        The finder methods can also be used magically by appending the
+	        property name to <code>findBy</code>, <code>findOneBy</code>, or 
+	        <code>findAllBy</code>, e.g. <code>findOneByLabel('Home')</code> to
+	        return the first matching page with label <code>Home</code>.
+	        Other combinations are <code>findByLabel(...)</code>,
+	        <code>findOnyByTitle(...)</code>,
+	        <code>findAllByController(...)</code>, etc. Finder
+	        methods also work on custom properties, such as
+	        <code>findByFoo('bar')</code>.
+	    </para>
+    
+        <example xml:id="zym.navigation.containers.finding.example">
+            <title>Finding pages in a container</title>
+            
+            <programlisting role="php"><xi:include href="example/finding.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.navigation.containers.iterating">
+        <title>Iterating containers</title>
+        
+        <para>
+            <classname>Zym_Navigation_Container</classname> implements
+            <classname>RecursiveIteratorIterator</classname>, and can be
+            iterated using any <classname>Iterator</classname> class. To iterate
+            a container recursively, use the 
+            <classname>RecursiveIteratorIterator</classname> class. 
+        </para>
+
+        <example xml:id="zym.navigation.containers.iterating.example">
+            <title>Iterating a container</title>
+            
+            <programlisting role="php"><xi:include href="example/iterating.php" parse="text" /></programlisting>
+        </example>
+    </section>
+    
+    <section xml:id="zym.navigation.containers.other">
+        <title>Other operations</title>
+        
+        <para>
+            The method <code>hasPage(Zym_Navigation_Page $page)</code> checks
+            if the container has the given page. The method <code>hasPages()</code>
+            checks if there are any pages in the container, and is equivalent
+            to <code>count($container) > 1</code>.
+        </para>
+        
+        <para>
+            The <code>toArray()</code> method converts the container and the 
+            pages in it to an array. This can be useful for serializing and 
+            debugging.
+        </para>
+
+        <example xml:id="zym.navigation.containers.other.toarray">
+            <title>Converting a container to an array</title>
+            
+            <programlisting role="php"><xi:include href="example/toarray.php" parse="text" /></programlisting>
+        </example>
+    </section>
+</section>

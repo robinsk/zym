@@ -1,12 +1,11 @@
 <?php
 /*
- * An array of example pages
- * 
+ * Create a container from an array
+ *
  * Each element in the array will be passed to
- * Zym_Navigation_Page::factory() when constructing
- * the navigation object below.
+ * Zym_Navigation_Page::factory() when constructing.
  */
-$pages = array(
+$container = new Zym_Navigation(array(
     array(
         'label' => 'Page 1',
         'id' => 'home-link'
@@ -14,7 +13,7 @@ $pages = array(
     array(
         'label' => 'Zym',
         'uri' => 'http://www.zym-project.com/',
-        'position' => 100
+        'order' => 100
     ),
     array(
         'label' => 'Page 2',
@@ -87,9 +86,9 @@ $pages = array(
     ),
     array(
         'label' => 'Page 0?',
-        'uri' => '/setting/the/position/option',
-        // setting position to -1 should make it appear first
-        'position' => -1
+        'uri' => '/setting/the/order/option',
+        // setting order to -1 should make it appear first
+        'order' => -1
     ),
     array(
         'label' => 'Page 5',
@@ -164,7 +163,4 @@ $pages = array(
         'label' => 'Zend Framework',
         'route' => 'zf-route'
     )
-);
-
-// create navigation from array
-$navigation = new Zym_Navigation($pages);
+));

@@ -6,32 +6,33 @@
 
     <para>
         <classname>Zym_Navigation</classname> is a component for managing
-        hierarchical structures of (logical representations of) web pages.
-        Simply put: It can be used for creating menus, breadcrumbs and
-        sitemaps, or serve as a container or model for other purposes
-        a project might find by having a hierarchical representation
-        of pages.
+        trees of pointers to web pages.
+        Simply put: It can be used for creating menus, breadcrumbs, links, and
+        sitemaps, or serve as a model for other navigation related purposes.
     </para>
     
     <section xml:id="zym.navigation.introduction.concepts">
         <title>Pages and Containers</title>
         
         <para>
-            There are two ground concepts in <classname>Zym_Navigation</classname>:
+            There are two concepts in <classname>Zym_Navigation</classname>:
             
             <section xml:id="zym.navigation.introduction.pages">
                 <title>Pages</title>
                 <para>
-                    A page in <classname>Zym_Navigation</classname> –
-                    in its most basic form – is a holder object for 
-                    <code>label</code> and <code>href</code>, where 
-                    <code>href</code> is a link to the page. There
-                    are of course a number of other other properties
-                    related to pages, all of which are covered in
-                    <link xlink:href="#zym.navigation.pages">the section
-                    on pages</link>. In addition to properties specific
-                    to the page, a page can also be container for other
-                    pages.
+                    A page (<classname>Zym_Navigation_Page</classname>) in 
+                    <classname>Zym_Navigation</classname> –
+                    in its most basic form – is an object that holds a pointer
+                    to a web page. In addition to the pointer itself, the page
+                    object contains a number of other properties that are 
+                    typically relevant for navigation, such as <code>label</code>,
+                    <code>title</code>, etc.
+                </para>
+        
+                <para>
+                    Read more about pages in the
+                    <link xlink:href="#zym.navigation.pages">pages</link>
+                    section.
                 </para>
             </section>
             
@@ -40,90 +41,48 @@
                 <para>
                     A navigation container 
                     (<classname>Zym_Navigation_Container</classname>) is a
-                    container class for pages. It contains methods for
+                    container class for pages. It has methods for
                     adding, retrieving, deleting and iterating pages.
-                    It implementes the <link xlink:href="http://php.net/manual/en/book.spl.php">SPL</link> 
+                    It implements the <link xlink:href="http://php.net/spl">SPL</link> 
                     interaces <classname>RecursiveIterator</classname> and
-                    <classname>Countable</classname>, so it may be iterated
-                    recursively, either by using the SPL class 
-                    <classname>RecursiveIteratorIterator</classname>
-                    class, or by implementing recursive iteration yourself
-                    using <code>foreach</code> loops.
-                </para>
-                
-                <para>
-                    Both <classname>Zym_Navigation</classname> and
-                    <classname>Zym_Navigation_Page</classname> extend
-                    <classname>Zym_Navigation_Container</classname>, so
-                    both can contain any number of hierarchic levels
-                    of pages.
-                </para>
-                
-                <para>
-                    Containers have finder methods for retrieving pages.
-                    Those are <code>findOneBy($property, $value)</code>,
-                    <code>findAllBy($property, $value)</code>, and
-                    <code>findBy($property, $value, $all = false)</code>.
-                    Those methods will recursively search the container for
-                    pages matching the given <code>$page->$property == $value</code>.
-                    The first method, <code>findOneBy()</code> will return a
-                    single page matching the property with the given value, or
-                    null if it cannot be found.
-                </para>
-                
-                <para>
-                    The finder methods can also be used magically with appending
-                    property name to the method, e.g. <code>findOneByLabel('Home')</code>
-                    to return the first matching page with label <code>Home</code>.
-                    Other combinations are <code>findByLabel(..)</code>,
-                    <code>findOnyByTitle(...)</code>,
-                    <code>findAllByController(...)</code>, and so on.
+                    <classname>Countable</classname>, and can thus be iterated
+                    with SPL iterators such as 
+                    <classname>RecursiveIteratorIterator</classname>.
                 </para>
         
-                <example xml:id="zym.navigation.introduction.containers.findby">
-                    <title>Using finder methods</title>
-                    
-                    <programlisting role="php"><xi:include href="example/findby.php" parse="text" /></programlisting>
-                </example>
-            
+		        <para>
+		            Read more about containers in the
+		            <link xlink:href="#zym.navigation.containers">containers</link>
+		            section.
+		        </para>
+                
                 <note>
-                    <para>
-                        <classname>Zym_Navigation_Container</classname> is
-                        <code>abstract</code>, and can  not be
-                        instantiated directly. Use 
-                        <classname>Zym_Navigation</classname> if you only
-                        want a container.
-                    </para>
+	                <para>
+	                    <classname>Zym_Navigation_Page</classname> extends
+	                    <classname>Zym_Navigation_Container</classname>, which
+	                    means that a page can have sub pages.
+	                </para>
                 </note>
             </section>
-                
-            <note>
-                <para>
-                    The difference between <classname>Zym_Navigation</classname>
-                    and <classname>Zym_Navigation_Page</classname> is that
-                    the former does not contain page properties, so it can
-                    only be used as an outer container for pages.
-                </para>
-            </note>
         </para>
         
     </section>
     
     <section xml:id="zym.navigation.introduction.separation">
-        <title>Separation of logic structure and rendering</title>
+        <title>Separation of data (model) and rendering (view)</title>
         
         <para>
-            The classes in the <classname>Zym_Navigation</classname>
-            namespace do not deal with rendering. This responsibility
-            is delegated to the navigation view helpers. However,
-            pages may contain information that is used by view helpers
-            when rendering, such as; CSS class, <code>title</code>
-            attribute, <code>lastmod</code> and <code>priority</code>
-            properties for sitemaps, etc.
+            Classes in the <classname>Zym_Navigation</classname>
+            namespace do not deal with rendering of navigational elements.
+            Rendering is done with navigational view helpers. However,
+            pages contain information that is used by view helpers
+            when rendering, such as; label, CSS class, title, 
+            <code>lastmod</code> and <code>priority</code> properties for
+            sitemaps, etc.
         </para>
         
         <para>
-            Read more about navigation rendering navigation objects in
+            Read more about rendering navigational elements in 
             the manual section on
             <link xlink:href="#zym.view.helpers.navigation">navigation 
             view helpers</link>.

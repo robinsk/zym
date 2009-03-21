@@ -4,7 +4,7 @@
     <title>Pages</title>
         
     <para>
-        There are two types of pages built-in in Zym_Navigation:
+        Zym_Navigation ships with two page types:
     
         <itemizedlist>
             <listitem>
@@ -21,16 +21,19 @@
             </listitem>
         </itemizedlist>
         
-        MVC pages are meant to be "internal" pages, and are defined using MVC
-        parameters like <code>action</code> and <code>controller</code>, while
-        the URI pages are generally considered to be off-site, for example if
-        you want it to link to another site/domain, or you want to have some
-        other special logic to it by using e.g. <code>href="#"</code>.
+        MVC pages are link to on-site web pages, and are defined using MVC
+        parameters (<code>action</code>, <code>controller</code>, 
+        <code>module</code>, <code>route</code>, <code>params</code>). URI
+        pages are defined by a single property <code>uri</code>, which give
+        you the full flexibility to link off-site pages or do other things
+        with the generated links (e.g. an URI that turns into
+        <code>&lt;a href="#"&gt;foo&lt;a&gt;</code>).
     </para>
     
     <xi:include href="pages/common.xml" />
     <xi:include href="pages/mvc.xml" />
     <xi:include href="pages/uri.xml" />
     <xi:include href="pages/custom.xml" />
+    <xi:include href="pages/factory.xml" />
     
 </section>

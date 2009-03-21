@@ -1,14 +1,13 @@
 In a view script or layout:
-<?php echo $this->menu() ?>
+<?php echo $this->navigation()->menu() ?>
 
 or if short tags are enabled:
-<?= $this->menu() ?>
+<?= $this->navigation()->menu() ?>
 
 Output:
 <ul class="navigation">
     <li>
         <a href="/setting/the/position/option">Page 0?</a>
-
     </li>
     <li>
         <a id="home-link" href="/">Page 1</a>
@@ -17,7 +16,6 @@ Output:
         <a href="/page2">Page 2</a>
         <ul>
             <li class="active">
-
                 <a title="This element has a special class" class="special-one" href="/page2/page2_1">Page 2.1</a>
             </li>
             <li>
@@ -26,7 +24,6 @@ Output:
         </ul>
     </li>
     <li>
-
         <a href="/page2/index/format/json/foo/bar">Page 2 with params</a>
     </li>
     <li>
@@ -34,7 +31,6 @@ Output:
     </li>
     <li>
         <a href="/mymodule">Page 3</a>
-
     </li>
     <li class="active">
         <a href="#">Page 4</a>
@@ -43,7 +39,6 @@ Output:
                 <a title="Page 4 using uri" href="/page4">Page 4.1</a>
                 <ul>
                     <li class="active">
-
                         <a title="Page 4 using mvc params" href="/page4">Page 4.1.1</a>
                     </li>
                 </ul>
@@ -52,7 +47,6 @@ Output:
     </li>
     <li>
         <a href="#acl-guest.foo">ACL page 1 (guest.foo)</a>
-
         <ul>
             <li>
                 <a href="#acl-member.foo">ACL page 1.1 (member.foo)</a>
@@ -61,7 +55,6 @@ Output:
                 <a href="#acl-member.bar">ACL page 1.2 (member.bar)</a>
             </li>
             <li>
-
                 <a href="#acl-member.baz+read">ACL page 1.4 (member.baz + read privilege)</a>
             </li>
         </ul>
@@ -70,7 +63,6 @@ Output:
         <span title="This URI page has no URI set, so a span is generated">No link :o</span>
     </li>
     <li>
-
         <a href="http://www.zym-project.com/">Zym</a>
     </li>
 </ul>

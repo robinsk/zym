@@ -8,19 +8,17 @@
  */
 
 $page1 = new Zym_Navigation_Page_Mvc(array(
-    'label'      => 'foo',
     'action'     => 'index',
     'controller' => 'index'
 ));
 
 $page2 = new Zym_Navigation_Page_Mvc(array(
-    'label'      => 'foo',
     'action'     => 'bar',
     'controller' => 'index'
 ));
 
 $page1->isActive(); // returns true
-$page2->isActive(); // returns false 
+$page2->isActive(); // returns false
 
 /*
  * Dispatched request:
@@ -31,14 +29,13 @@ $page2->isActive(); // returns false
  */
 
 $page = new Zym_Navigation_Page_Mvc(array(
-    'label'      => 'foo',
     'action'     => 'view',
     'controller' => 'post',
     'module'     => 'blog'
 ));
 
 // returns true, because request has the same module, controller and action
-$page->isActive(); 
+$page->isActive();
 
 /*
  * Dispatched request:
@@ -48,7 +45,6 @@ $page->isActive();
  */
 
 $page = new Zym_Navigation_Page_Mvc(array(
-    'label'      => 'foo',
     'action'     => 'view',
     'controller' => 'post',
     'module'     => 'blog',
@@ -57,4 +53,4 @@ $page = new Zym_Navigation_Page_Mvc(array(
 
 // returns false, because page requires the id param to be set in the request
 $page->isActive(); // returns false
-        
+

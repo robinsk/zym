@@ -1,2 +1,4 @@
-
-<?php $this->menu()->addPage(array('label' => 'New page')) ?>
+<?php
+$this->navigation()->addPage(array(
+    'type' => 'uri',
+    'label' => 'New page'));

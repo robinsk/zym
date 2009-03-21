@@ -1,9 +1,8 @@
 <?php
-
 class My_Navigation_Page extends Zym_Navigation_Page
 {
     protected $_fooBar = 'ok';
-    
+
     public function setFooBar($fooBar)
     {
         $this->_fooBar = $fooBar;

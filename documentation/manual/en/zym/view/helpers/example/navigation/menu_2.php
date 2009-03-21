@@ -1,5 +1,5 @@
 <?php
-$nav = new Zym_Navigation(array(
+$container = new Zym_Navigation(array(
     array(
         'label'      => 'Site 1',
         'uri'        => 'site1',
@@ -19,9 +19,10 @@ $nav = new Zym_Navigation(array(
     )
 ));
 
-$this->menu()->setUlClass('my-nav');
-$this->menu()->setIndent(4);
-echo $this->menu()->renderMenu($nav);
+echo $this->navigation()->menu()
+                            ->setUlClass('my-nav')
+                            ->setIndent(4)
+                            ->render($container);
 ?>
     <ul class="my-nav">
         <li>

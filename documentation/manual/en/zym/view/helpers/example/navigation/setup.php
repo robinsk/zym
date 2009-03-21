@@ -1,7 +1,7 @@
 <?php
 /*
  * An array of example pages
- * 
+ *
  * Each element in the array will be passed to
  * Zym_Navigation_Page::factory() when constructing
  * the navigation object below.
@@ -16,7 +16,7 @@ $config = array(
     array(
         'label' => 'Zym',
         'uri' => 'http://www.zym-project.com/',
-        'position' => 100
+        'order' => 100
     ),
     array(
         'label' => 'Page 2',
@@ -29,7 +29,7 @@ $config = array(
                 'controller' => 'page2',
                 'class' => 'special-one',
                 'title' => 'This element has a special class',
-                'active' => true
+                'active' => true // ACTIVE PAGE
             ),
             array(
                 'label' => 'Page 2.2',
@@ -81,8 +81,7 @@ $config = array(
                         'title' => 'Page 4 using mvc params',
                         'action' => 'index',
                         'controller' => 'page4',
-                        // let's say this page is active
-                        'active' => '1'
+                        'active' => '1' // ACTIVE PAGE
                     )
                 )
             )
@@ -90,9 +89,9 @@ $config = array(
     ),
     array(
         'label' => 'Page 0?',
-        'uri' => '/setting/the/position/option',
-        // setting position to -1 should make it appear first
-        'position' => -1
+        'uri' => '/setting/the/order/option',
+        // setting order to -1 should make it appear first
+        'order' => -1
     ),
     array(
         'label' => 'Page 5',
@@ -111,8 +110,7 @@ $config = array(
                             array(
                                 'label' => 'Page 5.1.2',
                                 'uri' => '#',
-                                // let's say this page is active
-                                'active' => true
+                                'active' => true // ACTIVE PAGE
                             )
                         )
                     )
@@ -155,12 +153,12 @@ $config = array(
         )
     ),
     array(
-        'label' => 'ACL page 3 (admin.foo)',
+        'label' => 'ACL page 2 (admin.foo)',
         'uri' => '#acl-admin.foo',
         'resource' => 'admin.foo',
         'pages' => array(
             array(
-                'label' => 'ACL page 3.1 (nothing)',
+                'label' => 'ACL page 2.1 (nothing)',
                 'uri' => '#acl-nada'
             )
         )
@@ -172,13 +170,20 @@ $config = array(
     )
 );
 
-// Create navigation from array
-$navigation = new Zym_Navigation($config);
+// Create container from array
+$container = new Zym_Navigation($config);
 
-// Put navigation in registry so it's found by helpers
-Zend_Registry::set('Zym_Navigation', $navigation);
+// Store the container in the proxy helper
+$view = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer')->view;
+$view->getHelper('navigation')->setContainer($container);
 
-// Add a route to show that zym_navigation can be aware of routes and params
+// ...or simply:
+$view->navigation($container);
+
+// Another option is to store the container in Zend_Registry
+Zend_Registry::set('Zym_Navigation', $container);
+
+// Add a route to show that MVC pages can be aware of routes and params
 $front = Zend_Controller_Front::getInstance();
 $router = $front->getRouter();
 $router->addRoute(
@@ -189,36 +194,27 @@ $router->addRoute(
 );
 
 // Add some ACL stuff to show integration with ACL
-$navAcl = new Zend_Acl();
+$acl = new Zend_Acl();
 
-$navAcl->addRole(new Zend_Acl_Role('guest'));
-$navAcl->addRole(new Zend_Acl_Role('member'), 'guest');
-$navAcl->addRole(new Zend_Acl_Role('admin'), 'member');
-$navAcl->addRole(new Zend_Acl_Role('special'), 'member');
+$acl->addRole(new Zend_Acl_Role('guest'));
+$acl->addRole(new Zend_Acl_Role('member'), 'guest');
+$acl->addRole(new Zend_Acl_Role('admin'), 'member');
+$acl->addRole(new Zend_Acl_Role('special'), 'member');
 
-$navAcl->add(new Zend_Acl_Resource('guest.foo'));
-$navAcl->add(new Zend_Acl_Resource('member.foo'));
-$navAcl->add(new Zend_Acl_Resource('member.bar'), 'member.foo');
-$navAcl->add(new Zend_Acl_Resource('member.baz'));
-$navAcl->add(new Zend_Acl_Resource('admin.foo'));
+$acl->add(new Zend_Acl_Resource('guest.foo'));
+$acl->add(new Zend_Acl_Resource('member.foo'));
+$acl->add(new Zend_Acl_Resource('member.bar'), 'member.foo');
+$acl->add(new Zend_Acl_Resource('member.baz'));
+$acl->add(new Zend_Acl_Resource('admin.foo'));
 
-$navAcl->allow('guest', 'guest.foo');
-$navAcl->allow('member', 'member.foo');
-$navAcl->allow('special', 'member.baz', 'read');
-$navAcl->allow('admin', null);
+$acl->allow('guest', 'guest.foo');
+$acl->allow('member', 'member.foo');
+$acl->allow('special', 'member.baz', 'read');
+$acl->allow('admin', null);
 
-Zend_Registry::set('Zym_Navigation_Acl', $navAcl);
+// Set ACL/role in the proxy helper
+$view->navigation()->setAcl($acl)->setRole('special');
 
-// Do the following in the view (for this demo we keep it simple,
-// but this is probably better to do in a plugin or when you set up
-// ACL or navigation):
-/*
-$navAcl = Zend_Registry::get('Zym_Navigation_Acl');
-
-$this->breadcrumbs()->setAcl($navAcl);
-$this->breadcrumbs()->setRole('special');
-$this->menu()->setAcl($navAcl);
-$this->menu()->setRole('special');
-$this->sitemap()->setAcl($navAcl);
-$this->sitemap()->setRole('special');
-*/
+// ...or set default ACL/role statically
+Zym_View_Helper_Navigation_Abstract::setDefaultAcl($navAcl);
+Zym_View_Helper_Navigation_Abstract::setDefaultRole('special');

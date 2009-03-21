@@ -4,8 +4,8 @@
     <title>Zym_Navigation_Page_Mvc</title>
     
     <para>
-        MVC pages are defined using MVC parameters from the Zend Framework
-        terminology. An MVC page will use
+        MVC pages are defined using MVC parameters known from the 
+        <code>Zend_Controller</code> component. An MVC page will use
         <classname>Zend_Controller_Action_Helper_Url</classname> internally
         in the <code>getHref()</code> method to generate hrefs, and
         in <code>isActive()</code> it will intersect the the 
@@ -68,7 +68,7 @@
                 <row>
                     <entry><code>params</code></entry>
                     <entry><code>array</code></entry>
-                    <entry><code>array</code></entry>
+                    <entry><code>array()</code></entry>
                     <entry>
                         User params to use when generating href to the page.
                     </entry>
@@ -76,7 +76,7 @@
                 <row>
                     <entry><code>route</code></entry>
                     <entry><code>string</code></entry>
-                    <entry><code>default</code></entry>
+                    <entry><code>null</code></entry>
                     <entry>
                         Route name to use when generating
                         href to the page.
@@ -95,28 +95,27 @@
         </tgroup>
     </table>
     
-    <example xml:id="zym.navigation.pages.mvc.getHref">
-        <title><code>getHref() generates the page URL</code></title>
-        
+    <note>
         <para>
-            These examples show that MVC pages use
-            <classname>Zend_Controller_Action_Helper_Url</classname> internally
-            to generate URLs when calling <code>$page->getHref()</code>.
+            The three examples below assume a default MVC setup with 
+            the <code>default</code> route in place.
         </para>
         
-        <note>
-            <para>
-                All examples assume a regular MVC setup with <code>default</code>
-                being the default module name, and that the route named
-                <code>default</code> has not been modified.
-            </para>
-            
-            <para>
-                The URL/URI returned is relative to your application's
-                <code>baseUrl</code>. In the examples, the base is '/'
-                for simplicity.
-            </para>
-        </note>
+        <para>
+            The URI returned is relative to the <code>baseUrl</code> in
+            <code>Zend_Controller_Front</code>. In the examples, the baseUrl 
+            is '/' for simplicity.
+        </para>
+    </note>
+    
+    <example xml:id="zym.navigation.pages.mvc.getHref">
+        <title><code>getHref() generates the page URI</code></title>
+	        
+	    <para>
+	        This example show that MVC pages use
+	        <classname>Zend_Controller_Action_Helper_Url</classname> internally
+	        to generate URIs when calling <code>$page->getHref()</code>.
+	    </para>
         
         <programlisting role="php"><xi:include href="mvc/example/gethref.php" parse="text" /></programlisting>
     </example>
@@ -125,17 +124,9 @@
         <title><code>isActive()</code> determines if page is active</title>
         
         <para>
-            These examples show that MVC pages determine whether they are active
+            This example show that MVC pages determine whether they are active
             by using the params found in the request object.
         </para>
-        
-        <note>
-            <para>
-                All examples assume a regular MVC setup with <code>default</code>
-                being the default module name, and that the route named
-                <code>default</code> has not been modified.
-            </para>
-        </note>
         
         <programlisting role="php"><xi:include href="mvc/example/isactive.php" parse="text" /></programlisting>
     </example>
@@ -149,6 +140,17 @@
             option when constructing, or by calling 
             <code>$page->setRoute('routeName')</code> on a page instance.
         </para>
+        
+        <note>
+            <para>
+                Note that when using the <code>route</code> property in a page,
+                you should also specify the default params the route uses 
+                (module, controller, action, etc.), otherwise the <code>isActive()</code>
+                method will not be able to determine if the page is active. The
+                reason for this is that there is no way to get the default
+                params from a <code>Zend_Controller_Router_Route</code> object.
+            </para>
+        </note>
         
         <programlisting role="php"><xi:include href="mvc/example/routes.php" parse="text" /></programlisting>
     </example>

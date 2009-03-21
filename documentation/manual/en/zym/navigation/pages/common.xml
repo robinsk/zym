@@ -4,28 +4,24 @@
     <title>Common page features</title>
     
     <para>
-        All page classes must extend <classname>Zym_Navigation_Abstract</classname>,
+        All page classes must extend <classname>Zym_Navigation_Page</classname>,
         and will thus share a common set of features and properties. Most notably
-        they share the options in the table below, and are forced to use the
-        same initialization process.
-        
-        <note>
-            <para>
-                Read more on extending Zym_Navigation_Page in 
-                <link xlink:href="#zym.navigation.pages.custom">Creating custom page types</link>.
-            </para>
-        </note>
+        they share the options in the table below and the same initialization
+        process.
     </para>
     
-    <note>
-        <para>
-            All option keys are translated to their according 
-            <code>set</code> methods. This means that the option
-            <code>position</code> maps to the method <code>setPosition()</code>,
-            and <code>reset_params</code> maps to the method
-            <code>setResetParams()</code>.
-        </para>
-    </note>
+    <para>
+        Option keys are mapped to <code>set</code> methods. This means that 
+        the option <code>order</code> maps to the method <code>setOrder()</code>,
+        and <code>reset_params</code> maps to the method
+        <code>setResetParams()</code>. If there is no setter method for
+        the option, it will be set as a custom property of the page.
+    </para>
+    
+    <para>
+        Read more on extending Zym_Navigation_Page in 
+        <link xlink:href="#zym.navigation.pages.custom">Creating custom page types</link>.
+    </para>
     
     <table xml:id="zym.navigation.pages.common.options">
         <title>Common page options</title>
@@ -33,7 +29,8 @@
         <info>
             <abstract>
                 <para>
-                    The options listed in the table below are common to all page classes.
+                    The options listed in the table are common 
+                    to all page classes.
                 </para>
             </abstract>
         </info>           
@@ -54,8 +51,7 @@
                     <entry><code>string</code></entry>
                     <entry><code>null</code></entry>
                     <entry>
-                        A page label, such as Home or Blog. This is the only
-                        required common page option.
+                        A page label, such as Home or Blog.
                     </entry>
                 </row>
                 <row>
@@ -95,14 +91,40 @@
                     </entry>
                 </row>
                 <row>
-                    <entry><code>position</code></entry>
+                    <entry><code>rel</code></entry>
+                    <entry><code>array</code></entry>
+                    <entry><code>array()</code></entry>
+                    <entry>
+                        Specifies forward relations for the page.
+                        Each element in the array is a key-value pair, where the
+                        key designates the relation/link type, and the value is 
+                        a pointer to the linked page. An example of a key-value 
+                        pair is <code>'alternate' => 'format/plain.html'</code>.
+                        To allow full flexbility, there are no restrictions on 
+                        relation values. The value does not have to be a string.
+                        Read more about <code>rel</code> and <code>rev</code> in
+                        <link xlink:href="#zym.view_helpers.navigation.acl">the
+                        section on Zym_View_Helper_Navigation_Links.</link>.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>rev</code></entry>
+                    <entry><code>array</code></entry>
+                    <entry><code>array()</code></entry>
+                    <entry>
+                        Specifies reverse relations for the page. Works exactly
+                        like <code>rel</code>.
+                    </entry>
+                </row>
+                <row>
+                    <entry><code>order</code></entry>
                     <entry><code>string</code> | <code>int</code> | <code>null</code></entry>
                     <entry><code>null</code></entry>
                     <entry>
                         Works like order for elements in Zend_Form. If specified,
                         the page will be iterated in a specific order, meaning
                         you can force a page to be iterated first by setting
-                        position to something like -100. If a <code>string</code>
+                        order to a low number, e.g. -100. If a <code>string</code>
                         is given, it must parse to a valid <code>int</code>. If
                         <code>null</code> is given, it will be reset, meaning
                         the order in which the page was added to the container
@@ -157,8 +179,9 @@
                     <entry>
                         Sub pages of the page. This could be an <code>array</code>
                         or <code>Zend_Config</code> object containing either page
-                        options that can be passed to <code>Zym_Navigation_Page::factory()</code>,
-                        actual <classname>Zym_Navigation_Page</classname> instances, or a mixture of those. 
+                        options that can be passed to the <code>factory()</code>
+                        method, or actual <classname>Zym_Navigation_Page</classname>
+                        instances, or a mixture of both. 
                     </entry>
                 </row>
             </tbody>
@@ -168,11 +191,19 @@
     <note>
         <title>Custom properties</title>
         <para>
-            All pages support setting and getting of custom properties, by
+            All pages support setting and getting of custom properties by
             using the magic methods <code>__set($name, $value)</code>,
             <code>__get($name)</code>, <code>__isset($name)</code> and
-            <code>__unset($name)</code>.Custom properties will also be 
-            included in <code>$page->toArray()</code>.
+            <code>__unset($name)</code>. Custom properties can have any value,
+            and will be included in the array that is returned from 
+            <code>$page->toArray()</code>, which means that pages
+            can be serialized/deserialized successfully even if the pages
+            contains properties that are not native in the page class.
+        </para>
+        <para>
+            Both native and custom properties can be set using
+            <code>$page->set($name, $value)</code> and retrieved using
+            <code>$page->get($name)</code>, or by using magic methods.
         </para>
     </note>
     
@@ -180,8 +211,7 @@
         <title>Custom page properties</title>
         
         <para>
-            This is an example of how custom properties can be used. Custom
-            properties will also be included inf <code>$page->toArray()</code>.
+            This example shows how custom properties can be used.
         </para>
         
         <programlisting role="php"><xi:include href="common/example/customprops.php" parse="text" /></programlisting>
