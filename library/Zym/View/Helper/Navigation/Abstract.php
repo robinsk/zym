@@ -576,7 +576,7 @@ abstract class Zym_View_Helper_Navigation_Abstract
         $accept = false;
 
         // do not accept if helper has no role
-        if ($role = $this->getRole()) {
+        if (($role = $this->getRole()) !== null) {
             $resource = $page->getResource();
             $privilege = $page->getPrivilege();
 
