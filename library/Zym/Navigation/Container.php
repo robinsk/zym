@@ -108,6 +108,12 @@ abstract class Zym_Navigation_Container
      */
     public function addPage($page)
     {
+        if ($page === $this) {
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                'A page cannot have itself as a parent');
+        }
+
         if (is_array($page) || $page instanceof Zend_Config) {
             require_once 'Zym/Navigation/Page.php';
             $page = Zym_Navigation_Page::factory($page);

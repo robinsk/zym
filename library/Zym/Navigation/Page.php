@@ -779,6 +779,12 @@ abstract class Zym_Navigation_Page extends Zym_Navigation_Container
      */
     public function setParent(Zym_Navigation_Container $parent = null)
     {
+        if ($parent === $this) {
+            require_once 'Zym/Navigation/Exception.php';
+            throw new Zym_Navigation_Exception(
+                'A page cannot have itself as a parent');
+        }
+
         // return if the given parent already is parent
         if ($parent === $this->_parent) {
             return $this;
